@@ -1,0 +1,97 @@
+<?php
+/*
+ -------------------------------------------------------------------------
+ Printercounters plugin for GLPI
+ Copyright (C) 2014 by the Printercounters Development Team.
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of Printercounters.
+
+ Printercounters is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ Printercounters is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Printercounters. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------  */
+ 
+if (!defined('GLPI_ROOT')) {
+   die("Sorry. You can't access directly to this file");
+}
+
+/**
+ * Class PluginPrintercountersItem_Recordmodel
+ * 
+ * This class allows to inject record models on the items with the plugin Datainjection
+ * 
+ * @package    Printercounters
+ * @author     Ludovic Dupont
+ */
+class PluginPrintercountersItem_RecordmodelInjection extends PluginPrintercountersItem_Recordmodel
+                                             implements PluginDatainjectionInjectionInterface {
+
+   static function getTable() {
+      $parenttype = get_parent_class();
+      return $parenttype::getTable();
+   }
+
+
+   function isPrimaryType() {
+      return true;
+   }
+
+
+   function connectedTo() {
+      return array();
+   }
+
+
+   
+   function getOptions($primary_type = '') {
+      
+      $tab = Search::getOptions(get_parent_class($this));
+
+      //Remove some options because some fields cannot be imported
+      $blacklist     = PluginDatainjectionCommonInjectionLib::getBlacklistedOptions(get_parent_class($this));
+      $notimportable = array(2, 90, 81, 91, 92, 93, 87, 84, 86, 83, 82, 80, 79, 85);
+      
+      $options['displaytype']   = array("dropdown" => array(95));
+
+      $options['ignore_fields'] = array_merge($blacklist, $notimportable);
+      
+      return PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
+   }
+   /**
+    * Standard method to add an object into glpi
+ 
+    *
+    * @param values fields to add into glpi
+    * @param options options used during creation
+    *
+    * @return an array of IDs of newly created objects : for example array(Computer=>1, Networkport=>10)
+   **/
+   function addOrUpdateObject($values=array(), $options=array()) {
+
+      $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
+      $lib->processAddOrUpdate();
+      return $lib->getInjectionResults();
+   }
+
+
+//   function addSpecificNeededFields($primary_type, $values) {
+//      Toolbox::logDebug($primary_type);Toolbox::logDebug($values);
+//      $fields['groups_id'] = $values['Group']['id'];
+//      return $fields;
+//   }
+
+}
+
+?>

@@ -1,0 +1,439 @@
+<?php
+/*
+ -------------------------------------------------------------------------
+ Printercounters plugin for GLPI
+ Copyright (C) 2014 by the Printercounters Development Team.
+ -------------------------------------------------------------------------
+
+ LICENSE
+
+ This file is part of Printercounters.
+
+ Printercounters is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ Printercounters is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Printercounters. If not, see <http://www.gnu.org/licenses/>.
+ --------------------------------------------------------------------------  */
+
+function plugin_printercounters_install() {
+   global $DB;
+
+   include_once (GLPI_ROOT . "/plugins/printercounters/inc/profile.class.php");
+   
+   // SQL creation
+   if (!TableExists("glpi_plugin_printercounters_profiles")) {
+      $DB->runFile(GLPI_ROOT . "/plugins/printercounters/install/sql/empty-1.0.6.sql");
+      
+      // Add record notification
+      include(GLPI_ROOT ."/plugins/printercounters/inc/notificationtargetadditional_data.class.php");
+      call_user_func(array("PluginPrintercountersNotificationTargetAdditional_Data",'install'));
+   }
+   
+   // Update 100 to 101
+   if (TableExists("glpi_plugin_printercounters_billingmodels")
+         && !FieldExists('glpi_plugin_printercounters_billingmodels', 'budgets_id')) {
+      include(GLPI_ROOT ."/plugins/printercounters/install/update_100_101.php");
+      update100to101();
+   }
+   
+   // Update 101 to 102
+   if (TableExists("glpi_plugin_printercounters_configs")
+         && !FieldExists('glpi_plugin_printercounters_configs', 'set_first_record')) {
+      include(GLPI_ROOT ."/plugins/printercounters/install/update_101_102.php");
+      update101to102();
+   }
+   
+   // Update 102 to 103
+   if (TableExists("glpi_plugin_printercounters_records")
+         && !isIndex('glpi_plugin_printercounters_records', 'date')) {
+      include(GLPI_ROOT."/plugins/printercounters/install/update_102_103.php");
+      update102to103();
+   }
+   
+   // Update 103 to 104
+   if (TableExists("glpi_plugin_printercounters_snmpauthentications")
+         && !FieldExists('glpi_plugin_printercounters_snmpauthentications', 'community_write')) {
+      include(GLPI_ROOT ."/plugins/printercounters/install/update_103_104.php");
+      update103to104();
+   }
+   
+   // Update 104 to 105
+   if (!TableExists('glpi_plugin_printercounters_additionals_datas')) {
+      include(GLPI_ROOT ."/plugins/printercounters/install/update_104_105.php");
+      update104to105();
+   }
+   
+   // Update 105 to 106
+   if (!FieldExists('glpi_plugin_printercounters_snmpauthentications', 'is_default')) {
+      include(GLPI_ROOT ."/plugins/printercounters/install/update_105_106.php");
+      update105to106();
+   }
+
+   CronTask::Register('PluginPrintercountersItem_Ticket', 'PrintercountersCreateTicket', DAY_TIMESTAMP);
+   
+   PluginPrintercountersProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
+   
+   return true;
+}
+
+// Uninstall process for plugin : need to return true if succeeded
+function plugin_printercounters_uninstall() {
+   global $DB;
+
+   // Plugin tables deletion
+   $tables = array("glpi_plugin_printercounters_profiles", 
+                   "glpi_plugin_printercounters_items_tickets",
+                   "glpi_plugin_printercounters_configs",
+                   "glpi_plugin_printercounters_countertypes",
+                   "glpi_plugin_printercounters_countertypes_recordmodels",
+                   "glpi_plugin_printercounters_recordmodels",
+                   "glpi_plugin_printercounters_items_recordmodels",
+                   "glpi_plugin_printercounters_counters",
+                   "glpi_plugin_printercounters_records",
+                   "glpi_plugin_printercounters_snmpauthentications",
+                   "glpi_plugin_printercounters_billingmodels",
+                   "glpi_plugin_printercounters_pagecosts",
+                   "glpi_plugin_printercounters_budgets",
+                   "glpi_plugin_printercounters_items_billingmodels",
+                   "glpi_plugin_printercounters_sysdescrs",
+                   "glpi_plugin_printercounters_additionals_datas");
+
+   foreach ($tables as $table){
+      $DB->query("DROP TABLE IF EXISTS `$table`;");
+   }
+
+   CronTask::Unregister('printercounters');
+   
+   return true;
+}
+
+function plugin_datainjection_populate_printercounters() {
+   global $INJECTABLE_TYPES;
+   
+   $INJECTABLE_TYPES['PluginPrintercountersCountertype_RecordmodelInjection'] = "printercounters";
+   $INJECTABLE_TYPES['PluginPrintercountersItem_RecordmodelInjection']        = "printercounters";
+   $INJECTABLE_TYPES['PluginPrintercountersCountertypeInjection']             = "printercounters";
+   $INJECTABLE_TYPES['PluginPrintercountersRecordmodelInjection']             = "printercounters";
+}
+
+function plugin_printercounters_postinit() {
+   global $PLUGIN_HOOKS;
+   
+   $plugin = 'printercounters';
+   foreach (array('add_css', 'add_javascript') as $type) {
+      if (isset($PLUGIN_HOOKS[$type][$plugin])) {
+         foreach ($PLUGIN_HOOKS[$type][$plugin] as $data) {
+            if (!empty($PLUGIN_HOOKS[$type])) {
+               foreach ($PLUGIN_HOOKS[$type] as $key => $plugins_data) {
+                  if (is_array($plugins_data) && $key != $plugin) {
+                     foreach ($plugins_data as $key2 => $values) {
+                        if ($values == $data) {
+                           unset($PLUGIN_HOOKS[$type][$key][$key2]);
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   }
+}
+
+// Hook done on purge item case
+function plugin_pre_item_purge_printercounters($item) {
+   switch (get_class($item)) {
+      case 'PluginPrintercountersRecordmodel' :
+         $billingmodel = new PluginPrintercountersBillingmodel();
+         $links = $billingmodel->checkLinkedRecordModels($item);
+         if (!empty($links)) {
+            Session::addMessageAfterRedirect(__('Record model cannot be deleted, it is linked to a billing model', 'printercounters').' : </br>'.implode('</br>', $links), true, ERROR);
+            $item->input = false;
+            return false;
+         }
+      
+         $temp = new PluginPrintercountersItem_Recordmodel();
+         $temp->deleteByCriteria(array('plugin_printercounters_recordmodels_id' => $item->getField('id')), 1);
+         
+         $temp = new PluginPrintercountersCountertype_Recordmodel();
+         $temp->deleteByCriteria(array('plugin_printercounters_recordmodels_id' => $item->getField('id')), 1);
+         
+         $temp = new PluginPrintercountersBillingmodel();
+         $temp->deleteByCriteria(array('plugin_printercounters_recordmodels_id' => $item->getField('id')), 1);
+           
+         $temp = new PluginPrintercountersSysdescr();
+         $temp->deleteByCriteria(array('plugin_printercounters_recordmodels_id' => $item->getField('id')), 1);
+         break;
+      
+      case 'PluginPrintercountersBillingmodel' :
+         $temp = new PluginPrintercountersItem_Billingmodel();
+         $temp->deleteByCriteria(array('plugin_printercounters_billingmodels_id' => $item->getField('id')), 1);
+         
+         $temp = new PluginPrintercountersPagecost();
+         $temp->deleteByCriteria(array('plugin_printercounters_billingmodels_id' => $item->getField('id')), 1);
+         break;
+      
+      case 'PluginPrintercountersCountertype' :
+         $temp = new PluginPrintercountersPagecost();
+         $temp->deleteByCriteria(array('plugin_printercounters_countertypes_id' => $item->getField('id')), 1);
+         
+         $temp = new PluginPrintercountersCountertype_Recordmodel();
+         $temp->deleteByCriteria(array('plugin_printercounters_countertypes_id' => $item->getField('id')), 1);
+         break;
+      
+      case 'PluginPrintercountersItem_Recordmodel' :
+         $temp = new PluginPrintercountersRecord();
+         $temp->deleteByCriteria(array('plugin_printercounters_items_recordmodels_id' => $item->getField('id')), 1);
+         
+         $temp = new PluginPrintercountersAdditional_data();
+         $temp->deleteByCriteria(array('plugin_printercounters_items_recordmodels_id' => $item->getField('id')), 1);
+         break;
+
+      case 'PluginPrintercountersRecord' :
+         $temp = new PluginPrintercountersCounter();
+         $temp->deleteByCriteria(array('plugin_printercounters_records_id' => $item->getField('id')), 1);
+         break;
+      
+      case 'PluginPrintercountersCountertype_Recordmodel' :
+         $billingmodel = new PluginPrintercountersBillingmodel();
+         $links        = $billingmodel->checkLinkedRecordModels($item);
+         if (!empty($links)) {
+            Session::addMessageAfterRedirect(__('Counter type cannot be deleted, the record model is linked to a billing model', 'printercounters').' : </br>'.implode('</br>', $links), true, ERROR);
+            $item->input = false;
+            return false;
+         }
+            
+         $temp = new PluginPrintercountersCounter();
+         $temp->deleteByCriteria(array('plugin_printercounters_countertypes_recordmodels_id' => $item->getField('id')), 1);
+
+         $temp         = new PluginPrintercountersPagecost();
+         if ($data = $billingmodel->getBillingModelsForRecordmodel($item->getField('plugin_printercounters_recordmodels_id'))) {
+            foreach ($data as $value) {
+               $temp->deleteByCriteria(array('plugin_printercounters_countertypes_id'  => $item->getField('plugin_printercounters_countertypes_id'),
+                                             'plugin_printercounters_billingmodels_id' => $value['id']), 1);
+            }
+         }
+         break;
+
+      case 'Printer' :
+         $temp = new PluginPrintercountersItem_Recordmodel();
+         $temp->deleteByCriteria(array('items_id' => $item->getField('id')), 1);
+         
+         $temp = new PluginPrintercountersItem_Billingmodel();
+         $temp->deleteByCriteria(array('items_id' => $item->getField('id')), 1);
+         
+         $temp = new PluginPrintercountersItem_Ticket();
+         $temp->deleteByCriteria(array('items_id' => $item->getField('id')), 1);
+         break;
+      
+      case 'Ticket' :
+         $temp = new PluginPrintercountersItem_Ticket();
+         $temp->deleteByCriteria(array('tickets_id' => $item->getField('id')), 1);
+         break;
+      
+      case 'Entity' :
+         $temp = new PluginPrintercountersBudget();
+         $temp->deleteByCriteria(array('entities_id' => $item->getField('id')), 1);
+         break;
+   }
+}
+
+// Hook done on purge item case
+function plugin_item_purge_printercounters($item) {
+   switch (get_class($item)) {
+      case 'PluginPrintercountersCounter' :
+         // If no counter delete record associated
+         if (countElementsInTable(getTableForItemType("PluginPrintercountersCounter"), "`plugin_printercounters_records_id` = ".$item->getField('plugin_printercounters_records_id')) == 0) {
+            $temp = new PluginPrintercountersRecord();
+            $temp->deleteByCriteria(array('id' => $item->getField('plugin_printercounters_records_id')), 1);
+         }
+         break;
+   }
+}
+
+// Hook done on delete item case
+function plugin_item_delete_printercounters($item) {
+    switch (get_class($item)) {
+      case 'Printer' :
+         $temp = new PluginPrintercountersItem_Recordmodel($item->getType(), $item->getField('id'));
+         $data = $temp->getItem_RecordmodelForItem();
+         $data = reset($data);
+         $temp->update(array('id' => $data['id'], 'enable_automatic_record' => 0));
+         break;
+    }
+}
+
+// Hook done on transfer item case
+function plugin_item_transfer_printercounters($input) {
+   switch ($input['type']) {
+      case 'Printer' :
+         // Recordmodel
+         $recordmodel = new PluginPrintercountersRecordmodel();
+         $recordmodel->duplicateRecordmodelForItem($input['type'], $input['id'], $input['entities_id']);
+
+         // Billingmodel
+         $billingmodel = new PluginPrintercountersBillingmodel();
+         $billingmodel->duplicateBillingmodelForItem($input['type'], $input['id'], $input['entities_id']);
+         break;
+   }
+}
+
+// Define dropdown relations
+function plugin_printercounters_getDatabaseRelations() {
+
+   $plugin = new Plugin();
+   if ($plugin->isActivated("printercounters")){
+      return array("glpi_profiles"                                         => array("glpi_plugin_printercounters_profiles"                  => "profiles_id"),
+                   "glpi_tickets"                                          => array("glpi_plugin_printercounters_items_tickets"             => "tickets_id"),
+                   "glpi_printers"                                         => array("glpi_plugin_printercounters_items_billingmodels"       => "items_id"),
+                   "glpi_plugin_printercounters_billingmodels"             => array("glpi_plugin_printercounters_items_billingmodels"       => "plugin_printercounters_billingmodels_id"),
+                   "glpi_printers"                                         => array("glpi_plugin_printercounters_items_recordmodels"        => "items_id"),
+                   "glpi_plugin_printercounters_recordmodels"              => array("glpi_plugin_printercounters_items_recordmodels"        => "plugin_printercounters_recordmodels_id"),
+                   "glpi_plugin_printercounters_snmpauthentications"       => array("glpi_plugin_printercounters_items_recordmodels"        => "plugin_printercounters_snmpauthentications_id"),
+                   "glpi_plugin_printercounters_recordmodels"              => array("glpi_plugin_printercounters_sysdescrs"                 => "plugin_printercounters_recordmodels_id"),
+                   "glpi_plugin_printercounters_items_recordmodels"        => array("glpi_plugin_printercounters_records"                   => "plugin_printercounters_items_recordmodels_id"),
+                   "glpi_plugin_printercounters_items_recordmodels"        => array("glpi_plugin_printercounters_additionals_datas"          => "plugin_printercounters_items_recordmodels_id"),
+                   "glpi_plugin_printercounters_records"                   => array("glpi_plugin_printercounters_counters"                  => "plugin_printercounters_records_id"),
+                   "glpi_plugin_printercounters_countertypes_recordmodels" => array("glpi_plugin_printercounters_counters"                  => "plugin_printercounters_countertypes_recordmodels_id"),
+                   "glpi_plugin_printercounters_recordmodels"              => array("glpi_plugin_printercounters_countertypes_recordmodels" => "plugin_printercounters_recordmodels_id"),
+                   "glpi_plugin_printercounters_countertypes"              => array("glpi_plugin_printercounters_countertypes_recordmodels" => "plugin_printercounters_countertypes_id"),
+                   "glpi_plugin_printercounters_billingmodels"             => array("glpi_plugin_printercounters_pagecosts"                 => "plugin_printercounters_billingmodels_id"),
+                   "glpi_plugin_printercounters_countertypes"              => array("glpi_plugin_printercounters_pagecosts"                 => "plugin_printercounters_countertypes_id"));
+   } else {
+      return array();
+   }
+}
+
+// Define Dropdown tables to be manage in GLPI
+function plugin_printercounters_getDropdown() {
+
+   $plugin = new Plugin();
+
+   if ($plugin->isActivated("printercounters")){
+      return array('PluginPrintercountersRecordmodel'         => PluginPrintercountersRecordmodel::getTypeName(2),
+                   'PluginPrintercountersBillingmodel'        => PluginPrintercountersBillingmodel::getTypeName(2),
+                   'PluginPrintercountersCountertype'         => PluginPrintercountersCountertype::getTypeName(2),
+                   'PluginPrintercountersBudget'              => PluginPrintercountersBudget::getTypeName(2),
+                   'PluginPrintercountersSnmpauthentication'  => PluginPrintercountersSnmpauthentication::getTypeName(2));
+   } else {
+      return array();
+   }
+}
+
+function plugin_printercounters_getAddSearchOptions($itemtype) {
+
+   $tab = array();
+   if (in_array($itemtype, PluginPrintercountersItem_Recordmodel::$types)) {
+      $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
+      $tab = $item_recordmodel->getAddSearchOptions();
+   }
+   
+   $tab2 = array();
+   if (in_array($itemtype, PluginPrintercountersItem_Billingmodel::$types)) {
+      $item_billingmodel = new PluginPrintercountersItem_Billingmodel();
+      $tab2 = $item_billingmodel->getAddSearchOptions();
+   }
+
+   return array_replace($tab, $tab2);
+}
+
+function plugin_printercounters_MassiveActions($type) {
+   
+   switch($type){
+      case 'Printer':
+         $item_recordmodel = new PluginPrintercountersItem_Recordmodel($type);
+         $output = $item_recordmodel->massiveActions();
+
+         $item_billingmodel = new PluginPrintercountersItem_Billingmodel($type);
+         $output2 = $item_billingmodel->massiveActions();
+
+         if(!empty($output) && !empty($output2)){
+            return array_merge($output, $output2);
+
+         } elseif(!empty($output)){
+            return $output;
+         }
+         break;
+         
+      case 'PluginPrintercountersRecordmodel':
+         $recordmodel = new PluginPrintercountersRecordmodel($type);
+         $output = $recordmodel->massiveActions();
+         return $output;
+   }
+
+}
+
+function plugin_printercounters_MassiveActionsDisplay($options=array()) {
+
+   switch($options['itemtype']){
+      case 'Printer':
+         $item_recordmodel = new PluginPrintercountersItem_Recordmodel($options['itemtype']);
+         $output = $item_recordmodel->massiveActionsDisplay($options);
+         if(!empty($output)){
+            return $output;
+         }
+
+         $item_billingmodel = new PluginPrintercountersItem_Billingmodel($options['itemtype']);
+         $output = $item_billingmodel->massiveActionsDisplay($options);
+         if(!empty($output)){
+            return $output;
+         }
+         break;
+         
+      case 'PluginPrintercountersRecordmodel':
+         $recordmodel = new PluginPrintercountersRecordmodel($options['itemtype']);
+         $output = $recordmodel->massiveActionsDisplay($options);
+         return $output;
+         
+   }
+}
+
+function plugin_printercounters_MassiveActionsProcess($data) {
+
+   switch ($data['itemtype']) {
+      case 'Printer':
+         switch ($data['action']) {
+            case 'plugin_printercounters_billingmodel':
+               $item_billingmodel = new PluginPrintercountersItem_Billingmodel();
+               $res = $item_billingmodel->massiveActionsProcess($data);
+               if (!empty($res)) {
+                  return $res;
+               }
+               break;
+            default:
+               $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
+               $res = $item_recordmodel->massiveActionsProcess($data);
+               if (!empty($res)) {
+                  return $res;
+               }
+               break;
+         }
+         break;
+         
+      case 'PluginPrintercountersRecordmodel':
+         $recordmodel = new PluginPrintercountersRecordmodel();
+         $res = $recordmodel->massiveActionsProcess($data);
+         if (!empty($res)) {
+            return $res;
+         }
+         break;
+   }
+}
+
+function plugin_printercounters_addLeftJoin($type, $ref_table, $new_table, $linkfield, &$already_link_tables) {
+   
+   switch ($type) {
+      case 'PluginPrintercountersItem_Recordmodel' :
+         $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
+         return $item_recordmodel->addLeftJoin($type, $ref_table, $new_table, $linkfield, $already_link_tables);
+   }
+}
+
+?>
