@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-22 09:58+0200\n"
+"POT-Creation-Date: 2015-06-01 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,16 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: hook.php:157
+#: hook.php:164
 msgid "Record model cannot be deleted, it is linked to a billing model"
 msgstr ""
 
-#: hook.php:208
+#: hook.php:215
 msgid ""
 "Counter type cannot be deleted, the record model is linked to a billing model"
 msgstr ""
 
-#: printercounters.js.php:42 inc/item_recordmodel.class.php:914
+#: printercounters.js.php:42 inc/item_recordmodel.class.php:920
 #: scripts/printercounters.js.php:47
 msgid "Global TCO"
 msgstr ""
@@ -53,7 +53,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: setup.php:95 front/record.form.php:46 inc/menu.class.php:86
-#: inc/menu.class.php:87 inc/record.class.php:248
+#: inc/menu.class.php:87 inc/record.class.php:252
 msgid "Record planning"
 msgstr ""
 
@@ -63,12 +63,12 @@ msgid_plural "SNMP authentications"
 msgstr[0] ""
 msgstr[1] ""
 
-#: setup.php:105 inc/config.class.php:47
+#: setup.php:105 inc/config.class.php:48
 msgid "Plugin management"
 msgstr ""
 
 #: setup.php:142 inc/additional_data.class.php:59 inc/printer.class.php:118
-#: inc/profile.class.php:198 inc/record.class.php:1121
+#: inc/profile.class.php:198 inc/record.class.php:1224
 msgid "Printer counters"
 msgstr ""
 
@@ -84,6 +84,24 @@ msgstr ""
 msgid "This plugin requires SNMP php extension"
 msgstr ""
 
+#: front/config.form.php:55 inc/record.class.php:1691
+msgid "Clean records in error"
+msgstr ""
+
+#: front/config.form.php:57 front/config.form.php:70
+#: scripts/clean_records.php:55
+msgid "Records cleaned"
+msgstr ""
+
+#: front/config.form.php:60 front/config.form.php:73
+#: scripts/clean_records.php:57
+msgid "No records to clean"
+msgstr ""
+
+#: front/config.form.php:68 inc/record.class.php:1694
+msgid "Clean empty records"
+msgstr ""
+
 #: inc/additional_data.class.php:59
 msgid "Additional data"
 msgid_plural "Additional datas"
@@ -91,9 +109,9 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: inc/additional_data.class.php:81 inc/billingmodel.class.php:66
-#: inc/item_billingmodel.class.php:92 inc/item_recordmodel.class.php:101
-#: inc/item_ticket.class.php:88 inc/record.class.php:102
-#: inc/recordmodel.class.php:65
+#: inc/erroritem.class.php:92 inc/item_billingmodel.class.php:92
+#: inc/item_recordmodel.class.php:101 inc/item_ticket.class.php:88
+#: inc/record.class.php:106 inc/recordmodel.class.php:65
 msgid "Invalid itemtype"
 msgstr ""
 
@@ -119,7 +137,7 @@ msgstr ""
 msgid "Linked items"
 msgstr ""
 
-#: inc/billingmodel.class.php:254 inc/item_recordmodel.class.php:541
+#: inc/billingmodel.class.php:254 inc/item_recordmodel.class.php:547
 msgid "Are you sure to change the recordmodel ?"
 msgstr ""
 
@@ -293,6 +311,73 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
+#: inc/erroritem.class.php:70
+msgid "Error item"
+msgid_plural "Error items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/erroritem.class.php:175
+msgid "No errors"
+msgstr ""
+
+#: inc/erroritem.class.php:176
+msgid "Soft state"
+msgstr ""
+
+#: inc/erroritem.class.php:177
+msgid "Hard state"
+msgstr ""
+
+#: inc/erroritem.class.php:192 inc/erroritem.class.php:455
+msgid "Error on item, soft state"
+msgstr ""
+
+#: inc/erroritem.class.php:192 inc/item_ticket.class.php:179
+msgid "Number of errors"
+msgstr ""
+
+#: inc/erroritem.class.php:238
+msgid "Enable record error handler"
+msgstr ""
+
+#: inc/erroritem.class.php:242
+msgid "Maximum number of interrogation for records in error"
+msgstr ""
+
+#: inc/erroritem.class.php:288
+msgid "Error item list"
+msgstr ""
+
+#: inc/erroritem.class.php:292
+msgid "Number of host errors"
+msgstr ""
+
+#: inc/erroritem.class.php:315
+msgid "Interrogation of printers in host error"
+msgstr ""
+
+#: inc/erroritem.class.php:464
+msgid "Error on item, hard state"
+msgstr ""
+
+#: inc/erroritem.class.php:471
+msgid "Record success"
+msgstr ""
+
+#: inc/erroritem.class.php:475 inc/record.class.php:778
+#: inc/record.class.php:794
+msgid "No results, please check OIDs of your record model"
+msgstr ""
+
+#: inc/erroritem.class.php:482 inc/record.class.php:801
+msgid "This item type is not correct"
+msgstr ""
+
+#: inc/erroritem.class.php:487 inc/record.class.php:806
+msgid "No printers to search"
+msgstr ""
+
 #: inc/exception.class.php:91 inc/exception.class.php:95
 msgid "SNMP Error: "
 msgstr ""
@@ -304,12 +389,12 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: inc/item_billingmodel.class.php:119 inc/item_recordmodel.class.php:138
-#: inc/record.class.php:1649
+#: inc/record.class.php:1810
 msgid "Result"
 msgstr ""
 
 #: inc/item_billingmodel.class.php:123 inc/item_recordmodel.class.php:142
-#: inc/record.class.php:1165
+#: inc/record.class.php:1268
 msgid "Counter value"
 msgstr ""
 
@@ -317,31 +402,31 @@ msgstr ""
 msgid "Link the item to a billing model"
 msgstr ""
 
-#: inc/item_billingmodel.class.php:255 inc/item_recordmodel.class.php:275
+#: inc/item_billingmodel.class.php:255 inc/item_recordmodel.class.php:281
 msgid "Add an item"
 msgstr ""
 
-#: inc/item_billingmodel.class.php:318 inc/item_recordmodel.class.php:338
-#: inc/item_recordmodel.class.php:836
+#: inc/item_billingmodel.class.php:318 inc/item_recordmodel.class.php:344
+#: inc/item_recordmodel.class.php:842
 msgid "Last record date"
 msgstr ""
 
-#: inc/item_billingmodel.class.php:319 inc/item_recordmodel.class.php:339
-#: inc/item_recordmodel.class.php:851
+#: inc/item_billingmodel.class.php:319 inc/item_recordmodel.class.php:345
+#: inc/item_recordmodel.class.php:857
 msgid "Last record type"
 msgstr ""
 
 #: inc/item_billingmodel.class.php:965 inc/item_billingmodel.class.php:989
-#: inc/item_recordmodel.class.php:836 inc/item_recordmodel.class.php:851
-#: inc/item_recordmodel.class.php:868 inc/item_recordmodel.class.php:877
-#: inc/item_recordmodel.class.php:887 inc/item_recordmodel.class.php:894
-#: inc/item_recordmodel.class.php:904 inc/item_recordmodel.class.php:914
-#: inc/item_recordmodel.class.php:939 inc/item_recordmodel.class.php:940
-#: inc/item_recordmodel.class.php:941 inc/item_recordmodel.class.php:942
-#: inc/item_recordmodel.class.php:943 inc/item_recordmodel.class.php:944
+#: inc/item_recordmodel.class.php:842 inc/item_recordmodel.class.php:857
+#: inc/item_recordmodel.class.php:874 inc/item_recordmodel.class.php:883
+#: inc/item_recordmodel.class.php:893 inc/item_recordmodel.class.php:900
+#: inc/item_recordmodel.class.php:910 inc/item_recordmodel.class.php:920
 #: inc/item_recordmodel.class.php:945 inc/item_recordmodel.class.php:946
 #: inc/item_recordmodel.class.php:947 inc/item_recordmodel.class.php:948
-#: inc/item_recordmodel.class.php:953 inc/printercountersreport2.php:36
+#: inc/item_recordmodel.class.php:949 inc/item_recordmodel.class.php:950
+#: inc/item_recordmodel.class.php:951 inc/item_recordmodel.class.php:952
+#: inc/item_recordmodel.class.php:953 inc/item_recordmodel.class.php:954
+#: inc/item_recordmodel.class.php:959 inc/printercountersreport2.php:36
 #: inc/printercountersreport3.php:36 inc/printercountersreport.php:36
 msgid "Printercounters"
 msgstr ""
@@ -361,7 +446,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: inc/item_recordmodel.class.php:136 inc/printercountersreport2.php:226
-#: inc/record.class.php:1651
+#: inc/record.class.php:1812
 msgid "Record type"
 msgstr ""
 
@@ -369,75 +454,75 @@ msgstr ""
 msgid "Record ID"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:235
+#: inc/item_recordmodel.class.php:241
 msgid "Link the item to a record model"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:532
+#: inc/item_recordmodel.class.php:538
 msgid "Record configuration"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:552 inc/item_recordmodel.class.php:868
-#: inc/item_recordmodel.class.php:939
+#: inc/item_recordmodel.class.php:558 inc/item_recordmodel.class.php:874
+#: inc/item_recordmodel.class.php:945
 msgid "Enable automatic record"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:560 inc/item_recordmodel.class.php:887
+#: inc/item_recordmodel.class.php:566 inc/item_recordmodel.class.php:893
 msgid "Periodicity of automatic record"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:571 inc/item_recordmodel.class.php:904
+#: inc/item_recordmodel.class.php:577 inc/item_recordmodel.class.php:910
 msgid "Number of retries"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:577
+#: inc/item_recordmodel.class.php:583
 msgid "Timeout"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:940
+#: inc/item_recordmodel.class.php:946
 msgid "Set periodicity"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:941
+#: inc/item_recordmodel.class.php:947
 msgid "Set record model"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:942
+#: inc/item_recordmodel.class.php:948
 msgid "Set SNMP authentication"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:943
+#: inc/item_recordmodel.class.php:949
 msgid "Set retries"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:944
+#: inc/item_recordmodel.class.php:950
 msgid "Set max timeout"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:945 inc/item_recordmodel.class.php:953
-#: inc/item_recordmodel.class.php:1028 inc/record.class.php:143
+#: inc/item_recordmodel.class.php:951 inc/item_recordmodel.class.php:959
+#: inc/item_recordmodel.class.php:1034 inc/record.class.php:147
 msgid "Immediate record"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:946 inc/item_recordmodel.class.php:1035
-#: inc/record.class.php:185
+#: inc/item_recordmodel.class.php:952 inc/item_recordmodel.class.php:1041
+#: inc/record.class.php:189
 msgid "Update counter position"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:947 inc/item_recordmodel.class.php:1042
+#: inc/item_recordmodel.class.php:953 inc/item_recordmodel.class.php:1048
 msgid "Init counters to zero"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:948 inc/item_recordmodel.class.php:1049
-#: inc/record.class.php:195
+#: inc/item_recordmodel.class.php:954 inc/item_recordmodel.class.php:1055
+#: inc/record.class.php:199
 msgid "Set printer values"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:1498
+#: inc/item_recordmodel.class.php:1504
 msgid "Record history"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:1941 inc/record.class.php:1647
+#: inc/item_recordmodel.class.php:1947 inc/record.class.php:1808
 msgid "Periodicity"
 msgstr ""
 
@@ -461,10 +546,6 @@ msgstr ""
 
 #: inc/item_ticket.class.php:172
 msgid "No successful records"
-msgstr ""
-
-#: inc/item_ticket.class.php:179
-msgid "Number of errors"
 msgstr ""
 
 #: inc/item_ticket.class.php:183 inc/item_ticket.class.php:192
@@ -523,7 +604,7 @@ msgstr ""
 
 #: inc/notificationtargetadditional_data.class.php:54
 #: inc/notificationtargetadditional_data.class.php:95
-#: inc/record.class.php:1524
+#: inc/record.class.php:1645
 msgid "Toner level alert"
 msgstr ""
 
@@ -615,51 +696,51 @@ msgstr ""
 msgid "Invalid process itemtype"
 msgstr ""
 
-#: inc/process.class.php:382
+#: inc/process.class.php:394
 msgid "Kill process"
 msgstr ""
 
-#: inc/process.class.php:388
+#: inc/process.class.php:400
 msgid "Kill all processes"
 msgstr ""
 
-#: inc/process.class.php:395 inc/process.class.php:399
+#: inc/process.class.php:407 inc/process.class.php:411
 msgid "No processes"
 msgstr ""
 
-#: inc/process.class.php:412
+#: inc/process.class.php:424
 msgid "UID"
 msgstr ""
 
-#: inc/process.class.php:413
+#: inc/process.class.php:425
 msgid "PID"
 msgstr ""
 
-#: inc/process.class.php:414
+#: inc/process.class.php:426
 msgid "PPID"
 msgstr ""
 
-#: inc/process.class.php:415
+#: inc/process.class.php:427
 msgid "C"
 msgstr ""
 
-#: inc/process.class.php:416
+#: inc/process.class.php:428
 msgid "STIME"
 msgstr ""
 
-#: inc/process.class.php:417
+#: inc/process.class.php:429
 msgid "TTY"
 msgstr ""
 
-#: inc/process.class.php:418
+#: inc/process.class.php:430
 msgid "TIME"
 msgstr ""
 
-#: inc/process.class.php:419
+#: inc/process.class.php:431
 msgid "CMD"
 msgstr ""
 
-#: inc/process.class.php:420
+#: inc/process.class.php:432
 msgid "Items in progress"
 msgstr ""
 
@@ -679,141 +760,150 @@ msgstr ""
 msgid "Right to update printers values"
 msgstr ""
 
-#: inc/record.class.php:80
+#: inc/record.class.php:84
 msgid "Record"
 msgid_plural "Records"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/record.class.php:132
+#: inc/record.class.php:136
 msgid "Actions"
 msgstr ""
 
-#: inc/record.class.php:153 inc/record.class.php:1154
+#: inc/record.class.php:157 inc/record.class.php:1257
 msgid "Add a manual record"
 msgstr ""
 
-#: inc/record.class.php:164 inc/record.class.php:1159
+#: inc/record.class.php:168 inc/record.class.php:1262
 msgid "Add a lower record"
 msgstr ""
 
-#: inc/record.class.php:177
+#: inc/record.class.php:181
 msgid "Update global TCO"
 msgstr ""
 
-#: inc/record.class.php:566
+#: inc/record.class.php:570
 msgid "Host error"
 msgstr ""
 
-#: inc/record.class.php:567
+#: inc/record.class.php:571
 msgid "Record error"
 msgstr ""
 
-#: inc/record.class.php:568
+#: inc/record.class.php:572
 msgid "Automatic"
 msgstr ""
 
-#: inc/record.class.php:569
+#: inc/record.class.php:573
 msgid "Manual"
 msgstr ""
 
-#: inc/record.class.php:605
+#: inc/record.class.php:609
 msgid "Planned"
 msgstr ""
 
-#: inc/record.class.php:606
+#: inc/record.class.php:610
 msgid "Finished"
 msgstr ""
 
-#: inc/record.class.php:607
+#: inc/record.class.php:611
 msgid "In progress"
 msgstr ""
 
-#: inc/record.class.php:645
+#: inc/record.class.php:649
 msgid "Success"
 msgstr ""
 
-#: inc/record.class.php:646
+#: inc/record.class.php:650
 msgid "IP fail"
 msgstr ""
 
-#: inc/record.class.php:647
+#: inc/record.class.php:651
 msgid "OID fail"
 msgstr ""
 
-#: inc/record.class.php:648
+#: inc/record.class.php:652
 msgid "Unknown error"
 msgstr ""
 
-#: inc/record.class.php:649
+#: inc/record.class.php:653
 msgid "Mac fail"
 msgstr ""
 
-#: inc/record.class.php:650
+#: inc/record.class.php:654
 msgid "Sysdescr fail"
 msgstr ""
 
-#: inc/record.class.php:651
+#: inc/record.class.php:655
 msgid "Serial fail"
 msgstr ""
 
-#: inc/record.class.php:764 inc/record.class.php:780
-msgid "No results, please check OIDs of your record model"
+#: inc/record.class.php:929
+#, php-format
+msgid "%s records remaining"
 msgstr ""
 
-#: inc/record.class.php:787
-msgid "This item type is not correct"
-msgstr ""
-
-#: inc/record.class.php:792
-msgid "No printers to search"
-msgstr ""
-
-#: inc/record.class.php:1157
+#: inc/record.class.php:1260
 msgid "Update record"
 msgstr ""
 
-#: inc/record.class.php:1386 inc/record.class.php:1400
+#: inc/record.class.php:1301
+msgid "Record entity"
+msgstr ""
+
+#: inc/record.class.php:1505 inc/record.class.php:1519
 msgid "Error : Counters are not valid"
 msgstr ""
 
-#: inc/record.class.php:1423
+#: inc/record.class.php:1542
 msgid "Error : Counters cannot be lower than the previous"
 msgstr ""
 
-#: inc/record.class.php:1447
+#: inc/record.class.php:1566
 msgid "Error : Counters cannot be higher than the next"
 msgstr ""
 
-#: inc/record.class.php:1460
+#: inc/record.class.php:1579
 msgid "Error : Counter position is not valid"
 msgstr ""
 
-#: inc/record.class.php:1485
+#: inc/record.class.php:1604
 msgid "Item records"
 msgstr ""
 
-#: inc/record.class.php:1488
+#: inc/record.class.php:1607
 msgid "Disable automatic records"
 msgstr ""
 
-#: inc/record.class.php:1495
+#: inc/record.class.php:1614
 msgid "Set first record when record model change"
 msgstr ""
 
-#: inc/record.class.php:1503
+#: inc/record.class.php:1622
 msgid "Enable toner level alert"
 msgstr ""
 
-#: inc/record.class.php:1526
+#: inc/record.class.php:1647
 msgid "Reminders frequency for printer toner level"
 msgstr ""
 
-#: inc/record.class.php:1534
+#: inc/record.class.php:1655
 msgid "Toner alert treshold"
 msgstr ""
 
-#: inc/record.class.php:1648
+#: inc/record.class.php:1680
+msgid "Cleaning"
+msgstr ""
+
+#: inc/record.class.php:1683
+msgid "Delete records before"
+msgstr ""
+
+#: inc/record.class.php:1700
+msgid "Do you want to clean all records ?"
+msgstr ""
+
+#: inc/record.class.php:1809
 msgid "State"
 msgstr ""
 
@@ -956,14 +1046,6 @@ msgstr ""
 
 #: inc/sysdescr.class.php:161
 msgid "Add a new sysdescr"
-msgstr ""
-
-#: scripts/clean_records.php:55
-msgid "Records cleaned"
-msgstr ""
-
-#: scripts/clean_records.php:57
-msgid "No records to clean"
 msgstr ""
 
 #: scripts/clean_records.php:61 scripts/printercounters_fullsync.php:75

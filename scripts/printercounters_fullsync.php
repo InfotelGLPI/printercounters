@@ -31,6 +31,7 @@ ini_set("max_execution_time", "0");
 if (isset($_SERVER["argv"]) && !isset($argv)) {
    $argv = $_SERVER["argv"];
 }
+
 if ($argv) {
    for ($i = 1; $i < count($argv); $i++) {
       $it = explode("=", $argv[$i], 2);
@@ -65,10 +66,21 @@ if ($plugin->isActivated("printercounters") && !$config['disable_autosearch']) {
    $sonprocess_nbr = $_GET['sonprocess_nbr'];
    $sonprocess_id  = $_GET['sonprocess_id'];
    $itemtype       = $_GET['itemtype'];
+   $record_type    = $_GET['record_type'];
 
-   // Init record
-   $record = new PluginPrintercountersRecord($itemtype);
-   list($messages, $error) = $record->initRecord($itemtype, 0, $sonprocess_id, $sonprocess_nbr);
+   switch($record_type){
+      case 'error':
+         // Init error record
+         $record = new PluginPrintercountersErrorItem($itemtype, 0);
+         list($messages, $error) = $record->initRecord($sonprocess_id, $sonprocess_nbr);
+         break;
+      case 'normal':
+         // Init record
+         $record = new PluginPrintercountersRecord($itemtype);
+         list($messages, $error) = $record->initRecord($itemtype, 0, $sonprocess_id, $sonprocess_nbr);
+         break;
+   }
+
    echo implode("\n", $messages);
 
 } else {

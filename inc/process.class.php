@@ -157,16 +157,20 @@ class PluginPrintercountersProcess extends CommonDBTM {
     * @global type $DB
     * @return type
     */
-   public function getIPAddressesForProcess() {
+   public function getIPAddressesForProcess($errorHandler=false) {
       global $DB;
 
       $ip = array();
-      
+
       // Filter printers according to their periodicity
-      if($this->items_id <= 0){
-         $items_id = $this->selectPrinterToSearch();
+      if ($this->items_id <= 0) {
+         $items_id = $this->selectPrinterToSearch(false, $errorHandler);
       } else {
-         $items_id = array($this->items_id);
+         $items_id   = array($this->items_id);
+         $error_item = new PluginPrintercountersErrorItem($this->itemtype, $this->items_id);
+         if ($error_item->isInError() > 0 && !$errorHandler) {
+            return $ip;
+         }
       }
 
       $itemjoin = getTableForItemType($this->itemtype);
@@ -185,7 +189,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
       if($this->items_id > 0){
          $query .= " AND `".$itemjoin."`.`id` = ".$this->items_id;
       }
-      
+
       $result_ocs = $DB->query($query);
       if ($DB->numrows($result_ocs) > 0) {
          while ($data = $DB->fetch_array($result_ocs)) {
@@ -198,7 +202,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
       $items_id = array_keys($ip);
       $item_recordmodels = new PluginPrintercountersItem_Recordmodel();
       $item_recordmodels->setMutex($items_id, $this->process_id);
-      
+
       return $ip;
    }
    
@@ -210,7 +214,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
     * @param string $condition
     * @return type
     */
-   function selectPrinterToSearch($more_data=false, $condition=''){
+   function selectPrinterToSearch($more_data=false, $errorHandler=false, $condition=''){
       global $DB;
       
       $output = array();
@@ -239,7 +243,8 @@ class PluginPrintercountersProcess extends CommonDBTM {
                        `".$itemjoin4."`.`name` as entities_name,
                        `".$itemjoin."`.`periodicity` as periodicity_seconds,
                        (`".$itemjoin."`.`periodicity`/24/3600) as periodicity,
-                       TIME_TO_SEC(TIMEDIFF(NOW(),max(`".$itemjoin3."`.`date`))) as delay
+                       TIME_TO_SEC(TIMEDIFF(NOW(),max(`".$itemjoin3."`.`date`))) as delay,
+                      `glpi_plugin_printercounters_items_recordmodels`.`status` as status
           FROM ".$itemjoin."
           LEFT JOIN `".$itemjoin3."` 
              ON (`".$itemjoin3."`.`plugin_printercounters_items_recordmodels_id` = `".$itemjoin."`.`id`)
@@ -247,35 +252,54 @@ class PluginPrintercountersProcess extends CommonDBTM {
              ON (`".$itemjoin3."`.`entities_id` = `".$itemjoin4."`.`id`)
           INNER JOIN `".$itemjoin5."` 
              ON (`".$itemjoin."`.`items_id` = `".$itemjoin5."`.`id`)
-          AND LOWER(`".$itemjoin."`.`itemtype`) = LOWER('".$this->itemtype."')
+          WHERE LOWER(`".$itemjoin."`.`itemtype`) = LOWER('".$this->itemtype."')
           AND `".$itemjoin5."`.`is_deleted` = 0 ";
-      
+
       $query .= $where_multi_process;
       
       $query .= " $condition GROUP BY `".$itemjoin."`.`items_id`";  
+      
+      // Items in error
+      $config      = new PluginPrintercountersConfig();
+      $config_data = $config->getInstance();
+      if ($config_data['enable_error_handler']) {
+         if (!$errorHandler) {
+            $query .= " HAVING (status IS NULL OR status='".PluginPrintercountersErrorItem::$NO_ERROR."')";
+         } else {
+            $query .= " HAVING (status IN ('".PluginPrintercountersErrorItem::$HARD_STATE."', '".PluginPrintercountersErrorItem::$SOFT_STATE."'))";
+         }
+      }
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         while ($data = $DB->fetch_assoc($result)) { 
-            // Is item can be fetch ?
-            if (($data['delay'] >= $data['periodicity_seconds'] || $data['delay'] == null) && $data['enable_automatic_record']) {
-               // Get next record
-               if (!empty($data['last_record']) && $data['last_record'] != 'NULL') {
-                  $next_record = strtotime($data['last_record']) + $data['periodicity_seconds'];
-                  if ($next_record < time()) {
-                     $seconds = round(((time() - $next_record) / 3600)) * 3600;
-                     $next_record = $next_record + $seconds;
+         // Items in error
+         if ($config_data['enable_error_handler'] && $errorHandler) {
+            while ($data = $DB->fetch_assoc($result)) { 
+               $output[] = $data['items_id'];
+            }
+         // Normal
+         } else {
+            while ($data = $DB->fetch_assoc($result)) { 
+               // Is item can be fetch ?
+               if (($data['delay'] >= $data['periodicity_seconds'] || $data['delay'] == null) && $data['enable_automatic_record']) {
+                  // Get next record
+                  if (!empty($data['last_record']) && $data['last_record'] != 'NULL') {
+                     $next_record = strtotime($data['last_record']) + $data['periodicity_seconds'];
+                     if ($next_record < time()) {
+                        $seconds = round(((time() - $next_record) / 3600)) * 3600;
+                        $next_record = $next_record + $seconds;
+                     }
+                  } else {
+                     $next_record = time();
                   }
-               } else {
-                  $next_record = time();
-               }
-               $data['next_record'] = $next_record;
+                  $data['next_record'] = $next_record;
 
-               if ($more_data) {
-                  $output[] = $data;
-               } else {
-                  if ($data['mutex_delay'] > self::MUTEX_TIMEOUT || $data['mutex_delay'] == null) {
-                     $output[] = $data['items_id'];
+                  if ($more_data) {
+                     $output[] = $data;
+                  } else {
+                     if ($data['mutex_delay'] > self::MUTEX_TIMEOUT || $data['mutex_delay'] == null) {
+                        $output[] = $data['items_id'];
+                     }
                   }
                }
             }

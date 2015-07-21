@@ -207,7 +207,13 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
    */
    function showForItem($item) {
       
-      if (countElementsInTable($this->getTable(), "`items_id` = '".$item->getID()."' AND `itemtype` ='".$item->getType()."'")) {
+      if (countElementsInTable($this->getTable(), "`items_id` = '".$item->getID()."' AND `itemtype` ='".$item->getType()."'")) {   
+         // Record error
+         echo "<div class='center' id='error_item'>";
+         $errorItem = new PluginPrintercountersErrorItem($item->getType(), $item->getID());
+         $errorItem->showErrorItem();
+         echo "</div>";
+         
          // Show sub unit data
          $additional_data = new PluginPrintercountersAdditional_data($item->getType(), $item->getID());
          echo "<div class='center' id='additional_datas'>";
@@ -1577,7 +1583,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          echo Search::showItem($search->output_type, $history['recordmodels_name'], $col_num, $row_num, $onclick);
          echo Search::showItem($search->output_type, $history['entities_name'], $col_num, $row_num, $onclick);
          $counters = array();
-         foreach($history['counters'] as $val){
+         foreach ($history['counters'] as $val) {
             $counters[$val['counters_name']] = $val['counters_value'];
          }
          echo Search::showItem($search->output_type, implode($lineBreak, array_keys($counters)), $col_num, $row_num, $onclick);
@@ -1735,6 +1741,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
                           (`".$this->getTable()."`.`max_timeout`)*1000000 as max_timeout,
                           `".$this->getTable()."`.`nb_retries`,
                           `".$this->getTable()."`.`enable_automatic_record`,
+                          `".$this->getTable()."`.`error_counter`,
                           `".$itemjoin."`.`entities_id`,
                           `".$itemjoin."`.`locations_id`,
                           `".$itemjoin."`.`name`

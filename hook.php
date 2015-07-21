@@ -30,7 +30,7 @@ function plugin_printercounters_install() {
    
    // SQL creation
    if (!TableExists("glpi_plugin_printercounters_profiles")) {
-      $DB->runFile(GLPI_ROOT . "/plugins/printercounters/install/sql/empty-1.0.6.sql");
+      $DB->runFile(GLPI_ROOT . "/plugins/printercounters/install/sql/empty-1.0.7.sql");
       
       // Add record notification
       include(GLPI_ROOT ."/plugins/printercounters/inc/notificationtargetadditional_data.class.php");
@@ -75,6 +75,12 @@ function plugin_printercounters_install() {
    if (!FieldExists('glpi_plugin_printercounters_snmpauthentications', 'is_default')) {
       include(GLPI_ROOT ."/plugins/printercounters/install/update_105_106.php");
       update105to106();
+   }
+   
+   // Update 106 to 107
+   if (!TableExists("glpi_plugin_printercounters_errorrecords")) {
+      include(GLPI_ROOT ."/plugins/printercounters/install/update_106_107.php");
+      update106to107();
    }
 
    CronTask::Register('PluginPrintercountersItem_Ticket', 'PrintercountersCreateTicket', DAY_TIMESTAMP);

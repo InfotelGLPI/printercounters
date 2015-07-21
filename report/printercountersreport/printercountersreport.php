@@ -88,6 +88,7 @@ $query = "SELECT `glpi_printers`.`id`,
                  `glpi_budgets`.`name` as budget,
                  `glpi_printers`.`serial` as serial,
                  `glpi_plugin_printercounters_records`.`date`,
+                 `glpi_plugin_printercounters_records`.`id` as records_id,
                  `glpi_printers`.`is_deleted`,
                  COUNT(`glpi_plugin_printercounters_records`.`id`) as countRecords
           FROM `glpi_plugin_printercounters_items_recordmodels`
@@ -110,9 +111,9 @@ $query = "SELECT `glpi_printers`.`id`,
           AND `glpi_plugin_printercounters_records`.`result` = ".PluginPrintercountersRecord::$SUCCESS."
           GROUP BY `glpi_plugin_printercounters_items_recordmodels`.`items_id`
           HAVING 
-              `glpi_plugin_printercounters_records`.`date` <= '".$datecriteria->getEndDate()."' 
+              `glpi_plugin_printercounters_records`.`date` <= '".date('Y-m-d H:i:s', strtotime($datecriteria->getEndDate()))."'
                AND `glpi_plugin_printercounters_records`.`date` >= '".date('Y-m-d H:i:s', strtotime($datecriteria->getStartDate()." - 3 MONTH"))."'
-               AND ((`glpi_printers`.`is_deleted` = 0) OR (`glpi_printers`.`is_deleted` = 1 AND countRecords >= 2))
+               AND (`glpi_printers`.`is_deleted` = 0 AND countRecords >= 2)
           ".
           getOrderBy($_REQUEST['sort'], $columns);
 
@@ -211,26 +212,74 @@ if ($res && $nbtot > 0) {
 
    $record = new PluginPrintercountersRecord();
 
+   $jalon1Minor3Month = date('Y-m-d H:i:s', strtotime($datecriteria->getStartDate()." - 3 MONTH"));
+   $jalon1Plus3Month  = date('Y-m-d H:i:s', strtotime($datecriteria->getStartDate()." + 3 MONTH"));
+   
    while ($data = $DB->fetch_assoc($res)) {
       $item_billingmodel = new PluginPrintercountersItem_Billingmodel($itemtype, $data['id']);
       
       // Get record start ~ 3 month
-      $condition = "AND `".$record->getTable()."`.`date` <= '".$datecriteria->getStartDate()."' 
-                    AND `".$record->getTable()."`.`date` >= '".date('Y-m-d H:i:s', strtotime($datecriteria->getStartDate()." - 3 MONTH"))."'";
-      $record1 = $record->getRecords($data['id'], $itemtype, array('condition' => $condition));
-      $record1 = $item_billingmodel->computeRecordCost($record1, array(PluginPrintercountersCountertype_Recordmodel::COLOR));
+      $sub_condition = "AND `glpi_plugin_printercounters_records`.`result` = ".PluginPrintercountersRecord::$SUCCESS;
+      $condition     = "AND `".$record->getTable()."`.`date` <= '".$jalon1Plus3Month."' 
+                        AND `".$record->getTable()."`.`date` >= '".$jalon1Minor3Month."' ".$sub_condition;
+
+      $record1 = $record->getRecords($data['id'], $itemtype, array('condition'     => $condition));
+      
+      $total_monochrome_record1 = 0;
+      $total_color_record1      = 0;
+
+      if (!empty($record1)) {
+         // Find closest record from start date   
+         $dates = array();
+         foreach ($record1 as $records) {
+            $dates[] = $records['date'];
+         }
+
+         $closestDate = findClosestDate($dates, $datecriteria->getStartDate());
+
+         foreach ($record1 as $records) {
+            if ($closestDate == $records['date']) {
+               foreach ($records['counters'] as $counter) {
+                  if ($counter['oid_type'] == PluginPrintercountersCountertype_Recordmodel::MONOCHROME || $counter['oid_type'] == PluginPrintercountersCountertype_Recordmodel::BLACKANDWHITE) {
+                     $total_monochrome_record1 += $counter['counters_value'];
+                  }
+
+                  if ($counter['oid_type'] == PluginPrintercountersCountertype_Recordmodel::COLOR) {
+                     $total_color_record1 += $counter['counters_value'];
+                  }
+               }
+               break;
+            }
+         }
+      }
 
       // Get record end ~ start
-      $condition = "AND `".$record->getTable()."`.`date` >= '".$datecriteria->getStartDate()."'
-                    AND `".$record->getTable()."`.`date` <= '".$datecriteria->getEndDate()."'";
-      $record2 = $record->getRecords($data['id'], $itemtype, array('condition' => $condition));
-      $record2 = $item_billingmodel->computeRecordCost($record2, array(PluginPrintercountersCountertype_Recordmodel::COLOR));
-      
+      $sub_condition = "AND `glpi_plugin_printercounters_records`.`result` = ".PluginPrintercountersRecord::$SUCCESS;
+      $condition     = "AND `".$record->getTable()."`.`date` >= '".$datecriteria->getStartDate()."'
+                        AND `".$record->getTable()."`.`date` <= '".$datecriteria->getEndDate()."' ".$sub_condition;
+
+      $record2 = $record->getRecords($data['id'], $itemtype, array('condition'     => $condition,
+                                                                   'sub_condition' => $sub_condition,
+                                                                   'last_record'   => true,
+                                                                   'record_date'   => $datecriteria->getEndDate()));
+      $total_monochrome_record2 = 0;
+      $total_color_record2      = 0;
+      foreach ($record2 as $records) {
+         foreach ($records['counters'] as $counter) {
+            if ($counter['oid_type'] == PluginPrintercountersCountertype_Recordmodel::MONOCHROME || $counter['oid_type'] == PluginPrintercountersCountertype_Recordmodel::BLACKANDWHITE) {
+               $total_monochrome_record2 += $counter['counters_value'];
+            }
+
+            if ($counter['oid_type'] == PluginPrintercountersCountertype_Recordmodel::COLOR) {
+               $total_color_record2 += $counter['counters_value'];
+            }
+         }
+      }
+
       // Get all records
       $condition = " AND `".$record->getTable()."`.`date` <= '".$datecriteria->getEndDate()."' 
-                     AND `".$record->getTable()."`.`date` >= '".date('Y-m-d H:i:s', strtotime($datecriteria->getStartDate()." - 3 MONTH"))."'";
+                     AND `".$record->getTable()."`.`date` >= '".$datecriteria->getStartDate()."'";
       $records = $record->getRecords($data['id'], $itemtype, array('condition' => $condition));
-
       $records = $item_billingmodel->computeRecordCost($records);
 
       $row_num++;
@@ -242,10 +291,10 @@ if ($res && $nbtot > 0) {
       echo Search::showItem($output_type, $data['manufacturer'], $num, $row_num);
       echo Search::showItem($output_type, $data['model'], $num, $row_num);
       echo Search::showItem($output_type, "<a href='".$CFG_GLPI['root_doc']."/front/budget.form.php?id=".$data['budgets_id']."' target='_blank'>".$data['budget']."</a>", $num, $row_num);
-      echo Search::showItem($output_type, $record1['total_page_number'], $num, $row_num);
-      echo Search::showItem($output_type, $record1['total_oid_type'][PluginPrintercountersCountertype_Recordmodel::COLOR]['page_number'], $num, $row_num);
-      echo Search::showItem($output_type, $record2['total_page_number'], $num, $row_num);
-      echo Search::showItem($output_type, $record2['total_oid_type'][PluginPrintercountersCountertype_Recordmodel::COLOR]['page_number'], $num, $row_num);
+      echo Search::showItem($output_type, $total_monochrome_record1, $num, $row_num);
+      echo Search::showItem($output_type, $total_color_record1, $num, $row_num);
+      echo Search::showItem($output_type, $total_monochrome_record2, $num, $row_num);
+      echo Search::showItem($output_type, $total_color_record2, $num, $row_num);
       echo Search::showItem($output_type, Html::formatNumber($records['total_record_cost']), $num, $row_num);
       echo Search::showEndLine($output_type);
    }
@@ -334,6 +383,25 @@ function getOrderByFields($default, $columns) {
       }
    }
    return array();
+}
+
+/**
+ * Get the closest date
+ * 
+ * @param type $array
+ * @param type $date
+ */
+function findClosestDate($array, $date) {
+
+   $interval = array();
+   foreach ($array as $day) {
+      $interval[] = abs(strtotime($date) - strtotime($day));
+   }
+
+   asort($interval);
+   $closest = key($interval);
+
+   return $array[$closest];
 }
 
 ?>

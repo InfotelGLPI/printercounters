@@ -39,10 +39,11 @@ class PluginPrintercountersConfig extends CommonDBTM {
    
    private static $instance;
    
-   const SNMPSET = 1; 
-   const TICKETS = 2; 
-   const RECORDS = 3;
-   
+   const SNMPSET    = 1;
+   const TICKETS    = 2;
+   const RECORDS    = 3;
+   const ERRORITEMS = 4;
+
    static function getTypeName($nb=0) {
       return __('Plugin management', 'printercounters');
    }
@@ -80,9 +81,10 @@ class PluginPrintercountersConfig extends CommonDBTM {
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
 
       if ($item->getType() == __CLASS__) {
-         $tabs[self::SNMPSET] = PluginPrintercountersSnmpset::getTypeName();
-         $tabs[self::TICKETS] = PluginPrintercountersItem_Ticket::getTypeName();
-         $tabs[self::RECORDS] = PluginPrintercountersRecord::getTypeName(2);
+         $tabs[self::SNMPSET]   = PluginPrintercountersSnmpset::getTypeName();
+         $tabs[self::TICKETS]   = PluginPrintercountersItem_Ticket::getTypeName();
+         $tabs[self::RECORDS]   = PluginPrintercountersRecord::getTypeName(2);
+         $tabs[self::ERRORITEMS] = PluginPrintercountersErrorItem::getTypeName(2);
 
          return $tabs;
       }
@@ -107,10 +109,12 @@ class PluginPrintercountersConfig extends CommonDBTM {
                $snmpset = new PluginPrintercountersSnmpset();
                $snmpset->showSnmpSet($config);
                break;
+            
             case self::TICKETS : // Ticket
                $ticket = new PluginPrintercountersItem_Ticket();
                $ticket->showTickets($config);
                break;
+            
             case self::RECORDS :
                // Record
                $record = new PluginPrintercountersRecord();
@@ -118,7 +122,12 @@ class PluginPrintercountersConfig extends CommonDBTM {
                 // Process
                $process = new PluginPrintercountersProcess();
                $process->showProcesses($config);
-
+               break;
+            
+            case self::ERRORITEMS :
+               // Error item
+               $erroritem = new PluginPrintercountersErrorItem();
+               $erroritem->showErrorItemConfig($config);
                break;
          }
       }
@@ -153,7 +162,9 @@ class PluginPrintercountersConfig extends CommonDBTM {
                            'set_first_record'         => $data['set_first_record'],
                            'enable_toner_alert'       => $data['enable_toner_alert'],
                            'toner_alert_repeat'       => $data['toner_alert_repeat'],
-                           'toner_treshold'           => $data['toner_treshold']
+                           'toner_treshold'           => $data['toner_treshold'],
+                           'max_error_counter'        => $data['max_error_counter'],
+                           'enable_error_handler'     => $data['enable_error_handler']
                          );
          }
          

@@ -30,12 +30,13 @@ function usage() {
    echo "\n\tArguments:\n";
    echo "\t\t--sonprocess_nbr=num: number of son processes to launch\n";
    echo "\t\t--itemtype=string: type of item to search\n";
+   echo "\t\t--record_type=string: type of record ('error' or 'normal')\n";
    echo "\t\t--nolog: use standard output rather than log file\n";
 }
 
 
 function readargs () {
-   global $itemtype, $sonprocess_nbr, $log;
+   global $itemtype, $sonprocess_nbr, $record_type,  $log;
 
    for ($i=1 ; $i<$_SERVER["argc"] ; $i++) {
       $it = explode("=",$_SERVER["argv"][$i]);
@@ -46,6 +47,10 @@ function readargs () {
 
          case '--sonprocess_nbr' :
             $sonprocess_nbr=$it[1];
+            break;
+         
+         case '--record_type' :
+            $record_type=$it[1];
             break;
 
          case '--nolog' :
@@ -157,7 +162,7 @@ if (function_exists("pcntl_fork")) {
          $pids[$pid]=1;
          
       } else  {
-         $cmd="php -q -d -f printercounters_fullsync.php  --sonprocess_nbr=$sonprocess_nbr ".
+         $cmd="php -q -d -f printercounters_fullsync.php --record_type=$record_type --sonprocess_nbr=$sonprocess_nbr ".
               " --sonprocess_id=$i --itemtype=$itemtype --process_id=$processid";
 
          $out=array();
@@ -181,8 +186,9 @@ if (function_exists("pcntl_fork")) {
    }
 } else {
    # Windows - No fork, so Only one process :(
-   $cmd="php -q -d -f printercounters_fullsync.php --sonprocess_nbr=1 --sonprocess_id=1 ".
-        "--itemtype=$itemtype --process_id=$processid";
+   $cmd="php -q -d -f printercounters_fullsync.php --record_type=$record_type --sonprocess_nbr=1"
+         . " --sonprocess_id=1 --itemtype=$itemtype --process_id=$processid";
+
    $out=array();
    exec($cmd, $out, $ret);
    foreach ($out as $line) {

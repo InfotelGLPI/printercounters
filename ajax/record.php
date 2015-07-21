@@ -100,6 +100,18 @@ switch($_POST['action']){
       $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
       $item_recordmodel->massiveActionTimeOut();
       break;
+   
+   case 'loadCleanErrorRecords':
+      header("Content-Type: text/html; charset=UTF-8");
+      $record->cleanRecords();
+      break;
+   
+   case 'showErrorItem':
+      header("Content-Type: text/html; charset=UTF-8");
+      // Record error
+      $errorItem = new PluginPrintercountersErrorItem($_POST['itemtype'], $_POST['items_id']);
+      $errorItem->showErrorItem();
+      break;
 }
 
 ?>

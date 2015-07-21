@@ -103,13 +103,12 @@ function initSearch(root_doc, formName, toupdate, start, limit, order, sort){
 }
 
 /** 
-* Init search
+* Init additional data
 * 
 * @param string root_doc
-* @param string formName
 * @param string toupdate
-* @param int start
-* @param int limit
+* @param string itemtype
+* @param int items_id
 */
 function initAdditionalData(root_doc, toupdate, itemtype, items_id){
 
@@ -135,6 +134,37 @@ function initAdditionalData(root_doc, toupdate, itemtype, items_id){
    });
 }
 
+/** 
+* Init error item
+* 
+* @param string root_doc
+* @param string toupdate
+* @param string itemtype
+* @param int items_id
+*/
+function initErrorItem(root_doc, toupdate, itemtype, items_id){
+
+   var item_bloc = Ext.get(toupdate);
+   
+   // Loading
+   item_bloc.update('<div style="width:100%;text-align:center"><img src="'+root_doc+'/lib/extjs/resources/images/default/shared/large-loading.gif"></div>');
+
+   // Send data
+   Ext.Ajax.request({
+      url: root_doc+'/plugins/printercounters/ajax/record.php',
+      params: 'action=showErrorItem&itemtype='+itemtype+'&items_id='+items_id,
+      success: function(response, opts) {
+         var result = response.responseText;
+         
+         item_bloc.update(result);
+
+         var scripts, scriptsFinder=/<script[^>]*>([\s\S]+?)<\/script>/gi;
+         while(scripts=scriptsFinder.exec(result)) {
+            eval(scripts[1]);
+         }
+      }
+   });
+}
 
 /** 
 *  Add search field
@@ -263,6 +293,7 @@ function printercountersActions(root_doc, action, toobserve, toupdate, params){
             case 'immediateRecord':
                initSearch(root_doc, params.formName, params.updates.record);
                initAdditionalData(root_doc, params.updates.additionalData, params.itemtype, params.items_id);
+               initErrorItem(root_doc, params.updates.errorItem, params.itemtype, params.items_id);
                break;
                
             case 'SNMPSet':
