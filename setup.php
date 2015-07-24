@@ -143,7 +143,7 @@ function plugin_version_printercounters() {
       'version'        => '1.0.7',
       'author'         => "<a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>",
       'license'        => 'GPLv2+',
-      'homepage'       => '',
+      'homepage'       => 'https://github.com/InfotelGLPI/printercounters',
       'minGlpiVersion' => '0.84');// For compatibility / no install in version < 0.83
 }
 
