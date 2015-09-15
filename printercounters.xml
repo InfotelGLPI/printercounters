@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+   <name>PrinterCounters</name>
+   <key>printercounters</key>
+   <state>stable</state>
+   <logo></logo>
+   <description>
+      <short>
+         <fr><![CDATA[Plugin de gestion des compteurs des imprimantes basé sur le protocole SNMP]]></fr>
+         <en><![CDATA[Plugin counters management of printers based on SNMP]]></en>
+      </short>
+      <long>
+         <fr><![CDATA[Plugin de gestion des compteurs des imprimantes basé sur le protocole SNMP.
+Le plugin se base sur l'inventaire déja existant de GLPI, pour récupérer les adresses IP des imprimantes de chaque entité.
+Le plugin permet :
+        <br />- d'effectuer le relevé des compteurs des imprimantes sur le réseau
+        <br />- de configurer et de gérer l'interrogation des compteurs pour chaque imprimante
+        <br />- d'afficher et de gérer les coûts par imprimantes / entités
+   ]]></fr>
+         <en><![CDATA[Plugin counters management of printers based on SNMP.
+The plugin is based on the existing inventory GLPI to retrieve the printer IP addresses of each entity.
+The plugin allows :
+        <br />- to perform counters reading printers on the network
+        <br />- to configure and manage the counter interrogation for each printer
+        <br />- to view and manage costs by printers / entities
+   ]]></en>
+       </long>
+   </description>
+   <homepage>https://forge.indepnet.net/projects/printercounters</homepage>
+   <download>https://forge.indepnet.net/projects/printercounters/files</download>
+   <authors>
+      <author>Infotel</author>
+   </authors>
+   <versions>
+      <version>
+          <num>1.04</num>
+          <compatibility>0.84</compatibility>
+      </version>
+      <version>
+          <num>1.02</num>
+          <compatibility>0.84</compatibility>
+      </version>
+     </versions>
+   <langs>
+      <lang>en_GB</lang>
+      <lang>fr_FR</lang>
+    </langs>
+   <license><![CDATA[GPLv2+]]></license>
+      <tags>
+         <fr>
+            <tag>gestion</tag>
+            <tag>inventaire</tag>
+         </fr>
+         <en>
+            <tag>management</tag>
+            <tag>inventory</tag>
+         </en>
+   </tags>
+</root>
