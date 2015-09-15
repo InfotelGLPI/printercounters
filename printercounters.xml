@@ -29,6 +29,7 @@ The plugin allows :
    <homepage>https://forge.indepnet.net/projects/printercounters</homepage>
    <download>https://forge.indepnet.net/projects/printercounters/files</download>
    <authors>
+      <author>Ludovic Dupont</author>
       <author>Infotel</author>
    </authors>
    <versions>
