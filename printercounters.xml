@@ -13,21 +13,21 @@
          <fr><![CDATA[Plugin de gestion des compteurs des imprimantes basé sur le protocole SNMP.
 Le plugin se base sur l'inventaire déja existant de GLPI, pour récupérer les adresses IP des imprimantes de chaque entité.
 Le plugin permet :
-        <br />- d'effectuer le relevé des compteurs des imprimantes sur le réseau
-        <br />- de configurer et de gérer l'interrogation des compteurs pour chaque imprimante
-        <br />- d'afficher et de gérer les coûts par imprimantes / entités
+        <br />- D'effectuer le relevé des compteurs des imprimantes sur le réseau
+        <br />- De configurer et de gérer l'interrogation des compteurs pour chaque imprimante
+        <br />- D'afficher et de gérer les coûts par imprimantes / entités
    ]]></fr>
          <en><![CDATA[Plugin counters management of printers based on SNMP.
 The plugin is based on the existing inventory GLPI to retrieve the printer IP addresses of each entity.
 The plugin allows :
-        <br />- to perform counters reading printers on the network
-        <br />- to configure and manage the counter interrogation for each printer
-        <br />- to view and manage costs by printers / entities
+        <br />- To perform counters reading printers on the network
+        <br />- To configure and manage the counter interrogation for each printer
+        <br />- To view and manage costs by printers / entities
    ]]></en>
        </long>
    </description>
-   <homepage>https://forge.indepnet.net/projects/printercounters</homepage>
-   <download>https://forge.indepnet.net/projects/printercounters/files</download>
+   <homepage>https://github.com/InfotelGLPI/printercounters</homepage>
+   <download>https://github.com/InfotelGLPI/printercounters/releases</download>
    <authors>
       <author>Ludovic Dupont</author>
       <author>Infotel</author>
@@ -57,4 +57,8 @@ The plugin allows :
             <tag>inventory</tag>
          </en>
    </tags>
+   <screenshots>
+      <screenshot>https://raw.githubusercontent.com/wiki/InfotelGLPI/printercounters/notice/image003.jpg</screenshot>
+      <screenshot>https://raw.githubusercontent.com/wiki/InfotelGLPI/printercounters/notice/image021.jpg</screenshot>
+   </screenshots>
 </root>
