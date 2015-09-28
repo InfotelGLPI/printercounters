@@ -3,7 +3,7 @@
    <name>PrinterCounters</name>
    <key>printercounters</key>
    <state>stable</state>
-   <logo></logo>
+   <logo>https://raw.githubusercontent.com/InfotelGLPI/printercounters/master/printercounters.png</logo>
    <description>
       <short>
          <fr><![CDATA[Plugin de gestion des compteurs des imprimantes basé sur le protocole SNMP]]></fr>
