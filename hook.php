@@ -29,7 +29,7 @@ function plugin_printercounters_install() {
    include_once (GLPI_ROOT . "/plugins/printercounters/inc/profile.class.php");
    
    // SQL creation
-   if (!TableExists("glpi_plugin_printercounters_profiles")) {
+   if (!TableExists("glpi_plugin_printercounters_countertypes")) {
       $DB->runFile(GLPI_ROOT . "/plugins/printercounters/install/sql/empty-1.0.7.sql");
       
       // Add record notification
@@ -86,6 +86,7 @@ function plugin_printercounters_install() {
    CronTask::Register('PluginPrintercountersItem_Ticket', 'PrintercountersCreateTicket', DAY_TIMESTAMP);
    
    PluginPrintercountersProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
+   $DB->query("DROP TABLE IF EXISTS `glpi_plugin_metademands_profiles`;");
    
    return true;
 }
@@ -296,22 +297,37 @@ function plugin_printercounters_getDatabaseRelations() {
 
    $plugin = new Plugin();
    if ($plugin->isActivated("printercounters")){
-      return array("glpi_profiles"                                         => array("glpi_plugin_printercounters_profiles"                  => "profiles_id"),
+      return array("glpi_entities"                                         => array("glpi_plugin_printercounters_countertypes"              => "entities_id",
+                                                                                    "glpi_plugin_printercounters_recordmodels"              => "entities_id",
+                                                                                    "glpi_plugin_printercounters_records"                   => "entities_id",
+                                                                                    "glpi_plugin_printercounters_snmpauthentications"       => "entities_id",         
+                                                                                    "glpi_plugin_printercounters_billingmodels"             => "entities_id",
+                                                                                    "glpi_plugin_printercounters_budgets"                   => "entities_id",
+                                                                                    "glpi_plugin_printercounters_snmpsets"                  => "entities_id"),
+               
                    "glpi_tickets"                                          => array("glpi_plugin_printercounters_items_tickets"             => "tickets_id"),
-                   "glpi_printers"                                         => array("glpi_plugin_printercounters_items_billingmodels"       => "items_id"),
-                   "glpi_plugin_printercounters_billingmodels"             => array("glpi_plugin_printercounters_items_billingmodels"       => "plugin_printercounters_billingmodels_id"),
-                   "glpi_printers"                                         => array("glpi_plugin_printercounters_items_recordmodels"        => "items_id"),
-                   "glpi_plugin_printercounters_recordmodels"              => array("glpi_plugin_printercounters_items_recordmodels"        => "plugin_printercounters_recordmodels_id"),
+         
+                   "glpi_printers"                                         => array("glpi_plugin_printercounters_items_billingmodels"       => "items_id", 
+                                                                                    "glpi_plugin_printercounters_items_recordmodels"        => "items_id"),
+         
+                   "glpi_plugin_printercounters_billingmodels"             => array("glpi_plugin_printercounters_items_billingmodels"       => "plugin_printercounters_billingmodels_id",
+                                                                                    "glpi_plugin_printercounters_pagecosts"                 => "plugin_printercounters_billingmodels_id"),
+
+                   "glpi_plugin_printercounters_recordmodels"              => array("glpi_plugin_printercounters_items_recordmodels"        => "plugin_printercounters_recordmodels_id",
+                                                                                    "glpi_plugin_printercounters_sysdescrs"                 => "plugin_printercounters_recordmodels_id",
+                                                                                    "glpi_plugin_printercounters_countertypes_recordmodels" => "plugin_printercounters_recordmodels_id"),
+         
                    "glpi_plugin_printercounters_snmpauthentications"       => array("glpi_plugin_printercounters_items_recordmodels"        => "plugin_printercounters_snmpauthentications_id"),
-                   "glpi_plugin_printercounters_recordmodels"              => array("glpi_plugin_printercounters_sysdescrs"                 => "plugin_printercounters_recordmodels_id"),
-                   "glpi_plugin_printercounters_items_recordmodels"        => array("glpi_plugin_printercounters_records"                   => "plugin_printercounters_items_recordmodels_id"),
-                   "glpi_plugin_printercounters_items_recordmodels"        => array("glpi_plugin_printercounters_additionals_datas"          => "plugin_printercounters_items_recordmodels_id"),
+         
+                   "glpi_plugin_printercounters_items_recordmodels"        => array("glpi_plugin_printercounters_records"                   => "plugin_printercounters_items_recordmodels_id",
+                                                                                    "glpi_plugin_printercounters_additionals_datas"          => "plugin_printercounters_items_recordmodels_id"),
+         
                    "glpi_plugin_printercounters_records"                   => array("glpi_plugin_printercounters_counters"                  => "plugin_printercounters_records_id"),
+         
                    "glpi_plugin_printercounters_countertypes_recordmodels" => array("glpi_plugin_printercounters_counters"                  => "plugin_printercounters_countertypes_recordmodels_id"),
-                   "glpi_plugin_printercounters_recordmodels"              => array("glpi_plugin_printercounters_countertypes_recordmodels" => "plugin_printercounters_recordmodels_id"),
-                   "glpi_plugin_printercounters_countertypes"              => array("glpi_plugin_printercounters_countertypes_recordmodels" => "plugin_printercounters_countertypes_id"),
-                   "glpi_plugin_printercounters_billingmodels"             => array("glpi_plugin_printercounters_pagecosts"                 => "plugin_printercounters_billingmodels_id"),
-                   "glpi_plugin_printercounters_countertypes"              => array("glpi_plugin_printercounters_pagecosts"                 => "plugin_printercounters_countertypes_id"));
+         
+                   "glpi_plugin_printercounters_countertypes"              => array("glpi_plugin_printercounters_countertypes_recordmodels" => "plugin_printercounters_countertypes_id",
+                                                                                    "glpi_plugin_printercounters_pagecosts"                 => "plugin_printercounters_countertypes_id"));
    } else {
       return array();
    }
