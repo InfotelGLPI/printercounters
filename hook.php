@@ -86,7 +86,6 @@ function plugin_printercounters_install() {
    CronTask::Register('PluginPrintercountersItem_Ticket', 'PrintercountersCreateTicket', DAY_TIMESTAMP);
    
    PluginPrintercountersProfile::createFirstAccess($_SESSION['glpiactiveprofile']['id']);
-   $DB->query("DROP TABLE IF EXISTS `glpi_plugin_metademands_profiles`;");
    
    return true;
 }
