@@ -33,14 +33,18 @@ $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
 
 if (isset($_POST["add"])) {
    // Check update rights for fields
-   $item_recordmodel->check(-1, 'w', $_POST);
-   $item_recordmodel->add($_POST);
+   $item_recordmodel->check(-1, CREATE, $_POST);
+   $newID = $item_recordmodel->add($_POST);
 
-   Html::back();
+   if ($_SESSION['glpibackcreated']) {
+      Html::redirect($item_recordmodel->getFormURL()."?id=".$newID);
+   } else {
+      Html::back();
+   }
 
 } elseif (isset($_POST["update"]) || isset($_POST["update_config"])) {
    // Check update rights for fields
-   $item_recordmodel->check($_POST['id'], 'w', $_POST);
+   $item_recordmodel->check($_POST['id'], UPDATE, $_POST);
    if($item_recordmodel->update($_POST) && isset($_POST["update_config"])){
       $item_recordmodel->addLog();
    }
@@ -48,9 +52,14 @@ if (isset($_POST["add"])) {
    
 } elseif (isset($_POST["delete"])) {
    // Check update rights for fields
-   $item_recordmodel->check($_POST['id'], 'w', $_POST);
+   $item_recordmodel->check($_POST['id'], DELETE, $_POST);
    $item_recordmodel->delete($_POST, 1);
    $item_recordmodel->redirectToList();
    
+} else {
+   Html::header(__('Record planning', 'printercounters'), '', "tools", "pluginprintercountersmenu", "record");
+   $item_recordmodel->showRecordPlanning();
+   Html::footer();
 }
+
 ?>

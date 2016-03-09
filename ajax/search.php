@@ -23,9 +23,7 @@
  along with Printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------  */
 
-define('GLPI_ROOT', '../../..');
-
-include (GLPI_ROOT."/inc/includes.php");
+include ("../../../inc/includes.php");
 
 Session::checkLoginUser();
 header("Content-Type: text/html; charset=UTF-8");
@@ -36,23 +34,18 @@ $search = new PluginPrintercountersSearch();
 switch($_POST['action']){
    case 'addSearchField':
       if (!isset($_POST['item'])) exit;
-      $search->addSearchField($_POST['search_count'], unserialize(Toolbox::decodeArrayFromInput($_POST['item'])));
+      $search->addSearchField($_POST['search_count'], unserialize(base64_decode($_POST['item'])));
       break;
    
    case 'resetSearchField':
       if (!isset($_POST['item'])) exit;
-      $item = unserialize(Toolbox::decodeArrayFromInput($_POST['item']));
+      $item = unserialize(base64_decode($_POST['item']));
       $search->showHistoryGenericSearch($item);
       break;
       
    case 'initSearch':
       if (!isset($_POST['item'])) exit;
-      foreach ($_POST as $key => $val) {
-         if ($val == 'undefined') {
-            unset($_POST[$key]);
-         }
-      }
-      $item = unserialize(Toolbox::decodeArrayFromInput($_POST['item']));
+      $item = unserialize(base64_decode($_POST['item']));
       $search->manageHistoryGetValues($item, $_POST);
       $search->showHistory($item);
       break;

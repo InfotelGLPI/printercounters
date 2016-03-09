@@ -38,6 +38,7 @@ if (!defined('GLPI_ROOT')) {
 class PluginPrintercountersItem_Ticket extends CommonDBTM {
    
    static $types = array('Printer');
+   static $rightname = 'plugin_printercounters';
    
    protected $itemtype;
    protected $items_id;
@@ -66,14 +67,6 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
     * */
    static function getTypeName($nb=0) {
       return _n('Ticket creation', 'Tickets creation', $nb, 'printercounters');
-   }
-
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
-   }
-
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
    }
 
    /**
@@ -173,23 +166,16 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       echo "</th>";
       echo "</tr>";
       
-      // Number of errors
       echo "<tr class='tab_bg_1'>";
       echo "<td>";
-      echo __('Number of errors', 'printercounters');
+      echo __('Number of consecutive errors', 'printercounters');
       echo "</td>";
       echo "<td>";
       Dropdown::showInteger('nb_errors_ticket', $config["nb_errors_ticket"], 0, 10);
-      echo "&nbsp;".__('since', 'printercounters')."&nbsp;";
-      Dropdown::showTimeStamp("nb_errors_delay_ticket", array('min'             => DAY_TIMESTAMP,
-                                                              'max'             => 15*DAY_TIMESTAMP,
-                                                              'step'            => DAY_TIMESTAMP,
-                                                              'value'           => $config["nb_errors_delay_ticket"],
-                                                              'addfirstminutes' => false,
-                                                              'inhours'         => false));
       echo "</td>";
       echo "<td>";
-      echo __('since', 'printercounters');
+      echo __('No successful records', 'printercounters');
+      echo "&nbsp;".__('since', 'printercounters');
       echo "</td>";
       echo "<td>";
       Dropdown::showTimeStamp("no_record_delay_ticket", array('min'             => DAY_TIMESTAMP,
@@ -201,9 +187,16 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       echo "</td>";
       echo "</tr>";
       
-      // Status
       echo "<tr class='tab_bg_1'>";
-      echo "<td colspan='2'></td>";
+      echo "<td>".__('since', 'printercounters')."</td>";
+      echo "<td>";
+      Dropdown::showTimeStamp("nb_errors_delay_ticket", array('min'             => DAY_TIMESTAMP,
+                                                              'max'             => 15*DAY_TIMESTAMP,
+                                                              'step'            => DAY_TIMESTAMP,
+                                                              'value'           => $config["nb_errors_delay_ticket"],
+                                                              'addfirstminutes' => false,
+                                                              'inhours'         => false));
+      echo "</td>";
       echo "<td>";
       echo __('For the item status', 'printercounters');
       echo "</td>";
@@ -215,7 +208,8 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       Dropdown::showFromArray('items_status', $state, array('multiple'        => true, 
                                                             'values'          => !empty($config["items_status"])?$config["items_status"]:array(), 
                                                             'size'            => 10, 
-                                                            'mark_unmark_all' => true));
+                                                            'mark_unmark_all' => true,
+                                                            'width'           => 250));
       echo "</td>";
       echo "</tr>";
       
@@ -291,8 +285,8 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
 
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array();
-         Html::showMassiveActions(__CLASS__, $massiveactionparams);
+         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         Html::showMassiveActions($massiveactionparams);
       }
 
       Html::printAjaxPager(self::getTypeName(2), $start, countElementsInTable($this->getTable()));
@@ -322,8 +316,8 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       }
 
       if ($canedit) {
-         $paramsma['ontop'] = false;
-         Html::showMassiveActions(__CLASS__, $paramsma);
+         $massiveactionparams['ontop'] = false;
+         Html::showMassiveActions($massiveactionparams);
          Html::closeForm();
       }
       

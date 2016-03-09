@@ -38,19 +38,10 @@ if (!defined('GLPI_ROOT')) {
  */
 class PluginPrintercountersCountertype extends CommonDropdown {
 
+   static $rightname = 'plugin_printercounters';
 
    static function getTypeName($nb=0) {
       return _n("Counter type", "Counter types", $nb, 'printercounters');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
    }
 
    function getSearchOptions() {
@@ -61,7 +52,7 @@ class PluginPrintercountersCountertype extends CommonDropdown {
    }
    
    function displayHeader() {
-      Html::header($this->getTypeName(), '', "plugins", "printercounters", "countertype");
+      Html::header($this->getTypeName(), '', "tools", "pluginprintercountersmenu", "countertype");
    }
    
    /**

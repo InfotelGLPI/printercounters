@@ -44,16 +44,10 @@ class PluginPrintercountersConfig extends CommonDBTM {
    const RECORDS    = 3;
    const ERRORITEMS = 4;
 
+   static $rightname = 'plugin_printercounters';
+   
    static function getTypeName($nb=0) {
       return __('Plugin management', 'printercounters');
-   }
-   
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
-   }
-
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
    }
    
   /**
@@ -81,9 +75,9 @@ class PluginPrintercountersConfig extends CommonDBTM {
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
 
       if ($item->getType() == __CLASS__) {
-         $tabs[self::SNMPSET]   = PluginPrintercountersSnmpset::getTypeName();
-         $tabs[self::TICKETS]   = PluginPrintercountersItem_Ticket::getTypeName();
-         $tabs[self::RECORDS]   = PluginPrintercountersRecord::getTypeName(2);
+         $tabs[self::SNMPSET]    = PluginPrintercountersSnmpset::getTypeName();
+         $tabs[self::TICKETS]    = PluginPrintercountersItem_Ticket::getTypeName();
+         $tabs[self::RECORDS]    = PluginPrintercountersRecord::getTypeName(2);
          $tabs[self::ERRORITEMS] = PluginPrintercountersErrorItem::getTypeName(2);
 
          return $tabs;

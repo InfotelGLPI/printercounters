@@ -26,7 +26,7 @@
 include ('../../../inc/includes.php');
 
 if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
-   Html::header(PluginPrintercountersMenu::getTypeName(2), '', "plugins", "printercounters");
+   Html::header(PluginPrintercountersMenu::getTypeName(2), '', "tools", "pluginprintercountersmenu", "menu");
 } else {
    Html::helpHeader(PluginPrintercountersMenu::getTypeName(2));
 }

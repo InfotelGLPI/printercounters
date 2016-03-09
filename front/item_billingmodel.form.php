@@ -33,14 +33,18 @@ $item_billingmodel = new PluginPrintercountersItem_Billingmodel();
 
 if (isset($_POST["add"])) {
    // Check update rights for fields
-   $item_billingmodel->check(-1, 'w', $_POST);
-   $item_billingmodel->add($_POST);
+   $item_billingmodel->check(-1, CREATE, $_POST);
+   $newID = $item_billingmodel->add($_POST);
 
-   Html::back();
+   if ($_SESSION['glpibackcreated']) {
+      Html::redirect($item_billingmodel->getFormURL()."?id=".$newID);
+   } else {
+      Html::back();
+   }
 
 } elseif (isset($_POST["update"]) || isset($_POST["update_config"])) {
    // Check update rights for fields
-   $item_billingmodel->check($_POST['id'], 'w', $_POST);
+   $item_billingmodel->check($_POST['id'], UPDATE, $_POST);
    if($item_billingmodel->update($_POST) && isset($_POST["update_config"])){
       $item_billingmodel->addLog();
    }
@@ -48,9 +52,9 @@ if (isset($_POST["add"])) {
    
 } elseif (isset($_POST["delete"])) {
    // Check update rights for fields
-   $item_billingmodel->check($_POST['id'], 'w', $_POST);
+   $item_billingmodel->check($_POST['id'], DELETE, $_POST);
    $item_billingmodel->delete($_POST, 1);
    $item_billingmodel->redirectToList();
-   
 }
+
 ?>

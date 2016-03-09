@@ -48,7 +48,7 @@ function readargs () {
          case '--sonprocess_nbr' :
             $sonprocess_nbr=$it[1];
             break;
-         
+
          case '--record_type' :
             $record_type=$it[1];
             break;
@@ -117,6 +117,7 @@ require GLPI_ROOT."/config/based_config.php";
 
 $processid      = date("zHi");
 $itemtype       = "Printer";
+$record_type    = 'normal';
 $sonprocess_nbr = 2;
 
 if (function_exists("sys_get_temp_dir")) {
@@ -155,12 +156,12 @@ if (function_exists("pcntl_fork")) {
       $pid=pcntl_fork();
       if ($pid == -1) {
          fwrite ($log, "Could not fork\n");
-         
+
       } else if ($pid) {
          fwrite ($log, "$pid Started\n");
          file_put_contents($pidfile, ";".$i.'$$$'.$pid, FILE_APPEND);
          $pids[$pid]=1;
-         
+
       } else  {
          $cmd="php -q -d -f printercounters_fullsync.php --record_type=$record_type --sonprocess_nbr=$sonprocess_nbr ".
               " --sonprocess_id=$i --itemtype=$itemtype --process_id=$processid";

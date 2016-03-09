@@ -41,6 +41,8 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
    protected $itemtype;
    protected $items_id;
    
+   static $rightname = 'plugin_printercounters';
+   
    /**
     * Constructor
     * 
@@ -81,16 +83,6 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
    
    static function getTypeName($nb = 0) {
       return _n("Billing model", "Billing models", $nb, 'printercounters');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
    }
    
   /** 
@@ -204,7 +196,7 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
    * Form header
    */
    function displayHeader() {
-      Html::header($this->getTypeName(), '', "plugins", "printercounters", "billingmodel");
+      Html::header($this->getTypeName(), '', "tools", "pluginprintercountersmenu", "billingmodel");
    }
    
    /**
@@ -246,12 +238,12 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
       if(isset($this->fields[$field['name']])){
          $value = $this->fields[$field['name']];
       }
-      
+
       switch($field['name']){        
          case 'plugin_printercounters_recordmodels_id':
             Dropdown::show('PluginPrintercountersRecordmodel', 
                     array('value'     => $value, 
-                          'on_change' => "printercounters_setConfirmation(\"".__('Are you sure to change the recordmodel ?', 'printercounters')."\", ".$this->fields[$field['name']].", this.value);"));
+                          'on_change' => "printercounters_setConfirmation(\"".__('Are you sure to change the recordmodel ?', 'printercounters')."\", \"".$this->fields[$field['name']]."\", this.value);"));
             break;
          
 //         case 'plugin_printercounters_budgets_id':
@@ -348,7 +340,7 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
    }
    
       
-   /** 
+/** 
     * Check if a recordmodel is linked to billingmodels
     * 
     * @param type $recordmodels_id

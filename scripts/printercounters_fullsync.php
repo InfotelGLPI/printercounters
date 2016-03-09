@@ -31,7 +31,6 @@ ini_set("max_execution_time", "0");
 if (isset($_SERVER["argv"]) && !isset($argv)) {
    $argv = $_SERVER["argv"];
 }
-
 if ($argv) {
    for ($i = 1; $i < count($argv); $i++) {
       $it = explode("=", $argv[$i], 2);

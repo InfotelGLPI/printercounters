@@ -38,6 +38,8 @@ if (!defined('GLPI_ROOT')) {
  */
 class PluginPrintercountersSnmpset extends CommonDBTM {
 
+   static $rightname = 'plugin_printercounters';
+   
    /**
     * functions mandatory
     * getTypeName(), canCreate(), canView()
@@ -45,18 +47,10 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
    static function getTypeName($nb=0) {
       return __('Snmpset', 'Snmpsets', $nb, 'printercounters');
    }
-
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
-   }
-
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
    
    // Printercounter's authorized profiles have right
    static function canSnmpSet() {
-      return plugin_printercounters_haveRight('snmpset', '1');
+      return Session::haveRight('plugin_printercounters_snmpset', 1);
    }
 
    
@@ -111,13 +105,16 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
    function showForm($ID, $options=array()) {
       
       if ($ID > 0) {
-         $this->check($ID,'r');
+         $script = "$('#printercounters_viewAddSnmpset').show();";
       } else {
-         // Create item
+         $script = "$('#printercounters_viewAddSnmpset').hide();";
          $options['plugin_printercounters_configs_id'] = $options['parent']->getField('id');
-         $this->check(-1,'w',$options);
       }
-
+      
+      $this->initForm($ID, $options);
+      
+      echo html::scriptBlock($script);
+      
       $this->showFormHeader($options);
       
       // Tags available
@@ -223,7 +220,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
                                                  'PluginPrintercountersConfig', 
                                                  $config['configs_id']);
          echo "<div class='center firstbloc'>".
-               "<a class='vsubmit' href='javascript:viewAddSnmpset".$config['configs_id']."_$rand();'>";
+               "<a class='vsubmit' id='printercounters_viewAddSnmpset' href='javascript:viewAddSnmpset".$config['configs_id']."_$rand();'>";
          echo __('Add a new snmpset', 'printercounters')."</a></div>\n";
          echo "<script type='text/javascript'>viewAddSnmpset".$config['configs_id']."_$rand();</script>";
       }
@@ -248,8 +245,8 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       echo "<div class='center'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array();
-         Html::showMassiveActions(__CLASS__, $massiveactionparams);
+         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         Html::showMassiveActions($massiveactionparams);
       }
       
 //      Html::printAjaxPager(self::getTypeName(2), $start, countElementsInTable($this->getTable()));
@@ -294,8 +291,8 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       }
       
       if ($canedit) {
-         $paramsma['ontop'] = false;
-         Html::showMassiveActions(__CLASS__, $paramsma);
+         $massiveactionparams['ontop'] = false;
+         Html::showMassiveActions($massiveactionparams);
          Html::closeForm(); 
       }
       echo "</table>";

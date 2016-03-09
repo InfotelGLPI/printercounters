@@ -1,5 +1,5 @@
 # printercounters
-Plugin Printercounters pour GLPI 0.84
+Plugin Printercounters pour GLPI
 
 Mise en place d'un plugin de gestion des compteurs des imprimantes basé sur le protocole SNMP.
 Le plugin se base sur l'inventaire déja existant de GLPI, pour récupérer les adresses IP des imprimantes de chaque entité.

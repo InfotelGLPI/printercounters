@@ -51,19 +51,11 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
    const AES128 = 2;
    const AES192 = 3;
    const AES256 = 4;
+   
+   static $rightname = 'plugin_printercounters';
 
    static function getTypeName($nb=0) {
       return _n("SNMP authentication", "SNMP authentications", $nb, 'printercounters');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
    }
    
   /** 
@@ -121,13 +113,13 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
       $tab[49]['name']           = __('Community write', 'printercounters');
       $tab[49]['datatype']       = 'specific';
       $tab[49]['massiveaction']  = true;
-      
+
       $tab[50]['table']          = $this->getTable();
       $tab[50]['field']          = 'is_default';
       $tab[50]['name']           = __('Is default', 'printercounters');
       $tab[50]['datatype']       = 'bool';
       $tab[50]['massiveaction']  = true;
-
+      
       return $tab;
    }
    
@@ -270,7 +262,7 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
    * Form header
    */
    function displayHeader() {
-      Html::header($this->getTypeName(), '', "plugins", "printercounters", "snmpauthentication");
+      Html::header($this->getTypeName(), '', "tools", "pluginprintercountersmenu", "snmpauthentication");
    }
    
    /**
@@ -494,27 +486,6 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
    }
    
   /** 
-   * Set default authenticiation
-   * 
-   * @param type $input
-   * @return type
-   */
-   function setDefaultAuthentication($input) {
-      
-      if ($input['is_default']) {
-         $default = $this->find("`is_default` = 1 AND `id` != '".$input['id']."'");
-         if (!empty($default)) {
-            foreach ($default as $authentication) {
-               $snmpAuthentification = new self();
-               $snmpAuthentification->getFromDB($authentication['id']);
-               $snmpAuthentification->fields['is_default'] = 0;
-               $snmpAuthentification->updateInDB(array('is_default'));
-            }
-         }
-      }
-   }
-   
-   /** 
    * Get default authenticiation
    *
    * @return id
@@ -530,6 +501,7 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
 
       return $defaultId;
    }
+   
    
   /** 
    * checkMandatoryFields 

@@ -37,6 +37,7 @@ if (!defined('GLPI_ROOT')) {
  */
 class PluginPrintercountersCounter extends CommonDBTM {
    
+   static $rightname = 'plugin_printercounters';
    
    /**
     * functions mandatory
@@ -44,14 +45,6 @@ class PluginPrintercountersCounter extends CommonDBTM {
     * */
    static function getTypeName($nb=0) {
       return __('Counter', 'Counters', $nb, 'printercounters');
-   }
-
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
-   }
-
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
    }
 
 }

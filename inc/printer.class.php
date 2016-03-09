@@ -113,19 +113,19 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
    const SNMP_CARTRIDGE_COLOR_SLOT_2 = '.1.3.6.1.2.1.43.12.1.1.4.1.2';
    const SNMP_CARTRIDGE_COLOR_SLOT_3 = '.1.3.6.1.2.1.43.12.1.1.4.1.3';
    const SNMP_CARTRIDGE_COLOR_SLOT_4 = '.1.3.6.1.2.1.43.12.1.1.4.1.4';
+   
+   static $rightname = 'plugin_printercounters';
 
    static function getTypeName($nb=0) {
       return __('Printer counters', 'printercounters');
    }
    
-   // Printercounter's authorized profiles have right
    static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
+      return Session::haveRight(self::$rightname, READ);
    }
 
-   // Printercounter's authorized profiles have right
    static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
+      return Session::haveRightsOr(self::$rightname, array(CREATE, UPDATE, DELETE));
    }
    
    /**

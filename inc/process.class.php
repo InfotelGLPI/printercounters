@@ -46,6 +46,8 @@ class PluginPrintercountersProcess extends CommonDBTM {
    const MUTEX_TIMEOUT = 3600;
    const SIGKILL = 9;
    const SIGTERM = 15;
+   
+   static $rightname = 'plugin_printercounters';
 
 
    /**
@@ -77,16 +79,6 @@ class PluginPrintercountersProcess extends CommonDBTM {
    
    static function getTypeName($nb=0) {
       return _n('Process', 'Processes', $nb, 'printercounters');
-   }
-   
-   // Printercounter's authorized profiles have right
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
    }
    
    /**
@@ -161,12 +153,12 @@ class PluginPrintercountersProcess extends CommonDBTM {
       global $DB;
 
       $ip = array();
-
+      
       // Filter printers according to their periodicity
-      if ($this->items_id <= 0) {
+      if($this->items_id <= 0){
          $items_id = $this->selectPrinterToSearch(false, $errorHandler);
       } else {
-         $items_id   = array($this->items_id);
+         $items_id = array($this->items_id);
          $error_item = new PluginPrintercountersErrorItem($this->itemtype, $this->items_id);
          if ($error_item->isInError() > 0 && !$errorHandler) {
             return $ip;
@@ -189,7 +181,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
       if($this->items_id > 0){
          $query .= " AND `".$itemjoin."`.`id` = ".$this->items_id;
       }
-
+      
       $result_ocs = $DB->query($query);
       if ($DB->numrows($result_ocs) > 0) {
          while ($data = $DB->fetch_array($result_ocs)) {
@@ -202,7 +194,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
       $items_id = array_keys($ip);
       $item_recordmodels = new PluginPrintercountersItem_Recordmodel();
       $item_recordmodels->setMutex($items_id, $this->process_id);
-
+      
       return $ip;
    }
    
@@ -254,7 +246,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
              ON (`".$itemjoin."`.`items_id` = `".$itemjoin5."`.`id`)
           WHERE LOWER(`".$itemjoin."`.`itemtype`) = LOWER('".$this->itemtype."')
           AND `".$itemjoin5."`.`is_deleted` = 0 ";
-
+      
       $query .= $where_multi_process;
       
       $query .= " $condition GROUP BY `".$itemjoin."`.`items_id`";  
@@ -274,12 +266,12 @@ class PluginPrintercountersProcess extends CommonDBTM {
       if ($DB->numrows($result)) {
          // Items in error
          if ($config_data['enable_error_handler'] && $errorHandler) {
-            while ($data = $DB->fetch_assoc($result)) { 
+            while ($data = $DB->fetch_assoc($result)) {
                $output[] = $data['items_id'];
             }
          // Normal
          } else {
-            while ($data = $DB->fetch_assoc($result)) { 
+            while ($data = $DB->fetch_assoc($result)) {
                // Is item can be fetch ?
                if (($data['delay'] >= $data['periodicity_seconds'] || $data['delay'] == null) && $data['enable_automatic_record']) {
                   // Get next record
@@ -308,7 +300,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
 
       return $output;
    }
-   
+
    /**
     * Function shows running processes form
     * 

@@ -23,15 +23,10 @@
  along with Printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------  */
 
-define('GLPI_ROOT', '../../..');
-include (GLPI_ROOT."/inc/includes.php");
+include ("../../../inc/includes.php");
 
 if (isset($_POST['item'])) {
-   if ($_POST['display_type'] == Search::PDF_OUTPUT_PORTRAIT || $_POST['display_type'] == Search::PDF_OUTPUT_LANDSCAPE) {
-      include (GLPI_ROOT."/lib/ezpdf/class.ezpdf.php");
-   }
-   
-   $item = unserialize(Toolbox::decodeArrayFromInput($_POST['item']));
+   $item = unserialize(base64_decode($_POST['item']));
 
    $search = new PluginPrintercountersSearch();
    $search->manageHistoryGetValues($item, $_POST);

@@ -25,6 +25,7 @@
 .printercounters_action_button{
    margin: 10px 80px 0px 80px;
    display: block;
+   width : 50%;
 }
 
 .printercounters_action_group{
@@ -34,7 +35,6 @@
 
 .printercounters_menu_item{
    border:solid 1px #CCCCCC;
-
    -moz-border-radius: 3px;
    -webkit-border-radius: 3px;
    border-radius: 3px;
@@ -42,6 +42,7 @@
 
 td.printercounters_menu_item:hover{
    border:solid 1px #535b5c;
+   opacity : .7;
 }
 
 .printercounters_menu_img{}

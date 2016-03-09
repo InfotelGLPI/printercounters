@@ -45,6 +45,8 @@ class PluginPrintercountersBudget extends CommonDropdown {
    
    var $rand = 0;
    
+   static $rightname = 'plugin_printercounters';
+   
    /**
     * Constructor
     * 
@@ -62,17 +64,6 @@ class PluginPrintercountersBudget extends CommonDropdown {
    static function getTypeName($nb=0) {
       return __("Budget");
    }
-
-   // Printercounter's authorized profiles have right
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
-   }
-   
       
    /**
     * Function sets rand
@@ -279,11 +270,14 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
       if (!empty($input)) {
          $give_item = array();
+         $line['raw'] = array();
          foreach ($input as $i => $row) {
             $count = 0;
+            $line['raw'] = $row;
+            PluginPrintercountersSearch::parseData($line);
             foreach ($searchopt as $num => $val) {
                if (is_array($val) && (!isset($val['nosql']) || $val['nosql'] == false)) {
-                  $give_item[$i][$num] = Search::giveItem($this->getType(), $num, $row, $count);
+                  $give_item[$i][$num] = Search::giveItem($this->getType(), $num, $line, $count);
                   $count++;
                }
             }
@@ -538,7 +532,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
          // Get records
          $record = new PluginPrintercountersRecord();
-
+         $records = array();
          if (!empty($budget['end_date']) && !empty($budget['begin_date']) && $budget['entities_id'] != null){
             $records = $record->getRecords(0, 'Printer', 
                     array('order' => "`date` DESC", 
@@ -546,7 +540,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
                                            AND `glpi_plugin_printercounters_records`.`date` >= ADDDATE('".$budget['begin_date']."', INTERVAL 1 DAY) 
                                            AND `glpi_plugin_printercounters_records`.`date` <= ADDDATE('".$budget['end_date']."', INTERVAL 1 DAY)"));
          }
-
+   
          $recordResults = array();
          $allItemsId = array();
          if (!empty($records)) {
@@ -811,10 +805,10 @@ class PluginPrintercountersBudget extends CommonDropdown {
       
       foreach ($budgets as &$budget) {
          if ($budget['budgets_id'] > 0) {
+            $budget['usage_rate'] = 0;
+            
             if ($budget['amount'] > 0) {
                $budget['usage_rate'] = (($budget['record_amount'] / $budget['amount']) * 100);
-            } else {
-               $budget['usage_rate'] = 0;
             }
 
             if (isset($total['total_usage_rate'])) {
@@ -1169,7 +1163,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
    * Form header
    */
    function displayHeader() {
-      Html::header($this->getTypeName(), '', "plugins", "printercounters", "budget");
+      Html::header($this->getTypeName(), '', "tools", "pluginprintercountersmenu", "budget");
    }
    
    /**

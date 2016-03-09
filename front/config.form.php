@@ -40,18 +40,18 @@ if ($plugin->isActivated("printercounters")) {
    }
    
    if (isset($_POST["update_config"])) {
-      if (!countElementsInTable("glpi_plugin_printercounters_configs", "`id` = 1")) {
+      if(!countElementsInTable("glpi_plugin_printercounters_configs", "`id` = 1")){
          $config->add($_POST);
       } else {
          $_POST['id'] = 1;
          $config->update($_POST);
       }
       Html::back();
-
+      
    } else if (isset($_POST["clean_error_records"])) {
       $record = new PluginPrintercountersRecord();
       if ($records_id = $record->getRecordsToClean(PluginPrintercountersRecord::$CLEAN_ERROR_RECORDS, array('date' => $_POST['date']))) {
-         Html::header(PluginPrintercountersConfig::getTypeName(), "", "plugins", "printercounters", "config");
+         Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
          $record->initCleanRecords(__('Clean records in error', 'printercounters'), $records_id);
          Html::footer();
          Session::addMessageAfterRedirect(__('Records cleaned', 'printercounters'));
@@ -64,7 +64,7 @@ if ($plugin->isActivated("printercounters")) {
    } else if (isset($_POST["clean_empty_records"])) {
       $record = new PluginPrintercountersRecord();
       if ($records_id = $record->getRecordsToClean(PluginPrintercountersRecord::$CLEAN_EMTPY_RECORDS, array('date' => $_POST['date']))) {
-         Html::header(PluginPrintercountersConfig::getTypeName(), "", "plugins", "printercounters", "config");
+         Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
          $record->initCleanRecords(__('Clean empty records', 'printercounters'), $records_id);
          Html::footer();
          Session::addMessageAfterRedirect(__('Records cleaned', 'printercounters'));
@@ -75,13 +75,14 @@ if ($plugin->isActivated("printercounters")) {
       }
    
    } else {
-      Html::header(PluginPrintercountersConfig::getTypeName(), "", "plugins", "printercounters", "config");
-      $config->show();
+      Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
+      $data = $config->getInstance();
+      $config->display(array('id' => $data['configs_id']));
       Html::footer();
    }
 
 } else {
-   Html::header(PluginPrintercountersConfig::getTypeName(), "", "plugins", "printercounters", "config");
+   Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
    echo "<div align='center'><br><br><img src=\"".$CFG_GLPI["root_doc"]."/pics/warning.png\" alt=\"warning\"><br><br>";
    echo "<b>Please activate the plugin</b></div>";
    Html::footer();

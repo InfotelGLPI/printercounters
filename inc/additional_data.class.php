@@ -40,7 +40,9 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
    var $items_id;
    var $itemtype;
-
+   
+   static $rightname = 'plugin_printercounters';
+ 
    /**
     * Constructor
     * 
@@ -57,16 +59,6 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
    
    static function getTypeName($nb = 2) {
       return __('Printer counters', 'printercounters')." : "._n("Additional data", "Additional datas", $nb, 'printercounters');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
    }
 
    /**
@@ -174,7 +166,7 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
    /**
     * Function set additional data for a printer
     * 
-    * @param array    $input : array('type'
+    * @param array    $input : array('type'                                        
      'name'
      'value'
      'plugin_printecounters_items_recordmodels_id')
@@ -357,8 +349,8 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
       $units = Toolbox::getTimestampTimeUnits($timestamp);
 
-      return sprintf(__('%1$d days %2$d hours %3$d minutes %4$d seconds'), 
-              $units['day'], $units['hour'], $units['minute'], $units['second']);
+      return sprintf(__('%1$s%2$d days %3$d hours %4$d minutes %5$d seconds'), 
+              '', $units['day'], $units['hour'], $units['minute'], $units['second']);
    }
 
 }

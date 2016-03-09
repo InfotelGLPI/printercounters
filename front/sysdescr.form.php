@@ -33,28 +33,32 @@ $sysdescr = new PluginPrintercountersSysdescr();
 
 if (isset($_POST["add"])) {
    // Check add rights for fields
-   $sysdescr->check(-1, 'w', $_POST);
-   $sysdescr->add($_POST);
+   $sysdescr->check(-1, CREATE, $_POST);
+   $newID = $sysdescr->add($_POST);
 
-   Html::back();
+   if ($_SESSION['glpibackcreated']) {
+      Html::redirect($sysdescr->getFormURL()."?id=".$newID);
+   } else {
+      Html::back();
+   }
 
 } elseif (isset($_POST["update"])) {
    // Check update rights for fields
-   $sysdescr->check($_POST['id'], 'w', $_POST);
-   $sysdescr->update($_POST);
+   $sysdescr->check($_POST['id'], UPDATE, $_POST);
+   $newID = $sysdescr->update($_POST);
 
    Html::back();
 
 } elseif (isset($_POST["delete"])) {
    // Check delete rights for fields
-   $sysdescr->check($_POST['id'], 'w', $_POST);
+   $sysdescr->check($_POST['id'], DELETE, $_POST);
    $sysdescr->delete($_POST, 1);
    $sysdescr->redirectToList();
    
 } else {
-   $sysdescr->checkGlobal("r");
-   Html::header(PluginPrintercountersItem_Recordmodel::getTypeName(1), '', "plugins", "printercounters");
-   $sysdescr->showForm($_GET["id"]);
+   $sysdescr->checkGlobal(READ);
+   Html::header(PluginPrintercountersItem_Recordmodel::getTypeName(1), '', "tools", "pluginprintercountersmenu", "sysdescr");
+   $sysdescr->display($_GET);
    Html::footer();
 }
 ?>

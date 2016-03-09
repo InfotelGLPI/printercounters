@@ -23,9 +23,7 @@
  along with Printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------  */
 
-define('GLPI_ROOT', '../../..');
-
-include (GLPI_ROOT."/inc/includes.php");
+include ("../../../inc/includes.php");
 
 Session::checkLoginUser();
 //Html::header_nocache();
@@ -81,14 +79,6 @@ switch($_POST['action']){
                              'error'      => $error));
       break;
    
-   case 'initAjaxMassiveAction':
-      header("Content-Type: text/html; charset=UTF-8");
-      Html::header(__('Printer'), $_SERVER['PHP_SELF']);
-      $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
-      $item_recordmodel->initMassiveActionsProcess();
-      Html::footer();
-      break;
-   
    case 'ajaxMassiveAction':
       header("Content-Type: text/html; charset=UTF-8");
       $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
@@ -100,7 +90,7 @@ switch($_POST['action']){
       $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
       $item_recordmodel->massiveActionTimeOut();
       break;
-   
+      
    case 'loadCleanErrorRecords':
       header("Content-Type: text/html; charset=UTF-8");
       $record->cleanRecords();

@@ -38,6 +38,8 @@ if (!defined('GLPI_ROOT')) {
  */
 class PluginPrintercountersSysdescr extends CommonDBTM {
 
+   static $rightname = 'plugin_printercounters';
+   
    /**
     * functions mandatory
     * getTypeName(), canCreate(), canView()
@@ -45,15 +47,6 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
    static function getTypeName($nb=0) {
       return __('Sysdescr', 'Sysdescrs', $nb, 'printercounters');
    }
-
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
-   }
-
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
-
    
    /**
     * Display tab for item
@@ -106,13 +99,16 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
    function showForm($ID, $options=array()) {
       
       if ($ID > 0) {
-         $this->check($ID,'r');
+         $script = "$('#printercounters_viewAddSysdescr').show();";
       } else {
-         // Create item
+         $script = "$('#printercounters_viewAddSysdescr').hide();";
          $options['plugin_printercounters_recordmodels_id'] = $options['parent']->getField('id');
-         $this->check(-1,'w',$options);
       }
-
+      
+      $this->initForm($ID, $options);
+      
+      echo html::scriptBlock($script);
+      
       $this->showFormHeader($options);
       echo "<tr class='tab_bg_1'>";
       // Sysdescr
@@ -137,7 +133,7 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
    function showForRecordmodel($item) {
       
       $recordmodel = new PluginPrintercountersRecordmodel();
-      $canedit = ($recordmodel->can($item->fields['id'],'w') && $this->canCreate());
+      $canedit = ($recordmodel->can($item->fields['id'], UPDATE) && $this->canCreate());
       
       $rand = mt_rand();
       
@@ -157,7 +153,7 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
                                                  'PluginPrintercountersRecordmodel', 
                                                  $item->fields['id']);
          echo "<div class='center firstbloc'>".
-               "<a class='vsubmit' href='javascript:viewAddSysdescr".$item->fields['id']."_$rand();'>";
+               "<a class='vsubmit' id='printercounters_viewAddSysdescr' href='javascript:viewAddSysdescr".$item->fields['id']."_$rand();'>";
          echo __('Add a new sysdescr', 'printercounters')."</a></div>\n";
       }
       
@@ -181,8 +177,8 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
       echo "<div class='center'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array();
-         Html::showMassiveActions(__CLASS__, $massiveactionparams);
+         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         Html::showMassiveActions($massiveactionparams);
       }
       
 //      Html::printAjaxPager(self::getTypeName(2), $start, countElementsInTable($this->getTable()));
@@ -217,13 +213,13 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
          echo "<td $onclick>".$field['sysdescr']."</td>";
          echo "</tr>";
       }
-      
+
+      echo "</table>";
       if ($canedit) {
-         $paramsma['ontop'] = false;
-         Html::showMassiveActions(__CLASS__, $paramsma);
+         $massiveactionparams['ontop'] = false;
+         Html::showMassiveActions($massiveactionparams);
          Html::closeForm(); 
       }
-      echo "</table>";
       echo "</div>";
    }
    

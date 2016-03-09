@@ -38,6 +38,7 @@ if (!defined('GLPI_ROOT')) {
 class PluginPrintercountersPagecost extends CommonDBTM {
    
    static $types = array('PluginPrintercountersBillingmodel');
+   static $rightname = 'plugin_printercounters';
 
    /**
     * functions mandatory
@@ -47,14 +48,6 @@ class PluginPrintercountersPagecost extends CommonDBTM {
       return _n('Counter types of billing model', 'Counter types of billing models', $nb, 'printercounters');
    }
 
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
-   }
-
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
-    
    /**
     * Display tab for each users
     *
@@ -100,13 +93,17 @@ class PluginPrintercountersPagecost extends CommonDBTM {
     * @param $options   array    options used
     */
    function showForm($ID, $options=array()) {
+
       if ($ID > 0) {
-         $this->check($ID,'r');
+         $script = "$('#printercounters_viewAddPagecost').show();";
       } else {
-         // Create item
+         $script = "$('#printercounters_viewAddPagecost').hide();";
          $options['plugin_printercounters_billingmodels_id'] = $options['parent']->getField('id');
-         $this->check(-1,'w',$options);
       }
+      
+      $this->initForm($ID, $options);
+      
+      echo html::scriptBlock($script);
 
       $data = $this->getCounterTypes($options['parent']->getField('id'));
             
@@ -148,7 +145,7 @@ class PluginPrintercountersPagecost extends CommonDBTM {
    function showForBillingmodel($item) {
 
       $recordmodel = new PluginPrintercountersBillingmodel();
-      $canedit = ($recordmodel->can($item->fields['id'],'w') && $this->canCreate());
+      $canedit = ($recordmodel->can($item->fields['id'], UPDATE) && $this->canCreate());
       
       $data = $this->getCounterTypes($item->fields['id']);
       
@@ -164,7 +161,7 @@ class PluginPrintercountersPagecost extends CommonDBTM {
                                                  'PluginPrintercountersBillingmodel', 
                                                  $item->fields['id']);
          echo "<div class='center firstbloc'>".
-               "<a class='vsubmit' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
+               "<a class='vsubmit' id='printercounters_viewAddPagecost' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
          echo __('Add a new counter', 'printercounters')."</a></div>\n";
       }
       
@@ -186,8 +183,8 @@ class PluginPrintercountersPagecost extends CommonDBTM {
       echo "<div class='center'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array();
-         Html::showMassiveActions(__CLASS__, $massiveactionparams);
+         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         Html::showMassiveActions($massiveactionparams);
       }
       echo "<table class='tab_cadre_fixehov'>";
       echo "<tr class='tab_bg_1'>";
@@ -230,13 +227,13 @@ class PluginPrintercountersPagecost extends CommonDBTM {
          echo "<td $onclick>".self::getCost($field['cost'])."</td>";
          // OID type
          $alloidtypes = PluginPrintercountersCountertype_Recordmodel::getAllOidTypeArray();
-         echo "<td $onclick>".(isset($alloidtypes[$field['oid_type']]) ? $alloidtypes[$field['oid_type']] : "")."</td>";
+         echo "<td $onclick>".$alloidtypes[$field['oid_type']]."</td>";
          echo "</tr>";
       }
 
       if ($canedit) {
-         $paramsma['ontop'] = false;
-         Html::showMassiveActions(__CLASS__, $paramsma);
+         $massiveactionparams['ontop'] = false;
+         Html::showMassiveActions($massiveactionparams);
          Html::closeForm(); 
       }
       echo "</table>";
@@ -405,6 +402,7 @@ class PluginPrintercountersPagecost extends CommonDBTM {
     * @return an array
     */
    static function showCostInput($item, $value, array $options = array()) {
+
       $options['value'] = self::getCost($value);
       return Html::autocompletionTextField($item, "cost", $options);
    }
@@ -419,13 +417,12 @@ class PluginPrintercountersPagecost extends CommonDBTM {
       return Html::formatNumber($value, false, 5);
    }
 
-  /** 
-   * Actions done before add
-   * 
-   * @param type $input
-   * @return boolean
-   */
-     
+  /**
+    * Actions done before add
+    * 
+    * @param type $input
+    * @return boolean
+    */
    function prepareInputForAdd($input) {
       if (isset($input['cost'])) {
          $input['cost'] = str_replace(',', '.', $input['cost']);
@@ -436,14 +433,14 @@ class PluginPrintercountersPagecost extends CommonDBTM {
 
       return $input;
    }
-   
-  /** 
-   * Actions done before update
-   * 
-   * @param type $input
-   * @return boolean
-   */
-  function prepareInputForUpdate($input) {
+
+   /**
+    * Actions done before update
+    * 
+    * @param type $input
+    * @return boolean
+    */
+   function prepareInputForUpdate($input) {
       if (isset($input['cost'])) {
          $input['cost'] = str_replace(',', '.', $input['cost']);
       }
@@ -453,9 +450,8 @@ class PluginPrintercountersPagecost extends CommonDBTM {
 
       return $input;
    }
-   
-   
-  /** 
+
+   /** 
    * checkMandatoryFields 
    * 
    * @param type $input

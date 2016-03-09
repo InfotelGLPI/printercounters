@@ -40,6 +40,8 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
    protected $itemtype;
    protected $items_id;
    
+   static $rightname = 'plugin_printercounters';
+   
    /**
     * Constructor
     * 
@@ -80,17 +82,6 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
 
    static function getTypeName($nb=0) {
       return _n("Record model", "Record models", $nb, 'printercounters');
-   }
-
-
-   // Printercounter's authorized profiles have right
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
    }
       
   /** 
@@ -230,7 +221,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
    * Form header
    */
    function displayHeader() {
-      Html::header($this->getTypeName(), '', "plugins", "printercounters", "recordmodel");
+      Html::header($this->getTypeName(), '', "tools", "pluginprintercountersmenu", "recordmodel");
    }
    
    /**
@@ -580,13 +571,15 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
     * @return array of results (nbok, nbko, nbnoright counts)
     **/
    function massiveActions(){
-            
+      
+      $prefix = $this->getType().MassiveAction::CLASS_ACTION_SEPARATOR;
+      
       switch ($this->itemtype) {
          case "PluginPrintercountersRecordmodel":
             $output = array();
             if ($this->canCreate()) {
                $output = array (
-                  "plugin_printercounters_duplicate_recordmodel" => __('Duplicate recordmodel', 'printercounters')
+                  $prefix."plugin_printercounters_duplicate_recordmodel" => __('Duplicate recordmodel', 'printercounters')
                );
             }
             return $output;
@@ -594,69 +587,41 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
    }
    
    /**
-    * Massive actions display
-    * 
-    * @param $input array of input datas
+    * @since version 0.85
     *
-    * @return array of results (nbok, nbko, nbnoright counts)
-    **/
-   function massiveActionsDisplay($options=array()){
+    * @see CommonDBTM::processMassiveActionsForOneItemtype()
+   **/
+   static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item,
+                                                       array $ids) {
 
-      switch ($options['itemtype']) {
-         case 'PluginPrintercountersRecordmodel':
-            switch ($options['action']) {
+      $recordmodel = new self();
+      
+      foreach ($ids as $key => $val) {
+         if ($recordmodel->can($key, UPDATE)) {
+            $result = false;
+            switch ($ma->getAction()) {
                case "plugin_printercounters_duplicate_recordmodel":
-                  if ($this->canCreate()){
-                     echo "</br></br><input type=\"submit\" name=\"massiveaction\" 
-                           class=\"submit\" value=\""._sx('button', 'Post')."\" >";
+                  if ($key) {
+                     $result = $recordmodel->duplicateRecordmodel($key);
                   }
                   break;
+
+               default :
+                  return parent::doSpecificMassiveActions($ma->POST);
             }
-            break;
-      }
-   }
-   
-   /**
-    * Massive actions process
-    * 
-    * @param $input array of input datas
-    *
-    * @return array of results (nbok, nbko, nbnoright counts)
-    **/
-   function massiveActionsProcess($input = array()) {
 
-      $res = array('ok'      => 0,
-                   'ko'      => 0,
-                   'noright' => 0);
-
-      if ($this->canCreate()) {
-         foreach ($input["item"] as $key => $val) {
-            if ($this->can($key, 'w')) {
-               $result = false;
-               switch ($input['action']) {
-                  case "plugin_printercounters_duplicate_recordmodel":
-                     if ($key) {
-                        $result = $this->duplicateRecordmodel($key);
-                     }
-                     break;
-                     
-                  default :
-                     return parent::doSpecificMassiveActions($input);
-               }
-
-               if ($result) {
-                  $res['ok']++;
-               } else {
-                  $res['ko']++;
-               }
-               
+            if ($result) {
+               $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_OK);
             } else {
-               $res['noright']++;
+               $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_KO);
+               $ma->addMessage($item->getErrorMessage(ERROR_ON_ACTION));
             }
+
+         } else {
+            $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_NORIGHT);
+            $ma->addMessage($item->getErrorMessage(ERROR_RIGHT));
          }
       }
-
-      return $res;
    }
    
    /**

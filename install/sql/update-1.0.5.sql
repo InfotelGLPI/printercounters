@@ -6,7 +6,7 @@ ALTER TABLE `glpi_plugin_printercounters_configs` ADD `toner_alert_repeat` int(1
 ALTER TABLE `glpi_plugin_printercounters_configs` ADD `toner_treshold` int(11) NOT NULL DEFAULT '0';
 
 -- --------------------------------------------------------
--- Structure de la table 'glpi_plugin_printercounters_sysdescrs'
+-- Structure de la table 'glpi_plugin_printercounters_additionals_datas'
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_additionals_datas` (
    `id` int(11) NOT NULL auto_increment,

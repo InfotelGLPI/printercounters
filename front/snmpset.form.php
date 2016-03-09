@@ -37,29 +37,33 @@ $_POST['set_contact']  = isset($_POST['set_contact'])  ? $_POST['set_contact']  
 
 if (isset($_POST["add"])) {
    // Check add rights for fields
-   $snmpset->check(-1, 'w', $_POST);
-   $snmpset->add($_POST);
+   $snmpset->check(-1, CREATE, $_POST);
+   $newID = $snmpset->add($_POST);
 
-   Html::back();
+   if ($_SESSION['glpibackcreated']) {
+      Html::redirect($snmpset->getFormURL()."?id=".$newID);
+   } else {
+      Html::back();
+   }
 
 } elseif (isset($_POST["update"])) {
    // Check update rights for fields
-   $snmpset->check($_POST['id'], 'w', $_POST);
+   $snmpset->check($_POST['id'], UPDATE, $_POST);
    $snmpset->update($_POST);
 
    Html::back();
 
 } elseif (isset($_POST["delete"])) {
    // Check delete rights for fields
-   $snmpset->check($_POST['id'], 'w', $_POST);
+   $snmpset->check($_POST['id'], DELETE, $_POST);
    $snmpset->delete($_POST, 1);
    
-   Html::back();
+   $snmpset->redirectToList();
    
 } else {
-   $snmpset->checkGlobal("r");
-   Html::header(PluginPrintercountersItem_Recordmodel::getTypeName(1), '', "plugins", "printercounters");
-   $snmpset->showForm($_GET["id"]);
+   $snmpset->checkGlobal(READ);
+   Html::header(PluginPrintercountersItem_Recordmodel::getTypeName(1), '', "tools", "pluginprintercountersmenu", "snmpset");
+   $snmpset->display(array('id' => $_GET["id"]));
    Html::footer();
 }
 ?>

@@ -1,17 +1,3 @@
--- --------------------------------------------------------
--- Structure de la table 'glpi_plugin_printercounters_profiles'
--- --------------------------------------------------------
-DROP TABLE IF EXISTS `glpi_plugin_printercounters_profiles`;
-CREATE TABLE `glpi_plugin_printercounters_profiles` (
-   `id` int(11) NOT NULL auto_increment,
-   `profiles_id` int(11) NOT NULL default '0' COMMENT 'RELATION to glpi_profiles (id)',
-   `printercounters` char(1) collate utf8_unicode_ci default NULL,
-   `update_records` tinyint(1) NOT NULL default '0',
-   `add_lower_records` tinyint(1) NOT NULL default '0',
-   `snmpset` tinyint(1) NOT NULL default '0',
-   PRIMARY KEY  (`id`),
-   KEY `profiles_id` (`profiles_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_configs'

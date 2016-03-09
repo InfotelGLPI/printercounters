@@ -27,7 +27,7 @@ include ('../../../inc/includes.php');
 
 $budget = new PluginPrintercountersBudget();
 
-Html::header($budget->getTypeName(2), "", "plugins", "printercounters", "budget");
+Html::header($budget->getTypeName(2), '', "tools", "pluginprintercountersmenu", "budget");
 $search = new PluginPrintercountersSearch();
 $search->showSearch($budget, array('fixedDisplay' => false, 'massiveaction' => true));
 Html::footer();

@@ -39,9 +39,12 @@ if (!defined('GLPI_ROOT')) {
 class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    static $types = array('Printer');
+   static $rightname = 'plugin_printercounters';
+   
    public $dohistory = false;
    protected $itemtype;
    protected $items_id;
+   
 
    /**
     * Constructor
@@ -65,19 +68,8 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       return _n('Linked billing models', 'Linked billing models', $nb, 'printercounters');
    }
 
-   // Printercounter's authorized profiles have right
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
-   }
-
-   // Printercounter's authorized profiles have right
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
-   }
-
-   // Printercounter's authorized profiles have right
    static function canUpdateRecords() {
-      return plugin_printercounters_haveRight('update_records', '1');
+      return Session::haveRight('update_records', 1);
    }
 
    /**
@@ -236,7 +228,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
    function showForBillingmodel($item) {
 
       $billingmodel = new PluginPrintercountersBillingmodel();
-      $canedit = ($billingmodel->can($item->fields['id'], 'w') && $this->canCreate());
+      $canedit = ($billingmodel->can($item->fields['id'], UPDATE) && $this->canCreate());
 
       $itemtype = $this->itemtype;
 
@@ -297,8 +289,8 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       echo "<div class='center'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array();
-         Html::showMassiveActions(__CLASS__, $massiveactionparams);
+         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         Html::showMassiveActions($massiveactionparams);
       }
 
       Html::printAjaxPager($itemtype::getTypeName(2), $start, $rows);
@@ -347,8 +339,8 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       }
 
       if ($canedit) {
-         $paramsma['ontop'] = false;
-         Html::showMassiveActions(__CLASS__, $paramsma);
+         $massiveactionparams['ontop'] = false;
+         Html::showMassiveActions($massiveactionparams);
          Html::closeForm();
       }
       echo "</table>";
@@ -981,14 +973,15 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
     * @return array of results (nbok, nbko, nbnoright counts)
     * */
    function massiveActions() {
+      
+      $prefix = $this->getType().MassiveAction::CLASS_ACTION_SEPARATOR;
 
       if ($this->canCreate()) {
          switch ($this->itemtype) {
             case "Printer":
                return array(
-                   "plugin_printercounters_billingmodel" => __('Printercounters', 'printercounters').' - '.__('Set billing model', 'printercounters'),
+                   $prefix."plugin_printercounters_billingmodel" => __('Printercounters', 'printercounters').' - '.__('Set billing model', 'printercounters'),
                );
-               break;
          }
       }
    }
@@ -1000,81 +993,68 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
     *
     * @return array of results (nbok, nbko, nbnoright counts)
     * */
-   function massiveActionsDisplay($options = array()) {
+   static function showMassiveActionsSubForm(MassiveAction $ma) {
+      
+      $itemtype         = $ma->getItemtype(false);
+      $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
 
-      if ($this->canCreate()) {
-         switch ($this->itemtype) {
-            case 'Printer':
-               switch ($options['action']) {
+      if ($item_recordmodel->canCreate()) {
+         switch (strtolower($itemtype)) {
+            case 'printer':
+               switch ($ma->getAction()) {
                   case "plugin_printercounters_billingmodel":
                      Dropdown::show("PluginPrintercountersBillingmodel", array('name' => 'plugin_printercounters_billingmodels_id'));
-                     echo "</br></br><input type=\"submit\" name=\"massiveaction\" 
-                           class=\"submit\" value=\""._sx('button', 'Post')."\" >";
                      break;
                }
-               break;
+               return parent::showMassiveActionsSubForm($ma);
          }
       }
    }
 
    /**
-    * Massive actions process
-    * 
-    * @param $input array of input datas
+    * @since version 0.85
     *
-    * @return array of results (nbok, nbko, nbnoright counts)
-    * */
-   function massiveActionsProcess($input = array()) {
+    * @see CommonDBTM::processMassiveActionsForOneItemtype()
+   **/
+   static function processMassiveActionsForOneItemtype(MassiveAction $ma, CommonDBTM $item,
+                                                       array $ids) {
+      $itemtype         = $ma->getItemtype(false);
+      $item_billingmodel = new self();
 
-      $item = getItemForItemtype($this->itemtype);
+//      $data = $item_billingmodel->find("`items_id` IN ('".implode("','", $ids)."') AND LOWER(`itemtype`)=LOWER('".$itemtype."')");
+//      $item_data = array();
+//      foreach ($data as $key => $val) {
+//         $item_data[$val['items_id']] = $val;
+//      }
 
-      $res = array('ok' => 0,
-          'ko' => 0,
-          'noright' => 0);
-
-      if ($this->canCreate()) {
-         $items_id = array();
-         foreach ($input["item"] as $key => $val) {
-            if ($val == 1) {
-               $items_id[] = $key;
+      foreach ($ids as $key => $val) {
+         if ($item->can($key, UPDATE)) {
+            $result = false;
+            switch ($ma->getAction()) {
+               case "plugin_printercounters_billingmodel":
+//                  if (isset($item_data[$key])) {
+//                     $result = $item_billingmodel->update(array('id' => $item_data[$key]['id'], 'plugin_printercounters_billingmodels_id' => $ma->POST['plugin_printercounters_billingmodels_id']));
+//                  } else {
+                     $result = $item_billingmodel->add(array('plugin_printercounters_billingmodels_id' => $ma->POST['plugin_printercounters_billingmodels_id'],
+                                                             'items_id'                                => $key,
+                                                             'itemtype'                                => $itemtype));
+//                  }
+                  break;
+               default :
+                  return parent::doSpecificMassiveActions($ma->POST);
             }
-         }
-//
-//         $data = $this->find("`items_id` IN ('".implode("','", $items_id)."') AND LOWER(`itemtype`)=LOWER('".$this->itemtype."')");
-//         $item_data = array();
-//         foreach ($data as $key => $val) {
-//            $item_data[$val['items_id']] = $val;
-//         }
 
-         foreach ($input["item"] as $key => $val) {
-            if ($item->can($key, 'w')) {
-               $result = false;
-               switch ($input['action']) {
-                  case "plugin_printercounters_billingmodel":
-//                     if (isset($item_data[$key])) {
-//                        $result = $this->update(array('id' => $item_data[$key]['id'], 'plugin_printercounters_billingmodels_id' => $input['plugin_printercounters_billingmodels_id']));
-//                     } else {
-                        $result = $this->add(array('plugin_printercounters_billingmodels_id' => $input['plugin_printercounters_billingmodels_id'],
-                            'items_id' => $key,
-                            'itemtype' => $this->itemtype));
-//                     }
-                     break;
-                  default :
-                     return parent::doSpecificMassiveActions($input);
-               }
-
-               if ($result) {
-                  $res['ok']++;
-               } else {
-                  $res['ko']++;
-               }
+            if ($result) {
+               $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_OK);
             } else {
-               $res['noright']++;
+               $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_KO);
+               $ma->addMessage($item->getErrorMessage(ERROR_COMPAT));
             }
+         } else {
+            $ma->itemDone($item->getType(), $key, MassiveAction::ACTION_NORIGHT);
+            $ma->addMessage($item->getErrorMessage(ERROR_RIGHT));
          }
       }
-
-      return $res;
    }
 
    /**

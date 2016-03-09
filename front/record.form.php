@@ -28,25 +28,27 @@ include ('../../../inc/includes.php');
 $record = new PluginPrintercountersRecord();
 
 if (isset($_POST["immediate_record"])) {
-   $record->check(-1, 'w', $_POST);
+   $record->check(-1, UPDATE, $_POST);
    $record->immediateRecord($_POST);
    Html::back();
    
 } elseif (isset($_POST["manual_record"])) {
-   $record->check($_POST['id'], 'w', $_POST);
+   $record->check($_POST['id'], UPDATE, $_POST);
    $record->manualRecord($_POST);
    Html::back();
    
 } elseif (isset($_POST["update_counter_position"])) {
-   $record->check($_POST['id'], 'w', $_POST);
+   $record->check($_POST['id'], UPDATE, $_POST);
    $record->updateCounterPosition($_POST);
    Html::back();
    
-} else {
-   Html::header(__('Record planning', 'printercounters'), "", "plugins", "printercounters", "record");
-   $record->showRecordPlanning();
+} elseif(isset($_GET["initAjaxMassiveAction"])){
+   Html::header(__('Printer'), '', "tools", "pluginprintercountersmenu");
+   $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
+   $item_recordmodel->initMassiveActionsProcess();
    Html::footer();
 }
+   
 
 
 

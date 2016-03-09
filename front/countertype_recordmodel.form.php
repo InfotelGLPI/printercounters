@@ -33,27 +33,32 @@ $countertype_recordmodel = new PluginPrintercountersCountertype_Recordmodel();
 
 if (isset($_POST["add"])) {
    // Check update rights for fields
-   $countertype_recordmodel->check(-1, 'w', $_POST);
-   $countertype_recordmodel->add($_POST);
-   Html::back();
+   $countertype_recordmodel->check(-1, CREATE, $_POST);
+   $newID = $countertype_recordmodel->add($_POST);
+   
+   if ($_SESSION['glpibackcreated']) {
+      Html::redirect($countertype_recordmodel->getFormURL()."?id=".$newID);
+   } else {
+      Html::back();
+   }
 
 } elseif (isset($_POST["update"])) {
    // Check update rights for fields
-   $countertype_recordmodel->check($_POST['id'], 'w', $_POST);
+   $countertype_recordmodel->check($_POST['id'], UPDATE, $_POST);
    $countertype_recordmodel->update($_POST);
 
    Html::back();
 
 } elseif (isset($_POST["delete"])) {
    // Check update rights for fields
-   $countertype_recordmodel->check($_POST['id'], 'w', $_POST);
+   $countertype_recordmodel->check($_POST['id'], DELETE, $_POST);
    $countertype_recordmodel->delete($_POST, 1);
-   Html::back();
+   $countertype_recordmodel->redirectToList();
    
 } else {
-   $countertype_recordmodel->checkGlobal("r");
-   Html::header(PluginPrintercountersCountertype::getTypeName(1), '', "plugins", "printercounters");
-   $countertype_recordmodel->showForm($_GET["id"]);
+   $countertype_recordmodel->checkGlobal(READ);
+   Html::header(PluginPrintercountersCountertype::getTypeName(1), '', "tools", "pluginprintercountersmenu", "countertype");
+   $countertype_recordmodel->display(array('id' => $_GET["id"]));
    Html::footer();
 }
 ?>

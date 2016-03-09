@@ -31,9 +31,7 @@
 * @brief
 */
 
-define('GLPI_ROOT', '../../..');
-
-include (GLPI_ROOT."/inc/includes.php");
+include ("../../../inc/includes.php");
 
 header("Content-Type: text/html; charset=UTF-8");
 
@@ -50,6 +48,7 @@ if (!isset($_POST['parenttype'])) {
 
 if (($item = getItemForItemtype($_POST['type']))
     && ($parent = getItemForItemtype($_POST['parenttype']))) {
+  
    if (isset($_POST[$parent->getForeignKeyField()])
        && isset($_POST["id"])
        && $parent->getFromDB($_POST[$parent->getForeignKeyField()])) {

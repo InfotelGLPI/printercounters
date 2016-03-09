@@ -47,6 +47,8 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    const SYSDESCR       = 5;
    const BLACKANDWHITE  = 6;
    const BICOLOR        = 7;
+   
+   static $rightname = 'plugin_printercounters';
     
    /**
     * functions mandatory
@@ -54,14 +56,6 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
     * */
    static function getTypeName($nb=0) {
       return _n('Counter type of record model', 'Counter types of record model', $nb, 'printercounters');
-   }
-
-   static function canCreate() {
-      return plugin_printercounters_haveRight('printercounters', 'w');
-   }
-
-   static function canView() {
-      return plugin_printercounters_haveRight('printercounters', 'r');
    }
     
    /**
@@ -109,13 +103,19 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
     * @param $options   array    options used
     */
    function showForm($ID, $options=array()) {
+      
       if ($ID > 0) {
-         $this->check($ID,'r');
+         $script = "$('#printercounters_viewAddCounters').show();";
       } else {
-         // Create item
+         $script = "$('#printercounters_viewAddCounters').hide();";
          $options['plugin_printercounters_recordmodels_id'] = $options['parent']->getField('id');
-         $this->check(-1,'w',$options);
       }
+      
+      $this->initForm($ID, $options);
+      
+      echo html::scriptBlock($script);
+      
+      $this->initForm($ID, $options);
 
       $data = $this->getCounterTypes($options['parent']->getField('id'));
             
@@ -162,7 +162,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    function showForRecordmodel($item) {
 
       $recordmodel = new PluginPrintercountersRecordmodel();
-      $canedit = ($recordmodel->can($item->fields['id'],'w') && $this->canCreate());
+      $canedit = ($recordmodel->can($item->fields['id'],UPDATE) && $this->canCreate());
       
       $data = $this->getCounterTypes($item->fields['id']);
       
@@ -178,7 +178,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
                                                  'PluginPrintercountersRecordmodel', 
                                                  $item->fields['id']);
          echo "<div class='center firstbloc'>".
-               "<a class='vsubmit' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
+               "<a class='vsubmit' id='printercounters_viewAddCounters' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
          echo __('Add a new counter', 'printercounters')."</a></div>\n";
       }
       
@@ -200,8 +200,8 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       echo "<div class='center'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array();
-         Html::showMassiveActions(__CLASS__, $massiveactionparams);
+         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         Html::showMassiveActions($massiveactionparams);
       }
       echo "<table class='tab_cadre_fixehov'>";
       echo "<tr class='tab_bg_1'>";
@@ -249,8 +249,8 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       }
 
       if ($canedit) {
-         $paramsma['ontop'] = false;
-         Html::showMassiveActions(__CLASS__, $paramsma);
+         $massiveactionparams['ontop'] = false;
+         Html::showMassiveActions($massiveactionparams);
          Html::closeForm(); 
       }
       
@@ -630,5 +630,6 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       
       parent::post_addItem($history);
    }
+
 }
 ?>

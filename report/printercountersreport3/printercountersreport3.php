@@ -215,9 +215,6 @@ if (empty($datas)) {
    echo "<div class='center'><font class='red b'>".__('No item found')."</font></div>";
    Html::footer();
    
-} else if ($output_type == Search::PDF_OUTPUT_PORTRAIT || $output_type == Search::PDF_OUTPUT_LANDSCAPE) {
-   include (GLPI_ROOT."/lib/ezpdf/class.ezpdf.php");
-   
 } else if ($output_type == Search::HTML_OUTPUT) {
    if (!$HEADER_LOADED) {
       Html::header($title, $_SERVER['PHP_SELF'], "utils", "report");
@@ -262,7 +259,7 @@ if (!empty($datas)) {
    // Header
    echo Search::showHeader($output_type, $nbrows, $nbCols, true);
    echo Search::showNewLine($output_type);
-   showTitle($output_type, $num, null, $key, false);
+   showTitle($output_type, $num, null, '', false);
    foreach ($datas['labels2'] as $key => $label) {
       showTitle($output_type, $num, $label, $key, false);
    }

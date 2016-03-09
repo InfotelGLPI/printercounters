@@ -60,7 +60,7 @@ function update104to105() {
    $DB->queryOrDie($query_snmpset, "Create additional datas table");
    
    // Add record notification
-   include(GLPI_ROOT ."/plugins/printercounters/inc/notificationtargetadditional_data.class.php");
+   include_once(GLPI_ROOT ."/plugins/printercounters/inc/notificationtargetadditional_data.class.php");
    call_user_func(array("PluginPrintercountersNotificationTargetAdditional_Data",'install')); 
    $migration->displayMessage("Add record notifications");
    

@@ -38,7 +38,7 @@ if (!defined('GLPI_ROOT')) {
  */
 class PluginPrintercountersSearch extends CommonDBTM {
 
-   var $output_type    = search::HTML_OUTPUT;
+   var $output_type    = Search::HTML_OUTPUT;
    var $number         = 0;
    var $default_search = array();
    var $current_search = array();
@@ -60,7 +60,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       $dataSearch = $p;
       unset($dataSearch['limit']);
       unset($dataSearch['start']);
-      $this->dataSearch = $this->getHistoryFromDB($item, array('search' => $dataSearch));
+      $this->dataSearch = $this->getHistoryFromDB($item, $dataSearch);
       if (is_callable(array($item, 'countLines'))) {
          $this->number = $item->countLines($this);
       } else {
@@ -68,7 +68,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       }
       
       // Get data
-      $this->input = $this->getHistoryFromDB($item, array('search' => $p));
+      $this->input = $this->getHistoryFromDB($item, $p);
    }
    
   /**
@@ -77,7 +77,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
    * @param type $params
    */
    function setSearchValues($item, $params){
-            
+
       // Default values of parameters
       $this->default_search = $this->getDefaultSearch($item);
       
@@ -85,12 +85,18 @@ class PluginPrintercountersSearch extends CommonDBTM {
       $p['order'] = $this->default_search['order'];
       $p['start'] = $this->default_search['start'];
       $p['limit'] = $this->default_search['limit'];
-      
-      foreach ($this->default_search['fields'] as $key => $val) {
-         $p['contains'][]    = $val['value'];
-         $p['searchtype'][]  = $val['searchtype'];
-         $p['search_item'][] = $val['field'];
-         $p['search_link'][] = $val['search_link'];
+     
+      foreach ($this->default_search as $key => $val) {
+         if (is_array($val)) {
+            foreach ($val as $key2 => $val2) {
+               $p[$key][$key2] = $val2;
+            }
+         } else {
+            $p[$key] = $val;
+            if ($key == 'limit') {
+               $_SESSION['glpilist_limit'] = $val;
+            }
+         }
       }
       
       foreach ($params as $key => $val) {
@@ -107,7 +113,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
       // Set current search parameters
       $this->current_search = $p;
-      
+
       return $p;
    }
    
@@ -138,18 +144,18 @@ class PluginPrintercountersSearch extends CommonDBTM {
          echo "<td>";
          echo "<div style='float:left;padding-top:8px;padding-bottom:8px;'>";
          // First line display add / delete images for normal and meta search items
-         echo "<input type='hidden' disabled id='add_search_count".$item->rand."' name='add_search_count' value='".(count($this->default_search['fields'])-1)."'>";
-         echo "<a href='javascript:void(0)' onClick = \"addSearchField('".$CFG_GLPI["root_doc"]."', 'search_line".$item->rand."', 'add_search_count".$item->rand."', 'search_form".$item->rand."');\">";
-         echo "<img src=\"".$CFG_GLPI["root_doc"]."/pics/plus.png\" alt='+' title=\"".
+         echo "<input type='hidden' disabled id='add_search_count".$item->rand."' name='add_search_count' value='".(count($this->default_search['criteria'])-1)."'>";
+         echo "<a href=\"javascript:printercountersSearch.addSearchField('".$CFG_GLPI["root_doc"]."', 'search_line".$item->rand."', 'add_search_count".$item->rand."', 'search_form".$item->rand."');\">";
+         echo "<img src=\"".$CFG_GLPI["root_doc"]."/pics/plus.png\" title=\"".
          __('Add a search criterion')."\"></a>&nbsp;&nbsp;&nbsp;&nbsp;";
 
-         echo "<a href='javascript:void(0)' onClick = \"deleteSearchField('search_line".$item->rand."', 'add_search_count".$item->rand."');\">";
-         echo "<img src=\"".$CFG_GLPI["root_doc"]."/pics/moins.png\" alt='-' title=\"".
+         echo "<a href=\"javascript:printercountersSearch.deleteSearchField('search_line".$item->rand."', 'add_search_count".$item->rand."');\" >";
+         echo "<img src=\"".$CFG_GLPI["root_doc"]."/pics/moins.png\" title=\"".
          __('Delete a search criterion')."\"></a>&nbsp;&nbsp;&nbsp;&nbsp;";
          echo "</div>";
 
          // Display link item
-         foreach ($this->default_search['fields'] as $key => $val) {
+         foreach ($this->default_search['criteria'] as $key => $val) {
             $this->addSearchField($key, $item, $val);
          }
 
@@ -157,11 +163,11 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
          // Submit 
          echo "<td class='center'>";
-         echo "<input type='button' onClick = \"initSearch('".$CFG_GLPI["root_doc"]."', 'search_form".$item->rand."', 'history_showForm".$item->rand."', '".$this->current_search['start']."', '".$this->current_search['limit']."', '".$this->current_search['order']."', '".$this->current_search['sort']."');\" value='".__('Search')."' class='submit'>";
+         echo "<input type='button' onClick = \"printercountersSearch.initSearch('".$CFG_GLPI["root_doc"]."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\" value='".__('Search')."' class='submit'>";
          echo "<input type='hidden' name='itemtype' value='".$itemtype."'>";
          echo "<input type='hidden' name='id' value='".$ID."'>";
-         echo "<input type='hidden' name='item' value='".Toolbox::prepareArrayForInput(serialize($item))."'>";
-         echo "<a href='javascript:void(0)' onClick = \"resetSearchField('".$CFG_GLPI['root_doc']."', 'history_showSearch".$item->rand."', 'search_form".$item->rand."', 'history_showForm".$item->rand."', '".$this->current_search['start']."', '".$this->current_search['limit']."', '".$this->current_search['order']."', '".$this->current_search['sort']."');\">";
+         echo "<input type='hidden' name='item' value='".base64_encode(serialize($item))."'>";
+         echo "<a href='javascript:void(0)' onClick = \"printercountersSearch.resetSearchField('".$CFG_GLPI['root_doc']."', 'history_showSearch".$item->rand."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\">";
          echo "&nbsp;&nbsp;<img title=\"".__('Blank')."\" alt=\"".__('Blank')."\" src='".
          $CFG_GLPI["root_doc"]."/pics/reset.png' class='calendrier'></a>";
          echo "</td>";
@@ -185,10 +191,10 @@ class PluginPrintercountersSearch extends CommonDBTM {
       
       if (empty($this->default_search)) {
          $default_search_params = $this->getDefaultSearch($item);
-         $default_search_params = $default_search_params['fields'][0];
+         $default_search_params = $default_search_params['criteria'][0];
       }
 
-      $default_search['search_link'] = '';
+      $default_search['link']        = '';
       $default_search['field']       = '';
       $default_search['value']       = '';
       $default_search['searchtype']  = '';
@@ -203,58 +209,27 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
       // Display link item
       if ($i > 0) {
-         echo "<select id='search_link$i' name='search_link[$i]'>";
          $operators = array('AND', 'OR', 'AND NOT', 'OR NOT');
+         $elements = array();
          foreach($operators as $val){
-            $selected = ($default_search['search_link'] == $val) ?  'selected' : '';
-            echo "<option $selected value='$val'>$val</option>\n";
+            $elements[$val] = $val;
          }
-         echo "</select>&nbsp;";
+         Dropdown::showFromArray("criteria[$i][link]", $elements, array('value' => $default_search['link'], 'width' => 80));
+         echo "&nbsp";
       }
 
       // display select box to define search item
-      echo "<select id='search_item$i' name='search_item[$i]' size='1'>";
-      $options = Search::getCleanedOptions($itemtype);
+      $elements = array();
+      $options = Search::getOptions($itemtype);
       reset($options);
-      
-      $first_group = true;
-      $str_limit   = 28;
-      $nb_in_group = 0;
-      $group       = '';
-
+ 
+      $str_limit = 28;
       foreach ($options as $key => $val) {
-         // print groups
-         if (!is_array($val)) {
-            if (!$first_group) {
-               $group .= "</optgroup>\n";
-            } else {
-               $first_group = false;
-            }
-            if ($nb_in_group) {
-               echo $group;
-            }
-            $group = '';
-            $nb_in_group = 0;
-
-            $group .= "<optgroup label=\"".Toolbox::substr($val, 0, $str_limit)."\">";
-         } else {
-            if ((!isset($val['nosearch']) || $val['nosearch'] == false) && (!isset($val['nodisplay']) || $val['nodisplay'] == false)) {
-               $nb_in_group++;
-               $selected = ($default_search['field'] == $key)?  'selected' : '';
-               $group .= "<option $selected title=\"".Html::cleanInputText($val["name"])."\" value='$key'";
-               $group .= ">".Toolbox::substr($val["name"], 0, $str_limit)."</option>\n";
-            } else {
-               unset($options[$key]);
-            }
+         if ((!isset($val['nosearch']) || $val['nosearch'] == false) && (!isset($val['nodisplay']) || $val['nodisplay'] == false)) {
+            $elements[$key] = Toolbox::substr($val["name"], 0, $str_limit);
          }
       }
-      if (!$first_group) {
-         $group .= "</optgroup>\n";
-      }
-      if ($nb_in_group) {
-         echo $group;
-      }
-      echo "</select>&nbsp;";
+      $rand = Dropdown::showFromArray("criteria[$i][field]", $elements, array('value' => $default_search['field'], 'width' => 150));
       echo "</td>";
 
       echo "<td style='padding:0px 0px'>";
@@ -275,7 +250,8 @@ class PluginPrintercountersSearch extends CommonDBTM {
                       'num'         => $i,
                       'value'       => '',
                       'searchtype'  => '');
-      Ajax::updateItemOnSelectEvent("search_item$i", "SearchSpan".$item->getType()."$i", $CFG_GLPI["root_doc"]."/ajax/searchoption.php", $params);
+      
+      Ajax::updateItemOnSelectEvent("dropdown_criteria_".$i."__field_".$rand, "SearchSpan".$item->getType()."$i", $CFG_GLPI["root_doc"]."/ajax/searchoption.php", $params);
       echo "</td></tr>";
       echo "</table></div>";
    }
@@ -287,28 +263,28 @@ class PluginPrintercountersSearch extends CommonDBTM {
    */
    function getDefaultSearch($item){
       
-      $default_search   = array();
-      $options          = Search::getCleanedOptions($item->getType());
-      $fields_num       = array_keys($options);
-      $default_search['fields'][] = array('field' => $fields_num[0], 'searchtype' => 'contains', 'value' => '', 'search_link' => '');
-      $default_search['order'] = 'ASC';
-      $default_search['sort']  = 1;
-      $default_search['start'] = 0;
-      $default_search['limit'] = $_SESSION['glpilist_limit'];
-      
+      $default_search                = array();
+      $options                       = Search::getOptions($item->getType());
+      $fields_num                    = array_keys($options);
+      $default_search['criteria'][0] = array('field' => $fields_num[0], 'searchtype' => 'contains', 'value' => '', 'link' => '');
+      $default_search['order']       = 'ASC';
+      $default_search['sort']        = 1;
+      $default_search['start']       = 0;
+      $default_search['limit']       = $_SESSION['glpilist_limit'];
+
       if (is_callable(array($item, 'getDefaultSearch'))) {
          $custom_search = $item->getDefaultSearch($this);
-         if (isset($custom_search['fields'])) {
-            foreach($custom_search['fields'] as $key => $val){
-               $default_search['fields'][$key] = $val;
-            }
-            unset($custom_search['fields']);
-         }
          foreach ($custom_search as $key => $val) {
-            $default_search[$key] = $val;
+            if (is_array($val)) {
+               foreach ($val as $key2 => $val2) {
+                  $default_search[$key][$key2] = $val2;
+               }
+            } else {
+               $default_search[$key] = $val;
+            }
          }
-      } 
-      
+      }
+
       return $default_search;
    }
    
@@ -353,7 +329,8 @@ class PluginPrintercountersSearch extends CommonDBTM {
          $canedit = ($item->canCreate() && $params['massiveaction'] && !(empty($this->input) && empty($this->dataSearch)));
          if ($canedit) {
             Html::openMassiveActionsForm('mass'.__CLASS__.$item->rand);
-            Html::showMassiveActions($item->getType(), array('fixed' => $params['fixedDisplay']));
+            $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$item->rand, 'fixed' => $params['fixedDisplay']);
+            Html::showMassiveActions($massiveactionparams);
          }
 
          echo "<div id='history_showForm".$item->rand."'>";
@@ -361,12 +338,15 @@ class PluginPrintercountersSearch extends CommonDBTM {
          echo "</div>";
 
          if ($canedit) {
-            Html::showMassiveActions($item->getType(), array('fixed' => $params['fixedDisplay'], 
-                                                             'ontop' => false));
+            $massiveactionparams['ontop'] = false;
+            Html::showMassiveActions($massiveactionparams);
             Html::closeForm();
          }
+
+         self::initPrintercounterJS($this->current_search);
       }
    }
+
    
   /**
     * Display the search title
@@ -421,19 +401,18 @@ class PluginPrintercountersSearch extends CommonDBTM {
       } else {
          // Show pager
          if ($this->output_type == search::HTML_OUTPUT) {
-            $this->setPrintPager($item, $_POST);
+            $this->printAjaxPager($item);
          }
 
          // Show headers
          echo Search::showHeader($this->output_type, count($this->input), 8, $item->fixedDisplay);
          echo Search::showNewLine($this->output_type);
-         if ($canedit && $this->output_type == search::HTML_OUTPUT) {
+         if ($canedit && $this->output_type == Search::HTML_OUTPUT) {
             echo Search::showHeaderItem($this->output_type, Html::getCheckAllAsCheckbox('mass'.__CLASS__.$item->rand), $col_num);
          }
          $searchopt            = array();
          $itemtype             = $item->getType();
          $searchopt[$itemtype] = &Search::getOptions($itemtype);
-         $globallinkto         = json_encode($this->current_search);
          ksort($searchopt[$itemtype]);
          foreach ($searchopt[$itemtype] as $num => $val) {
             if (isset($val['nodisplay']) && $val['nodisplay']) {
@@ -441,13 +420,13 @@ class PluginPrintercountersSearch extends CommonDBTM {
             }
             $linkto = '';
             if (!isset($val['nosort']) || !$val['nosort']) {
-               $linkto = "javascript:initSearch('".$CFG_GLPI["root_doc"]."', "
+               $linkto = "javascript:printercountersSearch.initSearch('".$CFG_GLPI["root_doc"]."', "
                                               . "'search_form".$item->rand."', "
                                               . "'history_showForm".$item->rand."', "
-                                              . "'".$this->current_search['start']."', "
-                                              . "'".$this->current_search['limit']."', "
-                                              . "'".(($this->current_search['order'] == "ASC") ? "DESC" : "ASC")."', "
-                                              . "'".$num."');";
+                                              .str_replace('"', "'", json_encode(array('start' => $this->current_search['start'], 
+                                                                                       'limit' => $this->current_search['limit'], 
+                                                                                       'order' => (($this->current_search['order'] == "ASC") ? "DESC" : "ASC"), 
+                                                                                       'sort'  => $num))).");";
             }
             echo Search::showHeaderItem($this->output_type, $val["name"], $col_num, $linkto, ($this->current_search['sort'] == $num), $this->current_search['order']);
          }
@@ -459,9 +438,13 @@ class PluginPrintercountersSearch extends CommonDBTM {
             
          // Default data display
          } else {
+            $line['raw'] = array();
             foreach ($this->input as $history) {
                $row_num++;
                $col_num = 1;
+               
+               $line['raw'] = $history;
+               PluginPrintercountersSearch::parseData($line);
                
                // Show massive action checkbox
                $count   = 0;
@@ -470,20 +453,19 @@ class PluginPrintercountersSearch extends CommonDBTM {
                   foreach ($searchopt[$item->getType()] as $num => $val) {
                      if ($val['table'] == $item->getTable() && $val['field'] == 'id') {
                         echo "<td class='center' width='10'>";
-                        Html::showMassiveActionCheckBox(__CLASS__, Search::giveItem($item->getType(), $num, $history, $count));
+                        Html::showMassiveActionCheckBox($item->getType(), Search::giveItem($item->getType(), $num, $line, $count));
                         echo "</td>";
                      }
                      $count++;
                   }
                }
-               
                // Show columns
                $count   = 0;
                foreach ($searchopt[$item->getType()] as $num => $val) {
                   if ((isset($val['nodisplay']) && $val['nodisplay']) || (isset($val['nosql']) && $val['nosql'])) {
                      continue;
                   }
-                  echo Search::showItem($this->output_type, Search::giveItem($item->getType(), $num, $history, $count), $col_num, $row_num);   
+                  echo Search::showItem($this->output_type, Search::giveItem($item->getType(), $num, $line, $count), $col_num, $row_num);   
                   $count++;
                }
                echo Search::showEndLine($this->output_type);
@@ -492,7 +474,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
          
          echo Search::showFooter($this->output_type, self::getTypeName());
       }
-
+      
       echo $output;
    }
 
@@ -509,16 +491,13 @@ class PluginPrintercountersSearch extends CommonDBTM {
       global $DB, $CFG_GLPI;
 
       $itemtype = $item->getType();
-
+      
       // Default values of parameters
       $p                = array();
-      $p['search_item'] = array();
-      $p['contains']    = array();
-      $p['search_link'] = array();
       $p['sort']        = '';
       $p['order']       = '';
 
-      foreach ($params['search'] as $key => $val) {
+      foreach ($params as $key => $val) {
          $p[$key] = $val;
       }
       
@@ -533,24 +512,6 @@ class PluginPrintercountersSearch extends CommonDBTM {
          }
       }
       sort($toview);
-
-      if (in_array('all', $p['search_item'])
-          && !$CFG_GLPI['allow_search_all']) {
-         Html::displayRightError();
-      }
-      if (in_array('view', $p['search_item'])
-          && !$CFG_GLPI['allow_search_view']) {
-         Html::displayRightError();
-      }
-
-      // Manage defautll seachtype value : for bookmark compatibility
-      if (count($p['contains'])) {
-         foreach ($p['contains'] as $key => $val) {
-            if (!isset($p['searchtype'][$key])) {
-               $p['searchtype'][$key] = 'contains';
-            }
-         }
-      }
 
       $blacklist_tables = array();
       if (isset($CFG_GLPI['union_search_type'][$itemtype])) {
@@ -609,18 +570,18 @@ class PluginPrintercountersSearch extends CommonDBTM {
       
       // 3 - WHERE
       $criteria = array();
-      foreach ($p['search_item'] as $key => $search_item) {
-         if (!empty($p['contains'][$key])) {
+      foreach ($p['criteria'] as $key => $search_item) {
+         if (!empty($search_item['value'])) {
             $LINK = " ";
             $NOT = 0;
             $tmplink = "";
 
-            if (is_array($p['search_link']) && isset($p['search_link'][$key])) {
-               if (strstr($p['search_link'][$key], "NOT")) {
-                  $tmplink = " ".str_replace(" NOT", "", $p['search_link'][$key]);
+            if (isset($search_item['link'])) {
+               if (strstr($search_item['link'], "NOT")) {
+                  $tmplink = " ".str_replace(" NOT", "", $search_item['link']);
                   $NOT = 1;
                } else {
-                  $tmplink = " ".$p['search_link'][$key];
+                  $tmplink = " ".$search_item['link'];
                }
             } else {
                $tmplink = " AND ";
@@ -630,7 +591,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
                $LINK = $tmplink;
             }
 
-            $criteria[$key] = self::addWhere($LINK, $NOT, $item->getType(), $p['search_item'][$key], $p['searchtype'][$key], $p['contains'][$key]);
+            $criteria[$key] = self::addWhere($LINK, $NOT, $item->getType(), $search_item['field'], $search_item['searchtype'], $search_item['value']);
          }
       }
       
@@ -693,11 +654,11 @@ class PluginPrintercountersSearch extends CommonDBTM {
             $output[] = $data;
          }
       }
-
+      
       return $output;
    }
    
-   /**
+      /**
     * Generic Function to add where to a request
     *
     * @param $link         link string
@@ -718,14 +679,13 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
       $inittable = $table;
       $addtable  = '';
-
-      if ($table != 'asset_types'
+      if (($table != 'asset_types')
           && ($table != getTableForItemType($itemtype))
           && ($searchopt[$ID]["linkfield"] != getForeignKeyFieldForTable($table))) {
 //         $addtable = "_".$searchopt[$ID]["linkfield"];
          $table   .= $addtable;
       }
- 
+
       if (isset($searchopt[$ID]['joinparams'])) {
          $complexjoin = Search::computeComplexJoinID($searchopt[$ID]['joinparams']);
 
@@ -807,15 +767,16 @@ class PluginPrintercountersSearch extends CommonDBTM {
       if ($plug = isPluginItemType($itemtype)) {
          $function = 'plugin_'.$plug['plugin'].'_addWhere';
          if (function_exists($function)) {
-            $out = $function($link,$nott,$itemtype,$ID,$val);
+            $out = $function($link, $nott, $itemtype, $ID, $val, $searchtype);
             if (!empty($out)) {
                return $out;
             }
          }
       }
-      
+
       switch ($inittable.".".$field) {
-//          case "glpi_users_validation.name" :
+// //          case "glpi_users_validation.name" :
+
          case "glpi_users.name" :
             if ($itemtype == 'User') { // glpi_users case / not link table
                if (in_array($searchtype, array('equals', 'notequals'))) {
@@ -845,8 +806,12 @@ class PluginPrintercountersSearch extends CommonDBTM {
             if (($itemtype == 'Ticket') || ($itemtype == 'Problem')) {
                if (isset($searchopt[$ID]["joinparams"]["beforejoin"]["table"])
                    && isset($searchopt[$ID]["joinparams"]["beforejoin"]["joinparams"])
-                   && (($searchopt[$ID]["joinparams"]["beforejoin"]["table"] == 'glpi_tickets_users')
-                       || ($searchopt[$ID]["joinparams"]["beforejoin"]["table"] == 'glpi_problems_users'))) {
+                   && (($searchopt[$ID]["joinparams"]["beforejoin"]["table"]
+                         == 'glpi_tickets_users')
+                       || ($searchopt[$ID]["joinparams"]["beforejoin"]["table"]
+                             == 'glpi_problems_users')
+                       || ($searchopt[$ID]["joinparams"]["beforejoin"]["table"]
+                             == 'glpi_changes_users'))) {
 
                   $bj        = $searchopt[$ID]["joinparams"]["beforejoin"];
                   $linktable = $bj['table'].'_'.Search::computeComplexJoinID($bj['joinparams']);
@@ -871,13 +836,13 @@ class PluginPrintercountersSearch extends CommonDBTM {
             if ($val == 'mygroups') {
                switch ($searchtype) {
                   case 'equals' :
-                     return " $link (`$table`.`id` IN ('".implode("','",$_SESSION['glpigroups'])."')) ";
-                     break;
+                     return " $link (`$table`.`id` IN ('".implode("','",
+                                                                  $_SESSION['glpigroups'])."')) ";
 
                   case 'notequals' :
-                     return " $link (`$table`.`id` NOT IN ('".implode("','",$_SESSION['glpigroups'])."')) ";
-                     break;
-                     
+                     return " $link (`$table`.`id` NOT IN ('".implode("','",
+                                                                      $_SESSION['glpigroups'])."')) ";
+
                   case 'under' :
                      $groups = $_SESSION['glpigroups'];
                      foreach ($_SESSION['glpigroups'] as $g) {
@@ -885,8 +850,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
                      }
                      $groups = array_unique($groups);
                      return " $link (`$table`.`id` IN ('".implode("','", $groups)."')) ";
-                     break;
-                     
+
                   case 'notunder' :
                      $groups = $_SESSION['glpigroups'];
                      foreach ($_SESSION['glpigroups'] as $g) {
@@ -894,61 +858,9 @@ class PluginPrintercountersSearch extends CommonDBTM {
                      }
                      $groups = array_unique($groups);
                      return " $link (`$table`.`id` NOT IN ('".implode("','", $groups)."')) ";
-                     break;                     
                }
             }
             break;
-
-         case "glpi_networkports.mac" :
-            if ($itemtype == 'Computer') {
-               return "$link (".Search::makeTextCriteria("`glpi_items_devicenetworkcards`.`mac`",
-                                                       $val, $nott,'').
-                              Search::makeTextCriteria("`$table`.`$field`", $val ,$nott, 'OR').")";
-            }
-            return Search::makeTextCriteria("`$table`.`$field`", $val, $nott, $link);
-
-         case "glpi_infocoms.sink_type" :
-            $ADD = "";
-            if ($nott
-                && ($val != 'NULL') && ($val != 'null')) {
-               $ADD = " OR `$table`.`$field` IS NULL";
-            }
-
-            if (stristr($val,Infocom::getAmortTypeName(1))) {
-               $val = 1;
-            } else if (stristr($val,Infocom::getAmortTypeName(2))) {
-               $val = 2;
-            }
-
-            if (is_int($val) && ($val > 0)) {
-               if ($nott) {
-                  return $link." (`$table`.`$field` <> '$val' ".
-                                  $ADD." ) ";
-               }
-               return $link." (`$table`.`$field` = '$val' ".
-                               $ADD." ) ";
-            }
-            break;
-
-         case "glpi_contacts.completename" :
-            if (in_array($searchtype, array('equals', 'notequals'))) {
-               return " $link `$table`.`id`".$SEARCH;
-            }
-            if ($_SESSION["glpinames_format"] == User::FIRSTNAME_BEFORE) {
-               $name1 = 'firstname';
-               $name2 = 'name';
-            } else {
-               $name1 = 'name';
-               $name2 = 'firstname';
-            }
-
-            $tmplink = 'OR';
-            if ($nott) {
-               $tmplink = 'AND';
-            }
-            return $link." (`$table`.`$name1` $SEARCH
-                            $tmplink `$table`.`$name2` $SEARCH
-                            $tmplink CONCAT(`$table`.`$name1`,' ',`$table`.`$name2`) $SEARCH) ";
 
          case "glpi_auth_tables.name" :
             $user_searchopt = Search::getOptions('User');
@@ -962,22 +874,6 @@ class PluginPrintercountersSearch extends CommonDBTM {
                            $tmplink `glpi_authldaps".$addtable."_".
                               Search::computeComplexJoinID($user_searchopt[30]['joinparams'])."`.`name`
                            $SEARCH ) ";
-
-         case "glpi_contracts.renewal" :
-            $valid = Contract::getContractRenewalIDByName($val);
-            if ($valid > 0) {
-               return $link." `$table`.`$field`"."="."'$valid'";
-            }
-            return "";
-
-         case "glpi_profiles.interface" :
-            if (stristr(Profile::getInterfaceName('central'),$val)) {
-               return $link." `$table`.`$field`='central'";
-            }
-            if (stristr(Profile::getInterfaceName('helpdesk'),$val)) {
-               return $link." `$table`.`$field`='helpdesk'";
-            }
-            return "";
 
          case "glpi_ipaddresses.name" :
             $search  = array("/\&lt;/","/\&gt;/");
@@ -994,7 +890,6 @@ class PluginPrintercountersSearch extends CommonDBTM {
                $regs[1] .= $regs[2];
                return $link." (INET_ATON(`$table`.`$field`) ".$regs[1]." INET_ATON('".$regs[3]."')) ";
             }
-//             return Search::makeTextCriteria("`$table`.`$field`", $val, $nott, $link);
             break;
 
          case "glpi_tickets.status" :
@@ -1041,6 +936,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
                      break;
                }
             }
+
             if (count($tocheck) == 0) {
                $statuses = $item->getAllStatusArray();
                if (isset($statuses[$val])) {
@@ -1077,9 +973,13 @@ class PluginPrintercountersSearch extends CommonDBTM {
          case "glpi_tickets.priority" :
          case "glpi_tickets.impact" :
          case "glpi_tickets.urgency" :
+         case "glpi_problems.priority" :
+         case "glpi_problems.impact" :
+         case "glpi_problems.urgency" :
+         case "glpi_changes.priority" :
+         case "glpi_changes.impact" :
+         case "glpi_changes.urgency" :
          case "glpi_projects.priority" :
-         case "glpi_projects.impact" :
-         case "glpi_projects.urgency" :
             if (is_numeric($val)) {
                if ($val > 0) {
                   return $link." `$table`.`$field` = '$val'";
@@ -1094,37 +994,33 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
          case "glpi_tickets.global_validation" :
          case "glpi_ticketvalidations.status" :
-            $tocheck = array('none'     => array('none'),
-                             'waiting'  => array('waiting'),
-                             'rejected' => array('rejected'),
-                             'accepted' => array('accepted'),
-                             'can'      => array('none', 'accepted'),
-                             'all'      => array('none', 'waiting', 'rejected', 'accepted'));
-            if (isset($tocheck[$val])) {
-               foreach ($tocheck[$val] as $key => $nval) {
-                  $tocheck[$val][$key] = " `$table`.`$field` = '$nval' ";
-               }
-               return $link.'('.implode(' OR ', $tocheck[$val]).')';
-            }
             if ($val == 'all') {
                return "";
             }
+            $tocheck = array();
+            switch ($val) {
+               case 'can' :
+                  $tocheck = CommonITILValidation::getCanValidationStatusArray();
+                  break;
+
+               case 'all' :
+                  $tocheck = CommonITILValidation::getAllValidationStatusArray();
+                  break;
+               }
+            if (count($tocheck) == 0) {
+               $tocheck = array($val);
+            }
+            if (count($tocheck)) {
+               if ($nott) {
+                  return $link." `$table`.`$field` NOT IN ('".implode("','",$tocheck)."')";
+               }
+               return $link." `$table`.`$field` IN ('".implode("','",$tocheck)."')";
+            }
             break;
-
-         case "glpi_ticketsatisfactions.type" :
-            return $link." `$table`.`$field` = '$val' ";
-
-         case "glpi_tickets.is_late" :
-            return " $link IF(`$table$addtable`.`due_date` IS NOT NULL
-                              AND (`$table$addtable`.`solvedate` > `$table$addtable`.`due_date`
-                                   OR (`$table$addtable`.`solvedate` IS NULL
-                                       AND `$table$addtable`.`due_date` < NOW())),
-                              1, 0)
-                     $SEARCH ";
 
       }
 
-      //// Default cases
+      // Default cases
 
       // Link with plugin tables
       if (preg_match("/^glpi_plugin_([a-z0-9]+)/", $inittable, $matches)) {
@@ -1132,7 +1028,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
             $plug     = $matches[1];
             $function = 'plugin_'.$plug.'_addWhere';
             if (function_exists($function)) {
-               $out = $function($link, $nott, $itemtype, $ID, $val);
+               $out = $function($link, $nott, $itemtype, $ID, $val, $searchtype);
                if (!empty($out)) {
                   return $out;
                }
@@ -1140,7 +1036,8 @@ class PluginPrintercountersSearch extends CommonDBTM {
          }
       }
 
-      $tocompute = "`$table`.`$field`";
+      $tocompute      = "`$table`.`$field`";
+      $tocomputetrans = "`".$table."_trans`.`value`";
       if (isset($searchopt[$ID]["computation"])) {
          $tocompute = $searchopt[$ID]["computation"];
          $tocompute = str_replace("TABLE", "`$table`", $tocompute);
@@ -1199,7 +1096,8 @@ class PluginPrintercountersSearch extends CommonDBTM {
                   }
                   $date_computation = "ADDDATE(`$table`.".$searchopt[$ID]["datafields"][1].",
                                                INTERVAL (`$table`.".$searchopt[$ID]["datafields"][2]."
-                                                 $add_minus) $delay_unit)";
+                                                         $add_minus)
+                                               $delay_unit)";
                }
                if (in_array($searchtype, array('equals', 'notequals'))) {
                   return " $link ($date_computation ".$SEARCH.') ';
@@ -1226,10 +1124,10 @@ class PluginPrintercountersSearch extends CommonDBTM {
                return Search::makeTextCriteria($date_computation, $val, $nott, $link);
 
             case "right" :
-               if (($val == 'NULL') || ($val == 'null')) {
-                  return $link." $tocompute IS ".($nott?'NOT':'')." NULL ";
+               if ($searchtype == 'notequals') {
+                  $nott = !$nott;
                }
-               return $link." $tocompute = '$val' ";
+               return $link. ($nott?' NOT':'')." ($tocompute & '$val') ";
 
             case "bool" :
                if (!is_numeric($val)) {
@@ -1239,8 +1137,12 @@ class PluginPrintercountersSearch extends CommonDBTM {
                      $val = 1;
                   }
                }
-               // No break here : use number comparaison case
+               if ($searchtype == 'notequals') {
+                  $nott = !$nott;
+               }
+            // No break here : use number comparaison case
 
+            case "count" :
             case "number" :
             case "decimal" :
             case "timestamp" :
@@ -1283,14 +1185,14 @@ class PluginPrintercountersSearch extends CommonDBTM {
                break;
          }
       }
-   
+
       // Default case
       if (in_array($searchtype, array('equals', 'notequals','under', 'notunder'))) {
-       
+
          if ((!isset($searchopt[$ID]['searchequalsonfield'])
-               || !$searchopt[$ID]['searchequalsonfield'])
-            && (($table != getTableForItemType($itemtype))
-               || ($itemtype == 'AllAssets'))) {
+              || !$searchopt[$ID]['searchequalsonfield'])
+            && ($table != getTableForItemType($itemtype)
+                || ($itemtype == 'AllAssets'))) {
             $out = " $link (`$table`.`id`".$SEARCH;
          } else {
             $out = " $link (`$table`.`$field`".$SEARCH;
@@ -1306,6 +1208,11 @@ class PluginPrintercountersSearch extends CommonDBTM {
          }
          $out .= ')';
          return $out;
+      }
+      $transitemtype = getItemTypeForTable($inittable);
+      if (Session::haveTranslations($transitemtype, $field)) {
+         return " $link (".Search::makeTextCriteria($tocompute,$val,$nott,'')."
+                          OR ".Search::makeTextCriteria($tocomputetrans,$val,$nott,'').")";
       }
 
       return Search::makeTextCriteria($tocompute,$val,$nott,$link);
@@ -1341,9 +1248,9 @@ class PluginPrintercountersSearch extends CommonDBTM {
 //          && ($searchopt[$ID]["linkfield"] != getForeignKeyFieldForTable($table))) {
 //         $addtable .= "_".$searchopt[$ID]["linkfield"];
 //      }
-
+//
 //      if (isset($searchopt[$ID]['joinparams'])) {
-//         $complexjoin = self::computeComplexJoinID($searchopt[$ID]['joinparams']);
+//         $complexjoin = Search::computeComplexJoinID($searchopt[$ID]['joinparams']);
 //
 //         if (!empty($complexjoin)) {
 //            $addtable .= "_".$complexjoin;
@@ -1370,9 +1277,11 @@ class PluginPrintercountersSearch extends CommonDBTM {
             $user_searchopt = Search::getOptions('User');
             return " ORDER BY `glpi_users`.`authtype` $order,
                               `glpi_authldaps".$addtable."_".
-                                 Search::computeComplexJoinID($user_searchopt[30]['joinparams'])."`.`name` $order,
+                                 Search::computeComplexJoinID($user_searchopt[30]['joinparams'])."`.
+                                 `name` $order,
                               `glpi_authmails".$addtable."_".
-                                 Search::computeComplexJoinID($user_searchopt[31]['joinparams'])."`.`name` $order ";
+                                 Search::computeComplexJoinID($user_searchopt[31]['joinparams'])."`.
+                                 `name` $order ";
 
          case "glpi_users.name" :
             if ($itemtype!='User') {
@@ -1417,8 +1326,8 @@ class PluginPrintercountersSearch extends CommonDBTM {
                   $add_minus = "- `$table$addtable`.`".$searchopt[$ID]["datafields"][3]."`";
                }
                return " ORDER BY ADDDATE(`$table$addtable`.`".$searchopt[$ID]["datafields"][1]."`,
-                                         INTERVAL (`$table$addtable`.`".$searchopt[$ID]["datafields"][2].
-                                                   "` $add_minus)
+                                         INTERVAL (`$table$addtable`.`".
+                                                   $searchopt[$ID]["datafields"][2]."` $add_minus)
                                          $interval) $order ";
          }
       }
@@ -1427,16 +1336,6 @@ class PluginPrintercountersSearch extends CommonDBTM {
       return " ORDER BY ITEM_$key $order ";
 
    }
-
-  /**
-   * Function set printer pager
-   * 
-   * @param object $item
-   * @param array $input
-   */
-   function setPrintPager($item, $input) {
-      $this->printAjaxPager($item, '', $this->current_search['start'], $this->number, $input);
-   }
    
   /**
    * Function set export to pdf, csv ...
@@ -1444,33 +1343,30 @@ class PluginPrintercountersSearch extends CommonDBTM {
    * @param object $item
    * @param array $input
    */
-   function setExport($item, $input) {
+   function setExport($item) {
       global $CFG_GLPI;
       
       echo "<form method='POST' name='search_export$item->rand' target='_blank' action='".$this->getFormURL()."' 
                onsubmit=\"printecounters_reloadCsrf('".$CFG_GLPI['root_doc']."','search_export$item->rand');\">\n";
-      $param = "";
       
-      if(isset($input['searchopt'])) unset($input['searchopt']);
+      if(isset($this->current_search['searchopt'])) unset($this->current_search['searchopt']);
       
-      echo "<input type='hidden' name='item' value='".Toolbox::prepareArrayForInput(serialize($item))."'>";
-      
-      foreach ($input as $key => $val) {
+      echo "<input type='hidden' name='item' value='".base64_encode(serialize($item))."'>";
+
+      foreach ($this->current_search as $key => $val) {
          if ($key != "_glpi_csrf_token") {
             if (is_array($val)) {
                foreach ($val as $k => $v) {
-                  echo "<input type='hidden' name='".$key."[$k]' value='$v' >";
-                  if (!empty($param)) {
-                     $param .= "&";
+                  if (is_array($v)) {
+                     foreach ($v as $k2 => $v2) {
+                        echo "<input type='hidden' name='".$key."[$k][$k2]' value='$v2' >";
+                     }
+                  } else {
+                     echo "<input type='hidden' name='".$key."[$k]' value='$v' >";
                   }
-                  $param .= $key."[".$k."]=".urlencode($v);
                }
             } else {
                echo "<input type='hidden' name='$key' value='$val' >";
-               if (!empty($param)) {
-                  $param .= "&";
-               }
-               $param .= "$key=".urlencode($val);
             }
          }
       }
@@ -1480,32 +1376,30 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
    /**
     * Print Ajax pager for list in tab panel
-    *
-    * @param $title displayed above
-    * @param $start from witch item we start
-    * @param $numrows total items
-    *
-    * @return nothing (print a pager)
-    * */
-   function printAjaxPager($item, $title, $start, $numrows, $input = array()) {
+    * 
+    * @global type $CFG_GLPI
+    * @param type $item
+    * @param type $title
+    */
+   function printAjaxPager($item, $title='') {
       global $CFG_GLPI;
-
+      
       $_SESSION['glpilist_limit'] = $this->current_search['limit'];
 
       $list_limit = $_SESSION['glpilist_limit'];
       // Forward is the next step forward
-      $forward = $start + $list_limit;
+      $forward = $this->current_search['start'] + $list_limit;
 
       // This is the end, my friend
-      $end = $numrows - $list_limit;
+      $end = $this->number - $list_limit;
 
       // Human readable count starts here
-      $current_start = $start + 1;
+      $current_start = $this->current_search['start'] + 1;
 
       // And the human is viewing from start to end
       $current_end = $current_start + $list_limit - 1;
-      if ($current_end > $numrows) {
-         $current_end = $numrows;
+      if ($current_end > $this->number) {
+         $current_end = $this->number;
       }
       // Empty case
       if ($current_end == 0) {
@@ -1515,7 +1409,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       if ($current_start - $list_limit <= 0) {
          $back = 0;
       } else {
-         $back = $start - $list_limit;
+         $back = $this->current_search['start'] - $list_limit;
       }
 
       // Print it
@@ -1526,11 +1420,11 @@ class PluginPrintercountersSearch extends CommonDBTM {
       echo "<tr>\n";
 
       // Back and fast backward button
-      if (!$start == 0) {
-         echo "<th class='left'><a href='javascript:initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", \"0\", \"".$this->current_search['limit']."\", \"".$this->current_search['order']."\", \"".$this->current_search['sort']."\");'>
+      if (!$this->current_search['start'] == 0) {
+         echo "<th class='left'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(array('start' => 0)).");'>
                <img src='".$CFG_GLPI["root_doc"]."/pics/first.png' alt=\"".__s('Start').
          "\" title=\"".__s('Start')."\"></a></th>";
-         echo "<th class='left'><a href='javascript:initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", \"$back\", \"".$this->current_search['limit']."\", \"".$this->current_search['order']."\", \"".$this->current_search['sort']."\");'>
+         echo "<th class='left'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(array('start' => $back)).");'>
                <img src='".$CFG_GLPI["root_doc"]."/pics/left.png' alt=\"".__s('Previous').
          "\" title=\"".__s('Previous')."\"></th>";
       }
@@ -1541,20 +1435,20 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
       // Doc export
       echo "<td class='tab_bg_2 center' width='30%'>";
-      $this->setExport($item, $input);
+      $this->setExport($item, $this->current_search);
       echo "</td>";
 
       // Print the "where am I?"
       echo "<td width='50%' class='tab_bg_2 b center'>";
-      echo sprintf(__('From %1$d to %2$d on %3$d'), $current_start, $current_end, $numrows);
+      echo sprintf(__('From %1$d to %2$d on %3$d'), $current_start, $current_end, $this->number);
       echo "</td>\n";
 
       // Forward and fast forward button
-      if ($forward < $numrows) {
-         echo "<th class='right'><a href='javascript:initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", \"$forward\", \"".$this->current_search['limit']."\", \"".$this->current_search['order']."\", \"".$this->current_search['sort']."\");'>
+      if ($forward < $this->number) {
+         echo "<th class='right'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(array('start' => $forward)).");'>
                <img src='".$CFG_GLPI["root_doc"]."/pics/right.png' alt=\"".__s('Next').
          "\" title=\"".__s('Next')."\"></a></th>";
-         echo "<th class='right'><a href='javascript:initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", \"".$end."\", \"".$this->current_search['limit']."\", \"".$this->current_search['order']."\", \"".$this->current_search['sort']."\");'>
+         echo "<th class='right'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(array('start' => $end)).");'>
                <img src='".$CFG_GLPI["root_doc"]."/pics/last.png' alt=\"".__s('End').
          "\" title=\"".__s('End')."\"></th>";
       }
@@ -1576,10 +1470,20 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
       echo "<form method='POST' action =''>\n";
       echo "<span>".__('Display (number of items)')."&nbsp;</span>";
-      Dropdown::showListLimit("initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", \"0\", this.value, \"".$this->current_search['order']."\", \"".$this->current_search['sort']."\")");
+      Dropdown::showListLimit("printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(array('limit' => '__VALUE__')).")");
       Html::closeForm();
    }
    
+  /**
+   * Init printercoutners JS
+   * 
+   */
+   static function initPrintercounterJS($params){
+      
+      echo '<script type="text/javascript">';
+      echo 'var printercountersSearch = $(document).printercountersSearch('.json_encode($params).');';
+      echo '</script>';
+   }
    
    /**
     * Generic Function to add left join to a request
@@ -1803,7 +1707,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
  //     return '';
    }
    
-   /**
+    /**
     * Generic Function to add select to a request
     *
     * @param $itemtype     item type
@@ -1817,7 +1721,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
    static function addSelect($itemtype, $ID, $num, $meta=0, $meta_type=0) {
       global $CFG_GLPI;
 
-      $searchopt   = &search::getOptions($itemtype);
+      $searchopt   = &Search::getOptions($itemtype);
       $table       = $searchopt[$ID]["table"];
       $field       = $searchopt[$ID]["field"];
       $addtable    = "";
@@ -1825,7 +1729,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       $complexjoin = '';
 
       if (isset($searchopt[$ID]['joinparams'])) {
-         $complexjoin = search::computeComplexJoinID($searchopt[$ID]['joinparams']);
+         $complexjoin = Search::computeComplexJoinID($searchopt[$ID]['joinparams']);
       }
 
       if (((($table != getTableForItemType($itemtype))
@@ -1841,7 +1745,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       }
 
       if ($meta) {
-         $NAME = "META";
+//          $NAME = "META";
          if (getTableForItemType($meta_type)!=$table) {
             $addtable .= "_".$meta_type;
          }
@@ -1858,42 +1762,35 @@ class PluginPrintercountersSearch extends CommonDBTM {
          }
       }
 
+
+      $tocompute      = "`$table$addtable`.`$field`";
+      $tocomputeid    = "`$table$addtable`.`id`";
+
+      $tocomputetrans = "IFNULL(`$table".$addtable."_trans`.`value`,'".Search::NULLVALUE."') ";
+
       $ADDITONALFIELDS = '';
       if (isset($searchopt[$ID]["additionalfields"])
           && count($searchopt[$ID]["additionalfields"])) {
          foreach ($searchopt[$ID]["additionalfields"] as $key) {
-            $ADDITONALFIELDS .= "`$table$addtable`.`$key` AS ".$NAME."_".$num."_$key, ";
+            if ($meta
+                || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
+               $ADDITONALFIELDS .= " GROUP_CONCAT(DISTINCT CONCAT(IFNULL(`$table$addtable`.`$key`,
+                                                                         '".Search::NULLVALUE."'),
+                                                   '$$', $tocomputeid) SEPARATOR '$$$$')
+                                    AS `".$NAME."_".$num."_$key`, ";
+            } else {
+               $ADDITONALFIELDS .= "`$table$addtable`.`$key` AS `".$NAME."_".$num."_$key`, ";
+            }
          }
       }
 
+
+      // Virtual display no select : only get additional fields
+      if (strpos($field, '_virtual') === 0) {
+         return $ADDITONALFIELDS;
+      }
+
       switch ($table.".".$field) {
-         case "glpi_tickets.due_date" :
-            return " `$table$addtable`.`$field` AS ".$NAME."_$num,
-                     `$table$addtable`.`status` AS ".$NAME."_".$num."_2,
-                      $ADDITONALFIELDS";
-
-         case "glpi_tickets.is_late" :
-            return " IF(`$table$addtable`.`due_date` IS NOT NULL
-                        AND (`$table$addtable`.`solvedate` > `$table$addtable`.`due_date`
-                             OR (`$table$addtable`.`solvedate` IS NULL
-                                 AND `$table$addtable`.`due_date` < NOW())),
-                        1, 0) AS ".$NAME."_$num,
-                     $ADDITONALFIELDS";
-
-         case "glpi_contacts.completename" :
-            // Contact for display in the enterprise item
-            if ($_SESSION["glpinames_format"] == User::FIRSTNAME_BEFORE) {
-               $name1 = 'firstname';
-               $name2 = 'name';
-            } else {
-               $name1 = 'name';
-               $name2 = 'firstname';
-            }
-            return " GROUP_CONCAT(DISTINCT CONCAT(`$table$addtable`.`$name1`, ' ',
-                                                  `$table$addtable`.`$name2`, '$$',
-                                                  `$table$addtable`.`id`)
-                                  SEPARATOR '$$$$') AS ".$NAME."_$num,
-                     $ADDITONALFIELDS";
 
          case "glpi_users.name" :
             if ($itemtype != 'User') {
@@ -1901,41 +1798,32 @@ class PluginPrintercountersSearch extends CommonDBTM {
                   $addaltemail = "";
                   if ((($itemtype == 'Ticket') || ($itemtype == 'Problem'))
                       && isset($searchopt[$ID]['joinparams']['beforejoin']['table'])
-                      && (($searchopt[$ID]['joinparams']['beforejoin']['table'] == 'glpi_tickets_users')
+                      && (($searchopt[$ID]['joinparams']['beforejoin']['table']
+                            == 'glpi_tickets_users')
                           || ($searchopt[$ID]['joinparams']['beforejoin']['table']
-                                == 'glpi_problems_users'))) { // For tickets_users
+                                == 'glpi_problems_users')
+                          || ($searchopt[$ID]['joinparams']['beforejoin']['table']
+                                == 'glpi_changes_users'))) { // For tickets_users
 
                      $ticket_user_table
                         = $searchopt[$ID]['joinparams']['beforejoin']['table'].
-                          "_".search::computeComplexJoinID($searchopt[$ID]['joinparams']['beforejoin']['joinparams']);
+                          "_".Search::computeComplexJoinID($searchopt[$ID]['joinparams']['beforejoin']
+                                                                   ['joinparams']);
                      $addaltemail
                         = "GROUP_CONCAT(DISTINCT CONCAT(`$ticket_user_table`.`users_id`, ' ',
                                                         `$ticket_user_table`.`alternative_email`)
-                                                        SEPARATOR '$$$$') AS ".$NAME."_".$num."_2, ";
+                                                        SEPARATOR '$$$$') AS `".$NAME."_".$num."_2`, ";
                   }
                   return " GROUP_CONCAT(DISTINCT `$table$addtable`.`id` SEPARATOR '$$$$')
-                                       AS ".$NAME."_".$num.",
+                                       AS `".$NAME."_".$num."`,
                            $addaltemail
                            $ADDITONALFIELDS";
 
                }
-               return " `$table$addtable`.`$field` AS ".$NAME."_$num,
-                        `$table$addtable`.`realname` AS ".$NAME."_".$num."_2,
-                        `$table$addtable`.`id`  AS ".$NAME."_".$num."_3,
-                        `$table$addtable`.`firstname` AS ".$NAME."_".$num."_4,
-                        $ADDITONALFIELDS";
-            }
-            break;
-
-         case "glpi_groups.name" :
-            if (($itemtype != 'Group') && ($itemtype != 'User')) {
-               if ($meta
-                   || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
-                  return " GROUP_CONCAT(DISTINCT CONCAT(`$table$addtable`.`$field`,'$$',
-                                                        `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                       AS ".$NAME."_$num, ";
-               }
-               return " `$table$addtable`.`$field` AS ".$NAME."_$num,
+               return " `$table$addtable`.`$field` AS `".$NAME."_$num`,
+                        `$table$addtable`.`realname` AS `".$NAME."_".$num."_realname`,
+                        `$table$addtable`.`id`  AS `".$NAME."_".$num."_id`,
+                        `$table$addtable`.`firstname` AS `".$NAME."_".$num."_firstname`,
                         $ADDITONALFIELDS";
             }
             break;
@@ -1943,112 +1831,20 @@ class PluginPrintercountersSearch extends CommonDBTM {
          case "glpi_softwarelicenses.number" :
             return " FLOOR(SUM(`$table$addtable`.`$field`)
                            * COUNT(DISTINCT `$table$addtable`.`id`)
-                           / COUNT(`$table$addtable`.`id`)) AS ".$NAME."_".$num.",
-                     MIN(`$table$addtable`.`$field`) AS ".$NAME."_".$num."_2,
+                           / COUNT(`$table$addtable`.`id`)) AS `".$NAME."_".$num."`,
+                     MIN(`$table$addtable`.`$field`) AS `".$NAME."_".$num."_min`,
                       $ADDITONALFIELDS";
-
-         case "glpi_documents_items.count" :
-            return " COUNT(DISTINCT `glpi_documents_items`.`id`) AS ".$NAME."_".$num.",
-                     $ADDITONALFIELDS";
-
-         case "glpi_contracts_items.count" :
-            return " COUNT(DISTINCT `glpi_contracts_items`.`id`) AS ".$NAME."_".$num.",
-                     $ADDITONALFIELDS";
-
-         case "glpi_contractcosts.totalcost" :
-            return " SUM(`glpi_contractcosts$addtable`.`cost`)
-                     / COUNT(`glpi_contractcosts$addtable`.`id`)
-                     * COUNT(DISTINCT `glpi_contractcosts$addtable`.`id`)
-                     AS ".$NAME."_".$num.",
-                     $ADDITONALFIELDS";
-
-         case "glpi_computers_softwareversions.count" :
-            return " COUNT(DISTINCT `glpi_computers_softwareversions$addtable`.`id`)
-                          AS ".$NAME."_".$num.",
-                     $ADDITONALFIELDS";
-
-         case "glpi_items_deviceharddrives.capacity" :
-            if ($itemtype != 'DeviceHardDrive') {
-               return " SUM(`glpi_items_deviceharddrives`.`capacity`)
-                        / COUNT(`glpi_items_deviceharddrives`.`id`)
-                        * COUNT(DISTINCT `glpi_items_deviceharddrives`.`id`) AS ".$NAME."_".$num.",
-                        $ADDITONALFIELDS";
-            }
-            break;
-
-         case "glpi_items_devicememories.size" :
-            if ($itemtype != 'DeviceMemory') {
-               return " SUM(`glpi_items_devicememories`.`size`)
-                        / COUNT(`glpi_items_devicememories`.`id`)
-                        * COUNT(DISTINCT `glpi_items_devicememories`.`id`) AS ".$NAME."_".$num.",
-                        $ADDITONALFIELDS";
-            }
-            break;
-
-         case "glpi_items_deviceprocessors.frequency" :
-            if ($itemtype != 'DeviceProcessor') {
-               return " SUM(`glpi_items_deviceprocessors`.`frequency`)
-                        / COUNT(`glpi_items_deviceprocessors`.`id`) AS ".$NAME."_".$num.",
-                        $ADDITONALFIELDS";
-            }
-            break;
-
-         case "glpi_problems.count" :
-         case "glpi_problemtasks.count" :
-         case "glpi_tickets.count" :
-         case "glpi_ticketfollowups.count" :
-         case "glpi_tickettasks.count" :
-         case "glpi_tickets_tickets.count" :
-         case "glpi_items_problems.count" :
-         case "glpi_problems_tickets.count" :
-            return " COUNT(DISTINCT `$table$addtable`.`id`) AS ".$NAME."_".$num.",
-                     $ADDITONALFIELDS";
-
-         case "glpi_ticketcosts.cost_time" :
-         case "glpi_ticketcosts.cost_fixed" :
-         case "glpi_ticketcosts.cost_material" :
-            return " SUM(`glpi_ticketcosts$addtable`.`$field`)
-                     / COUNT(`glpi_ticketcosts$addtable`.`id`)
-                     * COUNT(DISTINCT `glpi_ticketcosts$addtable`.`id`)
-                     AS ".$NAME."_".$num.",
-                     $ADDITONALFIELDS";
-
-         case "glpi_ticketcosts.totalcost" :
-            return " SUM(`glpi_ticketcosts$addtable`.`actiontime`
-                         * `glpi_ticketcosts$addtable`.`cost_time`/".HOUR_TIMESTAMP."
-                         + `glpi_ticketcosts$addtable`.`cost_fixed`
-                         + `glpi_ticketcosts$addtable`.`cost_material`)
-                     / COUNT(`glpi_ticketcosts$addtable`.`id`)
-                     * COUNT(DISTINCT `glpi_ticketcosts$addtable`.`id`)
-                     AS ".$NAME."_".$num.",
-                     $ADDITONALFIELDS";
-
-         case "glpi_tickets_tickets.tickets_id_1" :
-            return " GROUP_CONCAT(`$table$addtable`.`tickets_id_1` SEPARATOR '$$$$')
-                                 AS ".$NAME."_$num,
-                     GROUP_CONCAT(`$table$addtable`.`tickets_id_2` SEPARATOR '$$$$')
-                                 AS ".$NAME."_".$num."_2,
-                     $ADDITONALFIELDS";
-
-         case "glpi_networkports.mac" :
-            $port = " GROUP_CONCAT(`$table$addtable`.`$field` SEPARATOR '$$$$')
-                                  AS ".$NAME."_$num, ";
-            if ($itemtype == 'Computer') {
-               $port .= " GROUP_CONCAT(`glpi_items_devicenetworkcards`.`mac` SEPARATOR '$$$$')
-                                      AS ".$NAME."_".$num."_2, ";
-            }
-            return $port.$ADDITONALFIELDS;
 
          case "glpi_profiles.name" :
             if (($itemtype == 'User')
                 && ($ID == 20)) {
-               return " GROUP_CONCAT(`$table$addtable`.`$field` SEPARATOR '$$$$') AS ".$NAME."_$num,
+               return " GROUP_CONCAT(`$table$addtable`.`$field` SEPARATOR '$$$$') AS `".$NAME."_$num`,
                         GROUP_CONCAT(`glpi_profiles_users`.`entities_id` SEPARATOR '$$$$')
-                                    AS ".$NAME."_".$num."_2,
+                                    AS `".$NAME."_".$num."_entities_id`,
                         GROUP_CONCAT(`glpi_profiles_users`.`is_recursive` SEPARATOR '$$$$')
-                                    AS ".$NAME."_".$num."_3,
+                                    AS `".$NAME."_".$num."_is_recursive`,
                         GROUP_CONCAT(`glpi_profiles_users`.`is_dynamic` SEPARATOR '$$$$')
-                                    AS ".$NAME."_".$num."_4,
+                                    AS `".$NAME."_".$num."_is_dynamic`,
                         $ADDITONALFIELDS";
             }
             break;
@@ -2057,27 +1853,27 @@ class PluginPrintercountersSearch extends CommonDBTM {
             if (($itemtype == 'User')
                 && ($ID == 80)) {
                return " GROUP_CONCAT(`$table$addtable`.`completename` SEPARATOR '$$$$')
-                                    AS ".$NAME."_$num,
+                                    AS `".$NAME."_$num`,
                         GROUP_CONCAT(`glpi_profiles_users`.`profiles_id` SEPARATOR '$$$$')
-                                    AS ".$NAME."_".$num."_2,
+                                    AS `".$NAME."_".$num."_profiles_id`,
                         GROUP_CONCAT(`glpi_profiles_users`.`is_recursive` SEPARATOR '$$$$')
-                                    AS ".$NAME."_".$num."_3,
+                                    AS `".$NAME."_".$num."_is_recursive`,
                         GROUP_CONCAT(`glpi_profiles_users`.`is_dynamic` SEPARATOR '$$$$')
-                                    AS ".$NAME."_".$num."_4,
+                                    AS `".$NAME."_".$num."_is_dynamic`,
                         $ADDITONALFIELDS";
             }
             break;
 
          case "glpi_auth_tables.name":
-            $user_searchopt = search::getOptions('User');
-            return " `glpi_users`.`authtype` AS ".$NAME."_".$num.",
-                     `glpi_users`.`auths_id` AS ".$NAME."_".$num."_2,
+            $user_searchopt = Search::getOptions('User');
+            return " `glpi_users`.`authtype` AS `".$NAME."_".$num."`,
+                     `glpi_users`.`auths_id` AS `".$NAME."_".$num."_auths_id`,
                      `glpi_authldaps".$addtable."_".
-                           search::computeComplexJoinID($user_searchopt[30]['joinparams'])."`.`$field`
-                              AS ".$NAME."_".$num."_3,
+                           Search::computeComplexJoinID($user_searchopt[30]['joinparams'])."`.`$field`
+                              AS `".$NAME."_".$num."_ldapname`,
                      `glpi_authmails".$addtable."_".
-                           search::computeComplexJoinID($user_searchopt[31]['joinparams'])."`.`$field`
-                              AS ".$NAME."_".$num."_4,
+                           Search::computeComplexJoinID($user_searchopt[31]['joinparams'])."`.`$field`
+                              AS `".$NAME."_".$num."_mailname`,
                      $ADDITONALFIELDS";
 
          case "glpi_softwarelicenses.name" :
@@ -2086,7 +1882,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
                return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwares`.`name`, ' - ',
                                                      `$table$addtable`.`$field`, '$$',
                                                      `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                    AS ".$NAME."_".$num.",
+                                    AS `".$NAME."_".$num."`,
                         $ADDITONALFIELDS";
             }
             break;
@@ -2099,13 +1895,13 @@ class PluginPrintercountersSearch extends CommonDBTM {
                return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwares`.`name`, ' - ',
                                                      `$table$addtable`.`$field`,'$$',
                                                      `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                    AS ".$NAME."_".$num.",
+                                    AS `".$NAME."_".$num."`,
                         $ADDITONALFIELDS";
             }
             return " GROUP_CONCAT(DISTINCT CONCAT(`$table$addtable`.`name`, ' - ',
                                                   `$table$addtable`.`$field`, '$$',
                                                   `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                 AS ".$NAME."_".$num.",
+                                 AS `".$NAME."_".$num."`,
                      $ADDITONALFIELDS";
 
          case "glpi_states.name" :
@@ -2114,43 +1910,16 @@ class PluginPrintercountersSearch extends CommonDBTM {
                                                      `glpi_softwareversions$addtable`.`name`, ' - ',
                                                      `$table$addtable`.`$field`, '$$',
                                                      `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                     AS ".$NAME."_".$num.",
+                                     AS `".$NAME."_".$num."`,
                         $ADDITONALFIELDS";
             } else if ($itemtype == 'Software') {
                return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwareversions`.`name`, ' - ',
                                                      `$table$addtable`.`$field`,'$$',
                                                      `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                    AS ".$NAME."_".$num.",
+                                    AS `".$NAME."_".$num."`,
                         $ADDITONALFIELDS";
             }
             break;
-
-         case 'glpi_crontasks.description' :
-            return " `glpi_crontasks`.`name` AS ".$NAME."_".$num.",
-                     $ADDITONALFIELDS";
-
-         case 'glpi_notifications.event' :
-            return " `glpi_notifications`.`itemtype` AS `itemtype`,
-                     `glpi_notifications`.`event` AS ".$NAME."_".$num.",
-                     $ADDITONALFIELDS";
-
-         case 'glpi_tickets.name' :
-            if (isset($searchopt[$ID]['forcegroupby']) && $searchopt[$ID]['forcegroupby']) {
-               return " GROUP_CONCAT(DISTINCT CONCAT(`$table$addtable`.`$field`,'$$',
-                                                     `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                    AS ".$NAME."_".$num.",
-                        $ADDITONALFIELDS";
-            }
-            return " `$table$addtable`.`$field` AS ".$NAME."_$num,
-                     `$table$addtable`.`id` AS ".$NAME."_".$num."_2,
-                     `$table$addtable`.`content` AS ".$NAME."_".$num."_3,
-                     `$table$addtable`.`status` AS ".$NAME."_".$num."_4,
-                     $ADDITONALFIELDS";
-
-         case 'glpi_tickets.items_id':
-            return " `$table$addtable`.`$field` AS ".$NAME."_$num,
-                     `$table$addtable`.`itemtype` AS ".$NAME."_".$num."_2,
-                     $ADDITONALFIELDS";
       }
 
       //// Default cases
@@ -2168,17 +1937,17 @@ class PluginPrintercountersSearch extends CommonDBTM {
          }
       }
 
-      $tocompute   = "`$table$addtable`.`$field`";
-      $tocomputeid = "`$table$addtable`.`id`";
-
       if (isset($searchopt[$ID]["computation"])) {
          $tocompute = $searchopt[$ID]["computation"];
          $tocompute = str_replace("TABLE", "`$table$addtable`", $tocompute);
       }
-
       // Preformat items
       if (isset($searchopt[$ID]["datatype"])) {
          switch ($searchopt[$ID]["datatype"]) {
+            case "count" :
+               return " COUNT(DISTINCT `$table$addtable`.`$field`) AS `".$NAME."_".$num."`,
+                     $ADDITONALFIELDS";
+
             case "date_delay" :
                $interval = "MONTH";
                if (isset($searchopt[$ID]['delayunit'])) {
@@ -2194,39 +1963,54 @@ class PluginPrintercountersSearch extends CommonDBTM {
                   return " GROUP_CONCAT(DISTINCT ADDDATE(`$table$addtable`.`".
                                                             $searchopt[$ID]["datafields"][1]."`,
                                                          INTERVAL (`$table$addtable`.`".
-                                                                     $searchopt[$ID]["datafields"][2].
-                                                                     "` $add_minus) $interval)
-                                         SEPARATOR '$$$$') AS ".$NAME."_$num,
+                                                                    $searchopt[$ID]["datafields"][2].
+                                                                    "` $add_minus) $interval)
+                                         SEPARATOR '$$$$') AS `".$NAME."_$num`,
                            $ADDITONALFIELDS";
                }
                return "ADDDATE(`$table$addtable`.`".$searchopt[$ID]["datafields"][1]."`,
                                INTERVAL (`$table$addtable`.`".$searchopt[$ID]["datafields"][2].
-                                          "` $add_minus) $interval) AS ".$NAME."_$num,
+                                          "` $add_minus) $interval) AS `".$NAME."_$num`,
                        $ADDITONALFIELDS";
 
             case "itemlink" :
                if ($meta
                   || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
-                  return " GROUP_CONCAT(DISTINCT CONCAT(`$table$addtable`.`$field`, '$$' ,
+                  return " GROUP_CONCAT(DISTINCT CONCAT($tocompute, '$$' ,
                                                         `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                       AS ".$NAME."_$num,
+                                       AS `".$NAME."_$num`,
                            $ADDITONALFIELDS";
                }
-               return " $tocompute AS ".$NAME."_$num,
-                        `$table$addtable`.`id` AS ".$NAME."_".$num."_2,
+               return " $tocompute AS `".$NAME."_$num`,
+                        `$table$addtable`.`id` AS `".$NAME."_".$num."_id`,
                         $ADDITONALFIELDS";
          }
       }
       // Default case
       if ($meta
-         || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
-         return " GROUP_CONCAT(DISTINCT CONCAT($tocompute,'$$',$tocomputeid) SEPARATOR '$$$$')
-                              AS ".$NAME."_$num,
+          || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"]
+              && !isset($searchopt[$ID]["computation"]))) { // Not specific computation
+         $TRANS = '';
+         if (Session::haveTranslations(getItemTypeForTable($table), $field)) {
+            $TRANS = "GROUP_CONCAT(DISTINCT CONCAT(IFNULL($tocomputetrans, '".Search::NULLVALUE."'),
+                                                   '$$',$tocomputeid) SEPARATOR '$$$$')
+                                  AS `".$NAME."_".$num."_trans`, ";
+
+         }
+         return " GROUP_CONCAT(DISTINCT CONCAT(IFNULL($tocompute, '".Search::NULLVALUE."'),
+                                               '$$',$tocomputeid) SEPARATOR '$$$$')
+                              AS `".$NAME."_$num`,
+                  $TRANS
                   $ADDITONALFIELDS";
       }
-      return "$tocompute AS ".$NAME."_$num,
-              $ADDITONALFIELDS";
+      $TRANS = '';
+      if (Session::haveTranslations(getItemTypeForTable($table), $field)) {
+         $TRANS = $tocomputetrans." AS `".$NAME."_".$num."_trans`, ";
+
+      }
+      return "$tocompute AS `".$NAME."_$num`, $TRANS $ADDITONALFIELDS";
    }
+
    
    /**
     * Function compare search data
@@ -2239,17 +2023,15 @@ class PluginPrintercountersSearch extends CommonDBTM {
    function compareData($itemtype, $search_parameters, $data_array){
       
       $OK = true;
-
-//      Toolbox::logDebug($search_parameters);
-
+      
       if (!empty($search_parameters)) {
          $search     = array();
          $searchlink = array();
-         $options    = Search::getCleanedOptions($itemtype);
+         $options    = Search::getOptions($itemtype);
 
          foreach ($search_parameters as $key => $value) {      
             foreach ($data_array as $num => $data) {
-               if ($num == $value['search_item']) {
+               if ($num == $value['field']) {
                   foreach ($options as $options_num => $val) {
                      if ($options_num == $num) {
                         $type = $val['datatype'];
@@ -2261,16 +2043,16 @@ class PluginPrintercountersSearch extends CommonDBTM {
                   switch ($type) {
                      case 'datetime':
                         $force_day = false;
-                        if (strstr($value['contains'], 'BEGIN') || strstr($value['contains'], 'LAST')) {
+                        if (strstr($value['value'], 'BEGIN') || strstr($value['value'], 'LAST')) {
                            $force_day = true;
                         }
-                        $value['contains'] = Html::computeGenericDateTimeSearch($value['contains'], $force_day);
+                        $value['value'] = Html::computeGenericDateTimeSearch($value['value'], $force_day);
 
                         if ($value['searchtype'] == 'contains') {
                            $data = Html::convDateTime(date('Y-m-d H:i:s', $data));
                         } else {
                            $data = strtotime(date('Y-m-d H:i', $data));
-                           $value['contains'] = strtotime(date('Y-m-d H:i', strtotime($value['contains'])));
+                           $value['value'] = strtotime(date('Y-m-d H:i', strtotime($value['value'])));
                         }
                         break;
                   }
@@ -2278,19 +2060,19 @@ class PluginPrintercountersSearch extends CommonDBTM {
                   // Compare date
                   $search[$key] = 1;
 
-                  if ($value['searchtype'] == 'equals' && $value['contains'] != $data) {
+                  if ($value['searchtype'] == 'equals' && $value['value'] != $data) {
                      $search[$key] = 0;
 
-                  } elseif ($value['searchtype'] == 'notequals' && $value['contains'] == $data) {
+                  } elseif ($value['searchtype'] == 'notequals' && $value['value'] == $data) {
                      $search[$key] = 0;
 
-                  } elseif ($value['searchtype'] == 'lessthan' && $data >= $value['contains']) {
+                  } elseif ($value['searchtype'] == 'lessthan' && $data >= $value['value']) {
                      $search[$key] = 0;
 
-                  } elseif ($value['searchtype'] == 'morethan' && $data <= $value['contains']) {
+                  } elseif ($value['searchtype'] == 'morethan' && $data <= $value['value']) {
                      $search[$key] = 0;
 
-                  } elseif ($value['searchtype'] == 'contains' && !preg_match('/'.$value['contains'].'/', Html::convDateTime(date('Y-m-d H:i:s', $data)))) {
+                  } elseif ($value['searchtype'] == 'contains' && !preg_match('/'.$value['value'].'/', Html::convDateTime(date('Y-m-d H:i:s', $data)))) {
                      $search[$key] = 0;
                   }
 
@@ -2302,10 +2084,6 @@ class PluginPrintercountersSearch extends CommonDBTM {
                }
             }
          }
-
-//         Toolbox::logDebug('########################## Search result ############################');
-//         Toolbox::logDebug($search);
-//         Toolbox::logDebug($searchlink);
 
          // Compare each search parameter line
          foreach ($search as $key => $planned) {
@@ -2334,9 +2112,72 @@ class PluginPrintercountersSearch extends CommonDBTM {
             }
          }
       }
-//      Toolbox::logDebug('#################### OK ? ######################');
-//      Toolbox::logDebug($OK);
+      
       return $OK;
+   }
+   
+   static function parseData(&$newrow) {
+      // Parse datas
+      if (!empty($newrow['raw'])) {
+         foreach ($newrow['raw'] as $key => $val) {
+            // For compatibility keep data at the top for the moment
+//                $newrow[$key] = $val;
+
+            $keysplit = explode('_', $key);
+
+            if (isset($keysplit[1]) && $keysplit[0] == 'ITEM') {
+               $j         = $keysplit[1];
+               $fieldname = 'name';
+               if (isset($keysplit[2])) {
+                  $fieldname = $keysplit[2];
+                  $fkey      = 3;
+                  while (isset($keysplit[$fkey])) {
+                     $fieldname.= '_'.$keysplit[$fkey];
+                     $fkey++;
+                  }
+               }
+
+               // No Group_concat case
+               if (strpos($val, "$$$$") === false) {
+                  $newrow[$j]['count'] = 1;
+
+                  if (strpos($val, "$$") === false) {
+                     if ($val == Search::NULLVALUE) {
+                        $newrow[$j][0][$fieldname] = NULL;
+                     } else {
+                        $newrow[$j][0][$fieldname] = $val;
+                     }
+                  } else {
+                     $split2                    = Search::explodeWithID("$$", $val);
+                     $newrow[$j][0][$fieldname] = $split2[0];
+                     $newrow[$j][0]['id']       = $split2[1];
+                  }
+               } else {
+                  if (!isset($newrow[$j])) {
+                     $newrow[$j] = array();
+                  }
+                  $split               = explode("$$$$", $val);
+                  $newrow[$j]['count'] = count($split);
+                  foreach ($split as $key2 => $val2) {
+                     if (strpos($val2, "$$") === false) {
+                        $newrow[$j][$key2][$fieldname] = $val2;
+                     } else {
+                        $split2                  = Search::explodeWithID("$$", $val2);
+                        $newrow[$j][$key2]['id'] = $split2[1];
+                        if ($split2[0] == Search::NULLVALUE) {
+                           $newrow[$j][$key2][$fieldname] = NULL;
+                        } else {
+                           $newrow[$j][$key2][$fieldname] = $split2[0];
+                        }
+                     }
+                  }
+               }
+            }
+         }
+         if (isset($newrow['raw']['id'])) {
+            $newrow['id'] = $newrow['raw']['id'];
+         }
+      }
    }
 
 }
