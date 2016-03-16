@@ -36,11 +36,7 @@ if (isset($_POST["add"])) {
    $item_billingmodel->check(-1, CREATE, $_POST);
    $newID = $item_billingmodel->add($_POST);
 
-   if ($_SESSION['glpibackcreated']) {
-      Html::redirect($item_billingmodel->getFormURL()."?id=".$newID);
-   } else {
       Html::back();
-   }
 
 } elseif (isset($_POST["update"]) || isset($_POST["update_config"])) {
    // Check update rights for fields
