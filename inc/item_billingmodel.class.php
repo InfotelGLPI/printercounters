@@ -954,7 +954,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
       $tab[6099]['table'] = 'glpi_plugin_printercounters_billingmodels';
       $tab[6099]['field'] = 'name';
-      $tab[6099]['name'] = __('Printercounters', 'printercounters').' - '.PluginPrintercountersBillingmodel::getTypeName(1);
+      $tab[6099]['name'] = __('Printer counters', 'printercounters').' - '.PluginPrintercountersBillingmodel::getTypeName(1);
       $tab[6099]['datatype'] = 'dropdown';
       $tab[6099]['massiveaction'] = false;
       $tab[6099]['joinparams'] = array('beforejoin' => array('table' => 'glpi_plugin_printercounters_items_billingmodels',
@@ -980,7 +980,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
          switch ($this->itemtype) {
             case "Printer":
                return array(
-                   $prefix."plugin_printercounters_billingmodel" => __('Printercounters', 'printercounters').' - '.__('Set billing model', 'printercounters'),
+                   $prefix."plugin_printercounters_billingmodel" => __('Printer counters', 'printercounters').' - '.__('Set billing model', 'printercounters'),
                );
          }
       }

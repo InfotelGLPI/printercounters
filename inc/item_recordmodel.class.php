@@ -805,21 +805,21 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
             $output = array();
             if ($this->canCreate()) {
                $output = array (
-                  $prefix."plugin_printercounters_automatic_record"        => __('Printercounters','printercounters').' - '.__('Enable automatic record', 'printercounters'),
-                  $prefix."plugin_printercounters_periodicity"             => __('Printercounters','printercounters').' - '.__('Set periodicity', 'printercounters'),
-                  $prefix."plugin_printercounters_recordmodel"             => __('Printercounters','printercounters').' - '.__('Set record model', 'printercounters'),
-                  $prefix."plugin_printercounters_snmp_auth"               => __('Printercounters','printercounters').' - '.__('Set SNMP authentication', 'printercounters'),
-                  $prefix."plugin_printercounters_retries"                 => __('Printercounters','printercounters').' - '.__('Set retries', 'printercounters'),
-                  $prefix."plugin_printercounters_max_timeout"             => __('Printercounters','printercounters').' - '.__('Set max timeout', 'printercounters'),
-                  $prefix."plugin_printercounters_immediate_record"        => __('Printercounters','printercounters').' - '.__('Immediate record', 'printercounters'),
-                  $prefix."plugin_printercounters_update_counter_position" => __('Printercounters','printercounters').' - '.__('Update counter position', 'printercounters'),
-                  $prefix."plugin_printercounters_init_counters"           => __('Printercounters','printercounters').' - '.__('Init counters to zero', 'printercounters'),
-                  $prefix."plugin_printercounters_snmp_set"                => __('Printercounters','printercounters').' - '.__('Set printer values', 'printercounters')
+                  $prefix."plugin_printercounters_automatic_record"        => __('Printer counters', 'printercounters').' - '.__('Enable automatic record', 'printercounters'),
+                  $prefix."plugin_printercounters_periodicity"             => __('Printer counters', 'printercounters').' - '.__('Set periodicity', 'printercounters'),
+                  $prefix."plugin_printercounters_recordmodel"             => __('Printer counters', 'printercounters').' - '.__('Set record model', 'printercounters'),
+                  $prefix."plugin_printercounters_snmp_auth"               => __('Printer counters', 'printercounters').' - '.__('Set SNMP authentication', 'printercounters'),
+                  $prefix."plugin_printercounters_retries"                 => __('Printer counters', 'printercounters').' - '.__('Set retries', 'printercounters'),
+                  $prefix."plugin_printercounters_max_timeout"             => __('Printer counters', 'printercounters').' - '.__('Set max timeout', 'printercounters'),
+                  $prefix."plugin_printercounters_immediate_record"        => __('Printer counters', 'printercounters').' - '.__('Immediate record', 'printercounters'),
+                  $prefix."plugin_printercounters_update_counter_position" => __('Printer counters', 'printercounters').' - '.__('Update counter position', 'printercounters'),
+                  $prefix."plugin_printercounters_init_counters"           => __('Printer counters', 'printercounters').' - '.__('Init counters to zero', 'printercounters'),
+                  $prefix."plugin_printercounters_snmp_set"                => __('Printer counters', 'printercounters').' - '.__('Set printer values', 'printercounters')
                );
             }
 
             if ($this->canView() || $this->canCreate()) {
-               $output[$prefix."plugin_printercounters_immediate_record"] = __('Printercounters','printercounters').' - '.__('Immediate record', 'printercounters');
+               $output[$prefix."plugin_printercounters_immediate_record"] = __('Printer counters', 'printercounters').' - '.__('Immediate record', 'printercounters');
             }
             return $output;
       }
