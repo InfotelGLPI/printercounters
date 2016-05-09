@@ -502,6 +502,27 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
       return $defaultId;
    }
    
+   /** 
+   * Set default authenticiation
+   * 
+   * @param type $input
+   * @return type
+   */
+   function setDefaultAuthentication($input) {
+      
+      if ($input['is_default']) {
+         $default = $this->find("`is_default` = 1 AND `id` != '".$input['id']."'");
+         if (!empty($default)) {
+            foreach ($default as $authentication) {
+               $snmpAuthentification = new self();
+               $snmpAuthentification->getFromDB($authentication['id']);
+               $snmpAuthentification->fields['is_default'] = 0;
+               $snmpAuthentification->updateInDB(array('is_default'));
+            }
+         }
+      }
+   }
+   
    
   /** 
    * checkMandatoryFields 

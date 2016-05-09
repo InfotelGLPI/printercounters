@@ -115,7 +115,9 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
       echo "<td class='center' colspan='4'>";
       echo self::getTypeName().'&nbsp;';
       Html::autocompletionTextField($this, "sysdescr", array('value' => $this->fields['sysdescr']));
-      echo "<input type='hidden' name='plugin_printercounters_recordmodels_id' value='".$options['parent']->getField('id')."' >";
+      $p = $options['parent']->getField('id');
+      $parent = ((isset($p))? $p : 0);
+      echo "<input type='hidden' name='plugin_printercounters_recordmodels_id' value='".$parent."' >";
       echo "</td>";
       echo "</tr>";
       
