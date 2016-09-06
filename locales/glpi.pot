@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin 1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-09 09:44+0100\n"
+"POT-Creation-Date: 2016-09-06 11:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,14 @@ msgstr ""
 msgid "Global TCO"
 msgstr ""
 
-#: setup.php:103 inc/additional_data.class.php:61 inc/menu.class.php:43
+#: setup.php:103 inc/additional_data.class.php:61
+#: inc/item_billingmodel.class.php:957 inc/item_billingmodel.class.php:983
+#: inc/item_recordmodel.class.php:808 inc/item_recordmodel.class.php:809
+#: inc/item_recordmodel.class.php:810 inc/item_recordmodel.class.php:811
+#: inc/item_recordmodel.class.php:812 inc/item_recordmodel.class.php:813
+#: inc/item_recordmodel.class.php:814 inc/item_recordmodel.class.php:815
+#: inc/item_recordmodel.class.php:816 inc/item_recordmodel.class.php:817
+#: inc/item_recordmodel.class.php:822 inc/menu.class.php:43
 #: inc/printer.class.php:120 inc/profile.class.php:160
 #: inc/record.class.php:1194
 msgid "Printer counters"
@@ -275,7 +282,7 @@ msgstr ""
 msgid "Serial number"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:421 inc/sysdescr.class.php:311
+#: inc/countertype_recordmodel.class.php:421 inc/sysdescr.class.php:313
 msgid "Sysdescr"
 msgstr ""
 
@@ -388,20 +395,6 @@ msgstr ""
 msgid "Last record type"
 msgstr ""
 
-#: inc/item_billingmodel.class.php:957 inc/item_billingmodel.class.php:983
-#: inc/item_recordmodel.class.php:693 inc/item_recordmodel.class.php:708
-#: inc/item_recordmodel.class.php:725 inc/item_recordmodel.class.php:734
-#: inc/item_recordmodel.class.php:744 inc/item_recordmodel.class.php:751
-#: inc/item_recordmodel.class.php:761 inc/item_recordmodel.class.php:771
-#: inc/item_recordmodel.class.php:781 inc/item_recordmodel.class.php:808
-#: inc/item_recordmodel.class.php:809 inc/item_recordmodel.class.php:810
-#: inc/item_recordmodel.class.php:811 inc/item_recordmodel.class.php:812
-#: inc/item_recordmodel.class.php:813 inc/item_recordmodel.class.php:814
-#: inc/item_recordmodel.class.php:815 inc/item_recordmodel.class.php:816
-#: inc/item_recordmodel.class.php:817 inc/item_recordmodel.class.php:822
-msgid "Printercounters"
-msgstr ""
-
 #: inc/item_billingmodel.class.php:983
 msgid "Set billing model"
 msgstr ""
@@ -451,6 +444,14 @@ msgstr ""
 
 #: inc/item_recordmodel.class.php:566 inc/item_recordmodel.class.php:781
 msgid "Timeout"
+msgstr ""
+
+#: inc/item_recordmodel.class.php:693 inc/item_recordmodel.class.php:708
+#: inc/item_recordmodel.class.php:725 inc/item_recordmodel.class.php:734
+#: inc/item_recordmodel.class.php:744 inc/item_recordmodel.class.php:751
+#: inc/item_recordmodel.class.php:761 inc/item_recordmodel.class.php:771
+#: inc/item_recordmodel.class.php:781
+msgid "Printercounters"
 msgstr ""
 
 #: inc/item_recordmodel.class.php:809
@@ -878,32 +879,32 @@ msgid "Duplicate recordmodel"
 msgstr ""
 
 #: inc/snmpauthentication.class.php:77 inc/snmpauthentication.class.php:139
-#: inc/snmpauthentication.class.php:517
+#: inc/snmpauthentication.class.php:538
 msgid "Community"
 msgstr ""
 
 #: inc/snmpauthentication.class.php:83 inc/snmpauthentication.class.php:147
-#: inc/snmpauthentication.class.php:535
+#: inc/snmpauthentication.class.php:556
 msgid "Authentication encryption"
 msgstr ""
 
 #: inc/snmpauthentication.class.php:89 inc/snmpauthentication.class.php:151
-#: inc/snmpauthentication.class.php:536
+#: inc/snmpauthentication.class.php:557
 msgid "Data encryption"
 msgstr ""
 
 #: inc/snmpauthentication.class.php:101 inc/snmpauthentication.class.php:159
-#: inc/snmpauthentication.class.php:538
+#: inc/snmpauthentication.class.php:559
 msgid "Authentication password"
 msgstr ""
 
 #: inc/snmpauthentication.class.php:107 inc/snmpauthentication.class.php:163
-#: inc/snmpauthentication.class.php:539
+#: inc/snmpauthentication.class.php:560
 msgid "Data password"
 msgstr ""
 
 #: inc/snmpauthentication.class.php:113 inc/snmpauthentication.class.php:143
-#: inc/snmpauthentication.class.php:518
+#: inc/snmpauthentication.class.php:539
 msgid "Community write"
 msgstr ""
 
@@ -982,7 +983,7 @@ msgstr ""
 msgid "SNMPset is already configured for this entity"
 msgstr ""
 
-#: inc/sysdescr.class.php:157
+#: inc/sysdescr.class.php:159
 msgid "Add a new sysdescr"
 msgstr ""
 
