@@ -101,7 +101,7 @@ function plugin_init_printercounters() {
 function plugin_version_printercounters() {
    return array (
       'name'           => __('Printer counters', 'printercounters'),
-      'version'        => '1.2.0',
+      'version'        => '1.2.1',
       'author'         => "<a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>",
       'license'        => 'GPLv2+',
       'homepage'       => '',
@@ -111,7 +111,7 @@ function plugin_version_printercounters() {
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_printercounters_check_prerequisites() {
 
-   if (version_compare(GLPI_VERSION, '0.90', 'lt') || version_compare(GLPI_VERSION, '0.91', 'ge')) {
+   if (version_compare(GLPI_VERSION, '0.90', 'lt') || version_compare(GLPI_VERSION, '9.2', 'ge')) {
       _e('This plugin requires GLPI >= 0.90', 'printercounters');
       return false;
    }

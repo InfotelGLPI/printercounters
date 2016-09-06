@@ -141,7 +141,7 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
          if (strtolower($colorCartridgeSlot1) === self::CARTRIDGE_COLOR_CYAN) {
 
             /**
-             * We found CYAN color catridge in slot1 so it is color printer
+             * We found CYAN color cartridge in slot1 so it is color printer
              */
             return self::PRINTER_TYPE_COLOR;
          } else {
