@@ -28,6 +28,8 @@ The plugin allows :
    </description>
    <homepage>https://github.com/InfotelGLPI/printercounters</homepage>
    <download>https://github.com/InfotelGLPI/printercounters/releases</download>
+   <issues>https://github.com/InfotelGLPI/printercounters/issues</issues>
+   <readme>https://raw.githubusercontent.com/InfotelGLPI/printercounters/master/README.md</readme>
    <authors>
       <author>Ludovic Dupont</author>
       <author>Infotel</author>
