@@ -36,12 +36,8 @@ if (isset($_POST["add"])) {
    $sysdescr->check(-1, CREATE, $_POST);
    $newID = $sysdescr->add($_POST);
 
-   if ($_SESSION['glpibackcreated']) {
-      Html::redirect($sysdescr->getFormURL()."?id=".$newID);
-   } else {
-      Html::back();
-   }
-
+   Html::back();
+   
 } elseif (isset($_POST["update"])) {
    // Check update rights for fields
    $sysdescr->check($_POST['id'], UPDATE, $_POST);
