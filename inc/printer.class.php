@@ -463,8 +463,16 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
     * @return array
     */
    public function getPrinterInfo($resultData=array()) {
+      
+      $countertype_recordmodel = new PluginPrintercountersCountertype_Recordmodel();
+      $oid_name = $countertype_recordmodel->getOIDRecordmodelCountersForItem($this->items_id, $this->itemtype, PluginPrintercountersCountertype_Recordmodel::NAME);
 
-      $name         = $this->get(self::SNMP_PRINTER_SYSNAME);
+      if ($oid_name ==! false) {
+         $name = $this->get($oid_name);
+      } else {
+         $name = $this->get(self::SNMP_PRINTER_SYSNAME);
+      }
+     
       $location     = $this->get(self::SNMP_PRINTER_SYSLOCATION);
       $contact      = $this->get(self::SNMP_PRINTER_SYSCONTACT);
       $uptime       = $this->get(self::SNMP_PRINTER_SYSUP);
@@ -616,7 +624,14 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
                   break;
 
                case 'set_name':
-                  $this->set(self::SNMP_PRINTER_SYSNAME, 's', $val);
+                  $countertype_recordmodel = new PluginPrintercountersCountertype_Recordmodel();
+                  $oid_name                = $countertype_recordmodel->getOIDRecordmodelCountersForItem($this->items_id, $this->itemtype, PluginPrintercountersCountertype_Recordmodel::NAME);
+
+                  if ($oid_name === false) {
+                     $oid_name = self::SNMP_PRINTER_SYSNAME;
+                  }
+
+                  $this->set($oid_name, 's', $val);
                   $resultData['additional_datas'][] =  array('type'      => self::OTHER_TYPE,
                                                              'sub_type'  => self::PRINTER_NAME,
                                                              'name'      => __('Name'),  
