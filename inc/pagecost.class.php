@@ -297,7 +297,8 @@ class PluginPrintercountersPagecost extends CommonDBTM {
          foreach ($data as $values) {
             if ($values['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SERIAL 
                     && $values['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SYSDESCR 
-                        && $values['oid_type'] != PluginPrintercountersCountertype_Recordmodel::MODEL) {
+                        && $values['oid_type'] != PluginPrintercountersCountertype_Recordmodel::NAME 
+                           && $values['oid_type'] != PluginPrintercountersCountertype_Recordmodel::MODEL) {
                
                $this->add(array('plugin_printercounters_countertypes_id'  => $values['countertypes_id'],
                                 'plugin_printercounters_billingmodels_id' => $billingmodels_id));

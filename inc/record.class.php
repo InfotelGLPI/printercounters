@@ -966,7 +966,8 @@ class PluginPrintercountersRecord extends CommonDBTM {
             foreach ($oid as $val) {
                if ($val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SERIAL 
                   && $val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SYSDESCR
-                     && $val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::MODEL) {
+                     && $val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::NAME
+                        && $val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::MODEL) {
                   $counters['counters'][$val['id']][0] = 0;
                }
             }
