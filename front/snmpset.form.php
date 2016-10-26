@@ -44,11 +44,7 @@ if (isset($_POST["add"])) {
    $snmpset->check(-1, CREATE, $_POST);
    $newID = $snmpset->add($_POST);
 
-   if ($_SESSION['glpibackcreated']) {
-      Html::redirect($snmpset->getFormURL()."?id=".$newID);
-   } else {
-      Html::back();
-   }
+   Html::back();
 
 } elseif (isset($_POST["update"])) {
    // Check update rights for fields
