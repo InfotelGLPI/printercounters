@@ -51,6 +51,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    const SYSDESCR       = 5;
    const BLACKANDWHITE  = 6;
    const BICOLOR        = 7;
+   const MODEL          = 8;
    
    static $rightname = 'plugin_printercounters';
     
@@ -327,6 +328,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
           WHERE `".$itemjoin3."`.`items_id` = ".Toolbox::cleanInteger($items_id)." 
           AND LOWER(`".$itemjoin3."`.`itemtype`) = '".strtolower($itemtype)."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::SERIAL."' 
+          AND `".$this->getTable()."`.`oid_type` != '".self::MODEL."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::SYSDESCR."'";
       
       if($order != null){
@@ -341,6 +343,47 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       }
 
       return $output;
+   }
+   
+    /** 
+   * Function get all record model counters
+   * 
+   * @global type $DB
+   * @param type $items_id
+   * @param type $itemtype
+   * @param type $order
+   * @return type
+   */
+   function getOIDRecordmodelCountersForItem($items_id, $itemtype, $oid_type) {
+      global $DB;
+
+      $itemjoin  = getTableForItemType("PluginPrintercountersCountertype");
+      $itemjoin2 = getTableForItemType("PluginPrintercountersRecordmodel");
+      $itemjoin3 = getTableForItemType("PluginPrintercountersItem_Recordmodel");
+      
+      $output = array();
+
+      $query = "SELECT `".$this->getTable()."`.`oid`
+               FROM ".$this->getTable()."
+               LEFT JOIN `".$itemjoin."` 
+                  ON (`".$itemjoin."`.`id` = `".$this->getTable()."`.`plugin_printercounters_countertypes_id`)
+               LEFT JOIN `".$itemjoin2."` 
+                  ON (`".$itemjoin2."`.`id` = `".$this->getTable()."`.`plugin_printercounters_recordmodels_id`)      
+               LEFT JOIN `".$itemjoin3."` 
+                  ON (`".$itemjoin3."`.`plugin_printercounters_recordmodels_id` = `".$itemjoin2."`.`id`)          
+               WHERE `".$itemjoin3."`.`items_id` = ".Toolbox::cleanInteger($items_id)." 
+               AND LOWER(`".$itemjoin3."`.`itemtype`) = '".strtolower($itemtype)."' 
+               AND `".$this->getTable()."`.`oid_type` = '".$oid_type."'";
+
+      if($oid_type == self::SERIAL){
+         $query .= "AND `".$itemjoin2."`.`serial_conformity` = '0'";
+      }
+      
+      $result = $DB->query($query);
+      if ($DB->numrows($result)) {
+         return $DB->result($result, 0, 'oid');
+      }
+      return false;
    }
    
    /** 
@@ -370,6 +413,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
              ON (`".$itemjoin2."`.`id` = `".$this->getTable()."`.`plugin_printercounters_recordmodels_id`)         
           WHERE `".$this->getTable()."`.`plugin_printercounters_recordmodels_id` IN ('".implode("','", $recordmodels_id)."')
           AND `".$this->getTable()."`.`oid_type` != '".self::SERIAL."' 
+          AND `".$this->getTable()."`.`oid_type` != '".self::MODEL."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::SYSDESCR."'";
       
       if($order != null){
@@ -423,6 +467,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
                    self::BICOLOR        => __('Bichromie', 'printercounters'),
                    self::SERIAL         => __('Serial number', 'printercounters'),
                    self::SYSDESCR       => __('Sysdescr', 'printercounters'),
+                   self::MODEL          => __('Printer model'),
                    self::OTHER          => __('Other', 'printercounters'));
 
       return $tab;
@@ -626,7 +671,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    */
    function post_addItem($history = 1) {
       
-      if ($this->fields['oid_type'] != self::SERIAL && $this->fields['oid_type'] != self::SYSDESCR) {
+      if ($this->fields['oid_type'] != self::SERIAL && $this->fields['oid_type'] != self::SYSDESCR && $this->fields['oid_type'] != self::MODEL) {
          // Add countertype for billingmodels liked to the recordmodel
          $pagecost = new PluginPrintercountersPagecost();
          $pagecost->addCounterTypeForBillings($this->fields['plugin_printercounters_recordmodels_id'], $this->fields['plugin_printercounters_countertypes_id']);

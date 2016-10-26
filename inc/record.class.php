@@ -200,7 +200,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                       'itemtype'        => $this->itemtype,
                                       'formName'        => 'search_form'.$this->rand,
                                       'updates'         => array('record' => 'history_showForm'.$this->rand))).");'";
-         echo "<a $onclick class='vsubmit printercounters_action_button'>".__('Update counter position', 'printercounters')."</a>";
+         echo "<a $onclick class='vsubmit printercounters_action_button'>".__('Update printer data', 'printercounters')."</a>";
 
          // SNMP set
          if (PluginPrintercountersSnmpset::canSnmpSet()) {
@@ -210,7 +210,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                          'formName'        => 'search_form'.$this->rand,
                                          'updates'         => array('additionalData' => 'additional_datas'),
                                          'rand'            => $this->rand)).");'";
-            echo "<a $onclick class='vsubmit printercounters_action_button'>".__('Set printer values', 'printercounters')."</a>";
+            echo "<a $onclick class='vsubmit printercounters_action_button'>".__('Update the values of the physical printer', 'printercounters')."</a>";
          }
          echo "</div>";
       }
@@ -964,7 +964,9 @@ class PluginPrintercountersRecord extends CommonDBTM {
          // Set counters to 0
          if (!empty($oid)) {
             foreach ($oid as $val) {
-               if ($val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SERIAL && $val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SYSDESCR) {
+               if ($val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SERIAL 
+                  && $val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SYSDESCR
+                     && $val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::MODEL) {
                   $counters['counters'][$val['id']][0] = 0;
                }
             }
@@ -1378,8 +1380,22 @@ class PluginPrintercountersRecord extends CommonDBTM {
    function updateCounterPosition($items_id, $itemtype) {
       $item = getItemForItemtype($itemtype);
 
+      $recordmodel = new PluginPrintercountersCountertype_Recordmodel();
+      $oid_model = $recordmodel->getOIDRecordmodelCountersForItem($items_id, $itemtype, PluginPrintercountersCountertype_Recordmodel::MODEL);
+      $oid_serial = $recordmodel->getOIDRecordmodelCountersForItem($items_id, $itemtype, PluginPrintercountersCountertype_Recordmodel::SERIAL);
+      
+      if ($oid_model ==! false && $oid_serial ==! false) {
+         $specific_oid = array(PluginPrintercountersPrinter::SNMP_NUMBER_OF_PRINTED_PAPERS, $oid_model, $oid_serial);
+      } else if ($oid_model ==! false) {
+         $specific_oid = array(PluginPrintercountersPrinter::SNMP_NUMBER_OF_PRINTED_PAPERS, $oid_model);
+      } else if ($oid_serial ==! false) {
+         $specific_oid = array(PluginPrintercountersPrinter::SNMP_NUMBER_OF_PRINTED_PAPERS, $oid_serial);
+      } else {
+         $specific_oid = array(PluginPrintercountersPrinter::SNMP_NUMBER_OF_PRINTED_PAPERS);
+      }
+
       // Init record for specific OID
-      list($result, $error) = $this->initRecord($itemtype, $items_id, -1, -1, array(PluginPrintercountersPrinter::SNMP_NUMBER_OF_PRINTED_PAPERS));
+      list($result, $error) = $this->initRecord($itemtype, $items_id, -1, -1, $specific_oid);
       if ($error)
          return array($result, $error);
 
@@ -1388,8 +1404,44 @@ class PluginPrintercountersRecord extends CommonDBTM {
       if ($error)
          return array($messages, $error);
 
-      $item->update(array('id' => $items_id, 'last_pages_counter' => $result[0]));
-
+      if ($oid_model ==! false  && $oid_serial ==! false) {
+         $specific_oid = array(PluginPrintercountersPrinter::SNMP_NUMBER_OF_PRINTED_PAPERS, $oid_model, $oid_serial);
+         $model_printer = new PrinterModel();
+         if ($model_printer->getFromDBByQuery("WHERE `name` = '" . $result[1] . "'")) {
+            $model_printer_id = $model_printer->getID();
+         } else {
+            // add
+            $model_printer_id = $model_printer->add(array('name' => $result[1]));
+         }
+         
+         $item->update( array('id'                 => $items_id,
+                              'last_pages_counter' => $result[0],
+                              'printermodels_id'   => $model_printer_id,
+                              'serial'             => $result[2]));
+      } else if ($oid_model ==! false) {
+         $specific_oid = array(PluginPrintercountersPrinter::SNMP_NUMBER_OF_PRINTED_PAPERS, $oid_model);
+         $model_printer = new PrinterModel();
+         if ($model_printer->getFromDBByQuery("WHERE `name` = '" . $result[1] . "'")) {
+            $model_printer_id = $model_printer->getID();
+         } else {
+            // add
+            $model_printer_id = $model_printer->add(array('name' => $result[1]));
+         }
+         
+         $item->update(array('id'                 => $items_id,
+                             'last_pages_counter' => $result[0],
+                             'printermodels_id'   => $model_printer_id));
+      } else if ($oid_serial ==! false) {
+         $specific_oid = array(PluginPrintercountersPrinter::SNMP_NUMBER_OF_PRINTED_PAPERS, $oid_serial);
+         $item->update( array('id'                 => $items_id,
+                              'last_pages_counter' => $result[0],
+                              'serial'             => $result[1]));
+      } else {
+         $specific_oid = array(PluginPrintercountersPrinter::SNMP_NUMBER_OF_PRINTED_PAPERS);
+         $item->update( array('id'                 => $items_id,
+                              'last_pages_counter' => $result[0]));
+      }
+      
       return array($result, $error);
    }
 

@@ -205,7 +205,8 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
                          'type'  => 'bool',
                          'list'  => true),
                    array('name'  => 'serial_conformity',
-                         'label' => __('Serial Conformity', 'printercounters'),
+                         'label' => __('Serial Conformity', 'printercounters')."<p class='red'> "
+                                    .__('Warning import the serial number can not be effective if the setting is enabled', 'printercounters')."</p>",
                          'type'  => 'bool',
                          'list'  => true),
                    array('name'  => 'enable_toner_level',
