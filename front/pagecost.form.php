@@ -40,11 +40,7 @@ if (isset($_POST["add"])) {
    $pagecost->check(-1, CREATE, $_POST);
    $newID = $pagecost->add($_POST);
 
-   if ($_SESSION['glpibackcreated']) {
-      Html::redirect($pagecost->getFormURL()."?id=".$newID);
-   } else {
-      Html::back();
-   }
+   Html::back();
 
 } elseif (isset($_POST["update"])) {
    // Check update rights for fields
