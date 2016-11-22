@@ -76,9 +76,9 @@ switch($_POST['action']){
                              'error'     => $error));
       break;
    
-   case 'updateCounterPosition':
+   case 'updatePrinterData':
       header('Content-Type: application/json; charset=UTF-8"');
-      list($messages, $error) = $record->updateCounterPosition($_POST['items_id'], $_POST['itemtype']);
+      list($messages, $error) = $record->updatePrinterData($_POST['items_id'], $_POST['itemtype']);
       echo json_encode(array('message'    => implode('</br>', $messages), 
                              'error'      => $error));
       break;

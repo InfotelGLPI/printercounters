@@ -333,7 +333,7 @@
                             }
                             break;
 
-                        case 'updateCounterPosition':
+                        case 'updatePrinterData':
                             if (!result.error) {
                                 $("input[name='last_pages_counter']", true).val(result.message);
                                 result.message = '';

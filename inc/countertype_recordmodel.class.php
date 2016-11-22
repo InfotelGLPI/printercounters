@@ -44,16 +44,17 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    static $types = array('PluginPrintercountersRecordmodel');
 
    // OID types
-   const COLOR          = 1;
-   const MONOCHROME     = 2;
-   const SERIAL         = 3;
-   const OTHER          = 4;
-   const SYSDESCR       = 5;
-   const BLACKANDWHITE  = 6;
-   const BICOLOR        = 7;
-   const MODEL          = 8;
-   const NAME           = 9;
-   
+   const COLOR                    = 1;
+   const MONOCHROME               = 2;
+   const SERIAL                   = 3;
+   const OTHER                    = 4;
+   const SYSDESCR                 = 5;
+   const BLACKANDWHITE            = 6;
+   const BICOLOR                  = 7;
+   const MODEL                    = 8;
+   const NAME                     = 9;
+   const NUMBER_OF_PRINTED_PAPERS = 10;
+
    static $rightname = 'plugin_printercounters';
     
    /**
@@ -331,6 +332,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
           AND LOWER(`".$itemjoin3."`.`itemtype`) = '".strtolower($itemtype)."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::SERIAL."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::MODEL."' 
+          AND `".$this->getTable()."`.`oid_type` != '".self::NUMBER_OF_PRINTED_PAPERS."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::NAME."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::SYSDESCR."'";
       
@@ -417,6 +419,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
           WHERE `".$this->getTable()."`.`plugin_printercounters_recordmodels_id` IN ('".implode("','", $recordmodels_id)."')
           AND `".$this->getTable()."`.`oid_type` != '".self::SERIAL."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::MODEL."' 
+          AND `".$this->getTable()."`.`oid_type` != '".self::NUMBER_OF_PRINTED_PAPERS."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::NAME."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::SYSDESCR."'";
       
@@ -485,16 +488,17 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    static function getAllOidTypeArray() {
 
       // To be overridden by class
-      $tab = array(0                    => Dropdown::EMPTY_VALUE,
-                   self::COLOR          => __('Color', 'printercounters'),
-                   self::MONOCHROME     => __('Monochrome', 'printercounters'),
-                   self::BLACKANDWHITE  => __('Black and white', 'printercounters'),
-                   self::BICOLOR        => __('Bichromie', 'printercounters'),
-                   self::SERIAL         => __('Serial number', 'printercounters'),
-                   self::SYSDESCR       => __('Sysdescr', 'printercounters'),
-                   self::MODEL          => __('Printer model'),
-                   self::NAME           => __('Name'). " ".  strtolower(__('Printer')),
-                   self::OTHER          => __('Other', 'printercounters'));
+      $tab = array(0                              => Dropdown::EMPTY_VALUE,
+                   self::COLOR                    => __('Color', 'printercounters'),
+                   self::MONOCHROME               => __('Monochrome', 'printercounters'),
+                   self::BLACKANDWHITE            => __('Black and white', 'printercounters'),
+                   self::BICOLOR                  => __('Bichromie', 'printercounters'),
+                   self::SERIAL                   => __('Serial number', 'printercounters'),
+                   self::SYSDESCR                 => __('Sysdescr', 'printercounters'),
+                   self::MODEL                    => __('Printer model'),
+                   self::NUMBER_OF_PRINTED_PAPERS => __('Number of printed papers', 'printercounters'),
+                   self::NAME                     => __('Name') . " " . strtolower(__('Printer')),
+                   self::OTHER                    => __('Other', 'printercounters'));
 
       return $tab;
    }
@@ -700,7 +704,8 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       if ($this->fields['oid_type'] != self::SERIAL 
          && $this->fields['oid_type'] != self::SYSDESCR 
             && $this->fields['oid_type'] != self::NAME 
-               && $this->fields['oid_type'] != self::MODEL) {
+               && $this->fields['oid_type'] != self::NUMBER_OF_PRINTED_PAPERS
+                  && $this->fields['oid_type'] != self::MODEL) {
          // Add countertype for billingmodels liked to the recordmodel
          $pagecost = new PluginPrintercountersPagecost();
          $pagecost->addCounterTypeForBillings($this->fields['plugin_printercounters_recordmodels_id'], $this->fields['plugin_printercounters_countertypes_id']);
