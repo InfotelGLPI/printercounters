@@ -620,7 +620,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                    self::$IP_FAIL       => __('IP fail', 'printercounters'),
                    self::$OID_FAIL      => __('OID fail', 'printercounters'),
                    self::$UNKNOWN_FAIL  => __('Unknown error', 'printercounters'),
-                   self::$MAC_FAIL      => __('Mac fail', 'printercounters'),
+                   self::$MAC_FAIL      => __('MAC fail', 'printercounters'),
                    self::$SYSDESCR_FAIL => __('Sysdescr fail', 'printercounters'),
                    self::$SERIAL_FAIL   => __('Serial fail', 'printercounters'));
 

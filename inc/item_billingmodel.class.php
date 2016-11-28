@@ -68,7 +68,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
     * getTypeName(), canCreate(), canView()
     * */
    static function getTypeName($nb = 0) {
-      return _n('Linked billing models', 'Linked billing models', $nb, 'printercounters');
+      return _n('Linked billing model', 'Linked billing models', $nb, 'printercounters');
    }
 
    static function canUpdateRecords() {

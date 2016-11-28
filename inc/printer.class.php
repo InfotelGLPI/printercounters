@@ -494,7 +494,7 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
       
       $resultData[] =  array('type'      => self::OTHER_TYPE,
                              'sub_type'  => self::PRINTER_UPTIME,
-                             'name'      => __('Up time', 'printercounters'),  
+                             'name'      => __('Uptime', 'printercounters'),
                              'value'     => $uptime);
       
       return $resultData;

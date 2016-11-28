@@ -378,7 +378,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       
       switch ($name) {
          case 'PrintercountersCreateTicket':
-            return array('description' => __('Create a ticket if there is consecutive errors on records OR no recrods since a defined date', 'printercounters'));
+            return array('description' => __('Create a ticket if there are consecutive errors on records OR no records since a defined date', 'printercounters'));
       }
       return array();
    }
