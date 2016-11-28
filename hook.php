@@ -145,7 +145,7 @@ function plugin_pre_item_purge_printercounters($item) {
    switch (get_class($item)) {
       case 'PluginPrintercountersRecordmodel' :
          $billingmodel = new PluginPrintercountersBillingmodel();
-         $links = $billingmodel->checkLinkedRecordModels($item);
+         $links = $billingmodel->checkLinkedRecordModels($item->getField('id'));
          if (!empty($links)) {
             Session::addMessageAfterRedirect(__('Record model cannot be deleted, it is linked to a billing model', 'printercounters').' : </br>'.implode('</br>', $links), true, ERROR);
             $item->input = false;
@@ -196,7 +196,7 @@ function plugin_pre_item_purge_printercounters($item) {
       
       case 'PluginPrintercountersCountertype_Recordmodel' :
          $billingmodel = new PluginPrintercountersBillingmodel();
-         $links        = $billingmodel->checkLinkedRecordModels($item);
+         $links        = $billingmodel->checkLinkedRecordModels($item->getField('id'));
          if (!empty($links)) {
             Session::addMessageAfterRedirect(__('Counter type cannot be deleted, the record model is linked to a billing model', 'printercounters').' : </br>'.implode('</br>', $links), true, ERROR);
             $item->input = false;

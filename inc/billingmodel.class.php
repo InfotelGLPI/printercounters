@@ -349,10 +349,10 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
     * @param type $recordmodels_id
     * @return boolean
     */
-   function checkLinkedRecordModels(PluginPrintercountersCountertype_Recordmodel $countertype_recordmodel){
+   function checkLinkedRecordModels($plugin_printercounters_recordmodels_id){
       $links = array(); 
       
-      if ($data = $this->getBillingModelsForRecordmodel($countertype_recordmodel->fields['plugin_printercounters_recordmodels_id'])) {
+      if ($data = $this->getBillingModelsForRecordmodel($plugin_printercounters_recordmodels_id)) {
          $pagecosts = new PluginPrintercountersPagecost();
 
          foreach ($data as $value) {
@@ -360,7 +360,7 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
             $billingCounters = $pagecosts->getCounterTypes($value['id']);
             $counterUsed     = false;
             foreach ($billingCounters as $billingCounter) {
-               if ($countertype_recordmodel->fields['plugin_printercounters_countertypes_id'] == $billingCounter['countertypes_id']) {
+               if ($plugin_printercounters_recordmodels_id == $billingCounter['countertypes_id']) {
                   $counterUsed = true;
                   break;
                }
