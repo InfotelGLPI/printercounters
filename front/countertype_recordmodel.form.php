@@ -49,11 +49,11 @@ if (isset($_POST["add"])) {
 
    Html::back();
 
-} elseif (isset($_POST["delete"])) {
+} elseif (isset($_POST["purge"])) {
    // Check update rights for fields
    $countertype_recordmodel->check($_POST['id'], DELETE, $_POST);
    $countertype_recordmodel->delete($_POST, 1);
-   $countertype_recordmodel->redirectToList();
+   Html::back();
    
 } else {
    $countertype_recordmodel->checkGlobal(READ);
