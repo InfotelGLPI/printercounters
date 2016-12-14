@@ -521,7 +521,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
    }
    
    /**
-    * Function check no automatic or manual recrods since a defined date
+    * Function check no automatic or manual records since a defined date
     * 
     * @global type $DB
     * @param array $config_data
@@ -632,8 +632,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
                                            'entities_id'         => $input['entities_id'],
                                            'status'              => $ticket::INCOMING,
                                            'itilcategories_id'   => $config_data['tickets_category'],
-                                           'items_id'            => $input['items_id'],
-                                           'itemtype'            => $input['itemtype'],
+                                           'items_id'            => array($input['itemtype'] => array($input['items_id'])),
                                            'name'                => _n($item->getType(), $item->getType().'s', 1)." - ".$item->fields['name'].' '.self::getEvent($events_type),
                                            'content'             => $config_data['tickets_content']))) {
          
