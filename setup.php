@@ -77,7 +77,6 @@ function plugin_init_printercounters() {
 
       // Pre item purge
       $PLUGIN_HOOKS['pre_item_purge']['printercounters']  = array(
-         'Profile'                                      => array('PluginPrintercountersProfile', 'purgeProfiles'),
          'PluginPrintercountersRecordmodel'             => 'plugin_pre_item_purge_printercounters',
          'PluginPrintercountersBillingmodel'            => 'plugin_pre_item_purge_printercounters',
          'PluginPrintercountersCountertype'             => 'plugin_pre_item_purge_printercounters',
