@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: GLPI Project - printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-11-28 14:25+0100\n"
-"PO-Revision-Date: 2017-04-05 18:16+0000\n"
+"PO-Revision-Date: 2017-04-06 12:37+0000\n"
 "Last-Translator: Wanderlei Hüttel <wanderlei.huttel@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/tsmr/GLPI_printercounters/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -57,7 +57,7 @@ msgstr "Este plugin requer a extensão php-SNMP "
 
 #: front/config.form.php:59 inc/record.class.php:1693
 msgid "Clean records in error"
-msgstr "Limpar registros em erro"
+msgstr "Limpar registros com erro"
 
 #: front/config.form.php:61 front/config.form.php:74
 #: scripts/clean_records.php:58
@@ -104,8 +104,8 @@ msgstr "Informações da impressora"
 #: inc/billingmodel.class.php:88 inc/menu.class.php:157
 msgid "Billing model"
 msgid_plural "Billing models"
-msgstr[0] "Modelos de Faturamento"
-msgstr[1] "Modelos de Faturamento"
+msgstr[0] "Modelo de faturamento"
+msgstr[1] "Modelos de faturamento"
 
 #: inc/billingmodel.class.php:108 inc/billingmodel.class.php:178
 #: inc/billingmodel.class.php:462 inc/item_billingmodel.class.php:112
@@ -118,8 +118,8 @@ msgstr "Data de aplicação"
 #: inc/record.class.php:1958 inc/recordmodel.class.php:150
 msgid "Counter type"
 msgid_plural "Counter types"
-msgstr[0] "Tipos de contadores"
-msgstr[1] "Tipos de contadores"
+msgstr[0] "Tipo de contador"
+msgstr[1] "Tipos de contador"
 
 #: inc/billingmodel.class.php:151 inc/item_billingmodel.class.php:138
 #: inc/item_billingmodel.class.php:140 inc/item_recordmodel.class.php:143
@@ -241,8 +241,8 @@ msgstr "Gerenciamento do plugin"
 #: inc/countertype_recordmodel.class.php:65
 msgid "Counter type of record model"
 msgid_plural "Counter types of record model"
-msgstr[0] "Tipos de contador do modelo de registro"
-msgstr[1] "Tipos de contador do modelo de registro"
+msgstr[0] "Tipo de contador"
+msgstr[1] "Tipos de contador"
 
 #: inc/countertype_recordmodel.class.php:148
 #: inc/countertype_recordmodel.class.php:226
@@ -450,7 +450,7 @@ msgstr "Número de tentativas"
 
 #: inc/item_recordmodel.class.php:570 inc/item_recordmodel.class.php:785
 msgid "Timeout"
-msgstr "Tempo de limite"
+msgstr "Tempo limite"
 
 #: inc/item_recordmodel.class.php:697 inc/item_recordmodel.class.php:712
 #: inc/item_recordmodel.class.php:729 inc/item_recordmodel.class.php:738
@@ -572,8 +572,8 @@ msgstr "Acompanhamento de orçamento"
 #: inc/menu.class.php:144 inc/recordmodel.class.php:88
 msgid "Record model"
 msgid_plural "Record models"
-msgstr[0] "Modelo de registros"
-msgstr[1] "Modelo de registros"
+msgstr[0] "Modelo de registro"
+msgstr[1] "Modelos de registro"
 
 #: inc/menu.class.php:173 inc/snmpauthentication.class.php:62
 msgid "SNMP authentication"
@@ -608,8 +608,8 @@ msgstr "Subtipo"
 #: inc/pagecost.class.php:52
 msgid "Counter types of billing model"
 msgid_plural "Counter types of billing models"
-msgstr[0] "Tipos de contador para modelos de faturamento"
-msgstr[1] "Tipos de contador para modelos de faturamento"
+msgstr[0] "Tipo de contador"
+msgstr[1] "Tipos de contador"
 
 #: inc/printer.class.php:497
 msgid "Uptime"
@@ -901,7 +901,7 @@ msgstr "Modelo de registro duplicado"
 #: inc/snmpauthentication.class.php:81 inc/snmpauthentication.class.php:143
 #: inc/snmpauthentication.class.php:542
 msgid "Community"
-msgstr "Comunidade"
+msgstr "Comunidade de leitura"
 
 #: inc/snmpauthentication.class.php:87 inc/snmpauthentication.class.php:151
 #: inc/snmpauthentication.class.php:560
