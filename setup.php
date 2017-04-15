@@ -115,12 +115,12 @@ function plugin_version_printercounters() {
 function plugin_printercounters_check_prerequisites() {
 
    if (version_compare(GLPI_VERSION, '0.90', 'lt') || version_compare(GLPI_VERSION, '9.2', 'ge')) {
-      _e('This plugin requires GLPI >= 0.90', 'printercounters');
+      echo __('This plugin requires GLPI >= 0.90', 'printercounters');
       return false;
    }
 
    if (!extension_loaded('snmp')) {
-      _e('This plugin requires SNMP php extension', 'printercounters');
+      echo __('This plugin requires SNMP php extension', 'printercounters');
       return false;
    }
 
