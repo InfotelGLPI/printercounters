@@ -563,7 +563,11 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          // Retries
          echo "<td>".__('Number of retries', 'printercounters')."</td>";
          echo "<td>";
-         Dropdown::showInteger('nb_retries', $data["nb_retries"], 0, 10, 1, array(), array('width' => $width));
+         Dropdown::showNumber('nb_retries', ['value' => $data["nb_retries"],
+                                             'min'   => 0,
+                                             'max'   => 10,
+                                             'step'  => 1],
+                              ['width' => $width]);
          echo "</td>";
          
          // Timeout
@@ -862,7 +866,8 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
                case "plugin_printercounters_retries":
                   if ($item_recordmodel->canCreate()){
-                     Dropdown::showInteger('nb_retries', '', 0, 10);
+                     Dropdown::showNumber('nb_retries', ['min' => 0,
+                                                         'max' => 10]);
                   }
                   break;
 

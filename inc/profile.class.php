@@ -214,7 +214,7 @@ class PluginPrintercountersProfile extends Profile {
    static function migrateOneProfile() {
       global $DB;
       //Cannot launch migration if there's nothing to migrate...
-      if (!TableExists('glpi_plugin_printercounters_profiles')) {
+      if (!$DB->tableExists('glpi_plugin_printercounters_profiles')) {
          return true;
       }
 

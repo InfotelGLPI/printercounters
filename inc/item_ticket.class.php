@@ -175,7 +175,9 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       echo __('Number of consecutive errors', 'printercounters');
       echo "</td>";
       echo "<td>";
-      Dropdown::showInteger('nb_errors_ticket', $config["nb_errors_ticket"], 0, 10);
+      Dropdown::showNumber('nb_errors_ticket', ['value' => $config["nb_errors_ticket"],
+                                                'min'   => 0,
+                                                'max'   => 10]);
       echo "</td>";
       echo "<td>";
       echo __('No successful records', 'printercounters');

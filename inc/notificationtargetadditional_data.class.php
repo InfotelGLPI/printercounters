@@ -205,7 +205,6 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
                    'entities_id'              => 0,
                    'itemtype'                 => self::$itemtype,
                    'event'                    => $name,
-                   'mode'                     => 'mail',
                    'comment'                  => '',
                    'is_recursive'             => 1,
                    'is_active'                => 1,

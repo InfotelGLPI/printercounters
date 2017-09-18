@@ -33,7 +33,7 @@ function plugin_printercounters_install() {
    include_once (GLPI_ROOT . "/plugins/printercounters/inc/profile.class.php");
    
    // SQL creation
-   if (!TableExists("glpi_plugin_printercounters_records")) {
+   if (!$DB->tableExists("glpi_plugin_printercounters_records")) {
       $DB->runFile(GLPI_ROOT . "/plugins/printercounters/install/sql/empty-1.0.7.sql");
       
       // Add record notification
@@ -42,47 +42,47 @@ function plugin_printercounters_install() {
    }
    
    // Update 100 to 101
-   if (TableExists("glpi_plugin_printercounters_billingmodels")
-         && !FieldExists('glpi_plugin_printercounters_billingmodels', 'budgets_id')) {
+   if ($DB->tableExists("glpi_plugin_printercounters_billingmodels")
+         && !$DB->fieldExists('glpi_plugin_printercounters_billingmodels', 'budgets_id')) {
       include(GLPI_ROOT ."/plugins/printercounters/install/update_100_101.php");
       update100to101();
    }
    
    // Update 101 to 102
-   if (TableExists("glpi_plugin_printercounters_configs")
-         && !FieldExists('glpi_plugin_printercounters_configs', 'set_first_record')) {
+   if ($DB->tableExists("glpi_plugin_printercounters_configs")
+         && !$DB->fieldExists('glpi_plugin_printercounters_configs', 'set_first_record')) {
       include(GLPI_ROOT ."/plugins/printercounters/install/update_101_102.php");
       update101to102();
    }
    
    // Update 102 to 103
-   if (TableExists("glpi_plugin_printercounters_records")
+   if ($DB->tableExists("glpi_plugin_printercounters_records")
          && !isIndex('glpi_plugin_printercounters_records', 'date')) {
       include(GLPI_ROOT."/plugins/printercounters/install/update_102_103.php");
       update102to103();
    }
    
    // Update 103 to 104
-   if (TableExists("glpi_plugin_printercounters_snmpauthentications")
-         && !FieldExists('glpi_plugin_printercounters_snmpauthentications', 'community_write')) {
+   if ($DB->tableExists("glpi_plugin_printercounters_snmpauthentications")
+         && !$DB->fieldExists('glpi_plugin_printercounters_snmpauthentications', 'community_write')) {
       include(GLPI_ROOT ."/plugins/printercounters/install/update_103_104.php");
       update103to104();
    }
    
    // Update 104 to 105
-   if (!TableExists('glpi_plugin_printercounters_additionals_datas')) {
+   if (!$DB->tableExists('glpi_plugin_printercounters_additionals_datas')) {
       include(GLPI_ROOT ."/plugins/printercounters/install/update_104_105.php");
       update104to105();
    }
       
    // Update 105 to 106
-   if (!FieldExists('glpi_plugin_printercounters_snmpauthentications', 'is_default')) {
+   if (!$DB->fieldExists('glpi_plugin_printercounters_snmpauthentications', 'is_default')) {
       include(GLPI_ROOT ."/plugins/printercounters/install/update_105_106.php");
       update105to106();
    }
    
    // Update 106 to 107
-   if (!TableExists("glpi_plugin_printercounters_errorrecords")) {
+   if (!$DB->tableExists("glpi_plugin_printercounters_errorrecords")) {
       include(GLPI_ROOT ."/plugins/printercounters/install/update_106_107.php");
       update106to107();
    }
