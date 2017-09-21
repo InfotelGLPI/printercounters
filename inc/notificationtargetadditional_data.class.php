@@ -61,8 +61,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
     * @param type $options
     */
    function getDatasForTemplate($event, $options = array()) {
-      global $CFG_GLPI;
-  
+
       $events                                    = $this->getAllEvents();
       $this->datas['##printercounters.action##'] = $events[$event];
 
@@ -197,20 +196,25 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
             $translation->add($tmp);
          }
 
-         $notifs       = array(self::TONER_ALERT_NAME => self::TONER_ALERT);
-         $notification = new Notification();
+         $notifs               = array(self::TONER_ALERT_NAME => self::TONER_ALERT);
+         $notification         = new Notification();
+         $notificationtemplate = new Notification_NotificationTemplate();
          foreach ($notifs as $label => $name) {
             if (!countElementsInTable("glpi_notifications", "`itemtype`='".self::$itemtype."' AND `event`='$name'")) {
                $tmp = array('name'                     => $label,
-                   'entities_id'              => 0,
-                   'itemtype'                 => self::$itemtype,
-                   'event'                    => $name,
-                   'comment'                  => '',
-                   'is_recursive'             => 1,
-                   'is_active'                => 1,
-                   'date_mod'                 => $_SESSION['glpi_currenttime'],
-                   'notificationtemplates_id' => $templates_id);
-               $notification->add($tmp);
+                            'entities_id'              => 0,
+                            'itemtype'                 => self::$itemtype,
+                            'event'                    => $name,
+                            'comment'                  => '',
+                            'is_recursive'             => 1,
+                            'is_active'                => 1,
+                            'date_mod'                 => $_SESSION['glpi_currenttime']);
+               $notification_id = $notification->add($tmp);
+
+               $notificationtemplate->add(['notificationtemplates_id' => $templates_id,
+                                           'notifications_id'         => $notification_id,
+                                           'mode'                     => 'mailing']);
+
             }
          }
       }
@@ -234,8 +238,9 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
       }
 
       //templates
-      $template    = new NotificationTemplate();
-      $translation = new NotificationTemplateTranslation();
+      $template       = new NotificationTemplate();
+      $translation    = new NotificationTemplateTranslation();
+      $notif_template = new Notification_NotificationTemplate();
       $options     = array('itemtype' => self::$itemtype,
                            'FIELDS'   => 'id');
       foreach ($DB->request('glpi_notificationtemplates', $options) as $data) {
@@ -245,6 +250,9 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
             $translation->delete($data_template);
          }
          $template->delete($data);
+         foreach ($DB->request('glpi_notifications_notificationtemplates', $options_template) as $data_template) {
+            $notif_template->delete($data_template);
+         }
       }
    }
    
@@ -259,45 +267,6 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
 
       return urldecode($CFG_GLPI["url_base"]."/index.php?redirect=$redirect");
    }
-
-//   /**
-//    * Get additionnals targets for Tickets
-//    */
-//   function getAdditionalTargets($event = '') {
-//
-//      $this->addTarget(self::AUTHOR, __("Author"));
-//      $this->addTarget(self::AUTHOR_GROUP, __("Author group", "printercounters"));
-//      $this->addTarget(self::DELIVERY_USER, __("Recipient"));
-//      $this->addTarget(self::DELIVERY_GROUP, __("Recipient group", "printercounters"));
-//      $this->addTarget(self::SUPERVISOR_AUTHOR_GROUP, __("Manager")." ".__("Author group", "printercounters"));
-//      $this->addTarget(self::SUPERVISOR_DELIVERY_GROUP, __("Manager")." ".__("Recipient group", "printercounters"));
-//   }
-//
-//   /**
-//    * Get specific targets
-//    */
-//   function getSpecificTargets($data, $options) {
-//      switch ($data['items_id']) {
-//         case self::AUTHOR:
-//            $this->getUserByField("users_id");
-//            break;
-//         case self::DELIVERY_USER:
-//            $this->getUserByField("users_id_delivery");
-//            break;
-//         case self::AUTHOR_GROUP:
-//            $this->getAddressesByGroup(0, $this->obj->fields['groups_id']);
-//            break;
-//         case self::DELIVERY_GROUP:
-//            $this->getAddressesByGroup(0, $this->obj->fields['groups_id_delivery']);
-//            break;
-//         case self::SUPERVISOR_AUTHOR_GROUP:
-//            $this->getAddressesByGroup(1, $this->obj->fields['groups_id']);
-//            break;
-//         case self::SUPERVISOR_DELIVERY_GROUP:
-//            $this->getAddressesByGroup(1, $this->obj->fields['groups_id_delivery']);
-//            break;
-//      }
-//   }
 
 }
 
