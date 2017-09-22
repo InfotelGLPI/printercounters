@@ -140,7 +140,10 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          switch($item->getType()){
             case 'PluginPrintercountersRecordmodel' :
                if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(__('Linked items', 'printercounters'), countElementsInTable($this->getTable(), "`plugin_printercounters_recordmodels_id` = '".$item->getID()."'"));
+                  $dbu = new DbUtils();
+                  return self::createTabEntry(__('Linked items', 'printercounters'),
+                                              $dbu->countElementsInTable($this->getTable(),
+                                                                         "`plugin_printercounters_recordmodels_id` = '".$item->getID()."'"));
                }
                return __('Linked items', 'printercounters');
                break;
@@ -186,8 +189,8 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
    * @return boolean
    */
    function showForItem($item) {
-      
-      if (countElementsInTable($this->getTable(), "`items_id` = '".$item->getID()."' AND `itemtype` ='".$item->getType()."'")) {              
+      $dbu = new DbUtils();
+      if ($dbu->countElementsInTable($this->getTable(), "`items_id` = '".$item->getID()."' AND `itemtype` ='".$item->getType()."'")) {
          // Record error
          echo "<div class='center' id='error_item'>";
          $errorItem = new PluginPrintercountersErrorItem($item->getType(), $item->getID());

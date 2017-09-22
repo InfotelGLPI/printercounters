@@ -135,7 +135,10 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
          switch ($item->getType()) {
             case 'PluginPrintercountersBillingmodel' :
                if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(__('Linked items', 'printercounters'), countElementsInTable($this->getTable(), "`plugin_printercounters_billingmodels_id` = '".$item->getID()."'"));
+                  $dbu = new DbUtils();
+                  return self::createTabEntry(__('Linked items', 'printercounters'),
+                                              $dbu->countElementsInTable($this->getTable(),
+                                                                         "`plugin_printercounters_billingmodels_id` = '".$item->getID()."'"));
                }
                return __('Linked items', 'printercounters');
                break;

@@ -208,7 +208,8 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       echo "</td>";
       echo "<td>";
       $state = array();
-      foreach(getAllDatasFromTable(getTableForItemType('State')) as $value){
+      $dbu   = new DbUtils();
+      foreach ($dbu->getAllDataFromTable(getTableForItemType('State')) as $value) {
          $state[$value['id']] = $value['name'];
       }
       Dropdown::showFromArray('items_status', $state, array('multiple'        => true, 

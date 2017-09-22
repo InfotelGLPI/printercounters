@@ -169,7 +169,8 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
 
       if ($templates_id) {
          $translation = new NotificationTemplateTranslation();
-         if (!countElementsInTable($translation->getTable(), "`notificationtemplates_id`='$templates_id'")) {
+         $dbu = new DbUtils();
+         if (!$dbu->countElementsInTable($translation->getTable(), "`notificationtemplates_id`='$templates_id'")) {
             $tmp                             = array();
             $tmp['notificationtemplates_id'] = $templates_id;
             $tmp['language']                 = '';
@@ -200,7 +201,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
          $notification         = new Notification();
          $notificationtemplate = new Notification_NotificationTemplate();
          foreach ($notifs as $label => $name) {
-            if (!countElementsInTable("glpi_notifications", "`itemtype`='".self::$itemtype."' AND `event`='$name'")) {
+            if (!$dbu->countElementsInTable("glpi_notifications", "`itemtype`='".self::$itemtype."' AND `event`='$name'")) {
                $tmp = array('name'                     => $label,
                             'entities_id'              => 0,
                             'itemtype'                 => self::$itemtype,

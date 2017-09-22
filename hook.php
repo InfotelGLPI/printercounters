@@ -243,7 +243,9 @@ function plugin_item_purge_printercounters($item) {
    switch (get_class($item)) {
       case 'PluginPrintercountersCounter' :
          // If no counter delete record associated
-         if (countElementsInTable(getTableForItemType("PluginPrintercountersCounter"), "`plugin_printercounters_records_id` = ".$item->getField('plugin_printercounters_records_id')) == 0) {
+         $dbu = new DbUtils();
+         if ($dbu->countElementsInTable(getTableForItemType("PluginPrintercountersCounter"),
+                                        "`plugin_printercounters_records_id` = ".$item->getField('plugin_printercounters_records_id')) == 0) {
             $temp = new PluginPrintercountersRecord();
             $temp->deleteByCriteria(array('id' => $item->getField('plugin_printercounters_records_id')), 1);
          }

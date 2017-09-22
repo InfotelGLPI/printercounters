@@ -64,7 +64,10 @@ class PluginPrintercountersPagecost extends CommonDBTM {
       if (!$withtemplate) {
          if ($item->getType() == 'PluginPrintercountersBillingmodel') {
             if ($_SESSION['glpishow_count_on_tabs']) {
-               return self::createTabEntry(self::getTypeName(1), countElementsInTable($this->getTable(), "`plugin_printercounters_billingmodels_id` = '".$item->getID()."'"));
+               $dbu = new DbUtils();
+               return self::createTabEntry(self::getTypeName(1),
+                                           $dbu->countElementsInTable($this->getTable(),
+                                                                      "`plugin_printercounters_billingmodels_id` = '".$item->getID()."'"));
             }
             return self::getTypeName(1);
          }

@@ -217,8 +217,8 @@ class PluginPrintercountersProfile extends Profile {
       if (!$DB->tableExists('glpi_plugin_printercounters_profiles')) {
          return true;
       }
-
-      $datas = getAllDatasFromTable('glpi_plugin_printercounters_profiles');
+      $dbu   = new DbUtils();
+      $datas = $dbu->getAllDataFromTable('glpi_plugin_printercounters_profiles');
       
       foreach ($datas as $profile_data) {
          $matching = array('printercounters'    => 'plugin_printercounters', 
@@ -227,7 +227,7 @@ class PluginPrintercountersProfile extends Profile {
                            'snmpset'            => 'plugin_printercounters_snmpset');
          // Search existing rights
          $used = array();
-         $existingRights = getAllDatasFromTable('glpi_profilerights', "`profiles_id`='".$profile_data['profiles_id']."'");
+         $existingRights = $dbu->getAllDataFromTable('glpi_profilerights', "`profiles_id`='".$profile_data['profiles_id']."'");
          foreach ($existingRights as $right) {
             $used[$right['profiles_id']][$right['name']] = $right['rights'];
          }
