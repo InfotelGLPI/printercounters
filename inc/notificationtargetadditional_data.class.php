@@ -60,10 +60,10 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
     * @param type $event
     * @param type $options
     */
-   function getDatasForTemplate($event, $options = array()) {
+   function addDataForTemplate($event, $options = array()) {
 
       $events                                    = $this->getAllEvents();
-      $this->datas['##printercounters.action##'] = $events[$event];
+      $this->data['##printercounters.action##'] = $events[$event];
 
       foreach ($options['items'] as $id => $item) {
          $tmp                                                 = array();
@@ -78,41 +78,41 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
                $tmp['##printercountersadditionaldatas.value##'] = $item['value'];
                break;
          }
-         $this->datas['printercountersadditionaldatas'][] = $tmp;
+         $this->data['printercountersadditionaldatas'][] = $tmp;
       }
 
       $this->getTags();
       foreach ($this->tag_descriptions[NotificationTarget::TAG_LANGUAGE] as $tag => $values) {
-         if (!isset($this->datas[$tag])) {
-            $this->datas[$tag] = $values['label'];
+         if (!isset($this->data[$tag])) {
+            $this->data[$tag] = $values['label'];
          }
       }
       
       switch ($event) {
          case self::TONER_ALERT:
-            $this->datas['##lang.printercountersadditionaldatas.action##'] = __("Toner level alert", "printercounters");
+            $this->data['##lang.printercountersadditionaldatas.action##'] = __("Toner level alert", "printercounters");
             break;
          default :
-            $this->datas['##lang.printercountersadditionaldatas.action##'] = "";
+            $this->data['##lang.printercountersadditionaldatas.action##'] = "";
             break;
       }
       
       $item = getItemForItemtype($options['itemtype']);
       $item->getFromDB($options['items_id']);
 
-      $this->datas['##printercountersadditionaldatas.itemlink##']      = $this->formatURL('', strtolower($item->getType())."_".$item->getField("id")."_PluginPrintercountersItem_Recordmodel$1");
-      $this->datas['##printercountersadditionaldatas.itemname##']      = $item->getField('name');
+      $this->data['##printercountersadditionaldatas.itemlink##']      = $this->formatURL('', strtolower($item->getType())."_".$item->getField("id")."_PluginPrintercountersItem_Recordmodel$1");
+      $this->data['##printercountersadditionaldatas.itemname##']      = $item->getField('name');
       if ($_SESSION['glpiis_ids_visible']) {
-          $this->datas['##printercountersadditionaldatas.itemname##'] .= " (".$item->getField('id').")";
+          $this->data['##printercountersadditionaldatas.itemname##'] .= " (".$item->getField('id').")";
       }
       
       
-      $this->datas['##lang.printercountersadditionaldatas.itemlink##'] = __("Item link", "printercounters");
-      $this->datas['##lang.printercountersadditionaldatas.itemname##'] = __("Item name", "printercounters");
-      $this->datas['##lang.printercountersadditionaldatas.name##']     = __("Name");
-      $this->datas['##lang.printercountersadditionaldatas.value##']    = __("Value");
-      $this->datas['##lang.printercountersadditionaldatas.type##']     = _n("Type", "Types", 1);
-      $this->datas['##lang.printercountersadditionaldatas.sub_type##'] = __("Sub-type", "printercounters");
+      $this->data['##lang.printercountersadditionaldatas.itemlink##'] = __("Item link", "printercounters");
+      $this->data['##lang.printercountersadditionaldatas.itemname##'] = __("Item name", "printercounters");
+      $this->data['##lang.printercountersadditionaldatas.name##']     = __("Name");
+      $this->data['##lang.printercountersadditionaldatas.value##']    = __("Value");
+      $this->data['##lang.printercountersadditionaldatas.type##']     = _n("Type", "Types", 1);
+      $this->data['##lang.printercountersadditionaldatas.sub_type##'] = __("Sub-type", "printercounters");
    }
 
    /**
