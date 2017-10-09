@@ -101,7 +101,7 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
       $config = PluginPrintercountersConfig::getInstance();
 
-      if ($CFG_GLPI["use_mailing"] && $config['enable_toner_alert']) {
+      if ($CFG_GLPI["notifications_mailing"] && $config['enable_toner_alert']) {
          $alert   = new Alert();
          
          $types = array(PluginPrintercountersPrinter::TONER_TYPE, PluginPrintercountersPrinter::DRUM_TYPE);
