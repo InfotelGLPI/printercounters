@@ -1,26 +1,22 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Printercounters Development Team
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # Alexey Petukhov <lexx015@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI Project - printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-28 14:25+0100\n"
-"PO-Revision-Date: 2016-11-28 14:47+0100\n"
-"Last-Translator: Amandine Manceau <amandine.manceau@infotel.com>\n"
-"Language-Team: Russian (Russia) (http://www.transifex.com/tsmr/"
-"GLPI_printercounters/language/ru_RU/)\n"
+"POT-Creation-Date: 2017-10-30 09:12+0100\n"
+"PO-Revision-Date: 2017-10-30 08:29+0000\n"
+"Last-Translator: Amandine Manceau\n"
+"Language-Team: Russian (Russia) (http://www.transifex.com/tsmr/GLPI_printercounters/language/ru_RU/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru_RU\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
-"(n%100>=11 && n%100<=14)? 2 : 3);\n"
-"X-Generator: Poedit 1.8.5\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: hook.php:150
 msgid "Record model cannot be deleted, it is linked to a billing model"
@@ -33,50 +29,46 @@ msgid ""
 msgstr ""
 
 #: printercounters.js.php:46 ajax/loadscripts.php:47
-#: inc/item_recordmodel.class.php:775
+#: inc/item_recordmodel.class.php:782
 msgid "Global TCO"
 msgstr ""
 
-#: setup.php:107 inc/additional_data.class.php:64
-#: inc/item_billingmodel.class.php:960 inc/item_billingmodel.class.php:986
-#: inc/item_recordmodel.class.php:812 inc/item_recordmodel.class.php:813
-#: inc/item_recordmodel.class.php:814 inc/item_recordmodel.class.php:815
-#: inc/item_recordmodel.class.php:816 inc/item_recordmodel.class.php:817
-#: inc/item_recordmodel.class.php:818 inc/item_recordmodel.class.php:819
-#: inc/item_recordmodel.class.php:820 inc/item_recordmodel.class.php:821
-#: inc/item_recordmodel.class.php:826 inc/menu.class.php:47
+#: setup.php:106 inc/additional_data.class.php:64
+#: inc/item_billingmodel.class.php:963 inc/item_billingmodel.class.php:989
+#: inc/item_recordmodel.class.php:819 inc/item_recordmodel.class.php:820
+#: inc/item_recordmodel.class.php:821 inc/item_recordmodel.class.php:822
+#: inc/item_recordmodel.class.php:823 inc/item_recordmodel.class.php:824
+#: inc/item_recordmodel.class.php:825 inc/item_recordmodel.class.php:826
+#: inc/item_recordmodel.class.php:827 inc/item_recordmodel.class.php:828
+#: inc/item_recordmodel.class.php:833 inc/menu.class.php:47
 #: inc/printer.class.php:123 inc/profile.class.php:164
 #: inc/record.class.php:1205
 msgid "Printer counters"
 msgstr "Счетчики принтера"
 
-#: setup.php:119
-msgid "This plugin requires GLPI >= 0.90"
-msgstr ""
-
-#: setup.php:124
+#: setup.php:123
 msgid "This plugin requires SNMP php extension"
 msgstr "Этот плагин требует модуль PHP SNMP"
 
-#: front/config.form.php:59 inc/record.class.php:1693
+#: front/config.form.php:60 inc/record.class.php:1693
 msgid "Clean records in error"
 msgstr ""
 
-#: front/config.form.php:61 front/config.form.php:74
+#: front/config.form.php:62 front/config.form.php:75
 #: scripts/clean_records.php:58
 msgid "Records cleaned"
 msgstr "Записей очищено"
 
-#: front/config.form.php:64 front/config.form.php:77
+#: front/config.form.php:65 front/config.form.php:78
 #: scripts/clean_records.php:60
 msgid "No records to clean"
 msgstr "Нет записей для очистки"
 
-#: front/config.form.php:72 inc/record.class.php:1696
+#: front/config.form.php:73 inc/record.class.php:1696
 msgid "Clean empty records"
 msgstr "Очистить пустые записи"
 
-#: front/item_recordmodel.form.php:60 inc/item_recordmodel.class.php:1221
+#: front/item_recordmodel.form.php:60 inc/item_recordmodel.class.php:1229
 #: inc/menu.class.php:82 inc/menu.class.php:83 inc/menu.class.php:169
 msgid "Record planning"
 msgstr ""
@@ -96,7 +88,7 @@ msgstr[3] ""
 msgid "Invalid itemtype"
 msgstr ""
 
-#: inc/additional_data.class.php:278
+#: inc/additional_data.class.php:279
 msgid "Toner level"
 msgid_plural "Toner levels"
 msgstr[0] ""
@@ -104,7 +96,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: inc/additional_data.class.php:281
+#: inc/additional_data.class.php:282
 msgid "Printer informations"
 msgstr "Информация по принтеру"
 
@@ -132,13 +124,13 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: inc/billingmodel.class.php:151 inc/item_billingmodel.class.php:138
-#: inc/item_billingmodel.class.php:140 inc/item_recordmodel.class.php:143
-#: inc/item_recordmodel.class.php:145 inc/recordmodel.class.php:137
+#: inc/billingmodel.class.php:151 inc/item_billingmodel.class.php:139
+#: inc/item_billingmodel.class.php:143 inc/item_recordmodel.class.php:144
+#: inc/item_recordmodel.class.php:148 inc/recordmodel.class.php:137
 msgid "Linked items"
 msgstr ""
 
-#: inc/billingmodel.class.php:249 inc/item_recordmodel.class.php:532
+#: inc/billingmodel.class.php:249 inc/item_recordmodel.class.php:535
 msgid "Are you sure to change the recordmodel ?"
 msgstr ""
 
@@ -259,55 +251,55 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: inc/countertype_recordmodel.class.php:148
-#: inc/countertype_recordmodel.class.php:226
-#: inc/countertype_recordmodel.class.php:522
-#: inc/countertype_recordmodel.class.php:680 inc/pagecost.class.php:471
+#: inc/countertype_recordmodel.class.php:151
+#: inc/countertype_recordmodel.class.php:229
+#: inc/countertype_recordmodel.class.php:525
+#: inc/countertype_recordmodel.class.php:683 inc/pagecost.class.php:474
 #: inc/recordmodel.class.php:162
 msgid "OID"
 msgstr "OID"
 
-#: inc/countertype_recordmodel.class.php:153
-#: inc/countertype_recordmodel.class.php:227
-#: inc/countertype_recordmodel.class.php:527
-#: inc/countertype_recordmodel.class.php:679 inc/pagecost.class.php:206
+#: inc/countertype_recordmodel.class.php:156
+#: inc/countertype_recordmodel.class.php:230
+#: inc/countertype_recordmodel.class.php:530
+#: inc/countertype_recordmodel.class.php:682 inc/pagecost.class.php:209
 #: inc/recordmodel.class.php:169
 msgid "OID type"
 msgstr "Тип OID"
 
-#: inc/countertype_recordmodel.class.php:190 inc/pagecost.class.php:169
+#: inc/countertype_recordmodel.class.php:193 inc/pagecost.class.php:172
 msgid "Add a new counter"
 msgstr "Добавить новый счетчик"
 
-#: inc/countertype_recordmodel.class.php:492
+#: inc/countertype_recordmodel.class.php:495
 msgid "Color"
 msgstr "Цвет"
 
-#: inc/countertype_recordmodel.class.php:493
+#: inc/countertype_recordmodel.class.php:496
 msgid "Monochrome"
 msgstr "Монохромный"
 
-#: inc/countertype_recordmodel.class.php:494
+#: inc/countertype_recordmodel.class.php:497
 msgid "Black and white"
 msgstr "Черный и белый"
 
-#: inc/countertype_recordmodel.class.php:495
+#: inc/countertype_recordmodel.class.php:498
 msgid "Bichromie"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:496
+#: inc/countertype_recordmodel.class.php:499
 msgid "Serial number"
 msgstr "Серийный номер"
 
-#: inc/countertype_recordmodel.class.php:497 inc/sysdescr.class.php:317
+#: inc/countertype_recordmodel.class.php:500 inc/sysdescr.class.php:320
 msgid "Sysdescr"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:499
+#: inc/countertype_recordmodel.class.php:502
 msgid "Number of printed papers"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:501
+#: inc/countertype_recordmodel.class.php:504
 msgid "Other"
 msgstr ""
 
@@ -402,29 +394,29 @@ msgstr "Результат"
 msgid "Counter value"
 msgstr "Значение счетчика"
 
-#: inc/item_billingmodel.class.php:199
+#: inc/item_billingmodel.class.php:202
 msgid "Link the item to a billing model"
 msgstr ""
 
-#: inc/item_billingmodel.class.php:250 inc/item_recordmodel.class.php:263
+#: inc/item_billingmodel.class.php:253 inc/item_recordmodel.class.php:266
 msgid "Add an item"
 msgstr ""
 
-#: inc/item_billingmodel.class.php:313 inc/item_recordmodel.class.php:326
-#: inc/item_recordmodel.class.php:697
+#: inc/item_billingmodel.class.php:316 inc/item_recordmodel.class.php:329
+#: inc/item_recordmodel.class.php:704
 msgid "Last record date"
 msgstr "Дата последней записи"
 
-#: inc/item_billingmodel.class.php:314 inc/item_recordmodel.class.php:327
-#: inc/item_recordmodel.class.php:712
+#: inc/item_billingmodel.class.php:317 inc/item_recordmodel.class.php:330
+#: inc/item_recordmodel.class.php:719
 msgid "Last record type"
 msgstr ""
 
-#: inc/item_billingmodel.class.php:986
+#: inc/item_billingmodel.class.php:989
 msgid "Set billing model"
 msgstr ""
 
-#: inc/item_billingmodel.class.php:1166
+#: inc/item_billingmodel.class.php:1169
 msgid "Item cannot be added, check the record model"
 msgstr ""
 
@@ -436,7 +428,7 @@ msgstr[1] ""
 msgstr[2] ""
 msgstr[3] ""
 
-#: inc/item_recordmodel.class.php:122 inc/item_recordmodel.class.php:1689
+#: inc/item_recordmodel.class.php:122 inc/item_recordmodel.class.php:1697
 msgid "Periodicity"
 msgstr "Периодичность"
 
@@ -448,73 +440,73 @@ msgstr ""
 msgid "Record type"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:224
+#: inc/item_recordmodel.class.php:227
 msgid "Link the item to a record model"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:522
+#: inc/item_recordmodel.class.php:525
 msgid "Record configuration"
 msgstr "Записать конфигурацию"
 
-#: inc/item_recordmodel.class.php:544 inc/item_recordmodel.class.php:729
-#: inc/item_recordmodel.class.php:812
+#: inc/item_recordmodel.class.php:547 inc/item_recordmodel.class.php:736
+#: inc/item_recordmodel.class.php:819
 msgid "Enable automatic record"
 msgstr "Включить автоматическую запись"
 
-#: inc/item_recordmodel.class.php:552 inc/item_recordmodel.class.php:748
+#: inc/item_recordmodel.class.php:555 inc/item_recordmodel.class.php:755
 msgid "Periodicity of automatic record"
 msgstr "Периодичность автоматической записи"
 
-#: inc/item_recordmodel.class.php:564 inc/item_recordmodel.class.php:765
+#: inc/item_recordmodel.class.php:567 inc/item_recordmodel.class.php:772
 msgid "Number of retries"
 msgstr "Число попыток"
 
-#: inc/item_recordmodel.class.php:570 inc/item_recordmodel.class.php:785
+#: inc/item_recordmodel.class.php:577 inc/item_recordmodel.class.php:792
 msgid "Timeout"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:697 inc/item_recordmodel.class.php:712
-#: inc/item_recordmodel.class.php:729 inc/item_recordmodel.class.php:738
-#: inc/item_recordmodel.class.php:748 inc/item_recordmodel.class.php:755
-#: inc/item_recordmodel.class.php:765 inc/item_recordmodel.class.php:775
-#: inc/item_recordmodel.class.php:785
+#: inc/item_recordmodel.class.php:704 inc/item_recordmodel.class.php:719
+#: inc/item_recordmodel.class.php:736 inc/item_recordmodel.class.php:745
+#: inc/item_recordmodel.class.php:755 inc/item_recordmodel.class.php:762
+#: inc/item_recordmodel.class.php:772 inc/item_recordmodel.class.php:782
+#: inc/item_recordmodel.class.php:792
 msgid "Printercounters"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:813
+#: inc/item_recordmodel.class.php:820
 msgid "Set periodicity"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:814
+#: inc/item_recordmodel.class.php:821
 msgid "Set record model"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:815
+#: inc/item_recordmodel.class.php:822
 msgid "Set SNMP authentication"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:816
+#: inc/item_recordmodel.class.php:823
 msgid "Set retries"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:817
+#: inc/item_recordmodel.class.php:824
 msgid "Set max timeout"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:818 inc/item_recordmodel.class.php:826
+#: inc/item_recordmodel.class.php:825 inc/item_recordmodel.class.php:833
 #: inc/record.class.php:161
 msgid "Immediate record"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:819
+#: inc/item_recordmodel.class.php:826
 msgid "Update counter position"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:820
+#: inc/item_recordmodel.class.php:827
 msgid "Init counters to zero"
 msgstr ""
 
-#: inc/item_recordmodel.class.php:821
+#: inc/item_recordmodel.class.php:828
 msgid "Set printer values"
 msgstr ""
 
@@ -538,49 +530,49 @@ msgstr "Нет записей"
 msgid "Number of consecutive errors"
 msgstr ""
 
-#: inc/item_ticket.class.php:169 inc/item_ticket.class.php:181
+#: inc/item_ticket.class.php:169 inc/item_ticket.class.php:183
 msgid "No successful records"
 msgstr ""
 
-#: inc/item_ticket.class.php:182 inc/item_ticket.class.php:195
+#: inc/item_ticket.class.php:184 inc/item_ticket.class.php:197
 msgid "since"
 msgstr "начиная с"
 
-#: inc/item_ticket.class.php:205
+#: inc/item_ticket.class.php:207
 msgid "For the item status"
 msgstr ""
 
-#: inc/item_ticket.class.php:223
+#: inc/item_ticket.class.php:226
 msgid "Ticket fields"
 msgstr ""
 
-#: inc/item_ticket.class.php:230
+#: inc/item_ticket.class.php:233
 msgid "Category assigned to the new ticket"
 msgstr ""
 
-#: inc/item_ticket.class.php:242
+#: inc/item_ticket.class.php:245
 msgid "Add item group"
 msgstr ""
 
-#: inc/item_ticket.class.php:248
+#: inc/item_ticket.class.php:251
 msgid "Add item user"
 msgstr ""
 
-#: inc/item_ticket.class.php:258
+#: inc/item_ticket.class.php:261
 msgid "Description of the new ticket"
 msgstr ""
 
-#: inc/item_ticket.class.php:306
+#: inc/item_ticket.class.php:309
 msgid "Event type"
 msgstr "Тип события"
 
-#: inc/item_ticket.class.php:381
+#: inc/item_ticket.class.php:384
 msgid ""
 "Create a ticket if there are consecutive errors on records OR no records "
 "since a defined date"
 msgstr ""
 
-#: inc/item_ticket.class.php:646
+#: inc/item_ticket.class.php:648
 msgid "Tickets created for : "
 msgstr ""
 
@@ -609,26 +601,26 @@ msgstr[2] ""
 msgstr[3] ""
 
 #: inc/notificationtargetadditional_data.class.php:53
-#: inc/notificationtargetadditional_data.class.php:94
+#: inc/notificationtargetadditional_data.class.php:93
 #: inc/record.class.php:1645
 msgid "Toner level alert"
+msgstr ""
+
+#: inc/notificationtargetadditional_data.class.php:110
+#: inc/notificationtargetadditional_data.class.php:127
+#: inc/notificationtargetadditional_data.class.php:129
+msgid "Item link"
 msgstr ""
 
 #: inc/notificationtargetadditional_data.class.php:111
 #: inc/notificationtargetadditional_data.class.php:128
 #: inc/notificationtargetadditional_data.class.php:130
-msgid "Item link"
-msgstr ""
-
-#: inc/notificationtargetadditional_data.class.php:112
-#: inc/notificationtargetadditional_data.class.php:129
-#: inc/notificationtargetadditional_data.class.php:131
 msgid "Item name"
 msgstr ""
 
-#: inc/notificationtargetadditional_data.class.php:116
-#: inc/notificationtargetadditional_data.class.php:127
-#: inc/notificationtargetadditional_data.class.php:135
+#: inc/notificationtargetadditional_data.class.php:115
+#: inc/notificationtargetadditional_data.class.php:126
+#: inc/notificationtargetadditional_data.class.php:134
 msgid "Sub-type"
 msgstr ""
 
@@ -1001,42 +993,42 @@ msgstr "AES192"
 msgid "AES256"
 msgstr "AES256"
 
-#: inc/snmpset.class.php:145 inc/snmpset.class.php:265
-#: inc/snmpset.class.php:530
+#: inc/snmpset.class.php:148 inc/snmpset.class.php:268
+#: inc/snmpset.class.php:533
 msgid "Set printer name"
 msgstr "Установить имя принтера"
 
-#: inc/snmpset.class.php:157 inc/snmpset.class.php:266
-#: inc/snmpset.class.php:536
+#: inc/snmpset.class.php:160 inc/snmpset.class.php:269
+#: inc/snmpset.class.php:539
 msgid "Set printer location"
 msgstr "Установить расположение принтера"
 
-#: inc/snmpset.class.php:169 inc/snmpset.class.php:267
-#: inc/snmpset.class.php:542
+#: inc/snmpset.class.php:172 inc/snmpset.class.php:270
+#: inc/snmpset.class.php:545
 msgid "Set printer contact informations"
 msgstr "Установить контактную информацию по принтеру"
 
-#: inc/snmpset.class.php:228
+#: inc/snmpset.class.php:231
 msgid "Add a new snmpset"
 msgstr ""
 
-#: inc/snmpset.class.php:424
+#: inc/snmpset.class.php:427
 msgid "SNMPset configuration is not found in the printer entity"
 msgstr ""
 
-#: inc/snmpset.class.php:443
+#: inc/snmpset.class.php:446
 msgid "IP not found"
 msgstr "IP не найден"
 
-#: inc/snmpset.class.php:516
+#: inc/snmpset.class.php:519
 msgid "User phone"
 msgstr "Телефон пользователя"
 
-#: inc/snmpset.class.php:582
+#: inc/snmpset.class.php:585
 msgid "SNMPset is already configured for this entity"
 msgstr ""
 
-#: inc/sysdescr.class.php:163
+#: inc/sysdescr.class.php:166
 msgid "Add a new sysdescr"
 msgstr "Добавить новое системное описание"
 

@@ -149,7 +149,8 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
                      $options['items']    = $items;
                      $options['items_id'] = $additionalData['items_id'];
                      $options['itemtype'] = $additionalData['itemtype'];
-                     if (NotificationEvent::raiseEvent($type.'_alert', new PluginPrintercountersAdditional_data(), $options)) {
+                     if (NotificationEvent::raiseEvent($type.'_alert', new PluginPrintercountersAdditional_data(),
+                                                       $options)) {
                         $input["type"]     = Alert::THRESHOLD;
                         $input["itemtype"] = 'PluginPrintercountersAdditional_Data';
 
