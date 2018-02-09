@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,9 +33,9 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersCommonSNMPObject
- * 
+ *
  * Parent class that provides common function for the SNMP queries
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
@@ -49,11 +49,11 @@ abstract class PluginPrintercountersCommonSNMPObject {
    var $itemtype;
    var $items_id;
    var $entities_id;
-   var $locations_id;   
+   var $locations_id;
    var $item_recordmodel;
    var $recordmodel;
-   
-   
+
+
    /**
     * @var object SNMP session
     */
@@ -66,45 +66,45 @@ abstract class PluginPrintercountersCommonSNMPObject {
     * @var int microseconds
     */
    var $maxTimeout = 100000;
-   
+
    /**
     * The max number of retries for SNMP call
     * Default value is set to 5 tries
     *
-    * @var int 
+    * @var int
     */
    var $maxRetries = 5;
-   
+
    const ERROR_BOOL    = 3;
    const ERROR_NUMBER  = 2;
    const ERROR_MESSAGE = 1;
 
    /**
-    * Contructor 
+    * Contructor
     *
     * @param string $items_id item id
     * @param int $itemtype itemtype
     * @param string $ip IP address
     * @param string $mac MAC address
-    * 
-    * @param array $record_config : 
+    *
+    * @param array $record_config :
     *                               - nb_retries
     *                               - max_timeout
     *                               - item recordmodel : id of the link between item and recordmodel
     *                               - recordmodel : id of the recordmodel
     *                               - entities_id : entity of the printer
-    * 
-    * @param array $snmp_auth : 
-    *                           - version, 
-    *                           - community, 
-    *                           - authentication_encrypt, 
-    *                           - authentication_password, 
-    *                           - data_encrypt, 
+    *
+    * @param array $snmp_auth :
+    *                           - version,
+    *                           - community,
+    *                           - authentication_encrypt,
+    *                           - authentication_password,
+    *                           - data_encrypt,
     *                           - data_password
-    * 
+    *
     * @throws Exception if PHP SNMP extension is not loaded, if no record configuration, if no SNMP authentication
     */
-   public function __construct($items_id=null, $itemtype=null, $ip=null, $mac=null, $record_config=array(), $snmp_auth=array()) {
+   public function __construct($items_id = null, $itemtype = null, $ip = null, $mac = null, $record_config = [], $snmp_auth = []) {
 
       if (!extension_loaded('snmp')) {
          throw new PluginPrintercountersException(__('SNMP extension is not loaded', 'printercounters'), 0, null, $this->items_id, $this->itemtype);
@@ -114,23 +114,23 @@ abstract class PluginPrintercountersCommonSNMPObject {
       $this->setItemtype($itemtype);
       $this->setIPAddress($ip);
       $this->setMac($mac);
-      
+
       // Set record config
       $this->setRecordConfig($record_config);
 
       // Set SNMP authentication
       $this->setSNMPAuth($snmp_auth);
 
-      set_error_handler(array($this, 'handleSNMPError'));
+      set_error_handler([$this, 'handleSNMPError']);
    }
 
    /**
     * Function set SNMP Config
-    * 
+    *
     * @param type $record_config
     */
    public function setRecordConfig($record_config) {
-      
+
       if (!empty($record_config)) {
          if (isset($record_config['nb_retries'])) {
             $this->setMaxRetries($record_config['nb_retries']);
@@ -150,19 +150,19 @@ abstract class PluginPrintercountersCommonSNMPObject {
          if (isset($record_config['locations_id'])) {
             $this->setLocation($record_config['locations_id']);
          }
-         
+
       } else {
          throw new PluginPrintercountersException(__('No SNMP configuration', 'printercounters'), 0, null, $this->items_id, $this->itemtype);
       }
    }
-   
+
    /**
     * Function set SNMP Auth
     *
     * @param type $snmp_auth
     */
    public function setSNMPAuth($snmp_auth) {
-      
+
       if (!empty($snmp_auth)) {
          switch ($snmp_auth['version']) {
             case PluginPrintercountersSnmpauthentication::SNMPV3:
@@ -171,22 +171,22 @@ abstract class PluginPrintercountersCommonSNMPObject {
                                          $snmp_auth['community'],
                                          $this->maxTimeout,
                                          $this->maxRetries);
-               
-               if (!empty($snmp_auth['authentication_encrypt']) 
-                       && !empty($snmp_auth['authentication_password']) 
-                       && !empty($snmp_auth['data_encrypt']) 
+
+               if (!empty($snmp_auth['authentication_encrypt'])
+                       && !empty($snmp_auth['authentication_password'])
+                       && !empty($snmp_auth['data_encrypt'])
                        && !empty($snmp_auth['data_password'])) {
-                  $this->session->setSecurity('authPriv', 
-                                              $snmp_auth['authentication_encrypt'], 
-                                              $snmp_auth['authentication_password'], 
+                  $this->session->setSecurity('authPriv',
+                                              $snmp_auth['authentication_encrypt'],
+                                              $snmp_auth['authentication_password'],
                                               $snmp_auth['data_encrypt'],
                                               $snmp_auth['data_password'], '', '');
                } else {
                   throw new PluginPrintercountersException(__('Bad SNMP V3 parameters', 'printercounters'), 0, null, $this->items_id, $this->itemtype);
                }
                break;
-               
-            default : 
+
+            default :
                $this->session = new SNMP($snmp_auth['version'],
                                          $this->ip,
                                          $snmp_auth['community'],
@@ -194,12 +194,12 @@ abstract class PluginPrintercountersCommonSNMPObject {
                                          $this->maxRetries);
                break;
          }
-         
+
       } else {
          throw new PluginPrintercountersException(__('No SNMP authentication', 'printercounters'), 0, null, $this->items_id, $this->itemtype);
       }
    }
-   
+
    /**
     * Function sets item recordmodel
     *
@@ -214,7 +214,7 @@ abstract class PluginPrintercountersCommonSNMPObject {
 
       $this->item_recordmodel = $item_recordmodel;
    }
-   
+
    /**
     * Function sets recordmodel
     *
@@ -229,7 +229,7 @@ abstract class PluginPrintercountersCommonSNMPObject {
 
       $this->recordmodel = $recordmodel;
    }
-   
+
    /**
     * Function sets Itemtype
     *
@@ -251,10 +251,10 @@ abstract class PluginPrintercountersCommonSNMPObject {
     * @return string
     */
    public function getItemtype() {
-      
+
       return $this->itemtype;
    }
-   
+
    /**
     * Function sets Items id
     *
@@ -276,7 +276,7 @@ abstract class PluginPrintercountersCommonSNMPObject {
     * @return string
     */
    public function getItems_id() {
-      
+
       return $this->items_id;
    }
 
@@ -301,10 +301,10 @@ abstract class PluginPrintercountersCommonSNMPObject {
     * @return string
     */
    public function getIPAddress() {
-      
+
       return $this->ip;
    }
-   
+
    /**
     * Function sets MAC address
     *
@@ -321,10 +321,10 @@ abstract class PluginPrintercountersCommonSNMPObject {
     * @return string
     */
    public function getMac() {
-      
+
       return $this->mac;
    }
-   
+
    /**
     * Function sets entity
     *
@@ -343,7 +343,7 @@ abstract class PluginPrintercountersCommonSNMPObject {
    public function getEntity() {
       return $this->entities_id;
    }
-   
+
    /**
     * Function sets location
     *
@@ -385,14 +385,14 @@ abstract class PluginPrintercountersCommonSNMPObject {
     * @throws Exception if passed timeout in microseconds is not in integer format
     */
    public function setMaxRetries($retries) {
- 
+
       if (!is_numeric($retries)) {
          throw new PluginPrintercountersException(__('Passed retry is not int', 'printercounters'), 0, null, $this->items_id, $this->itemtype);
       }
 
       $this->maxRetries = $retries;
    }
-   
+
    /**
     * Function gets maxTimeout
     *
@@ -401,7 +401,7 @@ abstract class PluginPrintercountersCommonSNMPObject {
    public function getMaxTimeout() {
       return $this->maxTimeout;
    }
-   
+
    /**
     * Function gets result of SNMP object id,
     * or returns false if call failed
@@ -412,7 +412,7 @@ abstract class PluginPrintercountersCommonSNMPObject {
     * @throws Exception if IP address is not set
     * @throws Exception if $snmpObjectId is not in string format
     */
-   public function set($snmpObjectId, $type='s', $value=null, $error_type=1) {
+   public function set($snmpObjectId, $type = 's', $value = null, $error_type = 1) {
       $error_bool    = true;
       $error_message = '';
       $error_number  = 0;
@@ -431,19 +431,19 @@ abstract class PluginPrintercountersCommonSNMPObject {
          $error_bool    = false;
          $error_message = __('SNMP Object ID is not string', 'printercounters');
       }
-      
+
       try {
          $result = $this->session->set($snmpObjectId, $type, PluginPrintercountersToolbox::replaceAccents($value));
 
          if (!is_array($result)) {
-            return trim(str_replace(array('"', 'Hex-STRING: ', 'STRING: ', 'INTEGER: ', 'Counter32: '), '', $result));
+            return trim(str_replace(['"', 'Hex-STRING: ', 'STRING: ', 'INTEGER: ', 'Counter32: '], '', $result));
          } else {
             foreach ($result as &$value) {
-               $value = trim(str_replace(array('"', 'Hex-STRING: ', 'STRING: ', 'INTEGER: ', 'Counter32: '), '', $value));
+               $value = trim(str_replace(['"', 'Hex-STRING: ', 'STRING: ', 'INTEGER: ', 'Counter32: '], '', $value));
             }
             return $result;
          }
-         
+
       } catch (PluginPrintercountersException $e) {
          $error_bool = false;
          $error_message = $e->getMessage();
@@ -469,7 +469,7 @@ abstract class PluginPrintercountersCommonSNMPObject {
     * @throws Exception if IP address is not set
     * @throws Exception if $snmpObjectId is not in string format
     */
-   public function get($snmpObjectId, $error_type=1) {
+   public function get($snmpObjectId, $error_type = 1) {
       $error_bool    = true;
       $error_message = '';
       $error_number  = 0;
@@ -488,27 +488,27 @@ abstract class PluginPrintercountersCommonSNMPObject {
          $error_bool    = false;
          $error_message = __('SNMP Object ID is not string', 'printercounters');
       }
-      
+
       try {
          $result = $this->session->get($snmpObjectId);
-         if(!is_array($result)){
-            return trim(str_replace(array('"', 'Hex-STRING: ', 'STRING: ', 'INTEGER: ', 'Counter32: '), '', $result));
-            
+         if (!is_array($result)) {
+            return trim(str_replace(['"', 'Hex-STRING: ', 'STRING: ', 'INTEGER: ', 'Counter32: '], '', $result));
+
          } else {
-            foreach($result as &$value){
-               $value = trim(str_replace(array('"', 'Hex-STRING: ', 'STRING: ', 'INTEGER: ', 'Counter32: '), '', $value));
+            foreach ($result as &$value) {
+               $value = trim(str_replace(['"', 'Hex-STRING: ', 'STRING: ', 'INTEGER: ', 'Counter32: '], '', $value));
             }
             return $result;
          }
-         
+
       } catch (PluginPrintercountersException $e) {
          $error_bool    = false;
          $error_message = $e->getMessage();
       }
-      
+
       // Display error
-      if(!$error_bool){
-         switch($error_type){
+      if (!$error_bool) {
+         switch ($error_type) {
             case self::ERROR_NUMBER  : return $error_number;
             case self::ERROR_BOOL    : return $error_bool;
             default : throw new PluginPrintercountersException($error_message, 0, null, $this->items_id, $this->itemtype);
@@ -526,7 +526,7 @@ abstract class PluginPrintercountersCommonSNMPObject {
     * @throws Exception if IP address is not set
     * @throws Exception if $snmpObjectId is not in string format
     */
-   public function walk($snmpObjectId, $error_type=1) {
+   public function walk($snmpObjectId, $error_type = 1) {
       $error_bool    = true;
       $error_message = '';
       $error_number  = 0;
@@ -548,19 +548,19 @@ abstract class PluginPrintercountersCommonSNMPObject {
 
       try {
          $result = $this->session->walk($snmpObjectId, true);
-         foreach($result as &$value){
-            $value = trim(str_replace(array('"', 'Hex-STRING: ', 'STRING: ', 'INTEGER: ', 'Counter32: '), '', $value));
+         foreach ($result as &$value) {
+            $value = trim(str_replace(['"', 'Hex-STRING: ', 'STRING: ', 'INTEGER: ', 'Counter32: '], '', $value));
          }
          return $result;
-         
+
       } catch (PluginPrintercountersException $e) {
          $error_bool    = false;
          $error_message = $e->getMessage();
       }
-      
+
       // Display error
-      if(!$error_bool){
-         switch($error_type){
+      if (!$error_bool) {
+         switch ($error_type) {
             case self::ERROR_NUMBER  : return $error_number;
             case self::ERROR_BOOL    : return $error_bool;
             default : throw new PluginPrintercountersException($error_message, 0, null, $this->items_id, $this->itemtype);
@@ -578,27 +578,27 @@ abstract class PluginPrintercountersCommonSNMPObject {
    public function getSNMPString($snmpObjectId) {
       $result = $this->get($snmpObjectId);
 
-      return ($result !== false) ? str_replace(array('"', 'STRING: '), '', $result) : false;
+      return ($result !== false) ? str_replace(['"', 'STRING: '], '', $result) : false;
    }
-   
+
    /**
     * Function returns result of SNMP last error
     *
     * @return string
     */
-   public function getErrorMessage(){
+   public function getErrorMessage() {
       return $this->session->getError();
    }
-   
+
    /**
     * Function returns number of SNMP last error
     *
     * @return int
     */
-   public function getErrorNumber(){
+   public function getErrorNumber() {
       return $this->session->getErrno();
    }
-   
+
    /**
     * Function handles SNMP errors
     *
@@ -615,13 +615,13 @@ abstract class PluginPrintercountersCommonSNMPObject {
       /* Don't execute PHP internal error handler */
       return true;
    }
-   
+
    /**
     * Function closes SNMP session
     *
     * @return int
     */
-   public function closeSNMPSession(){
+   public function closeSNMPSession() {
       $this->session->close();
    }
 

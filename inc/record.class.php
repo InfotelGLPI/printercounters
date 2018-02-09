@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,9 +33,9 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersRecord
- * 
+ *
  * This class allows to add and manage the counter records of the items
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
@@ -49,32 +49,32 @@ class PluginPrintercountersRecord extends CommonDBTM {
    static $SERIAL_FAIL       = 5;
    static $OID_FAIL          = 6;
    static $UNKNOWN_FAIL      = 7;
-   
+
    // Record state
    static $PROGRAMMED_STATE  = 1;
    static $FINISHED_STATE    = 2;
    static $PROGRESS_STATE    = 3;
-   
+
    // Record type
    static $HOST_ERROR_TYPE   = 1;
    static $RECORD_ERROR_TYPE = 2;
    static $AUTOMATIC_TYPE    = 3;
    static $MANUAL_TYPE       = 4;
-   
+
    // Clean type
    static $CLEAN_EMTPY_RECORDS = 1;
    static $CLEAN_ERROR_RECORDS = 2;
-   
+
    var $items_id;
    var $itemtype;
    var $tags;
    var $rand = 0;
-   
+
    static $rightname = 'plugin_printercounters';
 
    /**
     * Constructor
-    * 
+    *
     * @param type $itemtype
     * @param type $items_id
     */
@@ -90,21 +90,21 @@ class PluginPrintercountersRecord extends CommonDBTM {
    static function getTypeName($nb = 0) {
       return _n("Record", "Records", $nb, 'printercounters');
    }
-   
+
    static function canUpdateRecords() {
       return Session::haveRight('plugin_printercounters_update_records', 1);
    }
-   
+
    static function canAddLessRecords() {
       return Session::haveRight('plugin_printercounters_add_lower_records', 1);
    }
-   
+
 
    /**
     * Function sets itemtype id
     *
-    * @param string $itemtype 
-    * @throws Exception 
+    * @param string $itemtype
+    * @throws Exception
     */
    public function setItemtype($itemtype) {
 
@@ -124,7 +124,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       $this->items_id = $items_id;
    }
-   
+
    /**
     * Function sets rand
     */
@@ -135,7 +135,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
    /**
     * Function show record actions
-    * 
+    *
     * @global type $CFG_GLPI
     * @param type $rand
     * @return boolean
@@ -154,31 +154,31 @@ class PluginPrintercountersRecord extends CommonDBTM {
          echo "<div class='printercounters_action_group'>";
          // Immediate record
          $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"immediateRecord\", \"\", \"record_action_result\", 
-                  ".json_encode(array('items_id'        => $this->items_id,
+                  ".json_encode(['items_id'        => $this->items_id,
                                       'itemtype'        => $this->itemtype,
                                       'formName'        => 'search_form'.$this->rand,
-                                      'updates'         => array('record' => 'history_showForm'.$this->rand, 'additionalData' => 'additional_datas', 'errorItem' => 'error_item'))).");'";
+                                      'updates'         => ['record' => 'history_showForm'.$this->rand, 'additionalData' => 'additional_datas', 'errorItem' => 'error_item']]).");'";
          echo "<a $onclick class='vsubmit printercounters_action_button'>".__('Immediate record', 'printercounters')."</a>";
 
          // Manual record
          $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"showManualRecord\", \"\", \"\", 
-                  ".json_encode(array('items_id'        => $this->items_id,
+                  ".json_encode(['items_id'        => $this->items_id,
                                       'itemtype'        => $this->itemtype,
                                       'addLowerRecord'  => 0,
                                       'formName'        => 'search_form'.$this->rand,
-                                      'updates'         => array('record' => 'history_showForm'.$this->rand),
-                                      'rand'            => $this->rand)).");'";
+                                      'updates'         => ['record' => 'history_showForm'.$this->rand],
+                                      'rand'            => $this->rand]).");'";
          echo "<a $onclick class='vsubmit printercounters_action_button'>".__('Add a manual record', 'printercounters')."</a>";
 
          // Manual record : add less record
          if (self::canAddLessRecords()) {
             $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"showManualRecord\", \"\", \"\", 
-                     ".json_encode(array('items_id'        => $this->items_id,
+                     ".json_encode(['items_id'        => $this->items_id,
                                          'itemtype'        => $this->itemtype,
                                          'addLowerRecord'  => 1,
                                          'formName'        => 'search_form'.$this->rand,
-                                         'updates'         => array('record' => 'history_showForm'.$this->rand),
-                                         'rand'            => $this->rand)).");'";
+                                         'updates'         => ['record' => 'history_showForm'.$this->rand],
+                                         'rand'            => $this->rand]).");'";
             echo "<a $onclick class='vsubmit printercounters_action_button'>".__('Add a lower record', 'printercounters')."</a>";
          }
          echo "</div>";
@@ -188,28 +188,28 @@ class PluginPrintercountersRecord extends CommonDBTM {
          echo "<div class='printercounters_action_group'>";
          // Update global TCO
          $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"updateGlobalTco\", \"\", \"record_action_result\", 
-                  ".json_encode(array('items_id'        => $this->items_id,
+                  ".json_encode(['items_id'        => $this->items_id,
                                       'itemtype'        => $this->itemtype,
                                       'formName'        => 'search_form'.$this->rand,
-                                      'updates'         => array('globalTco' => 'update_global_tco'))).");'";
+                                      'updates'         => ['globalTco' => 'update_global_tco']]).");'";
          echo "<a $onclick class='vsubmit printercounters_action_button'>".__('Update global TCO', 'printercounters')."</a>";
 
          // Update printer data
          $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"updatePrinterData\", \"\", \"record_action_result\", 
-                  ".json_encode(array('items_id'        => $this->items_id,
+                  ".json_encode(['items_id'        => $this->items_id,
                                       'itemtype'        => $this->itemtype,
                                       'formName'        => 'search_form'.$this->rand,
-                                      'updates'         => array('record' => 'history_showForm'.$this->rand))).");'";
+                                      'updates'         => ['record' => 'history_showForm'.$this->rand]]).");'";
          echo "<a $onclick class='vsubmit printercounters_action_button'>".__('Update printer data', 'printercounters')."</a>";
 
          // SNMP set
          if (PluginPrintercountersSnmpset::canSnmpSet()) {
             $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"SNMPSet\", \"\", \"record_action_result\", 
-                     ".json_encode(array('items_id'        => $this->items_id,
+                     ".json_encode(['items_id'        => $this->items_id,
                                          'itemtype'        => $this->itemtype,
                                          'formName'        => 'search_form'.$this->rand,
-                                         'updates'         => array('additionalData' => 'additional_datas'),
-                                         'rand'            => $this->rand)).");'";
+                                         'updates'         => ['additionalData' => 'additional_datas'],
+                                         'rand'            => $this->rand]).");'";
             echo "<a $onclick class='vsubmit printercounters_action_button'>".__('Update the values of the physical printer', 'printercounters')."</a>";
          }
          echo "</div>";
@@ -223,17 +223,23 @@ class PluginPrintercountersRecord extends CommonDBTM {
       echo "</tr>";
       echo "</table></div>";
    }
-   
-      
-  /**
+
+
+   /**
    * Init printercoutners JS
-   * 
+   *
    */
-   static function initPrintercountersActionsJS(){
-      
-      echo '<script type="text/javascript">';
-      echo 'var printercountersAction = $(document).printercountersAction();';
-      echo '</script>';
+   static function initPrintercountersActionsJS() {
+
+      Html::requireJs('printercounters');
+
+      echo Html::scriptBlock('$(document).ready(function() {
+         var printercountersAction = $(document).printercountersAction();
+         });');
+
+      //      echo '<script type="text/javascript">';
+      //      echo 'var printercountersAction = $(document).printercountersAction();';
+      //      echo '</script>';
    }
 
    /**
@@ -244,19 +250,19 @@ class PluginPrintercountersRecord extends CommonDBTM {
    function addGroupBy() {
       return $this->getTable().".`id`";
    }
-   
+
    /**
     * Search function : addRestriction
-    * 
+    *
     * @return string
     */
-   function addRestriction(){
-      
+   function addRestriction() {
+
       $options  = Search::getOptions($this->getType());
       $restriction = '';
       foreach ($options as $num => $val) {
          if ($val['table'] == getTableForItemType('PluginPrintercountersRecord') && $val['field'] == 'id') {
-            $restriction .= PluginPrintercountersSearch::addWhere('', 1, $this->getType(), $num, 'equals', NULL);
+            $restriction .= PluginPrintercountersSearch::addWhere('', 1, $this->getType(), $num, 'equals', null);
          }
          if ($val['table'] == getTableForItemType($this->itemtype) && $val['field'] == 'id') {
             $restriction .= PluginPrintercountersSearch::addWhere('AND', 0, $this->getType(), $num, 'equals', $this->items_id);
@@ -265,15 +271,15 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       return $restriction;
    }
-   
+
    /**
     * Search function : set default search
     *
     * @return an array
     */
    function getDefaultSearch() {
-      
-      $default_search = array();
+
+      $default_search = [];
       $options = Search::getCleanedOptions($this->getType());
       foreach ($options as $num => $val) {
          if ($val['table'] == 'glpi_entities' && $val['field'] == 'name') {
@@ -287,26 +293,26 @@ class PluginPrintercountersRecord extends CommonDBTM {
             break;
          }
       }
-      $default_search['criteria'][] = array('field' => $fields_num, 'searchtype' => '', 'value' => '', 'link' => '');
+      $default_search['criteria'][] = ['field' => $fields_num, 'searchtype' => '', 'value' => '', 'link' => ''];
       $default_search['order']    = 'DESC';
-      
+
       return $default_search;
    }
-   
-   /** 
+
+   /**
     * Search function : show record history data
-    * 
+    *
     * @global type $CFG_GLPI
     * @param PluginPrintercountersSearch $search
     */
-   function showSearchData(PluginPrintercountersSearch $search){
+   function showSearchData(PluginPrintercountersSearch $search) {
       global $CFG_GLPI;
 
       // Format data
       $input = $this->formatSearchData($search->input);
-      
+
       // Line break
-      switch($search->output_type){
+      switch ($search->output_type) {
          case search::HTML_OUTPUT:
             $lineBreak = "<hr>";
             break;
@@ -314,9 +320,9 @@ class PluginPrintercountersRecord extends CommonDBTM {
             $lineBreak = "\n";
             break;
       }
-   
+
       // Fill counters if recordmodel has changed
-      $recordmodels_id = array();
+      $recordmodels_id = [];
       foreach ($input['records'] as $records_id => $history) {
          $recordmodels_id[$history['recordmodels_id']] = $history['recordmodels_id'];
       }
@@ -333,20 +339,20 @@ class PluginPrintercountersRecord extends CommonDBTM {
          $style = " style='cursor:pointer;'";
          if ($this->canUpdateRecords()) {
             $onclick = " onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"showManualRecord\", \"\", \"\", 
-               ".json_encode(array('items_id'        => $this->items_id, 
-                                   'itemtype'        => $this->itemtype, 
+               ".json_encode(['items_id'        => $this->items_id,
+                                   'itemtype'        => $this->itemtype,
                                    'addLowerRecord'  => $this->canAddLessRecords() ? 1 : 0,
-                                   'records_id'      => $records_id, 
-                                   'formName'        => 'search_form'.$this->rand, 
-                                   'historyFormName' => 'history_showForm'.$this->rand, 
-                                   'rand'            => $this->rand)).");'";
+                                   'records_id'      => $records_id,
+                                   'formName'        => 'search_form'.$this->rand,
+                                   'historyFormName' => 'history_showForm'.$this->rand,
+                                   'rand'            => $this->rand]).");'";
          }
 
          echo Search::showItem($search->output_type, $history['formated_date'], $col_num, $row_num, $onclick.$style);
          echo Search::showItem($search->output_type, $history['recordmodels_name'], $col_num, $row_num, $onclick.$style);
          echo Search::showItem($search->output_type, $history['entities_name'], $col_num, $row_num, $onclick.$style);
-         $counters = array();
-         foreach($history['counters'] as $val){
+         $counters = [];
+         foreach ($history['counters'] as $val) {
             $counters[$val['counters_name']] = $val['counters_value'];
          }
          echo Search::showItem($search->output_type, implode($lineBreak, array_keys($counters)), $col_num, $row_num, $onclick." style='cursor:pointer;width:25%'");
@@ -358,12 +364,12 @@ class PluginPrintercountersRecord extends CommonDBTM {
          echo Search::showItem($search->output_type, PluginPrintercountersPagecost::getCost($history['record_cost']), $col_num, $row_num, $onclick.$style);
          echo Search::showEndLine($search->output_type);
       }
-      
+
       // Total
       $row_num++;
       $col_num = 1;
       echo Search::showNewLine($search->output_type);
-      $searchopt = array();
+      $searchopt = [];
       $searchopt = &Search::getOptions($this->getType());
       $count = 0;
       foreach ($searchopt as $val) {
@@ -378,74 +384,74 @@ class PluginPrintercountersRecord extends CommonDBTM {
       echo Search::showItem($search->output_type, "<b>".Html::formatNumber($input['total_record_cost'])."</b>", $col_num, $row_num, "class='tab_bg_1'");
       echo Search::showEndLine($search->output_type);
    }
-   
-   /** 
+
+   /**
     * Function format record history data
-    * 
+    *
     * @param array $input
     */
-   function formatSearchData($input){
+   function formatSearchData($input) {
 
-      $searchopt = array();
+      $searchopt = [];
       $searchopt = &Search::getOptions($this->getType());
 
-      $output = array();
-      $types  = array();
+      $output = [];
+      $types  = [];
       $separator = Search::LBBR;
-      
+
       foreach ($searchopt as $num => $val) {
          if (is_array($val) && (!isset($val['nosql']) || $val['nosql'] == false)) {
             if ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'date') {
                $types['date'] = $num;
 
-            } elseif ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'id') {
-               $types['records_id'] = $num; 
+            } else if ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'id') {
+               $types['records_id'] = $num;
 
-            } elseif ($val['table'] == 'glpi_plugin_printercounters_recordmodels' && $val['field'] == 'name') {
-               $types['recordmodels_name'] = $num; 
+            } else if ($val['table'] == 'glpi_plugin_printercounters_recordmodels' && $val['field'] == 'name') {
+               $types['recordmodels_name'] = $num;
 
-            } elseif ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'last_recordmodels_id') {
-               $types['recordmodels_id'] = $num; 
+            } else if ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'last_recordmodels_id') {
+               $types['recordmodels_id'] = $num;
 
-            } elseif ($val['table'] == 'glpi_entities' && $val['field'] == 'name') {
+            } else if ($val['table'] == 'glpi_entities' && $val['field'] == 'name') {
                $types['entities_name'] = $num;
 
-            } elseif ($val['table'] == 'glpi_entities' && $val['field'] == 'id') {
+            } else if ($val['table'] == 'glpi_entities' && $val['field'] == 'id') {
                $types['entities_id'] = $num;
 
-            }elseif ($val['table'] == 'glpi_plugin_printercounters_countertypes' && $val['field'] == 'name') {
+            } else if ($val['table'] == 'glpi_plugin_printercounters_countertypes' && $val['field'] == 'name') {
                $types['counters_name'] = $num;
 
-            } elseif ($val['table'] == 'glpi_plugin_printercounters_countertypes' && $val['field'] == 'id') {
+            } else if ($val['table'] == 'glpi_plugin_printercounters_countertypes' && $val['field'] == 'id') {
                $types['countertypes_id'] = $num;
 
-            } elseif ($val['table'] == 'glpi_locations' && $val['field'] == 'completename') {
+            } else if ($val['table'] == 'glpi_locations' && $val['field'] == 'completename') {
                $types['location'] = $num;
 
-            } elseif ($val['table'] == 'glpi_plugin_printercounters_counters' && $val['field'] == 'value') {
+            } else if ($val['table'] == 'glpi_plugin_printercounters_counters' && $val['field'] == 'value') {
                $types['counters_value'] = $num;
 
-            } elseif ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'record_type') {
+            } else if ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'record_type') {
                $types['record_type'] = $num;
 
-            } elseif ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'result') {
+            } else if ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'result') {
                $types['result'] = $num;
-               
-            } elseif ($val['table'] == 'glpi_plugin_printercounters_pagecosts' && $val['field'] == 'cost') {
+
+            } else if ($val['table'] == 'glpi_plugin_printercounters_pagecosts' && $val['field'] == 'cost') {
                $types['cost'] = $num;
-               
-            } elseif ($val['table'] == 'glpi_plugin_printercounters_billingmodels' && $val['field'] == 'application_date') {
+
+            } else if ($val['table'] == 'glpi_plugin_printercounters_billingmodels' && $val['field'] == 'application_date') {
                $types['application_date'] = $num;
-               
-            } elseif ($val['table'] == 'glpi_plugin_printercounters_budgets' && $val['field'] == 'name') {
+
+            } else if ($val['table'] == 'glpi_plugin_printercounters_budgets' && $val['field'] == 'name') {
                $types['budget'] = $num;
             }
          }
       }
 
       if (!empty($input)) {
-         $give_item = array();
-         $line['raw'] = array();
+         $give_item = [];
+         $line['raw'] = [];
          foreach ($input as $i => $row) {
             $count = 0;
             $line['raw'] = $row;
@@ -459,7 +465,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
          }
 
          $itemtype = strtolower($this->itemtype);
- 
+
          foreach ($give_item as $row) {
             if (!empty($row[$types['records_id']])) {
                $output[$row[$types['records_id']]]['formated_date']     = $row[$types['date']];
@@ -474,50 +480,50 @@ class PluginPrintercountersRecord extends CommonDBTM {
                $output[$row[$types['records_id']]]['record_type']       = $row[$types['record_type']];
                $output[$row[$types['records_id']]]['result']            = $row[$types['result']];
                $output[$row[$types['records_id']]]['budget']            = $row[$types['budget']];
-               
+
                // Set counters
                $countertypes  = explode((isset($searchopt[$types['countertypes_id']]['splititems']) && $searchopt[$types['countertypes_id']]['splititems']) ? Search::LBHR : Search::LBBR, $row[$types['countertypes_id']]);
                $counternames  = explode((isset($searchopt[$types['counters_name']]['splititems']) && $searchopt[$types['counters_name']]['splititems']) ? Search::LBHR : Search::LBBR, $row[$types['counters_name']]);
                $countervalues = explode((isset($searchopt[$types['counters_value']]['splititems']) && $searchopt[$types['counters_value']]['splititems']) ? Search::LBHR : Search::LBBR, $row[$types['counters_value']]);
                foreach ($countertypes as $key => $countertype) {
-                  $output[$row[$types['records_id']]]['counters'][$countertype] = array('counters_name'  => $counternames[$key], 
-                                                                                        'counters_value' => $countervalues[$key]);
+                  $output[$row[$types['records_id']]]['counters'][$countertype] = ['counters_name'  => $counternames[$key],
+                                                                                        'counters_value' => $countervalues[$key]];
                }
             }
          }
       }
-         
+
       // Get record costs
       $item_billingmodel = new PluginPrintercountersItem_Billingmodel($this->itemtype, $this->items_id);
       $output = $item_billingmodel->computeRecordCost($output);
-      
+
       return $output;
    }
-   
-   /** 
+
+   /**
     * Search function : getSearchTitle
-    * 
+    *
     * @return string
     */
-   function getSearchTitle(){
+   function getSearchTitle() {
       return __('Record history', 'printercounters');
    }
-   
+
 
    /**
     * Function Show the record type dropdown
-    * 
+    *
     * @param type $name
     * @param array $options
     * @return type
     */
-   static function dropdownRecordType($name = 'record_type', array $options = array()) {
+   static function dropdownRecordType($name = 'record_type', array $options = []) {
       return Dropdown::showFromArray($name, self::getAllRecordTypeArray(), $options);
    }
 
    /**
     * Function get the record type
-    * 
+    *
     * @param type $value
     * @return type
     */
@@ -536,11 +542,11 @@ class PluginPrintercountersRecord extends CommonDBTM {
    static function getAllRecordTypeArray() {
 
       // To be overridden by class
-      $tab = array(0                        => Dropdown::EMPTY_VALUE,
+      $tab = [0                        => Dropdown::EMPTY_VALUE,
                    self::$HOST_ERROR_TYPE   => __('Host error', 'printercounters'),
                    self::$RECORD_ERROR_TYPE => __('Record error', 'printercounters'),
                    self::$AUTOMATIC_TYPE    => __('Automatic', 'printercounters'),
-                   self::$MANUAL_TYPE       => __('Manual', 'printercounters'));
+                   self::$MANUAL_TYPE       => __('Manual', 'printercounters')];
 
       return $tab;
    }
@@ -550,13 +556,13 @@ class PluginPrintercountersRecord extends CommonDBTM {
     *
     * @return an array
     */
-   static function dropdownState($name = 'state', array $options = array()) {
+   static function dropdownState($name = 'state', array $options = []) {
       return Dropdown::showFromArray($name, self::getAllStateArray(), $options);
    }
 
    /**
     * Function get the state
-    * 
+    *
     * @param type $value
     * @return type
     */
@@ -575,28 +581,28 @@ class PluginPrintercountersRecord extends CommonDBTM {
    static function getAllStateArray() {
 
       // To be overridden by class
-      $tab = array(0                       => Dropdown::EMPTY_VALUE,
+      $tab = [0                       => Dropdown::EMPTY_VALUE,
                    self::$PROGRAMMED_STATE => __('Planned', 'printercounters'),
                    self::$FINISHED_STATE   => __('Finished', 'printercounters'),
-                   self::$PROGRESS_STATE   => __('In progress', 'printercounters'));
+                   self::$PROGRESS_STATE   => __('In progress', 'printercounters')];
 
       return $tab;
    }
 
    /**
     * Function Show the state dropdown
-    * 
+    *
     * @param type $name
     * @param array $options
     * @return type
     */
-   static function dropdownResult($name = 'result', array $options = array()) {
+   static function dropdownResult($name = 'result', array $options = []) {
       return Dropdown::showFromArray($name, self::getAllResultArray(), $options);
    }
 
    /**
     * Function get the result
-    * 
+    *
     * @param type $value
     * @return type
     */
@@ -615,36 +621,36 @@ class PluginPrintercountersRecord extends CommonDBTM {
    static function getAllResultArray() {
 
       // To be overridden by class
-      $tab = array(0                    => Dropdown::EMPTY_VALUE,
+      $tab = [0                    => Dropdown::EMPTY_VALUE,
                    self::$SUCCESS       => __('Success', 'printercounters'),
                    self::$IP_FAIL       => __('IP fail', 'printercounters'),
                    self::$OID_FAIL      => __('OID fail', 'printercounters'),
                    self::$UNKNOWN_FAIL  => __('Unknown error', 'printercounters'),
                    self::$MAC_FAIL      => __('MAC fail', 'printercounters'),
                    self::$SYSDESCR_FAIL => __('Sysdescr fail', 'printercounters'),
-                   self::$SERIAL_FAIL   => __('Serial fail', 'printercounters'));
+                   self::$SERIAL_FAIL   => __('Serial fail', 'printercounters')];
 
       return $tab;
    }
 
-   
+
 
    /**
     * Function init record for items
-    * 
+    *
     * @param string $itemtype
     * @param int $items_id
     * @param int $sonprocess_id
     * @param int $sonprocess_nbr
     * @param array $specific_oid : search specific oids
     */
-   function initRecord($itemtype = 'Printer', $items_id = 0, $sonprocess_id = -1, $sonprocess_nbr = -1, $specific_oid = array()) {
+   function initRecord($itemtype = 'Printer', $items_id = 0, $sonprocess_id = -1, $sonprocess_nbr = -1, $specific_oid = []) {
 
-      $messages                = array();
+      $messages                = [];
       $error                   = false;
-      $search_results          = array();
-      $additional_datas        = array();
-      $specific_search_results = array();
+      $search_results          = [];
+      $additional_datas        = [];
+      $specific_search_results = [];
 
       $additional_data = new PluginPrintercountersAdditional_data();
 
@@ -669,23 +675,22 @@ class PluginPrintercountersRecord extends CommonDBTM {
          $recordmodel        = new PluginPrintercountersRecordmodel();
          $recordmodel_config = $recordmodel->getRecordModelConfig(array_keys($ip_addresses), $itemtype);
 
-
          // Init counters search
          switch (strtolower($itemtype)) {
             case 'printer':
                foreach ($ip_addresses as $printers_id => $cards) {
-                  $search_results   = array();
-                  $additional_datas = array();
+                  $search_results   = [];
+                  $additional_datas = [];
                   foreach ($cards as $addresses) {
                      foreach ($addresses['ip'] as $ip) {
                         if (!empty($ip)) {
                            try {
-                              $printer = new PluginPrintercountersPrinter($printers_id, 
-                                                                          $itemtype, 
-                                                                          $ip, 
-                                                                          $addresses['mac'], 
-                                                                          isset($record_config[$printers_id]) ? $record_config[$printers_id] : array(), 
-                                                                          isset($snmp_auth[$printers_id]) ? $snmp_auth[$printers_id] : array());
+                              $printer = new PluginPrintercountersPrinter($printers_id,
+                                                                          $itemtype,
+                                                                          $ip,
+                                                                          $addresses['mac'],
+                                                                          isset($record_config[$printers_id]) ? $record_config[$printers_id] : [],
+                                                                          isset($snmp_auth[$printers_id]) ? $snmp_auth[$printers_id] : []);
 
                               // Search all oid of the record model
                               if (empty($specific_oid)) {
@@ -704,7 +709,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                  // Search specific oid
                               } else {
                                  foreach ($specific_oid as $oid) {
-                                    if(false === $oid){
+                                    if (false === $oid) {
                                        $specific_search_results[] = "";
                                     } else {
                                        $specific_search_results[] = $printer->get($oid);
@@ -726,7 +731,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
                   // Set record
                   if (!empty($search_results)) {
-                     $search_result_ok = array();
+                     $search_result_ok = [];
                      foreach ($search_results as $results) {
                         if ($results['record_result'] == self::$SUCCESS) {
                            $search_result_ok[] = $results;
@@ -739,13 +744,13 @@ class PluginPrintercountersRecord extends CommonDBTM {
                         if ($config_data['enable_error_handler']) {
                            $errorItem = new PluginPrintercountersErrorItem($itemtype, $printers_id);
                            $errorItem->addToErrorItems();
-                        // Normal
+                           // Normal
                         } else {
                            foreach ($search_results as $key => $results) {
                               $this->setRecord($results['counters'], $results['record_result'], $results['record_type'], date('Y-m-d H:i:s', time() + $key));
                            }
                         }
-                     // Record sucessful
+                        // Record sucessful
                      } else {
                         $this->setRecord($search_result_ok[0]['counters'], $search_result_ok[0]['record_result'], $search_result_ok[0]['record_type'], date('Y-m-d H:i:s'));
                      }
@@ -765,7 +770,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                if (!empty($specific_oid)) {
                   if (!empty($specific_search_results)) {
                      $error = false;
-                     return array($specific_search_results, $error);
+                     return [$specific_search_results, $error];
                   } else {
                      $messages[] = __('No results, please check OIDs of your record model', 'printercounters').' (itemtype : '.$itemtype.', items_id : '.$printers_id.')';
                      $error      = true;
@@ -783,50 +788,50 @@ class PluginPrintercountersRecord extends CommonDBTM {
          $error      = true;
       }
 
-      return array($messages, $error);
+      return [$messages, $error];
    }
    /**
     * Function get records to clean
-    * 
+    *
     * @global type $DB
     * @param type $cleanType
     * @return boolean
     */
-   function getRecordsToClean($cleanType, $options=array()) {
+   function getRecordsToClean($cleanType, $options = []) {
       global $DB;
 
       // Get records with all counters to 0
-      $output = array();
+      $output = [];
       $query  = "SELECT `glpi_plugin_printercounters_counters`.`plugin_printercounters_records_id` as records_id
                  FROM glpi_plugin_printercounters_counters
                  LEFT JOIN `glpi_plugin_printercounters_records` 
                     ON (`glpi_plugin_printercounters_counters`.`plugin_printercounters_records_id` = `glpi_plugin_printercounters_records`.`id`)";
-      
+
       switch ($cleanType) {
          case self::$CLEAN_EMTPY_RECORDS:
             $query .= " WHERE `glpi_plugin_printercounters_records`.`result` = ".self::$SUCCESS."
                         AND `glpi_plugin_printercounters_records`.`record_type` = ".self::$AUTOMATIC_TYPE;
-            
+
             // Do not delete first records
-            $firstRecords = array();
+            $firstRecords = [];
             $queryFirst = "SELECT min(`glpi_plugin_printercounters_records`.`date`) as min_date
                            FROM `glpi_plugin_printercounters_records`
                            GROUP BY  `glpi_plugin_printercounters_records`.`plugin_printercounters_items_recordmodels_id`";
             $resultFirst = $DB->query($queryFirst);
             if ($DB->numrows($resultFirst)) {
                while ($data = $DB->fetch_assoc($resultFirst)) {
-                  $firstRecords[] = $data['min_date']; 
+                  $firstRecords[] = $data['min_date'];
                }
-               $query .= " AND `glpi_plugin_printercounters_records`.`date` NOT IN('".implode("','",$firstRecords)."') ";
+               $query .= " AND `glpi_plugin_printercounters_records`.`date` NOT IN('".implode("','", $firstRecords)."') ";
             }
             break;
-         
+
          case self::$CLEAN_ERROR_RECORDS:
             $query .= " WHERE `glpi_plugin_printercounters_records`.`result` != ".self::$SUCCESS."
                         AND `glpi_plugin_printercounters_records`.`record_type` = ".self::$HOST_ERROR_TYPE;
             break;
       }
-      
+
       if (isset($options['date'])) {
          $query .= " AND `glpi_plugin_printercounters_records`.`date` < '".$options['date']."'";
       }
@@ -842,19 +847,19 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
          return $output;
       }
-      
+
       return false;
    }
-   
+
    /**
     * Function init clean records
-    *   
+    *
     * @global type $CFG_GLPI
     * @param type $records
     */
-   function initCleanRecords($title, $records){
+   function initCleanRecords($title, $records) {
       global $CFG_GLPI;
-      
+
       $_SESSION['plugin_printercounters']['clean_records'] = $records;
 
       // Launch ajax massive action
@@ -869,16 +874,16 @@ class PluginPrintercountersRecord extends CommonDBTM {
       echo"</td></tr>";
       echo "</table>";
    }
-   
+
    /**
     * Function clean records
-    *  
+    *
     * @global type $CFG_GLPI
     * @global type $DB
     */
-   function cleanRecords(){
+   function cleanRecords() {
       global $CFG_GLPI, $DB;
-      
+
       if (!empty($_SESSION['plugin_printercounters']['clean_records'])) {
          $success      = 0;
          $totalRecords = count($_SESSION['plugin_printercounters']['clean_records']);
@@ -895,18 +900,18 @@ class PluginPrintercountersRecord extends CommonDBTM {
             $success++;
             unset($_SESSION['plugin_printercounters']['clean_records'][$id]);
          }
-         
+
          // Update progress bar
          Html::changeProgressBarPosition(
-               $success, 
-               $totalRecords, 
+               $success,
+               $totalRecords,
                round((($success/$totalRecords)*100), 2)." % (".sprintf(__('%s records remaining', 'printercounters'), count($_SESSION['plugin_printercounters']['clean_records'])).")"
          );
 
          echo "<script type='text/javascript'>";
          echo "printecounters_ajaxMassiveAction('".$CFG_GLPI['root_doc']."', 'loadCleanErrorRecords', ".ini_get('max_execution_time').");";
          echo "</script>";
-         
+
       } else {
          $config = new PluginPrintercountersConfig();
          Html::redirect($config->getFormURL(true));
@@ -915,7 +920,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
    /**
     * Function set record for an item
-    * 
+    *
     * @param array    $input         : array of counters array(countertypes_id => counter_value)
     * @param int      $record_result : Sucess, IP error, Mac error, Sysdescr error, Serial error
     * @param int      $record_type   : Host error, Record error
@@ -924,21 +929,21 @@ class PluginPrintercountersRecord extends CommonDBTM {
    public function setRecord($input, $record_result, $record_type, $date) {
 
       if (!empty($input['counters'])) {
-         if ($records_id = $this->add(array('date'                                         => $date,
+         if ($records_id = $this->add(['date'                                         => $date,
                                             'result'                                       => $record_result,
                                             'state'                                        => self::$FINISHED_STATE,
                                             'record_type'                                  => $record_type,
                                             'last_recordmodels_id'                         => $input['recordmodels_id'],
                                             'entities_id'                                  => $input['entities_id'],
                                             'locations_id'                                 => $input['locations_id'],
-                                            'plugin_printercounters_items_recordmodels_id' => $input['items_recordmodels_id']))) {
+                                            'plugin_printercounters_items_recordmodels_id' => $input['items_recordmodels_id']])) {
 
             $counter = new PluginPrintercountersCounter();
             foreach ($input['counters'] as $countertypes_recordmodels_id => $counters) {
                foreach ($counters as $counters_id => $value) {
-                  $counter->add(array('plugin_printercounters_countertypes_recordmodels_id' => $countertypes_recordmodels_id,
+                  $counter->add(['plugin_printercounters_countertypes_recordmodels_id' => $countertypes_recordmodels_id,
                                       'plugin_printercounters_records_id'                   => $records_id,
-                                      'value'                                               => $value));
+                                      'value'                                               => $value]);
                }
             }
 
@@ -951,7 +956,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
    /**
     * Function set first record on item
-    * 
+    *
     * @param type $item_recordmodel
     * @param type $recordmodel
     */
@@ -960,7 +965,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $records = $this->find("`plugin_printercounters_items_recordmodels_id` = ".$item_recordmodel);
 
       if (empty($records)) {
-         $counters = array();
+         $counters = [];
 
          $countertype_recordmodel = new PluginPrintercountersCountertype_Recordmodel();
          $oid                     = $countertype_recordmodel->getCounterTypes($recordmodel);
@@ -968,7 +973,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
          // Set counters to 0
          if (!empty($oid)) {
             foreach ($oid as $val) {
-               if ($val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SERIAL 
+               if ($val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SERIAL
                   && $val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::SYSDESCR
                      && $val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::NAME
                         && $val['oid_type'] != PluginPrintercountersCountertype_Recordmodel::MODEL
@@ -994,7 +999,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
    /**
     * Function update a record
-    * 
+    *
     * @param array $input         : array of counters array(countertypes_id => counter_value)
     * @param int   $record_result : Sucess, IP error, Mac error, Sysdescr error, Serial error
     * @param int   $record_type   : Host error, Record error
@@ -1003,21 +1008,21 @@ class PluginPrintercountersRecord extends CommonDBTM {
    public function updateRecord($input, $record_result, $record_type, $records_id) {
 
       if (!empty($input['counters'])) {
-         if ($this->update(array('id'          => $records_id,
+         if ($this->update(['id'          => $records_id,
                                  'result'      => $record_result,
                                  'entities_id' => $input['entities_id'],
                                  'state'       => self::$FINISHED_STATE,
-                                 'record_type' => $record_type))) {
+                                 'record_type' => $record_type])) {
 
             $counter = new PluginPrintercountersCounter();
             foreach ($input['counters'] as $countertypes_recordmodels_id => $counters) {
                foreach ($counters as $counters_id => $value) {
                   if ($counters_id > 0) {
-                     $counter->update(array('id' => $counters_id, 'value' => $value));
+                     $counter->update(['id' => $counters_id, 'value' => $value]);
                   } else {
-                     $counter->add(array('value'                                               => $value,
+                     $counter->add(['value'                                               => $value,
                                          'plugin_printercounters_records_id'                   => $records_id,
-                                         'plugin_printercounters_countertypes_recordmodels_id' => $countertypes_recordmodels_id));
+                                         'plugin_printercounters_countertypes_recordmodels_id' => $countertypes_recordmodels_id]);
                   }
                }
             }
@@ -1027,11 +1032,11 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
    /**
     * Function get records for an item
-    * 
+    *
     * @global type $DB
     * @param int $items_id
     * @param string $itemtype
-    * @param array $options :    
+    * @param array $options :
     *                             - int      records_id   : record ID
     *                             - bool     last_record  : get last record
     *                             - bool     next_record  : get first record
@@ -1040,7 +1045,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
     *                             - string   condition    : add where condition
     * @return array
     */
-   function getRecords($items_id, $itemtype, $options = array()) {
+   function getRecords($items_id, $itemtype, $options = []) {
       global $DB;
 
       $params['condition']   = "";
@@ -1061,7 +1066,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $itemjoin3 = getTableForItemType("PluginPrintercountersCountertype_Recordmodel");
       $itemjoin4 = getTableForItemType("PluginPrintercountersCountertype");
 
-      $output = array();
+      $output = [];
 
       $query = "SELECT `".$itemjoin1."`.`id` as counters_id, 
                        `".$itemjoin1."`.`value` as counters_value, 
@@ -1150,11 +1155,11 @@ class PluginPrintercountersRecord extends CommonDBTM {
                $output[$data['records_id']]['record_type']                        = $data['record_type'];
                $output[$data['records_id']]['entities_id']                        = $data['entities_id'];
                $output[$data['records_id']]['result']                             = $data['result'];
-               $output[$data['records_id']]['counters'][$data['countertypes_id']] = array('counters_name'                => $data['counters_name'],
+               $output[$data['records_id']]['counters'][$data['countertypes_id']] = ['counters_name'                => $data['counters_name'],
                                                                                           'counters_value'               => $data['counters_value'],
                                                                                           'counters_id'                  => $data['counters_id'],
                                                                                           'oid_type'                     => $data['oid_type'],
-                                                                                          'countertypes_recordmodels_id' => $data['countertypes_recordmodels_id']);
+                                                                                          'countertypes_recordmodels_id' => $data['countertypes_recordmodels_id']];
             }
          } else {
             while ($data = $DB->fetch_assoc($result)) {
@@ -1164,11 +1169,11 @@ class PluginPrintercountersRecord extends CommonDBTM {
                $output[$itemtype][$data['items_id']][$data['records_id']]['date']                               = $data['date'];
                $output[$itemtype][$data['items_id']][$data['records_id']]['entities_id']                        = $data['entities_id'];
                $output[$itemtype][$data['items_id']][$data['records_id']]['result']                             = $data['result'];
-               $output[$itemtype][$data['items_id']][$data['records_id']]['counters'][$data['countertypes_id']] = array('counters_name'                => $data['counters_name'],
+               $output[$itemtype][$data['items_id']][$data['records_id']]['counters'][$data['countertypes_id']] = ['counters_name'                => $data['counters_name'],
                                                                                                                         'counters_value'               => $data['counters_value'],
                                                                                                                         'counters_id'                  => $data['counters_id'],
                                                                                                                         'oid_type'                     => $data['oid_type'],
-                                                                                                                        'countertypes_recordmodels_id' => $data['countertypes_recordmodels_id']);
+                                                                                                                        'countertypes_recordmodels_id' => $data['countertypes_recordmodels_id']];
             }
          }
       }
@@ -1178,7 +1183,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
    /**
     * Function init immediate record for an item
-    * 
+    *
     * @param string $items_id
     * @param int $itemtype
     */
@@ -1188,17 +1193,17 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
    /**
     * Function init manual record in a modal window
-    * 
+    *
     * @global type $CFG_GLPI
     * @param array $options
     */
-   function manualRecord($options = array()) {
+   function manualRecord($options = []) {
       global $CFG_GLPI;
 
       $p['ontop']         = false;
       $p['num_displayed'] = -1;
       $p['fixed']         = false;
-      $p['extraparams']   = array();
+      $p['extraparams']   = [];
       $p['width']         = 800;
       $p['height']        = 400;
       $p['rand']          = mt_rand();
@@ -1211,15 +1216,15 @@ class PluginPrintercountersRecord extends CommonDBTM {
          }
       }
 
-      Ajax::createFixedModalWindow('manual_record_window', array('title'       => $p['title'],
+      Ajax::createFixedModalWindow('manual_record_window', ['title'       => $p['title'],
                                                                  'extraparams' => $p['extraparams'],
                                                                  'width'       => $p['width'],
-                                                                 'height'      => $p['height']));
+                                                                 'height'      => $p['height']]);
    }
 
    /**
     * Function show manual record form
-    * 
+    *
     * @global type $CFG_GLPI
     * @param type $items_id
     * @param type $itemtype
@@ -1255,13 +1260,13 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       // UPDATE
       if ($records_id > 0) {
-         $records = $this->getRecords($items_id, $itemtype, array('records_id' => $records_id,
-             'order'      => "`glpi_plugin_printercounters_countertypes`.`name` ASC"));
+         $records = $this->getRecords($items_id, $itemtype, ['records_id' => $records_id,
+             'order'      => "`glpi_plugin_printercounters_countertypes`.`name` ASC"]);
 
          // Fill counters if recordmodel has changed
          $recordmodels_data        = current($records);
          $countertype_recordmodels = new PluginPrintercountersCountertype_Recordmodel();
-         $records                  = $countertype_recordmodels->fillCountersGap($records, array($recordmodels_data['recordmodels_id']));
+         $records                  = $countertype_recordmodels->fillCountersGap($records, [$recordmodels_data['recordmodels_id']]);
 
          foreach ($records as $record) {
             foreach ($record['counters'] as $counter) {
@@ -1282,22 +1287,22 @@ class PluginPrintercountersRecord extends CommonDBTM {
          echo __('Record entity', 'printercounters');
          echo "</td>";
          echo "<td>";
-         Dropdown::show('Entity', array('name'        => 'counters[entities_id]',
-                                        'entity'      => $_SESSION['glpiactive_entity'], 
-                                        'value'       => $item_recordmodels_data['entities_id'], 
-                                        'entity_sons' => true));
+         Dropdown::show('Entity', ['name'        => 'counters[entities_id]',
+                                        'entity'      => $_SESSION['glpiactive_entity'],
+                                        'value'       => $item_recordmodels_data['entities_id'],
+                                        'entity_sons' => true]);
          echo "</td>";
          echo "</tr>";
-         
+
          echo "<tr class='tab_bg_2'>";
          echo "<td colspan='2' class='center'>";
          $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"setManualRecord\", \"manual_record_form\", \"manual_record_error\", 
-               ".json_encode(array('items_id'        => $items_id,
+               ".json_encode(['items_id'        => $items_id,
                                    'itemtype'        => $itemtype,
                                    'addLowerRecord'  => $addLowerRecord,
                                    'records_id'      => $records_id,
                                    'formName'        => 'search_form'.$rand,
-                                   'updates'         => array('record' => 'history_showForm'.$rand))).");'";
+                                   'updates'         => ['record' => 'history_showForm'.$rand]]).");'";
          echo "<input type='button' $onclick class='submit' value='"._sx('button', 'Update')."'>";
          echo "</td></tr>";
 
@@ -1315,12 +1320,12 @@ class PluginPrintercountersRecord extends CommonDBTM {
          echo "<tr class='tab_bg_2'>";
          echo "<td colspan='2' class='center'>";
          $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"setManualRecord\", \"manual_record_form\", \"manual_record_error\", 
-               ".json_encode(array('items_id'        => $items_id,
+               ".json_encode(['items_id'        => $items_id,
                                    'itemtype'        => $itemtype,
                                    'addLowerRecord'  => $addLowerRecord,
                                    'records_id'      => $records_id,
                                    'formName'        => 'search_form'.$rand,
-                                   'updates'         => array('record' => 'history_showForm'.$rand))).");'";
+                                   'updates'         => ['record' => 'history_showForm'.$rand]]).");'";
          echo "<input type='button' $onclick class='submit' value='"._sx('button', 'Add')."'>";
          echo "<input type='hidden' value='".$item_recordmodels_data['entities_id']."' name='counters[entities_id]'>";
          echo "</td></tr>";
@@ -1335,7 +1340,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
    /**
     * Function set manual record
-    * 
+    *
     * @param int $items_id
     * @param string $itemtype
     * @param array $counters
@@ -1346,8 +1351,9 @@ class PluginPrintercountersRecord extends CommonDBTM {
       // Check if counters are not lower than previous
       if (!$addLowerRecord) {
          list($messages, $error) = $this->checkValues($items_id, $itemtype, $counters, 'last_record');
-         if ($error)
-            return array($messages, $error);
+         if ($error) {
+            return [$messages, $error];
+         }
       }
 
       // UPDATE
@@ -1355,36 +1361,38 @@ class PluginPrintercountersRecord extends CommonDBTM {
          // Check if counters are not higher than the next
          if (!$addLowerRecord) {
             list($messages, $error) = $this->checkValues($items_id, $itemtype, $counters, 'next_record');
-            if ($error)
-               return array($messages, $error);
+            if ($error) {
+               return [$messages, $error];
+            }
          }
 
          // Check if counters are numeric
          list($messages, $error) = $this->checkValues($items_id, $itemtype, $counters, 'numeric_or_empty_counters');
-         if ($error)
-            return array($messages, $error);
+         if ($error) {
+            return [$messages, $error];
+         }
          $this->updateRecord($counters, self::$SUCCESS, self::$MANUAL_TYPE, $records_id);
 
-         // ADD  
+         // ADD
       } else {
          // Check if counters are numeric
          list($messages, $error) = $this->checkValues($items_id, $itemtype, $counters, 'numeric_or_empty_counters');
-         if ($error)
-            return array($messages, $error);
+         if ($error) {
+            return [$messages, $error];
+         }
          $this->setRecord($counters, self::$SUCCESS, self::$MANUAL_TYPE, date('Y-m-d H:i:s'));
       }
 
-      return array($messages, $error);
+      return [$messages, $error];
    }
 
    /**
     * Function update total number of pages for item
-    * 
+    *
     * @param int $items_id
     * @param string $itemtype
     */
-   function updatePrinterData($items_id, $itemtype)
-   {
+   function updatePrinterData($items_id, $itemtype) {
       $item = getItemForItemtype($itemtype);
 
       $recordmodel       = new PluginPrintercountersCountertype_Recordmodel();
@@ -1392,31 +1400,33 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $oid_serial        = $recordmodel->getOIDRecordmodelCountersForItem($items_id, $itemtype, PluginPrintercountersCountertype_Recordmodel::SERIAL);
       $oid_number_papers = $recordmodel->getOIDRecordmodelCountersForItem($items_id, $itemtype, PluginPrintercountersCountertype_Recordmodel::NUMBER_OF_PRINTED_PAPERS);
 
-      $specific_oid = array($oid_number_papers, $oid_model, $oid_serial);
+      $specific_oid = [$oid_number_papers, $oid_model, $oid_serial];
       // Init record for specific OID
       list($result, $error) = $this->initRecord($itemtype, $items_id, -1, -1, $specific_oid);
-      if ($error)
-         return array($result, $error);
+      if ($error) {
+         return [$result, $error];
+      }
 
       // Check value
       list($messages, $error) = $this->checkValues($items_id, $itemtype, $result[0], 'counter_position');
-      if ($error)
-         return array($messages, $error);
+      if ($error) {
+         return [$messages, $error];
+      }
 
       $model_printer = new PrinterModel();
       if ($model_printer->getFromDBByQuery("WHERE `name` = '" . $result[1] . "'")) {
          $model_printer_id = $model_printer->getID();
       } else {
          // add
-         $model_printer_id = $model_printer->add(array('name' => $result[1]));
+         $model_printer_id = $model_printer->add(['name' => $result[1]]);
       }
 
-      $item->update(array('id'                 => $items_id,
+      $item->update(['id'                 => $items_id,
                           'last_pages_counter' => $result[0],
                           'printermodels_id'   => $model_printer_id,
-                          'serial'             => $result[2]));
+                          'serial'             => $result[2]]);
 
-      return array($result, $error);
+      return [$result, $error];
    }
 
    /**
@@ -1434,20 +1444,20 @@ class PluginPrintercountersRecord extends CommonDBTM {
       // Get all records cost for this item
       $record = new PluginPrintercountersRecord($this->itemtype, $this->items_id);
       $search  = new PluginPrintercountersSearch();
-      $search->showSearch($record, array('display' => false));
+      $search->showSearch($record, ['display' => false]);
       $records = $record->formatSearchData($search->input);
 
       // Update TCO
       $item_recordmodel = new PluginPrintercountersItem_Recordmodel($this->itemtype, $this->items_id);
       $item_recordmodel->getFromDBByQuery("WHERE LOWER(`itemtype`) = LOWER('".$this->itemtype."') AND `items_id`=".$this->items_id." LIMIT 1");
-      if ($item_recordmodel->update(array('id' => $item_recordmodel->getField('id'), 'global_tco' => ($records['total_record_cost'] + $tco)))) {
+      if ($item_recordmodel->update(['id' => $item_recordmodel->getField('id'), 'global_tco' => ($records['total_record_cost'] + $tco)])) {
          $result = Html::formatNumber($records['total_record_cost'] + $tco);
       } else {
          $error   = true;
          $message = __('TCO update error', 'printercounters');
       }
 
-      return array($message, $result, $error);
+      return [$message, $result, $error];
    }
 
    /**
@@ -1456,7 +1466,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
    function getItemTco() {
       global $DB;
 
-      $output = array();
+      $output = [];
 
       $itemjoin  = getTableForItemType($this->itemtype);
       $itemjoin2 = getTableForItemType('Infocom');
@@ -1479,8 +1489,8 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
    /**
     * Function checks record values
-    * 
-    * 
+    *
+    *
     * @param int $items_id
     * @param string $itemtype
     * @param array $input
@@ -1488,7 +1498,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
     * @return boolean
     */
    function checkValues($items_id, $itemtype, $input, $type) {
-      $msg     = array();
+      $msg     = [];
       $checkKo = false;
 
       if (!empty($input)) {
@@ -1526,8 +1536,8 @@ class PluginPrintercountersRecord extends CommonDBTM {
                if (isset($input['date'])) {
                   $record_date = $input['date'];
                }
-               $last_record = $this->getRecords($items_id, $itemtype, array('last_record' => true,
-                   'record_date' => $record_date));
+               $last_record = $this->getRecords($items_id, $itemtype, ['last_record' => true,
+                   'record_date' => $record_date]);
 
                if (!empty($last_record) && !empty($input['counters'])) {
                   foreach ($last_record as $record) {
@@ -1551,8 +1561,8 @@ class PluginPrintercountersRecord extends CommonDBTM {
                if (isset($input['date'])) {
                   $record_date = $input['date'];
                }
-               $next_record = $this->getRecords($items_id, $itemtype, array('next_record' => true,
-                   'record_date' => $record_date));
+               $next_record = $this->getRecords($items_id, $itemtype, ['next_record' => true,
+                   'record_date' => $record_date]);
                if (!empty($next_record) && !empty($input['counters'])) {
                   foreach ($next_record as $record) {
                      foreach ($record['counters'] as $next_counter) {
@@ -1579,12 +1589,12 @@ class PluginPrintercountersRecord extends CommonDBTM {
          }
       }
 
-      return array(array_unique($msg), $checkKo);
+      return [array_unique($msg), $checkKo];
    }
 
    /**
     * Show general records config
-    * 
+    *
     * @param type $config
     */
    function showRecordConfig($config) {
@@ -1592,7 +1602,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       if (!$this->canCreate()) {
          return false;
       }
-      
+
       $width = 75;
 
       echo "<form name='form' method='post' action='".
@@ -1606,20 +1616,20 @@ class PluginPrintercountersRecord extends CommonDBTM {
       echo __('Disable automatic records', 'printercounters');
       echo "</td>";
       echo "<td>";
-      Dropdown::showYesNo('disable_autosearch', $config['disable_autosearch'], -1, array('width' => $width));
+      Dropdown::showYesNo('disable_autosearch', $config['disable_autosearch'], -1, ['width' => $width]);
       echo "</td>";
 
       echo "<td>";
       echo __('Set first record when record model change', 'printercounters');
       echo "</td>";
       echo "<td>";
-      Dropdown::showYesNo('set_first_record', $config['set_first_record'], -1, array('width' => $width));
+      Dropdown::showYesNo('set_first_record', $config['set_first_record'], -1, ['width' => $width]);
       echo "</td>";
       echo "</tr>";
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>".__('Enable toner level alert', 'printercounters')."</td><td>";
-      $rand = Dropdown::showYesNo('enable_toner_alert', $config['enable_toner_alert'], -1, array('on_change' => 'enableAlertConfig();', 'width' => $width));
+      $rand = Dropdown::showYesNo('enable_toner_alert', $config['enable_toner_alert'], -1, ['on_change' => 'enableAlertConfig();', 'width' => $width]);
       echo "<script type='text/javascript'>";
       echo "function enableAlertConfig(){";
       echo "   $(document).ready(function() {
@@ -1631,40 +1641,40 @@ class PluginPrintercountersRecord extends CommonDBTM {
                   }
                });";
       echo "}";
-      if($config['enable_toner_alert']) {
+      if ($config['enable_toner_alert']) {
          echo "enableAlertConfig();";
       }
       echo "</script>";
       echo "</td>";
       echo "<td colspan='2'></td>";
       echo "</tr>";
-      
+
       echo "<tr>";
       echo "<td colspan='4'>";
       echo "<table class='tab_cadre' style='margin:0px;display:none;' id='enable_alert_config'>";
       echo "<tr><th colspan='2'>".__('Toner level alert', 'printercounters')."</th></tr>";
       echo "<tr class='tab_bg_1'>";
       echo "<td>".__('Reminders frequency for printer toner level', 'printercounters')."</td><td>";
-      Alert::dropdown(array('name'      => 'toner_alert_repeat',
-                            'value'     => $config['toner_alert_repeat']));
-      
+      Alert::dropdown(['name'      => 'toner_alert_repeat',
+                            'value'     => $config['toner_alert_repeat']]);
+
       echo "</td>";
       echo "</tr>";
-      
+
       echo "<tr class='tab_bg_1'>";
       echo "<td>".__('Toner alert treshold', 'printercounters')."</td>";
       echo "<td>";
-      Dropdown::showNumber("toner_treshold",  array('value' => $config['toner_treshold'],
+      Dropdown::showNumber("toner_treshold", ['value' => $config['toner_treshold'],
                                                     'min'   => 0,
-                                                    'max'   => 100, 
-                                                    'width' => $width));
+                                                    'max'   => 100,
+                                                    'width' => $width]);
       echo " % ";
       echo "</td>";
       echo "</tr>";
       echo "</table>";
       echo "</td>";
       echo "</tr>";
-      
+
       echo "<tr class='tab_bg_1'>";
       echo" <td class='tab_bg_2 center' colspan='6'>";
       echo "<input type=\"submit\" name=\"update_config\" class=\"submit\" value=\""._sx('button', 'Update')."\" >";
@@ -1672,7 +1682,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       echo "</tr>";
       echo "</table></div>";
       Html::closeForm();
-      
+
       // Record cleaning
       echo "<form name='form' method='post' action='".
       Toolbox::getItemTypeFormURL('PluginPrintercountersConfig')."' onsubmit='return printercounters_clean_records();'>";
@@ -1684,10 +1694,10 @@ class PluginPrintercountersRecord extends CommonDBTM {
       echo __('Delete records before', 'printercounters');
       echo "</td>";
       echo "<td class='left'>";
-      Html::showDateTimeField('date', array('value' => date('Y-m-d H:i:s', strtotime("- 3 MONTH"))));
+      Html::showDateTimeField('date', ['value' => date('Y-m-d H:i:s', strtotime("- 3 MONTH"))]);
       echo "</td>";
       echo "</tr>";
-      
+
       echo "<tr class='tab_bg_2'>";
       echo" <td class='center'>";
       echo "<input type=\"submit\" name=\"clean_error_records\" class=\"submit\" value=\"".__('Clean records in error', 'printercounters')."\" >";
@@ -1706,38 +1716,38 @@ class PluginPrintercountersRecord extends CommonDBTM {
                   }
                }
             </script>";
-      
+
       Html::closeForm();
    }
-   
-   /** 
+
+   /**
    * Get search options
-   * 
+   *
    * @return array
    */
    function getSearchOptions() {
 
-      $tab = array();
-      
+      $tab = [];
+
       $itemtype = $this->itemtype;
       $item = getItemForItemtype($itemtype);
-      
+
       $tab[79]['table']          = $this->getTable();
       $tab[79]['field']          = 'id';
       $tab[79]['name']           = $this->getFieldName('record_id');
       $tab[79]['datatype']       = 'numeric';
       $tab[79]['massiveaction']  = false;
-      $tab[79]['nosearch']       = true; 
+      $tab[79]['nosearch']       = true;
       $tab[79]['nodisplay']      = true;
       $tab[79]['nosort']         = true;
-      
+
       $tab[80]['table']          = $this->getTable();
       $tab[80]['field']          = 'date';
       $tab[80]['name']           = $this->getFieldName('date');
       $tab[80]['datatype']       = 'datetime';
       $tab[80]['massiveaction']  = false;
       $tab[80]['nosort']         = true;
-      
+
       $tab[81]['table']          = 'glpi_plugin_printercounters_recordmodels';
       $tab[81]['field']          = 'name';
       $tab[81]['linkfield']      = 'last_recordmodels_id';
@@ -1746,14 +1756,13 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[81]['massiveaction']  = false;
       $tab[81]['nosort']         = true;
 
-      
       $tab[82]['table']          = 'glpi_entities';
       $tab[82]['field']          = 'name';
       $tab[82]['name']           = $this->getFieldName('entities_id');
       $tab[82]['massiveaction']  = false;
       $tab[82]['datatype']       = 'itemlink';
       $tab[82]['nosort']         = true;
-      
+
       $tab[83]['table']          = 'glpi_plugin_printercounters_countertypes';
       $tab[83]['field']          = 'name';
       $tab[83]['name']           = $this->getFieldName('counters_name');
@@ -1762,26 +1771,24 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[83]['nosearch']       = true;
       $tab[83]['nosort']         = true;
       $tab[83]['forcegroupby']   = true;
-      $tab[83]['joinparams']     = array('beforejoin'
-                                          => array('table'      => 'glpi_plugin_printercounters_countertypes_recordmodels',
-                                                   'joinparams' => array('beforejoin' => array('table'      => 'glpi_plugin_printercounters_counters', 
-                                                                                               'joinparams' => array('jointype'   => 'child', 
-                                                                                                                     'beforejoin' => array('table' => 'glpi_plugin_printercounters_records')))))
-                                        );
+      $tab[83]['joinparams']     = ['beforejoin'
+                                          => ['table'      => 'glpi_plugin_printercounters_countertypes_recordmodels',
+                                                   'joinparams' => ['beforejoin' => ['table'      => 'glpi_plugin_printercounters_counters',
+                                                                                               'joinparams' => ['jointype'   => 'child',
+                                                                                                                     'beforejoin' => ['table' => 'glpi_plugin_printercounters_records']]]]]
+                                        ];
 
-            
       $tab[84]['table']          = 'glpi_plugin_printercounters_counters';
       $tab[84]['field']          = 'value';
       $tab[84]['name']           = $this->getFieldName('counters_value');
       $tab[84]['datatype']       = 'dropdown';
       $tab[84]['massiveaction']  = false;
-      $tab[84]['joinparams']     = array('jointype'   => 'child');  
+      $tab[84]['joinparams']     = ['jointype'   => 'child'];
       $tab[84]['nosearch']       = true;
       $tab[84]['forcegroupby']   = true;
       $tab[84]['nosort']         = true;
       $tab[84]['splititems']     = true;
-      
-      
+
       $tab[85]['table']               = $this->getTable();
       $tab[85]['field']               = 'record_type';
       $tab[85]['name']                = $this->getFieldName('record_type');
@@ -1790,7 +1797,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[85]['searchtype']          = 'equals';
       $tab[85]['massiveaction']       = false;
       $tab[85]['nosort']              = true;
-      
+
       $tab[86]['table']               = $this->getTable();
       $tab[86]['field']               = 'result';
       $tab[86]['name']                = $this->getFieldName('result');
@@ -1799,18 +1806,18 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[86]['searchtype']          = 'equals';
       $tab[86]['massiveaction']       = false;
       $tab[86]['nosort']              = true;
-      
+
       $tab[87]['table']          = 'glpi_locations';
       $tab[87]['field']          = 'completename';
       $tab[87]['name']           = $this->getFieldName('locations_id');
       $tab[87]['datatype']       = 'itemlink';
       $tab[87]['massiveaction']  = false;
       $tab[87]['nosort']         = true;
-      $tab[87]['joinparams']     = array('beforejoin'
-                                          => array('table'      => getTableForItemType($itemtype),
+      $tab[87]['joinparams']     = ['beforejoin'
+                                          => ['table'      => getTableForItemType($itemtype),
                                                    'linkfield'  => 'items_id',
-                                                   'joinparams' => array('beforejoin' => array('table' => 'glpi_plugin_printercounters_items_recordmodels')))
-                                   );
+                                                   'joinparams' => ['beforejoin' => ['table' => 'glpi_plugin_printercounters_items_recordmodels']]]
+                                   ];
 
       $tab[88]['table']          = 'glpi_plugin_printercounters_budgets';
       $tab[88]['field']          = 'name';
@@ -1819,8 +1826,8 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[88]['datatype']       = 'itemlink';
       $tab[88]['linkfield']      = 'entities_id';
       $tab[88]['nosort']         = true;
-      $tab[88]['joinparams']     = array('condition'  => "AND NEWTABLE.`begin_date` <= REFTABLE.`date` AND NEWTABLE.`end_date` >= REFTABLE.`date`");
-            
+      $tab[88]['joinparams']     = ['condition'  => "AND NEWTABLE.`begin_date` <= REFTABLE.`date` AND NEWTABLE.`end_date` >= REFTABLE.`date`"];
+
       $tab[89]['table']          = getTableForItemType($itemtype);
       $tab[89]['field']          = 'name';
       $tab[89]['name']           = $item::getTypeName();
@@ -1830,9 +1837,9 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[89]['nosearch']       = true;
       $tab[89]['nodisplay']      = true;
       $tab[89]['nosort']         = true;
-      $tab[89]['joinparams']     = array('beforejoin' 
-                                          => array('table' => 'glpi_plugin_printercounters_items_recordmodels')
-                                   );
+      $tab[89]['joinparams']     = ['beforejoin'
+                                          => ['table' => 'glpi_plugin_printercounters_items_recordmodels']
+                                   ];
 
       $tab[91]['table']          = getTableForItemType($itemtype);
       $tab[91]['field']          = 'id';
@@ -1843,25 +1850,24 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[91]['nosearch']       = true;
       $tab[91]['nodisplay']      = true;
       $tab[91]['nosort']         = true;
-      $tab[91]['joinparams']     = array('beforejoin' 
-                                          => array('table' => 'glpi_plugin_printercounters_items_recordmodels')
-                                   );
+      $tab[91]['joinparams']     = ['beforejoin'
+                                          => ['table' => 'glpi_plugin_printercounters_items_recordmodels']
+                                   ];
 
       $tab[92]['table']          = getTableForItemType($this->itemtype.'Model');
       $tab[92]['field']          = 'name';
       $tab[92]['name']           = __('Model');
       $tab[92]['massiveaction']  = false;
       $tab[92]['datatype']       = 'dropdown';
-      $tab[92]['nosearch']       = true; 
+      $tab[92]['nosearch']       = true;
       $tab[92]['nodisplay']      = true;
       $tab[92]['nosort']         = true;
-      $tab[92]['joinparams']     = array('beforejoin'
-                                          => array('table'      => getTableForItemType($itemtype),
+      $tab[92]['joinparams']     = ['beforejoin'
+                                          => ['table'      => getTableForItemType($itemtype),
                                                    'linkfield'  => 'items_id',
-                                                   'joinparams' => array('beforejoin' => array('table' => 'glpi_plugin_printercounters_items_recordmodels')))
-                                   );
+                                                   'joinparams' => ['beforejoin' => ['table' => 'glpi_plugin_printercounters_items_recordmodels']]]
+                                   ];
 
-      
       $tab[93]['table']          = $this->getTable();
       $tab[93]['field']          = 'last_recordmodels_id';
       $tab[93]['name']           = $this->getFieldName('last_recordmodels_id');
@@ -1870,7 +1876,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[93]['nosearch']       = true;
       $tab[93]['nodisplay']      = true;
       $tab[93]['nosort']         = true;
-      
+
       $tab[94]['table']          = 'glpi_plugin_printercounters_countertypes';
       $tab[94]['field']          = 'id';
       $tab[94]['name']           = $this->getFieldName('counters_name');
@@ -1880,12 +1886,12 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[94]['nodisplay']      = true;
       $tab[94]['nosort']         = true;
       $tab[94]['forcegroupby']   = true;
-      $tab[94]['joinparams']     = array('beforejoin'
-                                          => array('table'      => 'glpi_plugin_printercounters_countertypes_recordmodels',
-                                                   'joinparams' => array('beforejoin' => array('table'      => 'glpi_plugin_printercounters_counters', 
-                                                                                               'joinparams' => array('jointype'   => 'child', 
-                                                                                                                     'beforejoin' => array('table' => 'glpi_plugin_printercounters_records')))))
-                                        );
+      $tab[94]['joinparams']     = ['beforejoin'
+                                          => ['table'      => 'glpi_plugin_printercounters_countertypes_recordmodels',
+                                                   'joinparams' => ['beforejoin' => ['table'      => 'glpi_plugin_printercounters_counters',
+                                                                                               'joinparams' => ['jointype'   => 'child',
+                                                                                                                     'beforejoin' => ['table' => 'glpi_plugin_printercounters_records']]]]]
+                                        ];
 
       $tab[95]['table']          = 'glpi_plugin_printercounters_items_recordmodels';
       $tab[95]['field']          = 'itemtype';
@@ -1895,7 +1901,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[95]['nodisplay']      = true;
       $tab[95]['nosql']          = true;
       $tab[95]['nosort']         = true;
-      
+
       $tab[96]['table']          = 'glpi_plugin_printercounters_recordmodels';
       $tab[96]['field']          = 'name';
       $tab[96]['name']           = $this->getFieldName('recordmodels');
@@ -1905,10 +1911,10 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[96]['nodisplay']      = true;
       $tab[96]['nosql']          = true;
       $tab[96]['nosort']         = true;
-      $tab[96]['joinparams']     = array('beforejoin' 
-                                          => array('table' => 'glpi_plugin_printercounters_items_recordmodels')
-                                   );
-      
+      $tab[96]['joinparams']     = ['beforejoin'
+                                          => ['table' => 'glpi_plugin_printercounters_items_recordmodels']
+                                   ];
+
       $tab[97]['table']          = 'glpi_plugin_printercounters_pagecosts';
       $tab[97]['field']          = 'cost';
       $tab[97]['name']           = $this->getFieldName('cost');
@@ -1917,7 +1923,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[97]['nosearch']       = true;
       $tab[97]['nosql']          = true;
       $tab[97]['nosort']         = true;
-      
+
       $tab[98]['table']           = 'glpi_plugin_printercounters_items_recordmodels';
       $tab[98]['field']           = 'id';
       $tab[98]['name']            = __('ID');
@@ -1926,7 +1932,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $tab[98]['nosearch']        = true;
       $tab[98]['nodisplay']       = true;
       $tab[98]['nosort']          = true;
-      
+
       $tab[99]['table']          = 'glpi_entities';
       $tab[99]['field']          = 'id';
       $tab[99]['name']           = $this->getFieldName('entities_id');
@@ -1938,10 +1944,10 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       return $tab;
    }
-   
-   /** 
-    * getFieldName 
-    * 
+
+   /**
+    * getFieldName
+    *
     * @param type $field
     * @return type
     */
@@ -1963,7 +1969,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
          case 'last_recordmodels_id' : return __('Last record model ID');
       }
    }
-   
+
    /**
     * @since version 0.84
     *
@@ -1974,9 +1980,9 @@ class PluginPrintercountersRecord extends CommonDBTM {
     *
     * @return string
     * */
-   static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = array()) {
+   static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = []) {
       if (!is_array($values)) {
-         $values = array($field => $values);
+         $values = [$field => $values];
       }
       $options['display'] = false;
       $options['value']   = $values[$field];
@@ -2000,10 +2006,10 @@ class PluginPrintercountersRecord extends CommonDBTM {
     * @param $values
     * @param $options   array
     * */
-   static function getSpecificValueToDisplay($field, $values, array $options = array()) {
+   static function getSpecificValueToDisplay($field, $values, array $options = []) {
 
       if (!is_array($values)) {
-         $values = array($field => $values);
+         $values = [$field => $values];
       }
       switch ($field) {
          case 'record_type' :
@@ -2017,19 +2023,19 @@ class PluginPrintercountersRecord extends CommonDBTM {
       }
       return parent::getSpecificValueToDisplay($field, $values, $options);
    }
-   
+
    /**
     * Get rights
     */
-   function getRights($interface='central') {
+   function getRights($interface = 'central') {
       if ($interface == 'central') {
-         $values = array(CREATE  => __('Create'),
+         $values = [CREATE  => __('Create'),
                          READ    => __('Read'),
                          UPDATE  => __('Update'),
-                         PURGE   => array('short' => __('Purge'),
-                                          'long'  => _x('button', 'Delete permanently')));
+                         PURGE   => ['short' => __('Purge'),
+                                          'long'  => _x('button', 'Delete permanently')]];
       } else {
-          $values = array(READ    => __('Read'));
+          $values = [READ    => __('Read')];
       }
 
       return $values;

@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -50,23 +50,23 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
     */
    function getEvents() {
 
-      return array(self::TONER_ALERT => __("Toner level alert", "printercounters"));
+      return [self::TONER_ALERT => __("Toner level alert", "printercounters")];
    }
 
    /**
     * Get datas for template
-    * 
+    *
     * @global type $CFG_GLPI
     * @param type $event
     * @param type $options
     */
-   function addDataForTemplate($event, $options = array()) {
+   function addDataForTemplate($event, $options = []) {
 
       $events                                    = $this->getAllEvents();
       $this->data['##printercounters.action##'] = $events[$event];
 
       foreach ($options['items'] as $id => $item) {
-         $tmp                                                 = array();
+         $tmp                                                 = [];
          $tmp['##printercountersadditionaldatas.name##']     = $item['name'];
          $tmp['##printercountersadditionaldatas.type##']     = $item['type'];
          $tmp['##printercountersadditionaldatas.sub_type##'] = $item['sub_type'];
@@ -87,7 +87,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
             $this->data[$tag] = $values['label'];
          }
       }
-      
+
       switch ($event) {
          case self::TONER_ALERT:
             $this->data['##lang.printercountersadditionaldatas.action##'] = __("Toner level alert", "printercounters");
@@ -96,7 +96,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
             $this->data['##lang.printercountersadditionaldatas.action##'] = "";
             break;
       }
-      
+
       $item = getItemForItemtype($options['itemtype']);
       $item->getFromDB($options['items_id']);
 
@@ -105,8 +105,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
       if ($_SESSION['glpiis_ids_visible']) {
           $this->data['##printercountersadditionaldatas.itemname##'] .= " (".$item->getField('id').")";
       }
-      
-      
+
       $this->data['##lang.printercountersadditionaldatas.itemlink##'] = __("Item link", "printercounters");
       $this->data['##lang.printercountersadditionaldatas.itemname##'] = __("Item name", "printercounters");
       $this->data['##lang.printercountersadditionaldatas.name##']     = __("Name");
@@ -120,7 +119,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
     */
    function getTags() {
 
-      $tags = array('printercountersadditionaldatas.name'          => __("Name"),
+      $tags = ['printercountersadditionaldatas.name'          => __("Name"),
                     'printercountersadditionaldatas.value'         => __("Value"),
                     'printercountersadditionaldatas.type'          => _n("Type", "Types", 1),
                     'printercountersadditionaldatas.sub_type'      => __("Sub-type", "printercounters"),
@@ -131,12 +130,12 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
                     'lang.printercountersadditionaldatas.name'     => __("Label")." : ".__("Name"),
                     'lang.printercountersadditionaldatas.value'    => __("Label")." : ".__("Value"),
                     'lang.printercountersadditionaldatas.type'     => __("Label")." : "._n("Type", "Types", 1),
-                    'lang.printercountersadditionaldatas.sub_type' => __("Label")." : ".__("Sub-type", "printercounters"));
+                    'lang.printercountersadditionaldatas.sub_type' => __("Label")." : ".__("Sub-type", "printercounters")];
 
       foreach ($tags as $tag => $label) {
-         $this->addTagToList(array('tag'   => $tag,
+         $this->addTagToList(['tag'   => $tag,
                                    'label' => $label,
-                                   'value' => true));
+                                   'value' => true]);
       }
 
       asort($this->tag_descriptions);
@@ -160,18 +159,18 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
       if ($DB->numrows($result) > 0) {
          $templates_id = $DB->result($result, 0, 'id');
       } else {
-         $templates_id = $template->add(array('name'     => self::TONER_ALERT_NAME,
+         $templates_id = $template->add(['name'     => self::TONER_ALERT_NAME,
                                               'itemtype' => self::$itemtype,
                                               'date_mod' => $_SESSION['glpi_currenttime'],
                                               'comment'  => '',
-                                              'css'      => ''));
+                                              'css'      => '']);
       }
 
       if ($templates_id) {
          $translation = new NotificationTemplateTranslation();
          $dbu = new DbUtils();
          if (!$dbu->countElementsInTable($translation->getTable(), "`notificationtemplates_id`='$templates_id'")) {
-            $tmp                             = array();
+            $tmp                             = [];
             $tmp['notificationtemplates_id'] = $templates_id;
             $tmp['language']                 = '';
             $tmp['subject']                  = '##lang.printercountersadditionaldatas.action## : ##lang.printercountersadditionaldatas.name##';
@@ -184,7 +183,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
 ##lang.printercountersadditionaldatas.sub_type## : ##printercountersadditionaldatas.sub_type##
 ##lang.printercountersadditionaldatas.value## : ##printercountersadditionaldatas.value##
 ##ENDFOREACHprintercountersadditionaldatas##';
-            
+
             $tmp['content_html']             = "<p>##printercountersadditionaldatas.itemlink## :</p>
 <p>##printercountersadditionaldatas.itemname##</p>
 <p>##lang.printercountersadditionaldatas.action##</p>
@@ -197,19 +196,19 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
             $translation->add($tmp);
          }
 
-         $notifs               = array(self::TONER_ALERT_NAME => self::TONER_ALERT);
+         $notifs               = [self::TONER_ALERT_NAME => self::TONER_ALERT];
          $notification         = new Notification();
          $notificationtemplate = new Notification_NotificationTemplate();
          foreach ($notifs as $label => $name) {
             if (!$dbu->countElementsInTable("glpi_notifications", "`itemtype`='".self::$itemtype."' AND `event`='$name'")) {
-               $tmp = array('name'                     => $label,
+               $tmp = ['name'                     => $label,
                             'entities_id'              => 0,
                             'itemtype'                 => self::$itemtype,
                             'event'                    => $name,
                             'comment'                  => '',
                             'is_recursive'             => 1,
                             'is_active'                => 1,
-                            'date_mod'                 => $_SESSION['glpi_currenttime']);
+                            'date_mod'                 => $_SESSION['glpi_currenttime']];
                $notification_id = $notification->add($tmp);
 
                $notificationtemplate->add(['notificationtemplates_id' => $templates_id,
@@ -229,10 +228,10 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
 
       $notif = new Notification();
 
-      foreach (array(self::TONER_ALERT) as $event) {
-         $options = array('itemtype' => self::$itemtype,
+      foreach ([self::TONER_ALERT] as $event) {
+         $options = ['itemtype' => self::$itemtype,
                           'event'    => $event,
-                          'FIELDS'   => 'id');
+                          'FIELDS'   => 'id'];
          foreach ($DB->request('glpi_notifications', $options) as $data) {
             $notif->delete($data);
          }
@@ -242,11 +241,11 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
       $template       = new NotificationTemplate();
       $translation    = new NotificationTemplateTranslation();
       $notif_template = new Notification_NotificationTemplate();
-      $options     = array('itemtype' => self::$itemtype,
-                           'FIELDS'   => 'id');
+      $options     = ['itemtype' => self::$itemtype,
+                           'FIELDS'   => 'id'];
       foreach ($DB->request('glpi_notificationtemplates', $options) as $data) {
-         $options_template = array('notificationtemplates_id' => $data['id'],
-                                   'FIELDS'                   => 'id');
+         $options_template = ['notificationtemplates_id' => $data['id'],
+                                   'FIELDS'                   => 'id'];
          foreach ($DB->request('glpi_notificationtemplatetranslations', $options_template) as $data_template) {
             $translation->delete($data_template);
          }
@@ -256,7 +255,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
          }
       }
    }
-   
+
       /**
     * @since version 0.84
     *
@@ -271,4 +270,3 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
 
 }
 
-?>

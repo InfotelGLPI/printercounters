@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -36,7 +36,7 @@ if ($plugin->isActivated("printercounters")) {
    $config = new PluginPrintercountersConfig();
    Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
    $data = $config->getInstance();
-   $config->display(array('id' => $data['configs_id']));
+   $config->display(['id' => $data['configs_id']]);
    Html::footer();
 } else {
    Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
@@ -46,4 +46,3 @@ if ($plugin->isActivated("printercounters")) {
 }
 
 Html::footer();
-?>

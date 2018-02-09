@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -49,14 +49,13 @@ function update102to103() {
    $migration->addKey('glpi_plugin_printercounters_records', 'last_recordmodels_id', 'last_recordmodels_id');
    $migration->addKey('glpi_plugin_printercounters_records', 'locations_id', 'locations_id');
    $migration->addKey('glpi_plugin_printercounters_records', 'entities_id', 'entities_id');
-   
+
    // Billingmodel
    $migration->addKey('glpi_plugin_printercounters_billingmodels', 'budgets_id', 'budgets_id');
    $migration->addKey('glpi_plugin_printercounters_billingmodels', 'entities_id', 'entities_id');
-   
+
    $migration->executeMigration();
 
    return true;
 }
 
-?>

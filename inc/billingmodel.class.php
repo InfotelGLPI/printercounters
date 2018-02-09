@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,9 +33,9 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersBillingmodel
- * 
+ *
  * This class allows to manage the billing models
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
@@ -43,27 +43,27 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
 
    protected $itemtype;
    protected $items_id;
-   
+
    static $rightname = 'plugin_printercounters';
-   
+
    /**
     * Constructor
-    * 
+    *
     * @param type $itemtype
     * @param type $items_id
     */
-   public function __construct($itemtype = 'printer', $items_id=0) {
+   public function __construct($itemtype = 'printer', $items_id = 0) {
       $this->setItemtype($itemtype);
       $this->setItems_id($items_id);
-      
+
       parent::__construct();
    }
-   
+
    /**
     * Function sets itemtype id
     *
-    * @param string $itemtype 
-    * @throws Exception 
+    * @param string $itemtype
+    * @throws Exception
     */
    public function setItemtype($itemtype) {
 
@@ -73,7 +73,7 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
 
       $this->itemtype = $itemtype;
    }
-   
+
    /**
     * Function sets items id
     *
@@ -83,14 +83,14 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
 
       $this->items_id = $items_id;
    }
-   
+
    static function getTypeName($nb = 0) {
       return _n("Billing model", "Billing models", $nb, 'printercounters');
    }
-   
-  /** 
+
+   /**
    * Get search options
-   * 
+   *
    * @return array
    */
    function getSearchOptions() {
@@ -126,25 +126,25 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
       $tab[36]['name']           = __('Supplier');
       $tab[36]['datatype']       = 'dropdown';
       $tab[36]['massiveaction']  = true;
-      
+
       $tab[37]['table']          = 'glpi_plugin_printercounters_countertypes';
       $tab[37]['field']          = 'name';
       $tab[37]['name']           = __('Counter type', 'printercounters');
       $tab[37]['massiveaction']  = false;
       $tab[37]['datatype']       = 'dropdown';
       $tab[37]['forcegroupby']   = true;
-      $tab[37]['joinparams']     = array('beforejoin'
-                                          => array('table'      => 'glpi_plugin_printercounters_pagecosts',
-                                                   'joinparams' => array('jointype'   => 'child'))
-                                        );
-      
+      $tab[37]['joinparams']     = ['beforejoin'
+                                          => ['table'      => 'glpi_plugin_printercounters_pagecosts',
+                                                   'joinparams' => ['jointype'   => 'child']]
+                                        ];
+
       $tab[38]['table']          = 'glpi_plugin_printercounters_pagecosts';
       $tab[38]['field']          = 'cost';
       $tab[38]['name']           = __('Cost');
       $tab[38]['massiveaction']  = false;
       $tab[38]['forcegroupby']   = true;
       $tab[38]['datatype']       = 'specific';
-      
+
       $tab[39]['table']          = getTableForItemType($this->itemtype);
       $tab[39]['field']          = 'name';
       $tab[39]['forcegroupby']   = true;
@@ -152,56 +152,56 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
       $tab[39]['massiveaction']  = false;
       $tab[39]['datatype']       = 'itemlink';
       $tab[39]['linkfield']      = 'items_id';
-      $tab[39]['joinparams']     = array('condition' => " AND `glpi_plugin_printercounters_items_billingmodels`.`itemtype` = '".$this->itemtype."'",
+      $tab[39]['joinparams']     = ['condition' => " AND `glpi_plugin_printercounters_items_billingmodels`.`itemtype` = '".$this->itemtype."'",
                                           'beforejoin'
-                                          => array('table'      => 'glpi_plugin_printercounters_items_billingmodels',
-                                                   'joinparams' => array('jointype'   => 'child')
-                                              )
-                                        );
+                                          => ['table'      => 'glpi_plugin_printercounters_items_billingmodels',
+                                                   'joinparams' => ['jointype'   => 'child']
+                                              ]
+                                        ];
 
       return $tab;
    }
 
-  /** 
+   /**
    * Get additional fields in form
-   * 
+   *
    * @return array
    */
    function getAdditionalFields() {
 
-      $tab = array(
-          array('name'  => 'plugin_printercounters_recordmodels_id',
+      $tab = [
+          ['name'  => 'plugin_printercounters_recordmodels_id',
                 'label' => PluginPrintercountersRecordmodel::getTypeName(2),
                 'type'  => 'specific',
-                'list'  => false),
-          array('name'  => 'application_date',
+                'list'  => false],
+          ['name'  => 'application_date',
                 'label' => __('Application date', 'printercounters'),
                 'type'  => 'datetime',
-                'list'  => true),
-          array('name'  => 'budgets_id',
+                'list'  => true],
+          ['name'  => 'budgets_id',
                 'label' => __('Budget'),
                 'type'  => 'dropdownValue',
-                'list'  => true),
-          array('name'  => 'contracts_id',
+                'list'  => true],
+          ['name'  => 'contracts_id',
                 'label' => __('Contract'),
                 'type'  => 'dropdownValue',
-                'list'  => true),
-          array('name'  => 'suppliers_id',
+                'list'  => true],
+          ['name'  => 'suppliers_id',
                 'label' => __('Supplier'),
                 'type'  => 'dropdownValue',
-                'list'  => true),
-      );
+                'list'  => true],
+      ];
 
       return $tab;
    }
-   
-  /** 
+
+   /**
    * Form header
    */
    function displayHeader() {
       Html::header($this->getTypeName(), '', "tools", "pluginprintercountersmenu", "billingmodel");
    }
-   
+
    /**
     * Actions done at the end of the getEmpty function
     *
@@ -211,98 +211,98 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
       // Set session saved if exists
       $this->setSessionValues();
    }
-   
-  /** 
+
+   /**
    * Set session values in object
-   * 
+   *
    * @param type $input
    * @return type
    */
-   function setSessionValues(){
-      if(isset($_SESSION['plugin_printercounters']['billingmodel']) && !empty($_SESSION['plugin_printercounters']['billingmodel'])){
-         foreach($_SESSION['plugin_printercounters']['billingmodel'] as $key => $val){
+   function setSessionValues() {
+      if (isset($_SESSION['plugin_printercounters']['billingmodel']) && !empty($_SESSION['plugin_printercounters']['billingmodel'])) {
+         foreach ($_SESSION['plugin_printercounters']['billingmodel'] as $key => $val) {
             $this->fields[$key] = $val;
          }
       }
       unset($_SESSION['plugin_printercounters']['billingmodel']);
    }
-   
-  /** 
+
+   /**
    * Display specific fields
-   * 
+   *
    * @param type $ID
    * @param type $field
    */
-   function displaySpecificTypeField($ID, $field=array()) {
+   function displaySpecificTypeField($ID, $field = []) {
 
       $this->getFromDB($ID);
-      
+
       $value = '';
-      if(isset($this->fields[$field['name']])){
+      if (isset($this->fields[$field['name']])) {
          $value = $this->fields[$field['name']];
       }
 
-      switch($field['name']){        
+      switch ($field['name']) {
          case 'plugin_printercounters_recordmodels_id':
-            Dropdown::show('PluginPrintercountersRecordmodel', 
-                    array('value'     => $value, 
-                          'on_change' => "printercounters_setConfirmation(\"".__('Are you sure to change the recordmodel ?', 'printercounters')."\", \"".$this->fields[$field['name']]."\", this.value);"));
+            Dropdown::show('PluginPrintercountersRecordmodel',
+                    ['value'     => $value,
+                          'on_change' => "printercounters_setConfirmation(\"".__('Are you sure to change the recordmodel ?', 'printercounters')."\", \"".$this->fields[$field['name']]."\", this.value);"]);
             break;
-         
-//         case 'plugin_printercounters_budgets_id':
-//            Dropdown::show('PluginPrintercountersBudget', array('value' => $value));
-//            break;
+
+         //         case 'plugin_printercounters_budgets_id':
+         //            Dropdown::show('PluginPrintercountersBudget', array('value' => $value));
+         //            break;
       }
    }
-   
-   
-  /** 
+
+
+   /**
    * Check if application date is not already used
-   * 
+   *
    * @param type $input
    * @return boolean
    */
-   function checkApplicationDate($input){
+   function checkApplicationDate($input) {
       $data = $this->find();
       if (!empty($data)) {
          foreach ($data as $value) {
-            if (strtotime($value['application_date']) == strtotime($input['application_date']) 
-                  && $value['plugin_printercounters_recordmodels_id'] == $input['plugin_printercounters_recordmodels_id'] 
+            if (strtotime($value['application_date']) == strtotime($input['application_date'])
+                  && $value['plugin_printercounters_recordmodels_id'] == $input['plugin_printercounters_recordmodels_id']
                   && (isset($input['id']) && $input['id'] > 0 && $input['id'] != $value['id'])) {
                return false;
             }
          }
       }
-      
+
       return true;
    }
-   
-   /** 
+
+   /**
     * Get billingmodels linked to recordmodel
-    * 
+    *
     * @param type $recordmodels_id
     * @return boolean
     */
-   function getBillingModelsForRecordmodel($recordmodels_id){
+   function getBillingModelsForRecordmodel($recordmodels_id) {
       $data = $this->find("`plugin_printercounters_recordmodels_id`=".$recordmodels_id);
-      
-      if(!empty($data)){
+
+      if (!empty($data)) {
          return $data;
       }
-      
+
       return false;
    }
-   
+
    /**
     * Duplicate billingmodel if needed
-    * 
+    *
     * @param type $itemtype
     * @param type $items_id
     * @param type $entities_id
     */
-   function duplicateBillingmodelForItem($itemtype, $items_id, $entities_id){
+   function duplicateBillingmodelForItem($itemtype, $items_id, $entities_id) {
       $item_billingmodel = new PluginPrintercountersItem_Billingmodel();
-      $billings = $item_billingmodel->getBillingmodelForItem($items_id, $itemtype, array('addLimit' => false));
+      $billings = $item_billingmodel->getBillingmodelForItem($items_id, $itemtype, ['addLimit' => false]);
 
       if (!empty($billings)) {
          foreach ($billings as $data) {
@@ -319,21 +319,21 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
                $data['name'] = $data['billingmodels_name'].' - '.__('Copy', 'printercounters').' '.PluginPrintercountersToolbox::getCopyNumber($data['billingmodels_name'], $this->getTable());
                $data['is_recursive'] = $data['billingmodels_recursivity'];
                $data['plugin_printercounters_recordmodels_id'] = $data['currentitem_recordmodels_id'];
-               
-               $item_billingmodel->delete(array('id' => $item_billingmodels_id), 1);
-               
+
+               $item_billingmodel->delete(['id' => $item_billingmodels_id], 1);
+
                if ($newId = $this->add($data)) {
                   // Update item_billingmodels id
-                  $item_billingmodel->add(array('items_id' => $items_id, 'itemtype' => $itemtype, 'plugin_printercounters_billingmodels_id' => $newId));
+                  $item_billingmodel->add(['items_id' => $items_id, 'itemtype' => $itemtype, 'plugin_printercounters_billingmodels_id' => $newId]);
 
                   // Duplicate costs
                   $pagecosts = new PluginPrintercountersPagecost();
                   $countertypes = $pagecosts->getCounterTypes($newId);
                   foreach ($countertypes as $value) {
                      if (in_array($value['countertypes_id'], array_keys($data['counters']))) {
-                        $pagecosts->update(array('id'                                      => $value['id'],
+                        $pagecosts->update(['id'                                      => $value['id'],
                                                  'plugin_printercounters_billingmodels_id' => $newId,
-                                                 'cost'                                    => $data['counters'][$value['countertypes_id']]));
+                                                 'cost'                                    => $data['counters'][$value['countertypes_id']]]);
                      }
                   }
                }
@@ -341,17 +341,17 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
          }
       }
    }
-   
-      
-/** 
+
+
+   /**
     * Check if a recordmodel is linked to billingmodels
-    * 
+    *
     * @param type $recordmodels_id
     * @return boolean
     */
-   function checkLinkedRecordModels($plugin_printercounters_recordmodels_id){
-      $links = array(); 
-      
+   function checkLinkedRecordModels($plugin_printercounters_recordmodels_id) {
+      $links = [];
+
       if ($data = $this->getBillingModelsForRecordmodel($plugin_printercounters_recordmodels_id)) {
          $pagecosts = new PluginPrintercountersPagecost();
 
@@ -365,7 +365,7 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
                   break;
                }
             }
-            
+
             // Used in this billing model
             if ($counterUsed) {
                $links[] = "<a href='".Toolbox::getItemTypeFormURL($this->getType())."?id=".$value['id']."'>".$value['name']."</a>";
@@ -377,91 +377,91 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
    }
 
 
-   /** 
+   /**
    * Actions done before add
-   * 
+   *
    * @param type $input
    * @return boolean
    */
    function prepareInputForAdd($input) {
-      if(!$this->checkMandatoryFields($input)){
+      if (!$this->checkMandatoryFields($input)) {
          $_SESSION['plugin_printercounters']['billingmodel'] = $input;
-         return false;
-      }
-      
-      return $input;
-   }
-   
-  /** 
-   * Actions done before update
-   * 
-   * @param type $input
-   * @return boolean
-   */
-   function prepareInputForUpdate($input) {
-      if(!$this->checkMandatoryFields($input)){
          return false;
       }
 
       return $input;
    }
-   
-   
-  /** 
+
+   /**
+   * Actions done before update
+   *
+   * @param type $input
+   * @return boolean
+   */
+   function prepareInputForUpdate($input) {
+      if (!$this->checkMandatoryFields($input)) {
+         return false;
+      }
+
+      return $input;
+   }
+
+
+   /**
    * Actions done before update in db
    */
    function pre_updateInDB() {
-      
+
       if (in_array('plugin_printercounters_recordmodels_id', $this->updates)) {
          // Add recordmodels countertypes
          $pagecost = new PluginPrintercountersPagecost();
-         $pagecost->deleteByCriteria(array('plugin_printercounters_billingmodels_id' => $this->fields['id']));
+         $pagecost->deleteByCriteria(['plugin_printercounters_billingmodels_id' => $this->fields['id']]);
          $pagecost->addRecordmodelCounterTypesForBilling($this->fields['plugin_printercounters_recordmodels_id'], $this->fields['id']);
       }
 
       parent::pre_updateInDB();
    }
-   
-  /** 
+
+   /**
    * Actions done after update
    */
    function post_updateItem($history = 1) {
-      
+
       if (in_array('plugin_printercounters_recordmodels_id', $this->updates)) {
          // Clean item linked to billing model
          $item_billingmodel = new PluginPrintercountersItem_Billingmodel();
          $item_billingmodel->cleanItems($this->fields['id']);
       }
-      
+
       parent::post_updateItem($history);
    }
-   
-  /** 
+
+   /**
    * Actions done after add
    */
    function post_addItem($history = 1) {
-      
+
       // Add recordmodels countertypes
       $pagecost = new PluginPrintercountersPagecost();
       $pagecost->addRecordmodelCounterTypesForBilling($this->fields['plugin_printercounters_recordmodels_id'], $this->fields['id']);
-      
+
       parent::post_updateItem($history);
    }
-   
-  /** 
+
+   /**
    * Check mandatory fields
-   * 
+   *
    * @param type $input
    * @return boolean
    */
-   function checkMandatoryFields(&$input){
-      $msg     = array();
+   function checkMandatoryFields(&$input) {
+      $msg     = [];
       $checkKo = false;
-      
-      $mandatory_fields = array('plugin_printercounters_recordmodels_id'  => PluginPrintercountersRecordmodel::getTypeName(2),
-                                'application_date'                        => __('Application date', 'printercounters'));
-      
-      foreach($input as $key => $value){
+
+      $mandatory_fields = ['plugin_printercounters_recordmodels_id'  => PluginPrintercountersRecordmodel::getTypeName(2),
+                                'application_date'                        => __('Application date', 'printercounters')];
+
+      foreach ($input as $key => $value) {
          if (array_key_exists($key, $mandatory_fields)) {
             switch ($key) {
                case 'application_date':
@@ -480,9 +480,9 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
             }
          }
       }
-      
+
       if ($checkKo) {
-         foreach($msg as $key => $value){
+         foreach ($msg as $key => $value) {
             switch ($key) {
                case 'application_date':
                   Session::addMessageAfterRedirect(__("Application date is already used. Please select another", 'printercounters'), true, ERROR);
@@ -493,10 +493,10 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
             }
          }
       }
-      
+
       return true;
    }
-   
+
    /**
     * Get the standard massive actions which are forbidden
     *
@@ -506,7 +506,7 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
 
       $forbidden = parent::getForbiddenStandardMassiveAction();
       $forbidden[] = 'merge';
-      
+
       return $forbidden;
    }
 

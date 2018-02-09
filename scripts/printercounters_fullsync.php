@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -30,7 +30,7 @@
 ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
 
-# Converts cli parameter to web parameter for compatibility
+// Converts cli parameter to web parameter for compatibility
 if (isset($_SERVER["argv"]) && !isset($argv)) {
    $argv = $_SERVER["argv"];
 }
@@ -70,7 +70,7 @@ if ($plugin->isActivated("printercounters") && !$config['disable_autosearch']) {
    $itemtype       = $_GET['itemtype'];
    $record_type    = $_GET['record_type'];
 
-   switch($record_type){
+   switch ($record_type) {
       case 'error':
          // Init error record
          $record = new PluginPrintercountersErrorItem($itemtype, 0);
@@ -90,4 +90,3 @@ if ($plugin->isActivated("printercounters") && !$config['disable_autosearch']) {
    exit(1);
 }
 
-?>

@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,27 +33,27 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersProfile
- * 
+ *
  * This class manages the profile rights of the plugin
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersProfile extends Profile {
-   
-   static function getTypeName($nb=0) {
+
+   static function getTypeName($nb = 0) {
       return __('Rights management', 'printercounters');
    }
-   
-   
-  /**
+
+
+   /**
    * Get tab name for item
-   * 
+   *
    * @param CommonGLPI $item
    * @param type $withtemplate
    * @return string
    */
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
       if ($item->getType()=='Profile' && $item->getField('interface') != 'helpdesk') {
          return PluginPrintercountersPrinter::getTypeName(2);
@@ -61,44 +61,44 @@ class PluginPrintercountersProfile extends Profile {
       return '';
    }
 
-  /**
+   /**
    * display tab content for item
-   * 
+   *
    * @global type $CFG_GLPI
    * @param CommonGLPI $item
    * @param type $tabnum
    * @param type $withtemplate
    * @return boolean
    */
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       global $CFG_GLPI;
 
       if ($item->getType()=='Profile') {
          $ID = $item->getID();
          $prof = new self();
 
-         self::addDefaultProfileInfos($ID, 
-                                 array('plugin_printercounters'                   => ALLSTANDARDRIGHT,
+         self::addDefaultProfileInfos($ID,
+                                 ['plugin_printercounters'                   => ALLSTANDARDRIGHT,
                                        'plugin_printercounters_update_records'    => 0,
                                        'plugin_printercounters_add_lower_records' => 0,
-                                       'plugin_printercounters_snmpset'           => 0));
+                                       'plugin_printercounters_snmpset'           => 0]);
          $prof->showForm($ID);
       }
-      
+
       return true;
    }
 
-  /**
+   /**
    * show profile form
-   * 
+   *
    * @param type $ID
    * @param type $options
    * @return boolean
    */
-   function showForm ($profiles_id=0, $openform=TRUE, $closeform=TRUE) {
-      
+   function showForm ($profiles_id = 0, $openform = true, $closeform = true) {
+
       echo "<div class='firstbloc'>";
-      if (($canedit = Session::haveRightsOr(self::$rightname, array(CREATE, UPDATE, PURGE)))
+      if (($canedit = Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, PURGE]))
           && $openform) {
          $profile = new Profile();
          echo "<form method='post' action='".$profile->getFormURL()."'>";
@@ -108,41 +108,41 @@ class PluginPrintercountersProfile extends Profile {
       $profile->getFromDB($profiles_id);
 
       $rights = $this->getAllRights();
-      $profile->displayRightsChoiceMatrix($rights, array('canedit'       => $canedit,
+      $profile->displayRightsChoiceMatrix($rights, ['canedit'       => $canedit,
                                                          'default_class' => 'tab_bg_2',
-                                                         'title'         => __('General')));
-      
+                                                         'title'         => __('General')]);
+
       echo "<table class='tab_cadre_fixehov'>";
-      $effective_rights = ProfileRight::getProfileRights($profiles_id, array('plugin_printercounters_update_records', 
-                                                                             'plugin_printercounters_add_lower_records', 
-                                                                             'plugin_printercounters_snmpset'));
+      $effective_rights = ProfileRight::getProfileRights($profiles_id, ['plugin_printercounters_update_records',
+                                                                             'plugin_printercounters_add_lower_records',
+                                                                             'plugin_printercounters_snmpset']);
       echo "<tr class='tab_bg_2'>";
       echo "<td width='20%'>".__('Right to update records', 'printercounters')."</td>";
       echo "<td colspan='5'>";
-      Html::showCheckbox(array('name'    => '_plugin_printercounters_update_records',
-                               'checked' => $effective_rights['plugin_printercounters_update_records']));
+      Html::showCheckbox(['name'    => '_plugin_printercounters_update_records',
+                               'checked' => $effective_rights['plugin_printercounters_update_records']]);
       echo "</td>";
       echo "<td width='20%'>".__('Right to add lower records', 'printercounters')."</td>";
       echo "<td colspan='5'>";
-      Html::showCheckbox(array('name'    => '_plugin_printercounters_add_lower_records',
-                               'checked' => $effective_rights['plugin_printercounters_add_lower_records']));
+      Html::showCheckbox(['name'    => '_plugin_printercounters_add_lower_records',
+                               'checked' => $effective_rights['plugin_printercounters_add_lower_records']]);
       echo "</td>";
       echo "</tr>\n";
       echo "<tr class='tab_bg_2'>";
       echo "<td width='20%'>".__('Right to update printers values', 'printercounters')."</td>";
       echo "<td colspan='5'>";
-      Html::showCheckbox(array('name'    => '_plugin_printercounters_snmpset',
-                               'checked' => $effective_rights['plugin_printercounters_snmpset']));
+      Html::showCheckbox(['name'    => '_plugin_printercounters_snmpset',
+                               'checked' => $effective_rights['plugin_printercounters_snmpset']]);
       echo "</td>";
       echo "<td colspan='6'></td>";
       echo "</tr>\n";
       echo "</table>";
-      
+
       if ($canedit
           && $closeform) {
          echo "<div class='center'>";
-         echo Html::hidden('id', array('value' => $profiles_id));
-         echo Html::submit(_sx('button', 'Save'), array('name' => 'update'));
+         echo Html::hidden('id', ['value' => $profiles_id]);
+         echo Html::submit(_sx('button', 'Save'), ['name' => 'update']);
          echo "</div>\n";
          Html::closeForm();
       }
@@ -150,48 +150,48 @@ class PluginPrintercountersProfile extends Profile {
 
       $this->showLegend();
    }
-   
-  /**
+
+   /**
    * Get all rights
-   * 
+   *
    * @param type $all
    * @return array
    */
    static function getAllRights($all = false) {
 
-      $rights = array(
-          array('itemtype'  => 'PluginPrintercountersMenu',
+      $rights = [
+          ['itemtype'  => 'PluginPrintercountersMenu',
                 'label'     => __('Printer counters', 'printercounters'),
                 'field'     => 'plugin_printercounters'
-          )
-      );
-      
+          ]
+      ];
+
       if ($all) {
-         $rights[] = array('itemtype'  => 'PluginPrintercountersRecord',
+         $rights[] = ['itemtype'  => 'PluginPrintercountersRecord',
                            'label'     => __('Right to update records', 'printercounters'),
                            'field'     => 'plugin_printercounters_update_records'
-                     );
-         $rights[] = array('itemtype'  => 'PluginPrintercountersRecord',
+                     ];
+         $rights[] = ['itemtype'  => 'PluginPrintercountersRecord',
                            'label'     => __('Right to add lower records', 'printercounters'),
                            'field'     => 'plugin_printercounters_add_lower_records'
-                     );
-         $rights[] = array('itemtype'  => 'PluginPrintercountersRecord',
+                     ];
+         $rights[] = ['itemtype'  => 'PluginPrintercountersRecord',
                            'label'     => __('Right to update printers values', 'printercounters'),
                            'field'     => 'plugin_printercounters_snmpset'
-                     );
+                     ];
       }
-      
+
       return $rights;
    }
-   
-  /**
+
+   /**
     * Init profiles
     *
     **/
-    
+
    static function translateARight($old_right) {
       switch ($old_right) {
-         case '': 
+         case '':
             return 0;
          case 'r' :
             return READ;
@@ -200,12 +200,12 @@ class PluginPrintercountersProfile extends Profile {
          case '0':
          case '1':
             return $old_right;
-            
+
          default :
             return 0;
       }
    }
-      
+
    /**
    * @since 0.85
    * Migration rights from old system to the new one for one profile
@@ -219,14 +219,14 @@ class PluginPrintercountersProfile extends Profile {
       }
       $dbu   = new DbUtils();
       $datas = $dbu->getAllDataFromTable('glpi_plugin_printercounters_profiles');
-      
+
       foreach ($datas as $profile_data) {
-         $matching = array('printercounters'    => 'plugin_printercounters', 
+         $matching = ['printercounters'    => 'plugin_printercounters',
                            'update_records'     => 'plugin_printercounters_update_records',
                            'add_lower_records'  => 'plugin_printercounters_add_lower_records',
-                           'snmpset'            => 'plugin_printercounters_snmpset');
+                           'snmpset'            => 'plugin_printercounters_snmpset'];
          // Search existing rights
-         $used = array();
+         $used = [];
          $existingRights = $dbu->getAllDataFromTable('glpi_profilerights', "`profiles_id`='".$profile_data['profiles_id']."'");
          foreach ($existingRights as $right) {
             $used[$right['profiles_id']][$right['name']] = $right['rights'];
@@ -246,9 +246,9 @@ class PluginPrintercountersProfile extends Profile {
          }
       }
    }
-   
-   
-  /**
+
+
+   /**
    * Initialize profiles, and migrate it necessary
    */
    static function initProfile() {
@@ -257,24 +257,24 @@ class PluginPrintercountersProfile extends Profile {
 
       //Add new rights in glpi_profilerights table
       foreach ($profile->getAllRights(true) as $data) {
-         if (countElementsInTable("glpi_profilerights", 
+         if (countElementsInTable("glpi_profilerights",
                                   "`name` = '".$data['field']."'") == 0) {
-            ProfileRight::addProfileRights(array($data['field']));
+            ProfileRight::addProfileRights([$data['field']]);
          }
       }
-      
+
       // Migration old rights in new ones
       self::migrateOneProfile();
-      
+
       foreach ($DB->request("SELECT *
                            FROM `glpi_profilerights` 
                            WHERE `profiles_id`='".$_SESSION['glpiactiveprofile']['id']."' 
                               AND `name` LIKE '%plugin_printercounters%'") as $prof) {
-         $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights']; 
+         $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
       }
    }
-   
-  /**
+
+   /**
    * Initialize profiles, and migrate it necessary
    */
    static function changeProfile() {
@@ -284,19 +284,19 @@ class PluginPrintercountersProfile extends Profile {
                            FROM `glpi_profilerights` 
                            WHERE `profiles_id`='".$_SESSION['glpiactiveprofile']['id']."' 
                               AND `name` LIKE '%plugin_printercounters%'") as $prof) {
-         $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights']; 
+         $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
       }
-      
+
    }
 
    static function createFirstAccess($profiles_id) {
 
-      $rights = array('plugin_printercounters'                    => ALLSTANDARDRIGHT,
+      $rights = ['plugin_printercounters'                    => ALLSTANDARDRIGHT,
                       'plugin_printercounters_update_records'     => 1,
                       'plugin_printercounters_add_lower_records'  => 1,
-                      'plugin_printercounters_snmpset'            => 1);
+                      'plugin_printercounters_snmpset'            => 1];
 
-      self::addDefaultProfileInfos($profiles_id, 
+      self::addDefaultProfileInfos($profiles_id,
                                    $rights, true);
 
    }
@@ -306,12 +306,12 @@ class PluginPrintercountersProfile extends Profile {
    **/
    static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false) {
       global $DB;
-      
+
       $profileRight = new ProfileRight();
       foreach ($rights as $right => $value) {
          if (countElementsInTable('glpi_profilerights',
                                    "`profiles_id`='$profiles_id' AND `name`='$right'") && $drop_existing) {
-            $profileRight->deleteByCriteria(array('profiles_id' => $profiles_id, 'name' => $right));
+            $profileRight->deleteByCriteria(['profiles_id' => $profiles_id, 'name' => $right]);
          }
          if (!countElementsInTable('glpi_profilerights',
                                    "`profiles_id`='$profiles_id' AND `name`='$right'")) {
@@ -325,7 +325,6 @@ class PluginPrintercountersProfile extends Profile {
          }
       }
    }
-   
+
 }
 
-?>

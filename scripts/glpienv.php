@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -26,8 +26,7 @@
  along with printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
-define ("GLPI_ROOT","../../..");
+define ("GLPI_ROOT", "../../..");
 include GLPI_ROOT."/config/based_config.php";
 echo "GLPI_LOG_DIR=".GLPI_LOG_DIR."\n";
 echo "GLPI_LOCK_DIR=".GLPI_LOCK_DIR."\n";
-?>

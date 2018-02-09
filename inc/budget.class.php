@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,41 +33,41 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersBudget
- * 
+ *
  * This class allows to manage the budgets
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersBudget extends CommonDropdown {
-   
+
    const GET_NO_AMOUNT     = 0;
    const GET_PARENT_AMOUNT = 1;
    const GET_SON_AMOUNT    = 2;
    const ADD_AMOUNT        = 3;
-   
+
    var $rand = 0;
-   
+
    static $rightname = 'plugin_printercounters';
-   
+
    /**
     * Constructor
-    * 
+    *
     * @param type $itemtype
     * @param type $items_id
     */
    public function __construct() {
-      
+
       $this->setRand();
-      
+
       parent::__construct();
    }
 
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __("Budget");
    }
-      
+
    /**
     * Function sets rand
     */
@@ -75,15 +75,15 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
       $this->rand = mt_rand();
    }
-   
-   /** 
+
+   /**
     * Search function : getDefaultSearch
-    * 
+    *
     * @return string
     */
-   function getDefaultSearch(){
-      
-      $default_search = array();
+   function getDefaultSearch() {
+
+      $default_search = [];
       $options  = Search::getCleanedOptions($this->getType());
       foreach ($options as $num => $val) {
          if ($val['table'] == 'glpi_entities' && $val['field'] == 'level') {
@@ -92,17 +92,17 @@ class PluginPrintercountersBudget extends CommonDropdown {
          }
       }
       $default_search['order']    = 'ASC';
-      
+
       return $default_search;
    }
-   
+
    /**
     * Search function : addRestriction
-    * 
+    *
     * @return string
     */
-   function addRestriction(){
-      
+   function addRestriction() {
+
       $options  = Search::getCleanedOptions($this->getType());
       $restriction = '';
       foreach ($options as $num => $val) {
@@ -110,32 +110,32 @@ class PluginPrintercountersBudget extends CommonDropdown {
             $restriction .= PluginPrintercountersSearch::addWhere('', 0, $this->getType(), $num, 'under', $_SESSION['glpiactive_entity']);
          }
       }
-   
+
       return $restriction;
    }
-   
-   /** 
+
+   /**
     * Search function : show record history data
-    * 
+    *
     * @global type $CFG_GLPI
     * @param array $input
     * @param int $output_type
     */
-   function showSearchData(PluginPrintercountersSearch $search){
+   function showSearchData(PluginPrintercountersSearch $search) {
 
       // Format data
       list($input, $total) = $this->formatSearchData($search->input);
 
-      // Display recursive data 
+      // Display recursive data
       $row_num = 1;
       $this->displayRecursiveBudget($input, $search, count($search->input), $row_num, $this->getRootLevel($input));
-      
+
       // Total
       $row_num++;
       $col_num = 1;
       echo Search::showNewLine($search->output_type);
       echo Search::showItem($search->output_type, '', $col_num, $row_num, "class='tab_bg_1'");
-      if($search->output_type == Search::HTML_OUTPUT){
+      if ($search->output_type == Search::HTML_OUTPUT) {
          echo Search::showItem($search->output_type, '', $col_num, $row_num, "class='tab_bg_1'");
       }
       echo Search::showItem($search->output_type, "<b>".__('Total')."</b>", $col_num, $row_num, "class='tab_bg_1'");
@@ -149,17 +149,17 @@ class PluginPrintercountersBudget extends CommonDropdown {
       echo Search::showItem($search->output_type, '', $col_num, $row_num, "class='tab_bg_1'");
       echo Search::showEndLine($search->output_type);
    }
-   
-   /** 
+
+   /**
     * Display recursive budget
-    * 
+    *
     * @param type $input
     * @param type $search
     * @param type $nbLines
     * @param type $row_num
     * @param type $rootLevel
     */
-   function displayRecursiveBudget($input, $search, $nbLines, &$row_num=1, $rootLevel=0) {
+   function displayRecursiveBudget($input, $search, $nbLines, &$row_num = 1, $rootLevel = 0) {
 
       // Display data
       foreach ($input as $history) {
@@ -197,31 +197,31 @@ class PluginPrintercountersBudget extends CommonDropdown {
          }
       }
    }
-   
-   /** 
+
+   /**
     * Get root level of budgets
-    * 
+    *
     * @param type $budgets
     * @return type
     */
-   function getRootLevel($budgets){
-      
+   function getRootLevel($budgets) {
+
       if (isset($budgets[0]['sons'])) {
          $budgets = $budgets[0]['sons'];
       }
       $budgets = reset($budgets);
-      
+
       return $budgets['budgets_level'];
    }
 
-   /** 
+   /**
     * Function format record history data
-    * 
+    *
     * @param type $input
     * @param type $options
     * @return type
     */
-   function formatSearchData($input, $options=array()){
+   function formatSearchData($input, $options = []) {
 
       $params['use_repartition'] = true;
 
@@ -230,50 +230,49 @@ class PluginPrintercountersBudget extends CommonDropdown {
             $params[$key] = $val;
          }
       }
-      
-      
-      $searchopt = array();
+
+      $searchopt = [];
       $searchopt = &Search::getOptions($this->getType());
 
-      $output = array();
+      $output = [];
       $total_all_pages = 0;
-      $types  = array();
-      
+      $types  = [];
+
       foreach ($searchopt as $num => $val) {
          if (is_array($val) && (!isset($val['nosql']) || $val['nosql'] == false)) {
             if ($val['table'] == $this->getTable() && $val['field'] == 'name') {
                $types['budget'] = $num;
 
-            } elseif ($val['table'] == $this->getTable() && $val['field'] == 'amount') {
-               $types['amount'] = $num; 
+            } else if ($val['table'] == $this->getTable() && $val['field'] == 'amount') {
+               $types['amount'] = $num;
 
-            } elseif ($val['table'] == $this->getTable() && $val['field'] == 'begin_date') {
-               $types['begin_date'] = $num; 
+            } else if ($val['table'] == $this->getTable() && $val['field'] == 'begin_date') {
+               $types['begin_date'] = $num;
 
-            } elseif ($val['table'] == $this->getTable() && $val['field'] == 'end_date') {
-               $types['end_date'] = $num; 
+            } else if ($val['table'] == $this->getTable() && $val['field'] == 'end_date') {
+               $types['end_date'] = $num;
 
-            } elseif ($val['table'] == 'glpi_entities' && $val['field'] == 'completename') {
+            } else if ($val['table'] == 'glpi_entities' && $val['field'] == 'completename') {
                $types['entities_name'] = $num;
 
-            } elseif ($val['table'] == 'glpi_entities' && $val['field'] == 'id') {
+            } else if ($val['table'] == 'glpi_entities' && $val['field'] == 'id') {
                $types['entities_id'] = $num;
 
-            } elseif ($val['table'] == 'glpi_entities' && $val['field'] == 'level') {
+            } else if ($val['table'] == 'glpi_entities' && $val['field'] == 'level') {
                $types['entities_level'] = $num;
 
-            } elseif ($val['table'] == 'glpi_entities' && $val['field'] == 'entities_id') {
+            } else if ($val['table'] == 'glpi_entities' && $val['field'] == 'entities_id') {
                $types['entities_parent'] = $num;
-               
-            } elseif ($val['table'] == $this->getTable() && $val['field'] == 'id') {
+
+            } else if ($val['table'] == $this->getTable() && $val['field'] == 'id') {
                $types['budgets_id'] = $num;
             }
          }
       }
 
       if (!empty($input)) {
-         $give_item = array();
-         $line['raw'] = array();
+         $give_item = [];
+         $line['raw'] = [];
          foreach ($input as $i => $row) {
             $count = 0;
             $line['raw'] = $row;
@@ -285,12 +284,12 @@ class PluginPrintercountersBudget extends CommonDropdown {
                }
             }
          }
-         
+
          foreach ($give_item as $row) {
             if (!empty($row[$types['budgets_id']])) {
                $output[$row[$types['budgets_id']]]['record_amount']     = 0;
                $output[$row[$types['budgets_id']]]['total_page_number'] = 0;
-               $output[$row[$types['budgets_id']]]['record_detail']     = array();
+               $output[$row[$types['budgets_id']]]['record_detail']     = [];
                $output[$row[$types['budgets_id']]]['budget']            = $row[$types['budget']];
                $output[$row[$types['budgets_id']]]['budgets_id']        = $row[$types['budgets_id']];
                $output[$row[$types['budgets_id']]]['amount']            = $row[$types['amount']];
@@ -302,7 +301,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
                $output[$row[$types['budgets_id']]]['entities_parent']   = $row[$types['entities_parent']];
             }
          }
-         
+
          // Get record amount
          list($output, $total) = $this->getRecordsAmountForBudget($output, PluginPrintercountersCountertype_Recordmodel::COLOR, $params['use_repartition']);
          list($output, $total) = $this->computeUsageRate($output, $total);
@@ -313,20 +312,20 @@ class PluginPrintercountersBudget extends CommonDropdown {
          $total['total_color_rate']      = $total['total_color_rate'] / count($input);
          $total['total_color_page_rate'] = $total['total_color_page_rate'] / count($input);
       }
-      
-      return array($output, $total);
+
+      return [$output, $total];
    }
-   
-      
-  /** 
+
+
+   /**
    * Get records for the budgets of an entity
-   *  
+   *
    * @param type $budgets
    * @param type $oid_type
    * @param type $use_repartition
    * @return type
    */
-  function getRecordsAmountForBudget($budgets, $oid_type=null, $use_repartition=true) {
+   function getRecordsAmountForBudget($budgets, $oid_type = null, $use_repartition = true) {
 
       // Prepare budget data
       $budgets = $this->prepareBudgetData($budgets);
@@ -339,25 +338,25 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $total['total_record_amount'] = $budgets[0]['record_amount'];
       $total['total_amount']        = $this->getTotalBudgetAmount($budgets);
 
-      return array($budgets, $total);
+      return [$budgets, $total];
    }
-   
-   
+
+
    /**
     * Prepare budget data
-    * 
+    *
     * @param type $budgets
     * @return type
     */
    function prepareBudgetData($budgets) {
-      
-      foreach ($budgets as &$budget){
+
+      foreach ($budgets as &$budget) {
          $budget['begin_date'] = date('Y-m-d H:i:s', strtotime($budget['begin_date']));
          $budget['end_date'] = date('Y-m-d H:i:s', strtotime($budget['end_date']));
       }
-      
-      // Set default root budget 
-      $budgets[0] = array('record_amount'     => 0,
+
+      // Set default root budget
+      $budgets[0] = ['record_amount'     => 0,
                           'total_page_number' => 0,
                           'budget'            => '',
                           'budgets_id'        => 0,
@@ -368,18 +367,16 @@ class PluginPrintercountersBudget extends CommonDropdown {
                           'entities_id'       => -1,
                           'entities_level'    => -1,
                           'entities_parent'   => 0,
-                          'display'           => false);
-      
-
+                          'display'           => false];
 
       // Sort by entity levels ASC
       uasort($budgets, function($a, $b) {
          return ($a["entities_level"] - $b["entities_level"]) + (strcmp($a["entities_name"], $b["entities_name"]));
       });
-      
+
       // Set recursive budget with entities tree
       list($budgets, $used) = $this->setRecursiveBudget($budgets);
-      
+
       // Set budget levels
       $budgets = $this->setBudgetLevels($budgets);
 
@@ -389,23 +386,23 @@ class PluginPrintercountersBudget extends CommonDropdown {
       return $budgets;
    }
 
-   /** 
+   /**
     * Set sons for the budgets with same entities
-    * 
+    *
     * @param type $budgets
     * @param type $used
     * @param type $sameEntities
     * @return type
     */
-   function getSameEntities($budgets, $used, $sameEntities=array()) {
+   function getSameEntities($budgets, $used, $sameEntities = []) {
 
       foreach ($budgets as $val2) {
          foreach ($used as $val) {
             if ($val['entities_id'] == $val2['entities_id']
                     && $val['budgets_id'] != $val2['budgets_id']
-                    && !isset($budgets[$val2['budgets_id']]['sons']) 
+                    && !isset($budgets[$val2['budgets_id']]['sons'])
                     && isset($budgets[$val['budgets_id']]['sons'])) {
-               
+
                $sameEntities[$val['budgets_id']][] = $val2['budgets_id'];
 
             }
@@ -419,55 +416,54 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
       return $sameEntities;
    }
-   
-   /** 
+
+   /**
     * Copy budget sons if in same entity of another budget
-    * 
+    *
     * @param type $budgets
     * @param type $used
     * @return type
     */
-   function copySameEntitiesBudgets($budgets, $used){
+   function copySameEntitiesBudgets($budgets, $used) {
 
       $sameEntities = $this->getSameEntities($budgets, $used);
 
       foreach ($sameEntities as $budgetsToCopy => $sameEntity) {
          $data = $this->getBudgetData($budgets, $budgetsToCopy, 'sons');
-         
+
          $budgets = $this->setBudgetData($budgets, $budgetsToCopy, false, 'son_display');
-         
+
          end($sameEntity);
          $lastBudgetToCopy = key($sameEntity);
          reset($sameEntity);
-         
+
          foreach ($sameEntity as $key => $budgets_id) {
             $budgets = $this->setBudgetData($budgets, $budgets_id, $data, 'sons');
-            
+
             $parent_budget = $sameEntity;
             $parent_budget[] = $budgetsToCopy;
             $budgets = $this->setBudgetData($budgets, $budgets_id, $parent_budget, 'parent_budget', true);
-            
+
             if ($key != $lastBudgetToCopy) {
                $budgets = $this->setBudgetData($budgets, $budgets_id, false, 'son_display');
             }
          }
-        
 
       }
 
       return $budgets;
    }
-   
-  /** 
+
+   /**
     * Set budget data
-    * 
+    *
     * @param type $budgets
     * @param type $records
     * @param type $use_repartition
     * @return type
     */
-   function setBudgetData($budgets, $budgets_id, $data, $field, $copyToSons=false){
-      
+   function setBudgetData($budgets, $budgets_id, $data, $field, $copyToSons = false) {
+
       foreach ($budgets as &$budget) {
          if ($budget['budgets_id'] == $budgets_id) {
             if ($copyToSons) {
@@ -476,12 +472,12 @@ class PluginPrintercountersBudget extends CommonDropdown {
                      $son[$field] = $data;
                   }
                }
-               
+
             } else {
                $budget[$field] = $data;
             }
          }
-         
+
          // Get sons recursively
          if (isset($budget['sons'])) {
             $budget['sons'] = $this->setBudgetData($budget['sons'], $budgets_id, $data, $field, $copyToSons);
@@ -490,42 +486,42 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
       return $budgets;
    }
-   
-   /** 
+
+   /**
     * Get budget data in recursive array
-    * 
+    *
     * @param type $budgets
     * @param type $budgets_id
     * @param type $field
     * @param type $result
     * @return type
     */
-   function getBudgetData($budgets, $budgets_id, $field, $result=array()){
+   function getBudgetData($budgets, $budgets_id, $field, $result = []) {
 
       foreach ($budgets as $budget) {
          if ($budget['budgets_id'] == $budgets_id) {
             $result = $budgets[$budgets_id][$field];
          }
-         
+
          // Get sons recursively
          if (isset($budget['sons'])) {
             $result = $this->getBudgetData($budget['sons'], $budgets_id, $field, $result);
          }
       }
-      
+
       return $result;
    }
-   
-   
-   /** 
+
+
+   /**
     * Get record amount
-    * 
+    *
     * @param type $budgets
     * @param type $records
     * @param type $use_repartition
     * @return type
     */
-   function getRecordAmount($budgets, $oid_type, $use_repartition=true) {
+   function getRecordAmount($budgets, $oid_type, $use_repartition = true) {
 
       foreach ($budgets as &$budget) {
          if ($oid_type != null) {
@@ -535,17 +531,17 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
          // Get records
          $record = new PluginPrintercountersRecord();
-         $records = array();
-         if (!empty($budget['end_date']) && !empty($budget['begin_date']) && $budget['entities_id'] != null){
-            $records = $record->getRecords(0, 'Printer', 
-                    array('order' => "`date` DESC", 
+         $records = [];
+         if (!empty($budget['end_date']) && !empty($budget['begin_date']) && $budget['entities_id'] != null) {
+            $records = $record->getRecords(0, 'Printer',
+                    ['order' => "`date` DESC",
                           'condition' => " AND `glpi_printers`.`entities_id` = ".$budget['entities_id']." 
                                            AND `glpi_plugin_printercounters_records`.`date` >= ADDDATE('".$budget['begin_date']."', INTERVAL 1 DAY) 
-                                           AND `glpi_plugin_printercounters_records`.`date` <= ADDDATE('".$budget['end_date']."', INTERVAL 1 DAY)"));
+                                           AND `glpi_plugin_printercounters_records`.`date` <= ADDDATE('".$budget['end_date']."', INTERVAL 1 DAY)"]);
          }
-   
-         $recordResults = array();
-         $allItemsId = array();
+
+         $recordResults = [];
+         $allItemsId = [];
          if (!empty($records)) {
             foreach ($records as $itemtype => $value) {
                foreach ($value as $items_id => $record) {
@@ -564,7 +560,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
          // Get record costs
          if (!empty($recordResults)) {
             $item_billingmodel = new PluginPrintercountersItem_Billingmodel('Printer', $allItemsId);
-            $recordResults = $item_billingmodel->computeRecordCost($recordResults, array($oid_type));
+            $recordResults = $item_billingmodel->computeRecordCost($recordResults, [$oid_type]);
 
             // All oid results
             $budget['record_amount'] = $recordResults['total_record_cost'];
@@ -579,14 +575,14 @@ class PluginPrintercountersBudget extends CommonDropdown {
             // Set records on budget according to the dates
             foreach ($recordResults['records'] as $records_id => $record) {
                // Set record details in budget
-               $budget['record_detail'][$records_id] = array('entities_id'            => $record['entities_id'], 
-                                                             'page_number'            => $record['page_number'], 
-                                                             'items_id'               => $record['items_id'], 
-                                                             'result'                 => $record['result'], 
-                                                             'record_cost'            => $record['record_cost'], 
-                                                             'record_cost_'.$oid_type => $record['record_cost_'.$oid_type], 
-                                                             'page_number_'.$oid_type => $record['page_number_'.$oid_type], 
-                                                             'date'                   => $record['date']);
+               $budget['record_detail'][$records_id] = ['entities_id'            => $record['entities_id'],
+                                                             'page_number'            => $record['page_number'],
+                                                             'items_id'               => $record['items_id'],
+                                                             'result'                 => $record['result'],
+                                                             'record_cost'            => $record['record_cost'],
+                                                             'record_cost_'.$oid_type => $record['record_cost_'.$oid_type],
+                                                             'page_number_'.$oid_type => $record['page_number_'.$oid_type],
+                                                             'date'                   => $record['date']];
             }
          }
 
@@ -612,15 +608,15 @@ class PluginPrintercountersBudget extends CommonDropdown {
                }
             }
          }
-         
+
       }
 
       return $budgets;
    }
-   
-   /** 
+
+   /**
     * Compute sons record amount recursively
-    * 
+    *
     * @param type $sonsBudgets
     * @param type $parentBudget
     * @param type $records
@@ -628,8 +624,8 @@ class PluginPrintercountersBudget extends CommonDropdown {
     * @param type $used
     * @return type
     */
-   function setAmountRepartition($sonsBudgets, $parentBudget, $field, $used=array()){
-      
+   function setAmountRepartition($sonsBudgets, $parentBudget, $field, $used = []) {
+
       // Display data
       $amount = 0;
 
@@ -638,100 +634,109 @@ class PluginPrintercountersBudget extends CommonDropdown {
          if (!isset($used[$parentBudget['budgets_id']]) || !in_array($son['budgets_id'], $used[$parentBudget['budgets_id']])) {
 
                // Unlimited dates
-               if (($parentBudget['end_date'] == 'NULL' && $parentBudget['begin_date'] == 'NULL')) {
-                  if(!empty($son['record_detail'])){
-                     foreach ($son['record_detail'] as $record) {
-                        if ($record['date'] >= $son['begin_date']
-                                && $record['date'] <= $son['end_date']) {
+            if (($parentBudget['end_date'] == 'NULL' && $parentBudget['begin_date'] == 'NULL')) {
+               if (!empty($son['record_detail'])) {
+                  foreach ($son['record_detail'] as $record) {
+                     if ($record['date'] >= $son['begin_date']
+                             && $record['date'] <= $son['end_date']) {
 
-                           if (isset($record[$field])) $amount += $record[$field];
+                        if (isset($record[$field])) {
+                           $amount += $record[$field];
+                        }
+                     }
+                  }
+               }
+
+               // Son period in parent period
+            } else if ($this->isInPeriod($son, $parentBudget)) {
+               // Parent dates between son dates : get sons records with parent date
+               if ($parentBudget['begin_date'] >= $son['begin_date']
+                       && $parentBudget['end_date'] <= $son['end_date']) {
+                  if (!empty($son['record_detail'])) {
+                     foreach ($son['record_detail'] as $record) {
+                        if ($record['date'] >= $parentBudget['begin_date']
+                                && $record['date'] <= $parentBudget['end_date']) {
+
+                           if (isset($record[$field])) {
+                              $amount += $record[$field];
+                           }
                         }
                      }
                   }
 
-               // Son period in parent period   
-               } elseif($this->isInPeriod($son, $parentBudget)) {
-                  // Parent dates between son dates : get sons records with parent date
-                  if ($parentBudget['begin_date'] >= $son['begin_date']
-                          && $parentBudget['end_date'] <= $son['end_date']) {
-                     if(!empty($son['record_detail'])){
-                        foreach ($son['record_detail'] as $record) {
-                           if ($record['date'] >= $parentBudget['begin_date']
-                                   && $record['date'] <= $parentBudget['end_date']) {
+                  // If intersection between son dates and parent dates
+               } else if ($son['begin_date'] >= $parentBudget['begin_date']
+                       && $son['end_date'] >= $parentBudget['end_date']) {
+                  if (!empty($son['record_detail'])) {
+                     foreach ($son['record_detail'] as $record) {
+                        if ($record['date'] >= $son['begin_date']
+                                && $record['date'] <= $parentBudget['end_date']) {
 
-                              if (isset($record[$field])) $amount += $record[$field];
+                           if (isset($record[$field])) {
+                              $amount += $record[$field];
                            }
                         }
                      }
+                  }
 
                   // If intersection between son dates and parent dates
-                  } elseif ($son['begin_date'] >= $parentBudget['begin_date']
-                          && $son['end_date'] >= $parentBudget['end_date']) {
-                     if(!empty($son['record_detail'])){
-                        foreach ($son['record_detail'] as $record) {
-                           if ($record['date'] >= $son['begin_date']
-                                   && $record['date'] <= $parentBudget['end_date']) {
+               } else if ($son['begin_date'] <= $parentBudget['begin_date']
+                       && $son['end_date'] <= $parentBudget['begin_date']) {
+                  if (!empty($son['record_detail'])) {
+                     foreach ($son['record_detail'] as $record) {
+                        if ($record['date'] >= $parentBudget['begin_date']
+                                && $record['date'] <= $son['end_date']) {
 
-                              if (isset($record[$field])) $amount += $record[$field];
+                           if (isset($record[$field])) {
+                              $amount += $record[$field];
                            }
                         }
                      }
-
-                  // If intersection between son dates and parent dates
-                  } elseif ($son['begin_date'] <= $parentBudget['begin_date']
-                          && $son['end_date'] <= $parentBudget['begin_date']) {
-                     if(!empty($son['record_detail'])){
-                        foreach ($son['record_detail'] as $record) {
-                           if ($record['date'] >= $parentBudget['begin_date']
-                                   && $record['date'] <= $son['end_date']) {
-
-                              if (isset($record[$field])) $amount += $record[$field];
-                           }
-                        }
-                     }
+                  }
 
                   // Son dates between parent dates : get all son records
-                  } elseif ($son['begin_date'] >= $parentBudget['begin_date']
-                          && $son['end_date'] <= $parentBudget['end_date']) {
-                     if(!empty($son['record_detail'])){
-                        foreach ($son['record_detail'] as $record) {
-                           if ($record['date'] >= $son['begin_date']
-                                   && $record['date'] <= $son['end_date']) {
+               } else if ($son['begin_date'] >= $parentBudget['begin_date']
+                       && $son['end_date'] <= $parentBudget['end_date']) {
+                  if (!empty($son['record_detail'])) {
+                     foreach ($son['record_detail'] as $record) {
+                        if ($record['date'] >= $son['begin_date']
+                                && $record['date'] <= $son['end_date']) {
 
-                              if (isset($record[$field])) $amount += $record[$field];
+                           if (isset($record[$field])) {
+                              $amount += $record[$field];
                            }
                         }
                      }
                   }
                }
-            
-         
+            }
+
             $used[$parentBudget['budgets_id']][] = $son['budgets_id'];
          }
-         
+
          // Get sons recursively
          if (isset($son['sons'])) {
             list($son_amount, $used) = $this->setAmountRepartition($son['sons'], $parentBudget, $field, $used);
             $amount += $son_amount;
          }
       }
-      
-      return array($amount, $used);
+
+      return [$amount, $used];
    }
-   
-   /** 
+
+   /**
     * Transform budget in a recursive array with entities tree
-    * 
+    *
     * @param array $budgets
     * @param int $budgets_id
     * @param array $newOrder
     * @param array $used
     * @return type
     */
-   function setRecursiveBudget(&$budgets, $budgets_id=0, $newOrder=array(), $used=array()) {
+   function setRecursiveBudget(&$budgets, $budgets_id = 0, $newOrder = [], $used = []) {
 
       // Select parent budget where sons can be found
-      $selected_budget = array();
+      $selected_budget = [];
       if (empty($budgets_id)) {
          $keys = array_keys($budgets);
          $selected_budget = $budgets[$keys[0]];
@@ -747,7 +752,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
       // Get array of budget sons
       $entities_sons = getSonsOf('glpi_entities', $selected_budget['entities_id']);
-      if( $selected_budget['entities_id'] == -1){
+      if ($selected_budget['entities_id'] == -1) {
          $entities_sons[0] = 0;
       }
       unset($entities_sons[$selected_budget['entities_id']]);
@@ -760,30 +765,30 @@ class PluginPrintercountersBudget extends CommonDropdown {
          if (in_array($budget2['entities_id'], $entities_sons) && !in_array($budget2['budgets_id'], array_keys($used))) {
             // Add sons recursively
             $used[$budget2['budgets_id']] = $budget2;
-            list($sons, $used) = $this->setRecursiveBudget($budgets, $budget2['budgets_id'], array(), $used);
+            list($sons, $used) = $this->setRecursiveBudget($budgets, $budget2['budgets_id'], [], $used);
             $keys = array_keys($sons);
-            foreach($sons as &$son){
-               $son['parent_budget'] = array($selected_budget['budgets_id']);
+            foreach ($sons as &$son) {
+               $son['parent_budget'] = [$selected_budget['budgets_id']];
             }
             $newOrder[$selected_budget['budgets_id']]['sons'][$keys[0]] = $sons[$keys[0]];
          }
       }
-      
-      return array($newOrder, $used);
+
+      return [$newOrder, $used];
    }
-   
-  /** 
+
+   /**
    * Define budget level
-   * 
+   *
    * @param type $budgets
    * @param type $lastlevel
    * @param type $level
    * @return type
    */
-   function setBudgetLevels($budgets, $level=-1){
-      
+   function setBudgetLevels($budgets, $level = -1) {
+
       $level++;
-      
+
       foreach ($budgets as &$budget) {
          $budget['budgets_level'] = $level;
 
@@ -796,20 +801,20 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
       return $budgets;
    }
-   
-   /** 
+
+   /**
     * Compute usage rate recursively
-    * 
+    *
     * @param type $budgets
     * @param type $total
     * @return type
     */
-   function computeUsageRate($budgets, $total=array()){
-      
+   function computeUsageRate($budgets, $total = []) {
+
       foreach ($budgets as &$budget) {
          if ($budget['budgets_id'] > 0) {
             $budget['usage_rate'] = 0;
-            
+
             if ($budget['amount'] > 0) {
                $budget['usage_rate'] = (($budget['record_amount'] / $budget['amount']) * 100);
             }
@@ -820,7 +825,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
                $total['total_usage_rate'] = $budget['usage_rate'];
             }
          }
-         
+
          // Get sons recursively
          if (isset($budget['sons'])) {
             list($sons, $total) = $this->computeUsageRate($budget['sons'], $total);
@@ -828,17 +833,17 @@ class PluginPrintercountersBudget extends CommonDropdown {
          }
       }
 
-      return array($budgets, $total);
+      return [$budgets, $total];
    }
-   
-   /** 
+
+   /**
     * Compute color rate recursively
-    * 
+    *
     * @param type $budgets
     * @param type $total
     * @return type
     */
-   function computeColorRate($budgets, $total=array()){
+   function computeColorRate($budgets, $total = []) {
 
       $oid = PluginPrintercountersCountertype_Recordmodel::COLOR;
 
@@ -879,20 +884,20 @@ class PluginPrintercountersBudget extends CommonDropdown {
                }
             }
          }
-         
+
          // Get sons recursively
          if (isset($budget['sons'])) {
             list($sons, $total) = $this->computeColorRate($budget['sons'], $total);
             $budgets[$budget['budgets_id']]['sons'] = $sons;
          }
       }
-      
-      return array($budgets, $total);
+
+      return [$budgets, $total];
    }
-   
-   /** 
+
+   /**
     * Compute sons amount recursively
-    * 
+    *
     * @param type $sonsBudgets
     * @param type $field
     * @param type $amount
@@ -900,9 +905,9 @@ class PluginPrintercountersBudget extends CommonDropdown {
     * @param type $son_display
     * @return type
     */
-   function computeSonsAmount($sonsBudgets, $field, $amount=0, $rootLevel=0, $son_display=false){
-      
-      if(!empty($sonsBudgets)){
+   function computeSonsAmount($sonsBudgets, $field, $amount = 0, $rootLevel = 0, $son_display = false) {
+
+      if (!empty($sonsBudgets)) {
          foreach ($sonsBudgets as $budget) {
             if ($budget['budgets_level'] > $rootLevel && $budget['budgets_id'] != 0) {
                $amount += $budget[$field];
@@ -926,16 +931,16 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
       return $amount;
    }
-   
-  /** 
+
+   /**
    * Compute sons amount recursively
-   * 
+   *
    * @param type $parentBudgets
    * @param type $field
    * @return type
    */
-   function computeParentsAmount($parentBudgets, $field){
-      
+   function computeParentsAmount($parentBudgets, $field) {
+
       $amount = 0;
 
       if (!empty($parentBudgets)) {
@@ -946,46 +951,46 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
       return $amount;
    }
-   
-   /** 
+
+   /**
     * Merge budget data recursively
-    * 
+    *
     * @param type $usage_rate
     * @param type $color_rate
     * @return type
     */
-   function mergeData($usage_rate, $color_rate){
-      
+   function mergeData($usage_rate, $color_rate) {
+
       // Display data
       foreach ($usage_rate as &$budget) {
          $budget['usage_rate']        = $budget['usage_rate'];
          $budget['total_page_number'] = $budget['total_page_number'];
          $budget['color_rate']        = $color_rate[$budget['budgets_id']]['color_rate'];
          $budget['color_page_rate']   = $color_rate[$budget['budgets_id']]['color_page_rate'];
-         
+
          // Get sons recursively
          if (isset($budget['sons'])) {
             $usage_rate[$budget['budgets_id']]['sons'] = $this->mergeData($budget['sons'], $color_rate[$budget['budgets_id']]['sons']);
          }
       }
-      
+
       return $usage_rate;
    }
-   
-  /** 
+
+   /**
    * getItems
-   * 
+   *
    * @global type $DB
    * @param type $condition
    * @return type
    */
-   function getItems($condition=null){
+   function getItems($condition = null) {
       global $DB;
-            
-      $output = array();
+
+      $output = [];
 
       $itemjoin  = getTableForItemType('Entity');
-      
+
       $query = "SELECT `".$this->getTable()."`.`name`, 
                        `".$this->getTable()."`.`id` as budgets_id, 
                        `".$this->getTable()."`.`name` as budget,
@@ -1009,40 +1014,39 @@ class PluginPrintercountersBudget extends CommonDropdown {
             $output[$data['budgets_id']] = $data;
          }
       }
-      
+
       return $output;
    }
 
-  /** 
+   /**
    * Get search options
-   * 
+   *
    * @return array
    */
    function getSearchOptions() {
 
-      $tab = array();
-      
+      $tab = [];
+
       $tab[20]['table']          = $this->getTable();
       $tab[20]['field']          = 'name';
       $tab[20]['name']           = __('Budget');
       $tab[20]['datatype']       = 'itemlink';
       $tab[20]['massiveaction']  = false;
       $tab[20]['nosort']         = true;
-      
+
       $tab[21]['table']          = 'glpi_entities';
       $tab[21]['field']          = 'completename';
       $tab[21]['datatype']       = 'dropdown';
       $tab[21]['name']           = __('Entity');
       $tab[21]['massiveaction']  = true;
       $tab[21]['nosort']         = true;
-      
+
       $tab[22]['table']          = $this->getTable();
       $tab[22]['field']          = 'amount';
       $tab[22]['name']           = __('Amount', 'printercounters');
       $tab[22]['massiveaction']  = false;
       $tab[22]['nosort']         = true;
-      
-            
+
       $tab[23]['table']           = 'glpi_plugin_printercounters_records';
       $tab[23]['field']           = 'record_amount';
       $tab[23]['name']            = _n('Record amount', 'Records amount', 1, 'printercounters');
@@ -1050,7 +1054,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $tab[23]['nosearch']        = true;
       $tab[23]['nosql']           = true;
       $tab[23]['nosort']         = true;
-      
+
       $tab[24]['table']          = $this->getTable();
       $tab[24]['field']          = 'usage_rate';
       $tab[24]['name']           = __('Usage rate', 'printercounters');
@@ -1059,7 +1063,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $tab[24]['nosearch']       = true;
       $tab[24]['nosql']          = true;
       $tab[24]['nosort']         = true;
-      
+
       $tab[25]['table']          = $this->getTable();
       $tab[25]['field']          = 'color_rate';
       $tab[25]['name']           = __('Color rate', 'printercounters');
@@ -1068,7 +1072,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $tab[25]['nosearch']       = true;
       $tab[25]['nosql']          = true;
       $tab[25]['nosort']         = true;
-      
+
       $tab[26]['table']          = $this->getTable();
       $tab[26]['field']          = 'total_page_number';
       $tab[26]['name']           = __('Total page number', 'printercounters');
@@ -1077,7 +1081,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $tab[26]['nosearch']       = true;
       $tab[26]['nosql']          = true;
       $tab[26]['nosort']         = true;
-      
+
       $tab[27]['table']          = $this->getTable();
       $tab[27]['field']          = 'color_page_rate';
       $tab[27]['name']           = __('Color page rate', 'printercounters');
@@ -1086,21 +1090,21 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $tab[27]['nosearch']       = true;
       $tab[27]['nosql']          = true;
       $tab[27]['nosort']         = true;
-      
+
       $tab[28]['table']          = $this->getTable();
       $tab[28]['field']          = 'begin_date';
       $tab[28]['name']           = __('Begin date');
       $tab[28]['datatype']       = 'datetime';
       $tab[28]['massiveaction']  = true;
       $tab[28]['nosort']         = true;
-      
+
       $tab[29]['table']          = $this->getTable();
       $tab[29]['field']          = 'end_date';
       $tab[29]['name']           = __('End date');
       $tab[29]['datatype']       = 'datetime';
       $tab[29]['massiveaction']  = true;
       $tab[29]['nosort']         = true;
-      
+
       $tab[30]['table']           = $this->getTable();
       $tab[30]['field']           = 'id';
       $tab[30]['name']            = __('ID');
@@ -1109,7 +1113,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $tab[30]['nosearch']        = true;
       $tab[30]['nodisplay']       = true;
       $tab[30]['nosort']         = true;
-      
+
       $tab[31]['table']           = 'glpi_entities';
       $tab[31]['field']           = 'id';
       $tab[31]['name']            = __('ID');
@@ -1117,7 +1121,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $tab[31]['nosearch']        = true;
       $tab[31]['nodisplay']       = true;
       $tab[31]['nosort']         = true;
-      
+
       $tab[32]['table']           = 'glpi_entities';
       $tab[32]['field']           = 'level';
       $tab[32]['name']            = __('Level');
@@ -1125,7 +1129,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $tab[32]['nosearch']        = true;
       $tab[32]['nodisplay']       = true;
       $tab[32]['nosort']         = true;
-      
+
       $tab[33]['table']           = 'glpi_entities';
       $tab[33]['field']           = 'entities_id';
       $tab[33]['name']            = __('Parent');
@@ -1136,39 +1140,39 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
       return $tab;
    }
-   
-  /** 
+
+   /**
    * Get additional fields in form
-   * 
+   *
    * @return array
    */
    function getAdditionalFields() {
 
-      $tab = array(
-                   array('name'  => 'amount',
+      $tab = [
+                   ['name'  => 'amount',
                          'label' => __('Amount', 'printercounters'),
                          'type'  => 'text',
-                         'list'  => true),
-                   array('name'  => 'begin_date',
+                         'list'  => true],
+                   ['name'  => 'begin_date',
                          'label' => __('Begin date'),
                          'type'  => 'datetime',
-                         'list'  => true),
-                   array('name'  => 'end_date',
+                         'list'  => true],
+                   ['name'  => 'end_date',
                          'label' => __('End date'),
                          'type'  => 'datetime',
-                         'list'  => true),
-                   );
+                         'list'  => true],
+                   ];
 
       return $tab;
    }
-   
-  /** 
+
+   /**
    * Form header
    */
    function displayHeader() {
       Html::header($this->getTypeName(), '', "tools", "pluginprintercountersmenu", "budget");
    }
-   
+
    /**
     * Actions done at the end of the getEmpty function
     *
@@ -1178,63 +1182,63 @@ class PluginPrintercountersBudget extends CommonDropdown {
       // Set session saved if exists
       $this->setSessionValues();
    }
-   
-  /** 
+
+   /**
    * Set session values in object
-   * 
+   *
    * @return type
    */
-   function setSessionValues(){
-      if(isset($_SESSION['plugin_printercounters']['budget']) && !empty($_SESSION['plugin_printercounters']['budget'])){
-         foreach($_SESSION['plugin_printercounters']['budget'] as $key => $val){
+   function setSessionValues() {
+      if (isset($_SESSION['plugin_printercounters']['budget']) && !empty($_SESSION['plugin_printercounters']['budget'])) {
+         foreach ($_SESSION['plugin_printercounters']['budget'] as $key => $val) {
             $this->fields[$key] = $val;
          }
       }
       unset($_SESSION['plugin_printercounters']['budget']);
    }
-   
-  /** 
+
+   /**
    * Actions done before add
-   * 
+   *
    * @param type $input
    * @return type
    */
    function prepareInputForAdd($input) {
-      if(!$this->checkMandatoryFields($input) || !$this->checkBudget($input)){
+      if (!$this->checkMandatoryFields($input) || !$this->checkBudget($input)) {
          $_SESSION['plugin_printercounters']['budget'] = $input;
          return false;
       }
-      
+
       return $input;
    }
-   
-  /** 
+
+   /**
    * Actions done before update
-   * 
+   *
    * @param type $input
    * @return type
    */
    function prepareInputForUpdate($input) {
-      if(!$this->checkMandatoryFields($input) || !$this->checkBudget($input)){
+      if (!$this->checkMandatoryFields($input) || !$this->checkBudget($input)) {
          return false;
       }
 
       return $input;
    }
 
-   /** 
+   /**
    * Check if budget dates are not already used
-   * 
+   *
    * @param type $input
    * @return boolean
    */
-   function checkBudget($input){
-      
+   function checkBudget($input) {
+
       $condition = "";
       if (isset($input['id'])) {
          $condition .= " AND `".$this->getTable()."`.`id`!=".$input['id'];
       }
-      
+
       $budgets = $this->getItems($condition);
 
       $entity = new Entity();
@@ -1259,13 +1263,13 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $budgets = $this->prepareBudgetData($budgets);
 
       // Check sons amount exceeding
-      
+
       return $this->checkParentAmount($budgets, $input['budgets_id']);
    }
-   
+
    /**
     * Check if sons amount not exceed parent budget amount
-    * 
+    *
     * @global type $CFG_GLPI
     * @param type $budgets
     * @param type $budgets_id
@@ -1274,16 +1278,16 @@ class PluginPrintercountersBudget extends CommonDropdown {
     * @param type $rootLevel
     * @return type
     */
-   function checkParentAmount($budgets, $budgets_id=0, $parent_budget=array(), $result=true, $rootLevel=0) {
+   function checkParentAmount($budgets, $budgets_id = 0, $parent_budget = [], $result = true, $rootLevel = 0) {
       global $CFG_GLPI;
-      
+
       $amount = 0;
       foreach ($budgets as $budget) {
-         if(!empty($parent_budget)){
-            $rootLevel = $this->getRootLevel(array($parent_budget['budgets_id'] => $parent_budget));
+         if (!empty($parent_budget)) {
+            $rootLevel = $this->getRootLevel([$parent_budget['budgets_id'] => $parent_budget]);
          }
          if ($budgets_id == $budget['budgets_id'] && $this->isInPeriod($budget, $parent_budget)) {
-            $amount = $this->computeSonsAmount(array($parent_budget['budgets_id'] => $parent_budget), 'amount', 0, $rootLevel, true);
+            $amount = $this->computeSonsAmount([$parent_budget['budgets_id'] => $parent_budget], 'amount', 0, $rootLevel, true);
             if ($amount > $parent_budget['amount'] && $parent_budget['amount'] > 0) {
                $link = "<a href='".Toolbox::getItemTypeFormURL('PluginPrintercountersBudget')."?id=".$parent_budget['budgets_id']."'>".$parent_budget['name']." (".$parent_budget['amount'].")</a>";
                Session::addMessageAfterRedirect(__("The sub-entities budget amount exceed the parent budget", 'printercounters')." : $link ", true, ERROR);
@@ -1302,13 +1306,13 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
    /**
     * Check intersection between 2 dates
-    * 
+    *
     * @param type $dates1
     * @param type $dates2
     * @return boolean
     */
    function isInPeriod($dates1, $dates2) {
-      
+
       if (isset($dates1['begin_date']) && isset($dates1['begin_date'])) {
          if (!(($dates1['begin_date'] < $dates2['begin_date'] && $dates1['end_date'] < $dates2['begin_date'])
                  || ($dates1['begin_date'] > $dates2['end_date'] && ($dates1['end_date'] > $dates2['end_date'])))) {
@@ -1317,10 +1321,10 @@ class PluginPrintercountersBudget extends CommonDropdown {
          }
       }
    }
-   
+
    /**
     * Get budget amounts recursively
-    * 
+    *
     * @param type $budgets
     * @return type
     */
@@ -1333,8 +1337,8 @@ class PluginPrintercountersBudget extends CommonDropdown {
          return ($a["budgets_level"] - $b["budgets_level"]);
       });
 
-      $total = array();
-      
+      $total = [];
+
       foreach ($budgets as $budget) {
          if (isset($total['amount'])) {
             switch ($this->canAddAmount($budget, $budgets, $total)) {
@@ -1348,19 +1352,19 @@ class PluginPrintercountersBudget extends CommonDropdown {
                   $total['last_budget_added'] = $budget['budgets_id'];
                   break;
             }
-            
+
          } else {
             $total['amount'] = $budget['amount'];
             $total['last_budget_added'] = $budget['budgets_id'];
          }
       }
-      
+
       return $total['amount'];
    }
 
    /**
     * Check if a date can be added in budget sample
-    * 
+    *
     * @param type $budget
     * @param type $budgets
     * @param type $total
@@ -1368,13 +1372,13 @@ class PluginPrintercountersBudget extends CommonDropdown {
     */
    function canAddAmount($budget, $budgets, $total) {
 
-      $parents = array();
+      $parents = [];
       if (isset($budgets[$budget['budgets_id']]['parent_budget'])) {
          $parents = $this->getParentTree($budgets, $budget['budgets_id']);
-      } 
-      
+      }
+
       if (empty($parents)) {
-         $parents = array(0);
+         $parents = [0];
       }
 
       $last   = $total['last_budget_added'];
@@ -1387,7 +1391,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
             return self::GET_SON_AMOUNT;
 
-            // Is last added budget in same level ?  
+            // Is last added budget in same level ?
          } else if ($budget['budgets_id'] != $budgets[$last]['budgets_id']
                  && $budget['budgets_level'] == $budgets[$last]['budgets_level']) {
 
@@ -1400,12 +1404,12 @@ class PluginPrintercountersBudget extends CommonDropdown {
 
    /**
     * Set recursive budget to non recursive
-    * 
+    *
     * @param type $recursiveBudget
     * @param type $unrecursiveBudget
     * @return type
     */
-   function getNonRecursiveBudget($recursiveBudget, $unrecursiveBudget=array()) {
+   function getNonRecursiveBudget($recursiveBudget, $unrecursiveBudget = []) {
 
       if (!empty($recursiveBudget)) {
          foreach ($recursiveBudget as $value) {
@@ -1413,37 +1417,37 @@ class PluginPrintercountersBudget extends CommonDropdown {
             unset($saved['sons']);
             unset($saved['record_detail']);
             $unrecursiveBudget[$saved['budgets_id']] = $saved;
-            
+
             // search in sons
             if (isset($value['sons'])) {
                $unrecursiveBudget = $this->getNonRecursiveBudget($value['sons'], $unrecursiveBudget);
             }
          }
       }
-      
+
       return $unrecursiveBudget;
    }
-   
+
    /**
     * Get budget ancestors
-    * 
+    *
     * @param type $budgets
     * @param type $budgets_id
     * @param type $budgets_ancestors
     * @return type
     */
-   function getParentTree($budgets, $budgets_id, $budgets_ancestors=array()) {
-      
+   function getParentTree($budgets, $budgets_id, $budgets_ancestors = []) {
+
       $parents = null;
       if (isset($budgets[$budgets_id]['parent_budget'])) {
          $parents = $budgets[$budgets_id]['parent_budget'];
       }
-      
+
       if (!empty($budgets) && !empty($parents)) {
          foreach ($budgets as $value) {
             if ($value['budgets_id'] != $budgets_id && $value['budgets_id'] != 0) {
                foreach ($parents as $parent) {
-                  if($parent == $value['budgets_id']){
+                  if ($parent == $value['budgets_id']) {
                      $budgets_ancestors[] = $value['budgets_id'];
 
                      // Search in parents
@@ -1455,39 +1459,39 @@ class PluginPrintercountersBudget extends CommonDropdown {
             }
          }
       }
-      
+
       return array_unique($budgets_ancestors);
    }
-   
-  /** 
-   * Check mandatory fields 
-   * 
+
+   /**
+   * Check mandatory fields
+   *
    * @param type $input
    * @return boolean
    */
-   function checkMandatoryFields(&$input){
-      $msg     = array();
+   function checkMandatoryFields(&$input) {
+      $msg     = [];
       $checkKo = false;
 
-      $mandatory_fields = array('amount'     => __('Amount', 'printercounters'), 
-                                'begin_date' => __('Begin date'), 
-                                'end_date'   => __('End date'));
-      
-      foreach($input as $key => $value){
+      $mandatory_fields = ['amount'     => __('Amount', 'printercounters'),
+                                'begin_date' => __('Begin date'),
+                                'end_date'   => __('End date')];
+
+      foreach ($input as $key => $value) {
          if (array_key_exists($key, $mandatory_fields)) {
             switch ($key) {
                case 'begin_date' : case 'end_date' :
-                  if (isset($input['begin_date']) 
-                          && isset($input['end_date']) 
+                     if (isset($input['begin_date'])
+                          && isset($input['end_date'])
                           && strtotime($input['begin_date']) > strtotime($input['end_date'])) {
-                     Session::addMessageAfterRedirect(__("Begin date cannot be higher than end date", 'printercounters'), true, ERROR);
-                     return false;
-                  }
-                  if (empty($value) || $value == 'NULL') {
-                     $msg[] = $mandatory_fields[$key];
-                     $checkKo = true;
-                     unset($input[$key]);
-                  }
+                        Session::addMessageAfterRedirect(__("Begin date cannot be higher than end date", 'printercounters'), true, ERROR);
+                        return false;
+                     }
+                     if (empty($value) || $value == 'NULL') {
+                        $msg[] = $mandatory_fields[$key];
+                        $checkKo = true;
+                        unset($input[$key]);
+                     }
                   break;
                default :
                   if (empty($value)) {
@@ -1498,25 +1502,25 @@ class PluginPrintercountersBudget extends CommonDropdown {
             }
          }
       }
-      
+
       if ($checkKo) {
          Session::addMessageAfterRedirect(sprintf(__("Mandatory fields are not filled. Please correct: %s"), implode(', ', $msg)), true, ERROR);
          return false;
       }
-      
+
       return true;
    }
-   
+
    /**
     * Get the standard massive actions which are forbidden
-    * 
+    *
     * @return an array of massive actions
    **/
    function getForbiddenStandardMassiveAction() {
 
       $forbidden = parent::getForbiddenStandardMassiveAction();
       $forbidden[] = 'merge';
-      
+
       return $forbidden;
    }
 

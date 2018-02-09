@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -42,47 +42,47 @@ if ($plugin->isActivated("printercounters")) {
    } else {
       $_POST['items_status'] = "";
    }
-   
+
    if (isset($_POST["update_config"])) {
       $dbu = new DbUtils();
-      if(!$dbu->countElementsInTable("glpi_plugin_printercounters_configs", "`id` = 1")){
+      if (!$dbu->countElementsInTable("glpi_plugin_printercounters_configs", "`id` = 1")) {
          $config->add($_POST);
       } else {
          $_POST['id'] = 1;
          $config->update($_POST);
       }
       Html::back();
-      
+
    } else if (isset($_POST["clean_error_records"])) {
       $record = new PluginPrintercountersRecord();
-      if ($records_id = $record->getRecordsToClean(PluginPrintercountersRecord::$CLEAN_ERROR_RECORDS, array('date' => $_POST['date']))) {
+      if ($records_id = $record->getRecordsToClean(PluginPrintercountersRecord::$CLEAN_ERROR_RECORDS, ['date' => $_POST['date']])) {
          Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
          $record->initCleanRecords(__('Clean records in error', 'printercounters'), $records_id);
          Html::footer();
          Session::addMessageAfterRedirect(__('Records cleaned', 'printercounters'));
-         
+
       } else {
          Session::addMessageAfterRedirect(__('No records to clean', 'printercounters'));
          Html::back();
       }
-      
+
    } else if (isset($_POST["clean_empty_records"])) {
       $record = new PluginPrintercountersRecord();
-      if ($records_id = $record->getRecordsToClean(PluginPrintercountersRecord::$CLEAN_EMTPY_RECORDS, array('date' => $_POST['date']))) {
+      if ($records_id = $record->getRecordsToClean(PluginPrintercountersRecord::$CLEAN_EMTPY_RECORDS, ['date' => $_POST['date']])) {
          Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
          $record->initCleanRecords(__('Clean empty records', 'printercounters'), $records_id);
          Html::footer();
          Session::addMessageAfterRedirect(__('Records cleaned', 'printercounters'));
-         
+
       } else {
          Session::addMessageAfterRedirect(__('No records to clean', 'printercounters'));
          Html::back();
       }
-   
+
    } else {
       Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
       $data = $config->getInstance();
-      $config->display(array('id' => $data['configs_id']));
+      $config->display(['id' => $data['configs_id']]);
       Html::footer();
    }
 
@@ -93,4 +93,3 @@ if ($plugin->isActivated("printercounters")) {
    Html::footer();
 }
 
-?>

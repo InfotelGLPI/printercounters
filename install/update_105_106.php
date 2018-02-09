@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -36,11 +36,10 @@ function update105to106() {
    $migration = new Migration(106);
 
    // Default authentication
-   $migration->addField('glpi_plugin_printercounters_snmpauthentications', 'is_default', 'bool', array('value' => '0'));
+   $migration->addField('glpi_plugin_printercounters_snmpauthentications', 'is_default', 'bool', ['value' => '0']);
 
    $migration->executeMigration();
 
    return true;
 }
 
-?>

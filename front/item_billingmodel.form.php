@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -42,19 +42,18 @@ if (isset($_POST["add"])) {
 
       Html::back();
 
-} elseif (isset($_POST["update"]) || isset($_POST["update_config"])) {
+} else if (isset($_POST["update"]) || isset($_POST["update_config"])) {
    // Check update rights for fields
    $item_billingmodel->check($_POST['id'], UPDATE, $_POST);
-   if($item_billingmodel->update($_POST) && isset($_POST["update_config"])){
+   if ($item_billingmodel->update($_POST) && isset($_POST["update_config"])) {
       $item_billingmodel->addLog();
    }
    Html::back();
-   
-} elseif (isset($_POST["delete"])) {
+
+} else if (isset($_POST["delete"])) {
    // Check update rights for fields
    $item_billingmodel->check($_POST['id'], DELETE, $_POST);
    $item_billingmodel->delete($_POST, 1);
    $item_billingmodel->redirectToList();
 }
 
-?>

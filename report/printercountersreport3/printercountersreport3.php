@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -47,13 +47,13 @@ $datecriteria->setEndDate(date('Y-m-d H:i:s'));
 $report->displayCriteriasForm();
 
 //colname with sort allowed
-$columns = array('name'         => array('sorton' => 'name'),
-                 'entity'       => array('sorton' => 'entity'),
-                 'serial'       => array('sorton' => 'serial'),
-                 'location'     => array('sorton' => 'location'),
-                 'manufacturer' => array('sorton' => 'manufacturer'),
-                 'model'        => array('sorton' => 'model'),
-                 'date'         => array('sorton' => 'date'));
+$columns = ['name'         => ['sorton' => 'name'],
+                 'entity'       => ['sorton' => 'entity'],
+                 'serial'       => ['sorton' => 'serial'],
+                 'location'     => ['sorton' => 'location'],
+                 'manufacturer' => ['sorton' => 'manufacturer'],
+                 'model'        => ['sorton' => 'model'],
+                 'date'         => ['sorton' => 'date']];
 
 $output_type = Search::HTML_OUTPUT;
 
@@ -84,7 +84,7 @@ if ($output_type == Search::HTML_OUTPUT) {
    echo "</table></div>";
 }
 
-$datas = array();
+$datas = [];
 
 $endDate   = $datecriteria->getEndDate();
 $startDate = $datecriteria->getEndDate();
@@ -112,12 +112,12 @@ if ($endDate != 'NULL' && $startDate != 'NULL') {
               $entity_restrict";
 
    $result = $DB->query($query);
-   $output = array();
+   $output = [];
    if ($DB->numrows($result)) {
       while ($data = $DB->fetch_assoc($result)) {
          $data['total_page_number'] = 0;
          $data['record_amount'] = 0;
-         $data['record_detail'] = array();
+         $data['record_detail'] = [];
          $data['budgets_id'] = $data['id'];
          $output[$data['id']] = $data;
       }
@@ -125,9 +125,9 @@ if ($endDate != 'NULL' && $startDate != 'NULL') {
       // Get record amount
       $budget = new PluginPrintercountersBudget();
       list($output, $total) = $budget->getRecordsAmountForBudget($output, PluginPrintercountersCountertype_Recordmodel::COLOR, false);
-      
+
       // Records amount
-      $datas = getRecordAmount($output, $tmp_datas, array());
+      $datas = getRecordAmount($output, $tmp_datas, []);
 
       // Budgets amount sampled
       $sample = getBudgetAmount($output);
@@ -144,17 +144,17 @@ if ($endDate != 'NULL' && $startDate != 'NULL') {
 
 if (!empty($datas)) {
    if (!isset($datas['datas'][__('Budget')])) {
-      $datas['datas'][__('Budget')] = array();
+      $datas['datas'][__('Budget')] = [];
    }
    if (!isset($datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')])) {
-      $datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')] = array();
+      $datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')] = [];
    }
-   
+
    $datas['datas'][__('Budget')]                                                = fillEmptyValues($datas['datas'][__('Budget')], $tmp_datas);
    $datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')] = fillEmptyValues($datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')], $tmp_datas);
-   
+
    $total_record_amount = 0;
-   
+
    foreach ($tmp_datas as $date => $label) {
       // Confidence rate
       $total_items   = 0;
@@ -173,35 +173,35 @@ if (!empty($datas)) {
       } else {
          $datas['datas'][__('Confidence rate', 'printercounters')][$date] = Html::formatNumber(0)." %";
       }
-      
+
       // Total record amount
       $total_record_amount += $datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')][$date];
-      
+
       // Consumption rate
       if (!empty($datas['datas'][__('Budget')][$date])) {
          $datas['datas'][__('Consumption rate', 'printercounters')][$date] = Html::formatNumber((($datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')][$date] / $datas['datas'][__('Budget')][$date]) * 100)).' %';
       } else {
          $datas['datas'][__('Consumption rate', 'printercounters')][$date] = Html::formatNumber((0)).' %';
       }
-      
+
       // Budget
       $datas['datas'][__('Budget')][$date] = Html::formatNumber($datas['datas'][__('Budget')][$date]);
-      
+
       // Record amount
       $datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')][$date] = Html::formatNumber($datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')][$date]);
    }
-   
+
    // Extrapolation
-   $extrapolation = array(__('Extrapolation (over 12 months) based on the month recorded', 'printercounters') => Html::formatNumber(($total_record_amount / count($tmp_datas)) * 12));
+   $extrapolation = [__('Extrapolation (over 12 months) based on the month recorded', 'printercounters') => Html::formatNumber(($total_record_amount / count($tmp_datas)) * 12)];
 
    // Sort values by dates
    ksort($datas['datas'][__('Budget')]);
    ksort($datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')]);
    ksort($datas['datas'][__('Consumption rate', 'printercounters')]);
    ksort($datas['datas'][__('Confidence rate', 'printercounters')]);
-   
+
    unset($datas['datas']['successRecord']);
-   
+
    // Set labels for abscissa
    $datas['labels2'] = $tmp_datas;
 }
@@ -214,7 +214,7 @@ if (empty($datas)) {
    }
    echo "<div class='center'><font class='red b'>".__('No item found')."</font></div>";
    Html::footer();
-   
+
 } else if ($output_type == Search::HTML_OUTPUT) {
    if (!$HEADER_LOADED) {
       Html::header($title, $_SERVER['PHP_SELF'], "utils", "report");
@@ -276,8 +276,8 @@ if (!empty($datas)) {
       }
       echo Search::showEndLine($output_type);
    }
-   
-   // Extrapolation 
+
+   // Extrapolation
    echo Search::showNewLine($output_type, false);
    foreach ($extrapolation as $title => $val) {
       $row_num++;
@@ -289,7 +289,7 @@ if (!empty($datas)) {
       }
    }
    echo Search::showEndLine($output_type);
-   
+
    // Footer
    echo Search::showFooter($output_type, $title);
 }
@@ -325,7 +325,7 @@ function showTitle($output_type, &$num, $title, $columnname, $sort = false) {
    $link = $_SERVER['PHP_SELF'];
    $first = true;
    foreach ($_REQUEST as $name => $value) {
-      if (!in_array($name, array('sort', 'order', 'PHPSESSID'))) {
+      if (!in_array($name, ['sort', 'order', 'PHPSESSID'])) {
          $link .= ($first ? '?' : '&amp;');
          $link .= $name.'='.urlencode($value);
          $first = false;
@@ -376,12 +376,12 @@ function getOrderByFields($default, $columns) {
          return $column['sorton'];
       }
    }
-   return array();
+   return [];
 }
 
   /**
  * Get all dates between an interval with the format
- * 
+ *
  * @param type $startTime
  * @param type $endTime
  * @return type
@@ -392,8 +392,7 @@ function getDatesBetween2Dates($startTime, $endTime) {
    $startTime = strtotime($startTime);
    $endTime = strtotime($endTime);
    $numDays = round(($endTime - $startTime) / $day) + 1;
-   $days = array();
-
+   $days = [];
 
    for ($i = 0; $i < $numDays; $i++) {
       $days[date('ym', ($startTime + ($i * $day)))] = __(date('F', ($startTime + ($i * $day)))).' '.date('y', ($startTime + ($i * $day)));
@@ -404,7 +403,7 @@ function getDatesBetween2Dates($startTime, $endTime) {
 
 /**
  * Fill empty values
- * 
+ *
  * @global type $DB
  * @param type $area
  * @param type $configs
@@ -423,13 +422,13 @@ function fillEmptyValues($datas, $dates) {
 
  /**
  * Get budget values recursively
- * 
+ *
  * @param type $budgets
  * @param type $tmp_datas
  * @param type $datas
  * @return type
  */
-function getRecordAmount($budgets, $tmp_datas, $datas = array()) {
+function getRecordAmount($budgets, $tmp_datas, $datas = []) {
 
    if (!empty($budgets)) {
       foreach ($budgets as $value) {
@@ -444,10 +443,10 @@ function getRecordAmount($budgets, $tmp_datas, $datas = array()) {
                   } else {
                      $datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')][$begin] = $record['record_cost'];
                   }
-                  
+
                   // Get success / fail counters
                   if ($record['result'] == PluginPrintercountersRecord::$SUCCESS) {
-                     if (isset($datas['datas']['successRecord'][$begin][$record['items_id']])){
+                     if (isset($datas['datas']['successRecord'][$begin][$record['items_id']])) {
                         $datas['datas']['successRecord'][$begin][$record['items_id']]++;
                      } else {
                         $datas['datas']['successRecord'][$begin][$record['items_id']] = 1;
@@ -471,14 +470,14 @@ function getRecordAmount($budgets, $tmp_datas, $datas = array()) {
 
 /**
  * Get budget amounts recursively
- * 
+ *
  * @param type $budgets
  * @return type
  */
 function getBudgetAmount($budgets) {
-   
-   $sample = array();
-   
+
+   $sample = [];
+
    $budgetObject = new PluginPrintercountersBudget();
    $budgets = $budgetObject->getNonRecursiveBudget($budgets);
 
@@ -516,7 +515,7 @@ function getBudgetAmount($budgets) {
                   $sample[$begin_date]['last_budget_added'] = $budget['budgets_id'];
                   break;
             }
-            
+
          } else {
             $sample[$begin_date]['amount'] = $budget['amount'];
             $sample[$begin_date]['last_budget_added'] = $budget['budgets_id'];
@@ -529,7 +528,7 @@ function getBudgetAmount($budgets) {
 
 /**
  * Check if a date can be added in budget sample
- * 
+ *
  * @param type $date
  * @param type $budget
  * @param type $budgets
@@ -537,18 +536,18 @@ function getBudgetAmount($budgets) {
  * @return int
  */
 function canAddAmount($date, $budget, $budgets, $sample) {
-   
+
    $budgetObject = new PluginPrintercountersBudget();
 
-   $parents = array();
+   $parents = [];
    if (isset($budgets[$budget['budgets_id']]['parent_budget'])) {
       $parents = $budgetObject->getParentTree($budgets, $budget['budgets_id']);
    }
-   
+
    if (empty($parents)) {
-      $parents = array(0);
+      $parents = [0];
    }
-   
+
    $last   = $sample[date('ym', $date)]['last_budget_added'];
    $amount = $sample[date('ym', $date)]['amount'];
 
@@ -561,7 +560,7 @@ function canAddAmount($date, $budget, $budgets, $sample) {
                  && $budget['amount'] >= $amount) {
 
             return 2;
-            
+
          } else if ($budget['budgets_id'] != $budgets[$last]['budgets_id']
                  && $budget['budgets_level'] == $budgets[$last]['budgets_level']) {
 
@@ -573,4 +572,3 @@ function canAddAmount($date, $budget, $budgets, $sample) {
    return 0;
 }
 
-?>

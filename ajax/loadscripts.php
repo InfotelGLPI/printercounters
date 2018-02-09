@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -36,15 +36,15 @@ header("Content-Type: text/html; charset=UTF-8");
 switch ($_POST['action']) {
    case "load" :
       foreach (PluginPrintercountersItem_Recordmodel::$types as $item) {
-         if (isset($_SERVER['HTTP_REFERER']) 
-               && strpos($_SERVER['HTTP_REFERER'], strtolower($item)) !== false 
+         if (isset($_SERVER['HTTP_REFERER'])
+               && strpos($_SERVER['HTTP_REFERER'], strtolower($item)) !== false
                && $_SESSION['glpiactiveprofile']['interface'] == "central") {
 
-            $params = array('root_doc'   => $CFG_GLPI['root_doc'],
+            $params = ['root_doc'   => $CFG_GLPI['root_doc'],
                             'itemtype'   => $item,
                             'itemToShow' => 'Infocom',
                             'glpi_tab'   => 'Infocom$1',
-                            'lang'       => array('global_tco' => __('Global TCO', 'printercounters')));
+                            'lang'       => ['global_tco' => __('Global TCO', 'printercounters')]];
 
             echo "<script type='text/javascript'>";
             echo "printercounters_addelements(".json_encode($params).");";
@@ -53,4 +53,3 @@ switch ($_POST['action']) {
       }
       break;
 }
-?>

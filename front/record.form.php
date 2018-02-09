@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -35,25 +35,24 @@ if (isset($_POST["immediate_record"])) {
    $record->check(-1, UPDATE, $_POST);
    $record->immediateRecord($_POST);
    Html::back();
-   
-} elseif (isset($_POST["manual_record"])) {
+
+} else if (isset($_POST["manual_record"])) {
    $record->check($_POST['id'], UPDATE, $_POST);
    $record->manualRecord($_POST);
    Html::back();
-   
-} elseif (isset($_POST["update_counter_position"])) {
+
+} else if (isset($_POST["update_counter_position"])) {
    $record->check($_POST['id'], UPDATE, $_POST);
    $record->updateCounterPosition($_POST);
    Html::back();
-   
-} elseif(isset($_GET["initAjaxMassiveAction"])){
+
+} else if (isset($_GET["initAjaxMassiveAction"])) {
    Html::header(__('Printer'), '', "tools", "pluginprintercountersmenu");
    $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
    $item_recordmodel->initMassiveActionsProcess();
    Html::footer();
 }
-   
 
 
 
-?>
+

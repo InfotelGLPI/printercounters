@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,23 +33,22 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersCounter
- * 
+ *
  * This class allows to manage the counters added in the records
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersCounter extends CommonDBTM {
-   
+
    static $rightname = 'plugin_printercounters';
-   
+
    /**
     * functions mandatory
     * getTypeName(), canCreate(), canView()
     * */
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __('Counter', 'Counters', $nb, 'printercounters');
    }
 
 }
-?>

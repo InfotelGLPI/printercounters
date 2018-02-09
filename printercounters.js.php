@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -39,13 +39,12 @@ if ($_SESSION['glpiactiveprofile']['interface'] == "central") {
    $itemtype = PluginPrintercountersItem_Recordmodel::$types;
 
    if (!empty($itemtype)) {
-      $params = array('root_doc'    => $CFG_GLPI['root_doc'],
+      $params = ['root_doc'    => $CFG_GLPI['root_doc'],
                       'itemtype'    => $itemtype[0],
                       'itemToShow'  => 'Infocom',
                       'glpi_tab'    => 'Infocom$1',
-                      'lang'        => array('global_tco' => __('Global TCO', 'printercounters')));
+                      'lang'        => ['global_tco' => __('Global TCO', 'printercounters')]];
 
       echo "printercounters_addelements(".json_encode($params).");";
    }
 }
-?>

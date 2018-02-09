@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -46,9 +46,9 @@ $datecriteria->setEndDate(date('Y-m-d H:i:s'));
 $report->displayCriteriasForm();
 
 //colname with sort allowed
-$columns = array('name'         => array('sorton' => 'name'),
-                 'type'         => array('sorton' => 'type'),
-                 'model'        => array('sorton' => 'model'));
+$columns = ['name'         => ['sorton' => 'name'],
+                 'type'         => ['sorton' => 'type'],
+                 'model'        => ['sorton' => 'model']];
 
 $output_type = Search::HTML_OUTPUT;
 
@@ -126,7 +126,7 @@ if ($nbtot == 0) {
    }
    echo "<div class='center'><font class='red b'>".__('No item found')."</font></div>";
    Html::footer();
-   
+
 } else if ($output_type == Search::HTML_OUTPUT) {
    if (!$HEADER_LOADED) {
       Html::header($title, $_SERVER['PHP_SELF'], "utils", "report");
@@ -183,35 +183,35 @@ if ($res && $nbtot > 0) {
    echo Search::showEndLine($output_type);
 
    $record = new PluginPrintercountersRecord();
-   
-   $items = array();
-   $datas = array();
+
+   $items = [];
+   $datas = [];
    while ($data = $DB->fetch_assoc($res)) {
       $items[] = $data['id'];
       $datas[] = $data;
    }
-   
+
    $fqdns = getItemDomain($items);
-   
-   foreach($datas as $data){
+
+   foreach ($datas as $data) {
       $item_billingmodel = new PluginPrintercountersItem_Billingmodel($itemtype, $data['id']);
-      
+
       // Get record start
       $condition = "AND `".$record->getTable()."`.`date` <= '".date('Y-m-d', strtotime($datecriteria->getStartDate()))." 23:59:00' 
                     AND `".$record->getTable()."`.`date` >= '".date('Y-m-d', strtotime($datecriteria->getStartDate()." - 1 day"))." 00:00:00'";
-      $record1 = $record->getRecords($data['id'], $itemtype, array('condition' => $condition));
+      $record1 = $record->getRecords($data['id'], $itemtype, ['condition' => $condition]);
       $record1 = $item_billingmodel->computeRecordCost($record1);
 
       // Get record end
       $condition = "AND `".$record->getTable()."`.`date` <= '".date('Y-m-d', strtotime($datecriteria->getEndDate()))." 23:59:00' 
                     AND `".$record->getTable()."`.`date` >= '".date('Y-m-d', strtotime($datecriteria->getEndDate()." - 1 day"))." 00:00:00'";
-      $record2 = $record->getRecords($data['id'], $itemtype, array('condition' => $condition));
+      $record2 = $record->getRecords($data['id'], $itemtype, ['condition' => $condition]);
       $record2 = $item_billingmodel->computeRecordCost($record2);
-      
+
       // Get all records
       $condition = " AND `".$record->getTable()."`.`date` <= '".$datecriteria->getEndDate()."' 
                      AND `".$record->getTable()."`.`date` >= '".$datecriteria->getStartDate()."'";
-      $records = $record->getRecords($data['id'], $itemtype, array('condition' => $condition));
+      $records = $record->getRecords($data['id'], $itemtype, ['condition' => $condition]);
       $records = $item_billingmodel->computeRecordCost($records);
 
       $row_num++;
@@ -235,9 +235,9 @@ if ($output_type == Search::HTML_OUTPUT) {
 
 function getItemDomain($items) {
    global $DB;
-   
-   $fqdns = array();
-   
+
+   $fqdns = [];
+
    $query = "SELECT `glpi_fqdns`.`fqdn` as fqdn,
                      `glpi_printers`.`id` as items_id
              FROM `glpi_networkports`
@@ -254,7 +254,7 @@ function getItemDomain($items) {
          $fqdns[$data['items_id']] = $data['fqdn'];
       }
    }
-   
+
    return $fqdns;
 }
 
@@ -285,7 +285,7 @@ function showTitle($output_type, &$num, $title, $columnname, $sort = false) {
    $link = $_SERVER['PHP_SELF'];
    $first = true;
    foreach ($_REQUEST as $name => $value) {
-      if (!in_array($name, array('sort', 'order', 'PHPSESSID'))) {
+      if (!in_array($name, ['sort', 'order', 'PHPSESSID'])) {
          $link .= ($first ? '?' : '&amp;');
          $link .= $name.'='.urlencode($value);
          $first = false;
@@ -335,7 +335,6 @@ function getOrderByFields($default, $columns) {
          return $column['sorton'];
       }
    }
-   return array();
+   return [];
 }
 
-?>

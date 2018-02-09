@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -28,4 +28,3 @@
  */
 $LANG['plugin_printercounters']['printercountersreport'] = "Contradiction with the holders of markets";
 
-?>

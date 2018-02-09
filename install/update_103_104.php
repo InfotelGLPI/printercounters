@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -39,16 +39,16 @@ function update103to104() {
 
    // Snmp authentications
    $migration->addKey('glpi_plugin_printercounters_snmpauthentications', 'entities_id', 'entities_id');
-   $migration->addField('glpi_plugin_printercounters_snmpauthentications', 'community_write', 'string', array('value' => 'private'));
-   
+   $migration->addField('glpi_plugin_printercounters_snmpauthentications', 'community_write', 'string', ['value' => 'private']);
+
    // Profile
-   $migration->addField('glpi_plugin_printercounters_profiles', 'snmpset', 'bool', array('value' => 0));
+   $migration->addField('glpi_plugin_printercounters_profiles', 'snmpset', 'bool', ['value' => 0]);
    $query_profile = "ALTER TABLE `glpi_plugin_printercounters_profiles`
                         MODIFY COLUMN `add_lower_records` tinyint(1) NOT NULL default '0',
                         MODIFY COLUMN `update_records` tinyint(1) NOT NULL default '0';";
-   
+
    $DB->queryOrDie($query_profile, "Change profile column types");
-   
+
    // Create snmpset table
    $query_snmpset = "CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_snmpsets` (
                         `id` int(11) NOT NULL auto_increment,
@@ -62,12 +62,11 @@ function update103to104() {
                         UNIQUE KEY `unicity` (`entities_id`),
                         KEY `entities_id` (`entities_id`)
                      ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-   
+
    $DB->queryOrDie($query_snmpset, "Create snmpset table");
-   
+
    $migration->executeMigration();
 
    return true;
 }
 
-?>

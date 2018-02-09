@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -44,11 +44,11 @@ if (!isset($_POST['parenttype'])) {
 
 if (($item = getItemForItemtype($_POST['type']))
     && ($parent = getItemForItemtype($_POST['parenttype']))) {
-  
+
    if (isset($_POST[$parent->getForeignKeyField()])
        && isset($_POST["id"])
        && $parent->getFromDB($_POST[$parent->getForeignKeyField()])) {
-      $item->showForm($_POST["id"], array('parent' => $parent));
+      $item->showForm($_POST["id"], ['parent' => $parent]);
 
    } else {
       echo __('Access denied');
@@ -56,4 +56,3 @@ if (($item = getItemForItemtype($_POST['type']))
 }
 
 Html::ajaxFooter();
-?>

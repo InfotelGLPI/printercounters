@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -34,18 +34,17 @@
 function update106to107() {
 
    $migration = new Migration(107);
-   
+
    // Add item_recordmodel fields for items in error
-   $migration->addField('glpi_plugin_printercounters_items_recordmodels', 'status', 'int', array('value' => '0'));
-   $migration->addField('glpi_plugin_printercounters_items_recordmodels', 'error_counter', 'int', array('value' => '0'));
-   
+   $migration->addField('glpi_plugin_printercounters_items_recordmodels', 'status', 'int', ['value' => '0']);
+   $migration->addField('glpi_plugin_printercounters_items_recordmodels', 'error_counter', 'int', ['value' => '0']);
+
    // Maximum number of interrogation for records in error
-   $migration->addField('glpi_plugin_printercounters_configs', 'max_error_counter', 'int', array('value' => '3'));
-   $migration->addField('glpi_plugin_printercounters_configs', 'enable_error_handler', 'int', array('value' => '0'));
+   $migration->addField('glpi_plugin_printercounters_configs', 'max_error_counter', 'int', ['value' => '3']);
+   $migration->addField('glpi_plugin_printercounters_configs', 'enable_error_handler', 'int', ['value' => '0']);
 
    $migration->executeMigration();
 
    return true;
 }
 
-?>

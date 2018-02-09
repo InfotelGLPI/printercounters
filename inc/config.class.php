@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,50 +33,50 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersConfig
- * 
+ *
  * This class allows to manage the config
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersConfig extends CommonDBTM {
-   
+
    private static $instance;
-   
+
    const SNMPSET    = 1;
    const TICKETS    = 2;
    const RECORDS    = 3;
    const ERRORITEMS = 4;
 
    static $rightname = 'plugin_printercounters';
-   
-   static function getTypeName($nb=0) {
+
+   static function getTypeName($nb = 0) {
       return __('Plugin management', 'printercounters');
    }
-   
-  /**
+
+   /**
    * Define tabs
-   * 
+   *
    * @param type $options
    * @return array
    */
-   function defineTabs($options=array()) {
+   function defineTabs($options = []) {
 
-      $ong = array();
+      $ong = [];
       $this->addStandardTab(__CLASS__, $ong, $options);
 
       return $ong;
-   }   
-   
+   }
+
    /**
     * Get tab name for item
-    * 
+    *
     * @param CommonGLPI $item
     * @param type $tabnum
     * @param type $withtemplate
     * @return boolean
     */
-   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+   function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
       if ($item->getType() == __CLASS__) {
          $tabs[self::SNMPSET]    = PluginPrintercountersSnmpset::getTypeName();
@@ -88,31 +88,31 @@ class PluginPrintercountersConfig extends CommonDBTM {
       }
       return '';
    }
-   
+
    /**
     * Display content for item
-    * 
+    *
     * @param CommonGLPI $item
     * @param type $tabnum
     * @param type $withtemplate
     * @return boolean
     */
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
 
       $config = PluginPrintercountersConfig::getInstance();
-      
+
       if ($item->getType() == __CLASS__) {
          switch ($tabnum) {
             case self::SNMPSET : // Snmpset
                $snmpset = new PluginPrintercountersSnmpset();
                $snmpset->showSnmpSet($config);
                break;
-            
+
             case self::TICKETS : // Ticket
                $ticket = new PluginPrintercountersItem_Ticket();
                $ticket->showTickets($config);
                break;
-            
+
             case self::RECORDS :
                // Record
                $record = new PluginPrintercountersRecord();
@@ -121,7 +121,7 @@ class PluginPrintercountersConfig extends CommonDBTM {
                $process = new PluginPrintercountersProcess();
                $process->showProcesses($config);
                break;
-            
+
             case self::ERRORITEMS :
                // Error item
                $erroritem = new PluginPrintercountersErrorItem();
@@ -131,23 +131,23 @@ class PluginPrintercountersConfig extends CommonDBTM {
       }
       return true;
    }
-   
-   
-   
+
+
+
    /**
     * Get config instance in database
-    * 
+    *
     * @param type $options
     * @return type
     */
-   public static function getInstance(){
+   public static function getInstance() {
       if (!isset(self::$instance)) {
          $temp = new PluginPrintercountersConfig();
-         
+
          $data = $temp->getConfigFromDB();
-         $input = array();
-         if($data){
-            $input = array('configs_id'               => $data['id'],
+         $input = [];
+         if ($data) {
+            $input = ['configs_id'               => $data['id'],
                            'nb_errors_ticket'         => $data['nb_errors_ticket'],
                            'nb_errors_delay_ticket'   => $data['nb_errors_delay_ticket'],
                            'no_record_delay_ticket'   => $data['no_record_delay_ticket'],
@@ -163,26 +163,28 @@ class PluginPrintercountersConfig extends CommonDBTM {
                            'toner_treshold'           => $data['toner_treshold'],
                            'max_error_counter'        => $data['max_error_counter'],
                            'enable_error_handler'     => $data['enable_error_handler']
-                         );
+                         ];
          }
-         
+
          self::$instance = $input;
       }
 
       return self::$instance;
    }
-   
+
    /**
     * getConfigFromDB : get all configs in the database
-    * 
+    *
     * @param type $options
     * @return type
     */
-   function getConfigFromDB($options = array()) {
+   function getConfigFromDB($options = []) {
 
       $table = $this->getTable();
       $where = '1';
-      if (isset($options['where'])) $where = $options['where'];
+      if (isset($options['where'])) {
+         $where = $options['where'];
+      }
       $dbu        = new DbUtils();
       $dataConfig = $dbu->getAllDataFromTable($table, $where);
       if (count($dataConfig) > 0) {
@@ -206,4 +208,3 @@ class PluginPrintercountersConfig extends CommonDBTM {
    }
 }
 
-?>

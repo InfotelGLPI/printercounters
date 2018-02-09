@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -26,10 +26,9 @@
  along with printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
- 
+
 include ('../../../inc/includes.php');
 
 $dropdown = new PluginPrintercountersSnmpauthentication();
 include (GLPI_ROOT . "/front/dropdown.common.form.php");
 
-?>

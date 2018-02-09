@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -34,24 +34,24 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersSysdescr
- * 
+ *
  * This class allows to add and manage the sysdescrs used for the conforimty check of the items
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersSysdescr extends CommonDBTM {
 
    static $rightname = 'plugin_printercounters';
-   
+
    /**
     * functions mandatory
     * getTypeName(), canCreate(), canView()
     * */
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __('Sysdescr', 'Sysdescrs', $nb, 'printercounters');
    }
-   
+
    /**
     * Display tab for item
     *
@@ -62,7 +62,7 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
       if (!$withtemplate) {
-         switch($item->getType()){
+         switch ($item->getType()) {
             case 'PluginPrintercountersRecordmodel' :
                if ($_SESSION['glpishow_count_on_tabs']) {
                   $dbu = new DbUtils();
@@ -76,7 +76,7 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
       }
       return '';
    }
-   
+
    /**
     * Display content for each users
     *
@@ -88,109 +88,109 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
     */
    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       $sysdescr = new self();
-      
-      switch($item->getType()){
+
+      switch ($item->getType()) {
          case 'PluginPrintercountersRecordmodel' :
             $sysdescr->showForRecordmodel($item);
             break;
       }
       return true;
    }
-   
+
    /**
     * Function show item
     *
     * @param $ID        integer  ID of the item
     * @param $options   array    options used
     */
-   function showForm($ID, $options=array()) {
-      
+   function showForm($ID, $options = []) {
+
       if ($ID > 0) {
          $script = "$('#printercounters_viewAddSysdescr').show();";
       } else {
          $script = "$('#printercounters_viewAddSysdescr').hide();";
          $options['plugin_printercounters_recordmodels_id'] = $options['parent']->getField('id');
       }
-      
+
       $this->initForm($ID, $options);
-      
+
       echo html::scriptBlock($script);
-      
+
       $this->showFormHeader($options);
       echo "<tr class='tab_bg_1'>";
       // Sysdescr
       echo "<td class='center' colspan='4'>";
       echo self::getTypeName().'&nbsp;';
-      Html::autocompletionTextField($this, "sysdescr", array('value' => $this->fields['sysdescr']));
+      Html::autocompletionTextField($this, "sysdescr", ['value' => $this->fields['sysdescr']]);
       $p = $options['parent']->getField('id');
       $parent = ((isset($p))? $p : 0);
       echo "<input type='hidden' name='plugin_printercounters_recordmodels_id' value='".$parent."' >";
       echo "</td>";
       echo "</tr>";
-      
+
       $this->showFormButtons($options);
 
       return true;
    }
-   
+
    /**
     * Function show for record model
-    * 
+    *
     * @param type $item
     * @return boolean
     */
    function showForRecordmodel($item) {
-      
+
       $recordmodel = new PluginPrintercountersRecordmodel();
       $canedit = ($recordmodel->can($item->fields['id'], UPDATE) && $this->canCreate());
-      
+
       $rand = mt_rand();
-      
+
       if (isset($_POST["start"])) {
          $start = $_POST["start"];
       } else {
          $start = 0;
       }
       $data = $this->getItems($item->fields['id'], $start);
-      
+
       if ($canedit) {
          echo "<div id='viewsysdescr".$item->fields['id']."_$rand'></div>\n";
-         PluginPrintercountersAjax::getJSEdition("viewsysdescr".$item->fields['id']."_$rand", 
-                                                 "viewAddSysdescr".$item->fields['id']."_$rand", 
+         PluginPrintercountersAjax::getJSEdition("viewsysdescr".$item->fields['id']."_$rand",
+                                                 "viewAddSysdescr".$item->fields['id']."_$rand",
                                                  $this->getType(),
-                                                 -1, 
-                                                 'PluginPrintercountersRecordmodel', 
+                                                 -1,
+                                                 'PluginPrintercountersRecordmodel',
                                                  $item->fields['id']);
          echo "<div class='center firstbloc'>".
                "<a class='vsubmit' id='printercounters_viewAddSysdescr' href='javascript:viewAddSysdescr".$item->fields['id']."_$rand();'>";
          echo __('Add a new sysdescr', 'printercounters')."</a></div>\n";
       }
-      
+
       if (!empty($data)) {
          $this->listItems($item->fields['id'], $data, $canedit, $rand);
       }
    }
-   
+
    /**
     * Function list items
-    * 
+    *
     * @global type $CFG_GLPI
     * @param type $ID
     * @param type $data
     * @param type $canedit
     * @param type $rand
     */
-   private function listItems($ID, $data, $canedit, $rand){
+   private function listItems($ID, $data, $canedit, $rand) {
       global $CFG_GLPI;
 
       echo "<div class='center'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];
          Html::showMassiveActions($massiveactionparams);
       }
-      
-//      Html::printAjaxPager(self::getTypeName(2), $start, countElementsInTable($this->getTable()));
+
+      //      Html::printAjaxPager(self::getTypeName(2), $start, countElementsInTable($this->getTable()));
       echo "<table class='tab_cadre_fixehov'>";
       echo "<tr class='tab_bg_1'>";
       echo "<th width='10'>";
@@ -200,21 +200,21 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
       echo "</th>";
       echo "<th>".self::getTypeName(1)."</th>";
       echo "</tr>";
-      
-      foreach($data as $field){
+
+      foreach ($data as $field) {
          $onclick = ($canedit
                       ? "style='cursor:pointer' onClick=\"viewEditSysdescr".$field['plugin_printercounters_recordmodels_id']."_".
                         $field['id']."_$rand();\"": '');
-                  
+
          echo "<tr class='tab_bg_2'>";
          echo "<td width='10'>";
          if ($canedit) {
             Html::showMassiveActionCheckBox(__CLASS__, $field['id']);
-            PluginPrintercountersAjax::getJSEdition("viewsysdescr".$ID."_$rand", 
-                                                    "viewEditSysdescr".$field['plugin_printercounters_recordmodels_id']."_".$field["id"]."_$rand", 
+            PluginPrintercountersAjax::getJSEdition("viewsysdescr".$ID."_$rand",
+                                                    "viewEditSysdescr".$field['plugin_printercounters_recordmodels_id']."_".$field["id"]."_$rand",
                                                     $this->getType(),
-                                                    $field["id"], 
-                                                    'PluginPrintercountersRecordmodel', 
+                                                    $field["id"],
+                                                    'PluginPrintercountersRecordmodel',
                                                     $field["plugin_printercounters_recordmodels_id"]);
          }
          echo "</td>";
@@ -227,24 +227,24 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
       if ($canedit) {
          $massiveactionparams['ontop'] = false;
          Html::showMassiveActions($massiveactionparams);
-         Html::closeForm(); 
+         Html::closeForm();
       }
       echo "</div>";
    }
-   
+
    /**
     * Function get items for record models
-    * 
+    *
     * @global type $DB
     * @param type $recordmodels_id
     * @param type $start
     * @return type
     */
-   function getItems($recordmodels_id, $start=0){
+   function getItems($recordmodels_id, $start = 0) {
       global $DB;
-      
-      $output = array();
-      
+
+      $output = [];
+
       $query = "SELECT `".$this->getTable()."`.`id`, 
                        `".$this->getTable()."`.`sysdescr`,
                        `".$this->getTable()."`.`plugin_printercounters_recordmodels_id`
@@ -258,68 +258,68 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
             $output[$data['id']] = $data;
          }
       }
-      
+
       return $output;
    }
-   
-  
-  /** 
+
+
+   /**
    * Get search options
-   * 
+   *
    * @return array
    */
    function getSearchOptions() {
-      
+
       $tab[111]['table']          = $this->getTable();
       $tab[111]['field']          = 'sysdescr';
       $tab[111]['name']           = self::getTypeName();
       $tab[111]['massiveaction']  = true;
-      
+
       return $tab;
    }
-   
-  /** 
+
+   /**
    * Actions done before add
-   * 
+   *
    * @param type $input
    * @return type
    */
    function prepareInputForAdd($input) {
-      if(!$this->checkMandatoryFields($input)){
-         return false;
-      }
-      
-      return $input;
-   }
-   
-  /** 
-   * Actions done before update
-   * 
-   * @param type $input
-   * @return type
-   */
-   function prepareInputForUpdate($input) {
-      if(!$this->checkMandatoryFields($input)){
+      if (!$this->checkMandatoryFields($input)) {
          return false;
       }
 
       return $input;
    }
-   
-   
-  /** 
-   * checkMandatoryFields 
-   * 
+
+   /**
+   * Actions done before update
+   *
+   * @param type $input
+   * @return type
+   */
+   function prepareInputForUpdate($input) {
+      if (!$this->checkMandatoryFields($input)) {
+         return false;
+      }
+
+      return $input;
+   }
+
+
+   /**
+   * checkMandatoryFields
+   *
    * @param type $input
    * @return boolean
    */
-   function checkMandatoryFields($input){
-      $msg     = array();
+   function checkMandatoryFields($input) {
+      $msg     = [];
       $checkKo = false;
-      
-      $mandatory_fields = array('sysdescr' => __('Sysdescr', 'printercounters'));
-      
-      foreach($input as $key => $value){
+
+      $mandatory_fields = ['sysdescr' => __('Sysdescr', 'printercounters')];
+
+      foreach ($input as $key => $value) {
          if (array_key_exists($key, $mandatory_fields)) {
             if (empty($value)) {
                $msg[] = $mandatory_fields[$key];
@@ -327,7 +327,7 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
             }
          }
       }
-      
+
       if ($checkKo) {
          Session::addMessageAfterRedirect(sprintf(__("Mandatory fields are not filled. Please correct: %s"), implode(', ', $msg)), true, ERROR);
          return false;
@@ -335,4 +335,3 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
       return true;
    }
 }
-?>

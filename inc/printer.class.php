@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,14 +33,14 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersPrinter
- * 
+ *
  * This class brings fonctions and attributes for the SNMP interrogation of printers
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject {
-   
+
    /**
     * Printer types
     */
@@ -55,15 +55,15 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
    const CARTRIDGE_COLOR_YELLOW = 'yellow';
    const CARTRIDGE_COLOR_BLACK = 'black';
    const OTHER_DATA = 'other';
-   
+
    /**
     * Printer data types
     */
    const TONER_TYPE = 'toner';
    const DRUM_TYPE  = 'drum';
    const OTHER_TYPE = 'other';
-   
-   
+
+
    /**
     * Printer data sub-types
     */
@@ -82,7 +82,7 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
    /**
     * SNMP printer common object ids
     */
-   
+
    const SNMP_PRINTER_SYSUP = '.1.3.6.1.2.1.1.3.0';
    const SNMP_PRINTER_SYSNAME = '.1.3.6.1.2.1.1.5.0';
    const SNMP_PRINTER_SYSLOCATION = '.1.3.6.1.2.1.1.6.0';
@@ -116,21 +116,21 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
    const SNMP_CARTRIDGE_COLOR_SLOT_2 = '.1.3.6.1.2.1.43.12.1.1.4.1.2';
    const SNMP_CARTRIDGE_COLOR_SLOT_3 = '.1.3.6.1.2.1.43.12.1.1.4.1.3';
    const SNMP_CARTRIDGE_COLOR_SLOT_4 = '.1.3.6.1.2.1.43.12.1.1.4.1.4';
-   
+
    static $rightname = 'plugin_printercounters';
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __('Printer counters', 'printercounters');
    }
-   
+
    static function canView() {
       return Session::haveRight(self::$rightname, READ);
    }
 
    static function canCreate() {
-      return Session::haveRightsOr(self::$rightname, array(CREATE, UPDATE, DELETE));
+      return Session::haveRightsOr(self::$rightname, [CREATE, UPDATE, DELETE]);
    }
-   
+
    /**
     * Function gets and return what type of printer we are working with,
     * or returns false if error occurred
@@ -238,7 +238,7 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
    public function getBlackCatridgeType() {
       if ($this->isColorPrinter()) {
          return $this->getSNMPString(self::SNMP_SUB_UNIT_TYPE_SLOT_4);
-      } elseif ($this->isMonoPrinter()) {
+      } else if ($this->isMonoPrinter()) {
          return $this->getSNMPString(self::SNMP_SUB_UNIT_TYPE_SLOT_1);
       } else {
          return false;
@@ -332,11 +332,9 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
     */
    public function getBlackTonerLevel() {
       if ($this->isColorPrinter()) {
-         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_4
-                         , self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_4);
-      } elseif ($this->isMonoPrinter()) {
-         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_1
-                         , self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_1);
+         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_4, self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_4);
+      } else if ($this->isMonoPrinter()) {
+         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_1, self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_1);
       } else {
          return false;
       }
@@ -351,8 +349,7 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
     */
    public function getCyanTonerLevel() {
       if ($this->isColorPrinter()) {
-         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_1
-                         , self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_1);
+         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_1, self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_1);
       } else {
          return false;
       }
@@ -367,8 +364,7 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
     */
    public function getMagentaTonerLevel() {
       if ($this->isColorPrinter()) {
-         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_2
-                         , self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_2);
+         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_2, self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_2);
       } else {
          return false;
       }
@@ -383,8 +379,7 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
     */
    public function getYellowTonerLevel() {
       if ($this->isColorPrinter()) {
-         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_3
-                         , self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_3);
+         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_3, self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_3);
       } else {
          return false;
       }
@@ -399,16 +394,14 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
     */
    public function getDrumLevel() {
       if ($this->isColorPrinter()) {
-         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_5
-                         , self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_5);
-      } elseif ($this->isMonoPrinter()) {
-         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_2
-                         , self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_2);
+         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_5, self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_5);
+      } else if ($this->isMonoPrinter()) {
+         return $this->getSubUnitPercentageLevel(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOT_2, self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOT_2);
       } else {
          return false;
       }
    }
-   
+
    /**
     * Function walks through SNMP object ids of Sub-Units and returns results of them all in array
     * with calculated percentage level
@@ -416,54 +409,54 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
     * @return array
     */
    public function getAllSubUnitData() {
-      
+
       $names = $this->walk(self::SNMP_SUB_UNIT_TYPE_SLOTS);
       $maxValues = $this->walk(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOTS);
       $actualValues = $this->walk(self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOTS);
 
       foreach ($names as $key => $name) {
-         $resultData[] = array('name'            => $name, 
-                               'maxValue'        => $maxValues[$key] , 
-                               'actualValue'     => $actualValues[$key], 
-                               'percentageLevel' => ((int) $actualValues[$key] >= 0) ? ($actualValues[$key] / ($maxValues[$key] / 100)) : null);
+         $resultData[] = ['name'            => $name,
+                               'maxValue'        => $maxValues[$key] ,
+                               'actualValue'     => $actualValues[$key],
+                               'percentageLevel' => ((int) $actualValues[$key] >= 0) ? ($actualValues[$key] / ($maxValues[$key] / 100)) : null];
       }
-      
+
       return $resultData;
    }
-   
-   
-      
+
+
+
    /**
     * Function walks through SNMP object ids of Sub-Units and returns results of them all in array
     * with calculated percentage level
     *
     * @return array
     */
-   public function getTonerData($resultData=array()) {
-      
+   public function getTonerData($resultData = []) {
+
       $types = $this->walk(self::SNMP_MARKER_COLORANT_VALUE);
       $names = $this->walk(self::SNMP_SUB_UNIT_TYPE_SLOTS);
       $maxValues = $this->walk(self::SNMP_MARKER_SUPPLIES_MAX_CAPACITY_SLOTS);
       $actualValues = $this->walk(self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOTS);
 
       foreach ($types as $key => $type) {
-         $resultData[] = array('type'      => self::TONER_TYPE,
+         $resultData[] = ['type'      => self::TONER_TYPE,
                                'sub_type'  => $type,
-                               'name'      => $names[$key],  
-                               'value'     => ((int) $actualValues[$key] >= 0) ? ($actualValues[$key] / ($maxValues[$key] / 100)) : null);
+                               'name'      => $names[$key],
+                               'value'     => ((int) $actualValues[$key] >= 0) ? ($actualValues[$key] / ($maxValues[$key] / 100)) : null];
       }
-      
+
       return $resultData;
    }
-   
-  /**
+
+   /**
     * Function walks through SNMP object ids of Sub-Units and returns results of them all in array
     * with calculated percentage level
     *
     * @return array
     */
-   public function getPrinterInfo($resultData=array()) {
-      
+   public function getPrinterInfo($resultData = []) {
+
       $countertype_recordmodel = new PluginPrintercountersCountertype_Recordmodel();
       $oid_name = $countertype_recordmodel->getOIDRecordmodelCountersForItem($this->items_id, $this->itemtype, PluginPrintercountersCountertype_Recordmodel::NAME);
 
@@ -472,46 +465,46 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
       } else {
          $name = $this->get(self::SNMP_PRINTER_SYSNAME);
       }
-     
+
       $location     = $this->get(self::SNMP_PRINTER_SYSLOCATION);
       $contact      = $this->get(self::SNMP_PRINTER_SYSCONTACT);
       $uptime       = $this->get(self::SNMP_PRINTER_SYSUP);
 
-      $resultData[] =  array('type'      => self::OTHER_TYPE,
+      $resultData[] =  ['type'      => self::OTHER_TYPE,
                              'sub_type'  => self::PRINTER_NAME,
-                             'name'      => __('Name'),  
-                             'value'     => $name);
-      
-      $resultData[] =  array('type'      => self::OTHER_TYPE,
+                             'name'      => __('Name'),
+                             'value'     => $name];
+
+      $resultData[] =  ['type'      => self::OTHER_TYPE,
                              'sub_type'  => self::PRINTER_LOCATION,
-                             'name'      => __('Location'),  
-                             'value'     => $location);
-            
-      $resultData[] =  array('type'      => self::OTHER_TYPE,
+                             'name'      => __('Location'),
+                             'value'     => $location];
+
+      $resultData[] =  ['type'      => self::OTHER_TYPE,
                              'sub_type'  => self::PRINTER_CONTACT,
-                             'name'      => __('Contact'),  
-                             'value'     => $contact);
-      
-      $resultData[] =  array('type'      => self::OTHER_TYPE,
+                             'name'      => __('Contact'),
+                             'value'     => $contact];
+
+      $resultData[] =  ['type'      => self::OTHER_TYPE,
                              'sub_type'  => self::PRINTER_UPTIME,
                              'name'      => __('Uptime', 'printercounters'),
-                             'value'     => $uptime);
-      
+                             'value'     => $uptime];
+
       return $resultData;
    }
-   
+
    /**
     * Function gets OIDs of an item
     *
     */
-   public function getOID(){
+   public function getOID() {
       global $DB;
-      
+
       $itemjoin2 = "PluginPrintercountersItem_Recordmodel";
       $itemjoin3 = "PluginPrintercountersCountertype_Recordmodel";
-      
-      $output = array();
-      
+
+      $output = [];
+
       $query = "SELECT `".getTableForItemType($itemjoin3)."`.`id` as countertypes_recordmodels_id,
                        `".getTableForItemType($itemjoin3)."`.`oid` as oid
           FROM ".getTableForItemType($itemjoin3)."
@@ -531,13 +524,13 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
             $output[$data['countertypes_recordmodels_id']] = $data['oid'];
          }
       }
-      
+
       $this->oid = $output;
    }
-   
+
    /**
     * Function inits search of counters for the printers
-    * 
+    *
     * @param array $recordmodel_config
     * @return type
     */
@@ -546,9 +539,9 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
       // Conformity check
       $recordmodel = new PluginPrintercountersRecordmodel();
       list($record_result, $record_type) = $recordmodel->checkConformity($this, $recordmodel_config);
-      
+
       // If no IP error : Search toner data
-      $additional_datas = array();
+      $additional_datas = [];
       if ($record_result != PluginPrintercountersRecord::$IP_FAIL) {
          if ($recordmodel_config['enable_toner_level']) {
             $additional_datas = $this->getTonerData();
@@ -557,13 +550,13 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
             $additional_datas = $this->getPrinterInfo($additional_datas);
          }
       }
-      
-      $counters = array(); 
-      
+
+      $counters = [];
+
       if (!empty($this->oid)) {
          $record = new PluginPrintercountersRecord();
 
-         // If conformity is ok : Get counters 
+         // If conformity is ok : Get counters
          if ($record_result == PluginPrintercountersRecord::$SUCCESS) {
             foreach ($this->oid as $countertypes_recordmodels_id => $oid) {
                $counters['counters'][$countertypes_recordmodels_id][0] = $this->get($oid);
@@ -574,7 +567,7 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
             if ($error) {
                $record_type = PluginPrintercountersRecord::$RECORD_ERROR_TYPE;
             }
-            
+
             // Check if counters are correct values
             list($messages, $error) = $record->checkValues($this->items_id, $this->itemtype, $counters, 'numeric_or_empty_counters');
             if ($error) {
@@ -582,7 +575,7 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
                $record_result = PluginPrintercountersRecord::$OID_FAIL;
             }
          }
-         
+
          // Set counters to 0 if in error state
          if ($record_result != PluginPrintercountersRecord::$SUCCESS) {
             foreach ($this->oid as $countertypes_recordmodels_id => $oid) {
@@ -590,7 +583,7 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
             }
          }
       }
-        
+
       $counters['itemtype']              = $this->itemtype;
       $counters['items_id']              = $this->items_id;
       $counters['items_recordmodels_id'] = $this->item_recordmodel;
@@ -599,30 +592,30 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
       $counters['locations_id']          = $this->locations_id;
       $counters['additional_datas']      = $additional_datas;
 
-      return array('counters'         => $counters,
-                   'record_result'    => $record_result, 
-                   'record_type'      => $record_type);
+      return ['counters'         => $counters,
+                   'record_result'    => $record_result,
+                   'record_type'      => $record_type];
    }
-   
+
    /**
     * Function set values on printer
-    * 
+    *
     * @param type $SNMPsetValues
     */
 
    public function setValues($SNMPsetValues) {
-      
-      $resultData = array();
+
+      $resultData = [];
 
       if (!empty($SNMPsetValues)) {
          foreach ($SNMPsetValues as $key => $val) {
             switch ($key) {
                case 'set_contact':
                   $this->set(self::SNMP_PRINTER_SYSCONTACT, 's', $SNMPsetValues['contact']);
-                  $resultData['additional_datas'][] =  array('type'      => self::OTHER_TYPE,
+                  $resultData['additional_datas'][] =  ['type'      => self::OTHER_TYPE,
                                                              'sub_type'  => self::PRINTER_CONTACT,
-                                                             'name'      => __('Contact'),  
-                                                             'value'     => $SNMPsetValues['contact']);
+                                                             'name'      => __('Contact'),
+                                                             'value'     => $SNMPsetValues['contact']];
                   break;
 
                case 'set_name':
@@ -634,23 +627,23 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
                   }
 
                   $this->set($oid_name, 's', $val);
-                  $resultData['additional_datas'][] =  array('type'      => self::OTHER_TYPE,
+                  $resultData['additional_datas'][] =  ['type'      => self::OTHER_TYPE,
                                                              'sub_type'  => self::PRINTER_NAME,
-                                                             'name'      => __('Name'),  
-                                                             'value'     => $val);
+                                                             'name'      => __('Name'),
+                                                             'value'     => $val];
                   break;
 
                case 'set_location':
                   $this->set(self::SNMP_PRINTER_SYSLOCATION, 's', $val);
-                  $resultData['additional_datas'][] =  array('type'      => self::OTHER_TYPE,
+                  $resultData['additional_datas'][] =  ['type'      => self::OTHER_TYPE,
                                                              'sub_type'  => self::PRINTER_LOCATION,
-                                                             'name'      => __('Location'),  
-                                                             'value'     => $val);
+                                                             'name'      => __('Location'),
+                                                             'value'     => $val];
                   break;
             }
          }
       }
-      
+
       return $resultData;
    }
 

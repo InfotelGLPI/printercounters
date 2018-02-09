@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -42,23 +42,22 @@ if (isset($_POST["add"])) {
 
    Html::back();
 
-} elseif (isset($_POST["update"])) {
+} else if (isset($_POST["update"])) {
    // Check update rights for fields
    $pagecost->check($_POST['id'], UPDATE, $_POST);
    $pagecost->update($_POST);
 
    Html::back();
 
-} elseif (isset($_POST["delete"])) {
+} else if (isset($_POST["delete"])) {
    // Check update rights for fields
    $pagecost->check($_POST['id'], DELETE, $_POST);
    $pagecost->delete($_POST, 1);
    $pagecost->redirectToList();
-   
+
 } else {
    $pagecost->checkGlobal(READ);
    Html::header(PluginPrintercountersPagecost::getTypeName(1), '', "tools", "pluginprintercountersmenu");
    $pagecost->display($_GET);
    Html::footer();
 }
-?>

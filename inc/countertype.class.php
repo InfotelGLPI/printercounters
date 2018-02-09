@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,9 +33,9 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersCountertype
- * 
+ *
  * This class allows to manage the counter types (like color, monochrome ...)
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
@@ -43,7 +43,7 @@ class PluginPrintercountersCountertype extends CommonDropdown {
 
    static $rightname = 'plugin_printercounters';
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return _n("Counter type", "Counter types", $nb, 'printercounters');
    }
 
@@ -53,11 +53,11 @@ class PluginPrintercountersCountertype extends CommonDropdown {
 
       return $tab;
    }
-   
+
    function displayHeader() {
       Html::header($this->getTypeName(), '', "tools", "pluginprintercountersmenu", "countertype");
    }
-   
+
    /**
     * Actions done at the end of the getEmpty function
     *
@@ -67,63 +67,63 @@ class PluginPrintercountersCountertype extends CommonDropdown {
       // Set session saved if exists
       $this->setSessionValues();
    }
-   
-  /** 
+
+   /**
    * Set session values in object
    *
    * @return type
    */
-   function setSessionValues(){
-      if(isset($_SESSION['plugin_printercounters']['countertype']) && !empty($_SESSION['plugin_printercounters']['countertype'])){
-         foreach($_SESSION['plugin_printercounters']['countertype'] as $key => $val){
+   function setSessionValues() {
+      if (isset($_SESSION['plugin_printercounters']['countertype']) && !empty($_SESSION['plugin_printercounters']['countertype'])) {
+         foreach ($_SESSION['plugin_printercounters']['countertype'] as $key => $val) {
             $this->fields[$key] = $val;
          }
       }
       unset($_SESSION['plugin_printercounters']['countertype']);
    }
-   
-     /** 
+
+     /**
    * Actions done before add
-   * 
+   *
    * @param type $input
    * @return type
    */
    function prepareInputForAdd($input) {
-      if(!$this->checkMandatoryFields($input)){
+      if (!$this->checkMandatoryFields($input)) {
          $_SESSION['plugin_printercounters']['countertype'] = $input;
-         return false;
-      }
-      
-      return $input;
-   }
-   
-  /** 
-   * Actions done before update
-   * 
-   * @param type $input
-   * @return type
-   */
-   function prepareInputForUpdate($input) {
-      if(!$this->checkMandatoryFields($input)){
          return false;
       }
 
       return $input;
    }
-   
-  /** 
-   * Check mandatory fields 
-   * 
+
+   /**
+   * Actions done before update
+   *
+   * @param type $input
+   * @return type
+   */
+   function prepareInputForUpdate($input) {
+      if (!$this->checkMandatoryFields($input)) {
+         return false;
+      }
+
+      return $input;
+   }
+
+   /**
+   * Check mandatory fields
+   *
    * @param type $input
    * @return boolean
    */
-   function checkMandatoryFields($input){
-      $msg     = array();
+   function checkMandatoryFields($input) {
+      $msg     = [];
       $checkKo = false;
-      
-      $mandatory_fields = array('name'     => __('Name'));
-      
-      foreach($input as $key => $value){
+
+      $mandatory_fields = ['name'     => __('Name')];
+
+      foreach ($input as $key => $value) {
          if (array_key_exists($key, $mandatory_fields)) {
             if (empty($value)) {
                $msg[] = $mandatory_fields[$key];
@@ -131,24 +131,24 @@ class PluginPrintercountersCountertype extends CommonDropdown {
             }
          }
       }
-      
+
       if ($checkKo) {
          Session::addMessageAfterRedirect(sprintf(__("Mandatory fields are not filled. Please correct: %s"), implode(', ', $msg)), false, ERROR);
          return false;
       }
       return true;
    }
-   
+
    /**
     * Get the standard massive actions which are forbidden
-    * 
+    *
     * @return an array of massive actions
    **/
    function getForbiddenStandardMassiveAction() {
 
       $forbidden = parent::getForbiddenStandardMassiveAction();
       $forbidden[] = 'merge';
-      
+
       return $forbidden;
    }
 

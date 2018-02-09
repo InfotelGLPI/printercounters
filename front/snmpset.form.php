@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -46,24 +46,23 @@ if (isset($_POST["add"])) {
 
    Html::back();
 
-} elseif (isset($_POST["update"])) {
+} else if (isset($_POST["update"])) {
    // Check update rights for fields
    $snmpset->check($_POST['id'], UPDATE, $_POST);
    $snmpset->update($_POST);
 
    Html::back();
 
-} elseif (isset($_POST["delete"])) {
+} else if (isset($_POST["delete"])) {
    // Check delete rights for fields
    $snmpset->check($_POST['id'], DELETE, $_POST);
    $snmpset->delete($_POST, 1);
-   
+
    $snmpset->redirectToList();
-   
+
 } else {
    $snmpset->checkGlobal(READ);
    Html::header(PluginPrintercountersItem_Recordmodel::getTypeName(1), '', "tools", "pluginprintercountersmenu", "snmpset");
-   $snmpset->display(array('id' => $_GET["id"]));
+   $snmpset->display(['id' => $_GET["id"]]);
    Html::footer();
 }
-?>

@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,37 +33,37 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersRecordmodel
- * 
+ *
  * This class allows to manage the record models
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersRecordmodel extends CommonDropdown {
-   
+
    protected $itemtype;
    protected $items_id;
-   
+
    static $rightname = 'plugin_printercounters';
-   
+
    /**
     * Constructor
-    * 
+    *
     * @param type $itemtype
     * @param type $items_id
     */
-   public function __construct($itemtype = 'printer', $items_id=0) {
+   public function __construct($itemtype = 'printer', $items_id = 0) {
       $this->setItemtype($itemtype);
       $this->setItems_id($items_id);
-      
+
       parent::__construct();
    }
-   
+
    /**
     * Function sets itemtype id
     *
-    * @param string $itemtype 
-    * @throws Exception 
+    * @param string $itemtype
+    * @throws Exception
     */
    public function setItemtype($itemtype) {
 
@@ -73,7 +73,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
 
       $this->itemtype = $itemtype;
    }
-   
+
    /**
     * Function sets items id
     *
@@ -84,17 +84,17 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
       $this->items_id = $items_id;
    }
 
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return _n("Record model", "Record models", $nb, 'printercounters');
    }
-      
-  /** 
+
+   /**
    * Get search options
-   * 
+   *
    * @return array
    */
    function getSearchOptions() {
-      
+
       $tab[1]['table']             = $this->getTable();
       $tab[1]['field']             = 'name';
       $tab[1]['name']              = __('Name');
@@ -106,7 +106,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
       $tab[2]['name']              = __('ID');
       $tab[2]['massiveaction']     = false;
       $tab[2]['datatype']          = 'number';
-      
+
       $tab[3]['table']             = 'glpi_entities';
       $tab[3]['field']             = 'name';
       $tab[3]['name']              = __('Entity');
@@ -118,19 +118,19 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
       $tab[12]['name']           = __('MAC Address Conformity', 'printercounters');
       $tab[12]['datatype']       = 'bool';
       $tab[12]['massiveaction']  = true;
-      
+
       $tab[13]['table']          = $this->getTable();
       $tab[13]['field']          = 'sysdescr_conformity';
       $tab[13]['name']           = __('Sysdescr Conformity', 'printercounters');
       $tab[13]['datatype']       = 'bool';
       $tab[13]['massiveaction']  = true;
-      
+
       $tab[14]['table']          = $this->getTable();
       $tab[14]['field']          = 'serial_conformity';
       $tab[14]['name']           = __('Serial Conformity', 'printercounters');
       $tab[14]['datatype']       = 'bool';
       $tab[14]['massiveaction']  = true;
-      
+
       $tab[15]['table']          = getTableForItemType($this->itemtype);
       $tab[15]['field']          = 'name';
       $tab[15]['forcegroupby']   = true;
@@ -138,97 +138,96 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
       $tab[15]['massiveaction']  = false;
       $tab[15]['datatype']       = 'itemlink';
       $tab[15]['linkfield']      = 'items_id';
-      $tab[15]['joinparams']     = array('condition' => " AND `glpi_plugin_printercounters_items_recordmodels`.`itemtype` = '".$this->itemtype."'",
+      $tab[15]['joinparams']     = ['condition' => " AND `glpi_plugin_printercounters_items_recordmodels`.`itemtype` = '".$this->itemtype."'",
                                           'beforejoin'
-                                          => array('table'      => 'glpi_plugin_printercounters_items_recordmodels',
-                                                   'joinparams' => array('jointype'   => 'child')
-                                              )
-                                        );
-      
+                                          => ['table'      => 'glpi_plugin_printercounters_items_recordmodels',
+                                                   'joinparams' => ['jointype'   => 'child']
+                                              ]
+                                        ];
+
       $tab[16]['table']         = 'glpi_plugin_printercounters_countertypes';
       $tab[16]['field']         = 'name';
       $tab[16]['name']          = __('Counter type', 'printercounters');
       $tab[16]['forcegroupby']  = true;
       $tab[16]['massiveaction'] = false;
-      $tab[16]['joinparams']     = array(
+      $tab[16]['joinparams']     = [
                                     'beforejoin'
-                                    => array('table'      => 'glpi_plugin_printercounters_countertypes_recordmodels',
-                                             'joinparams' => array('jointype'   => 'child')
-                                        )
-                                  );
-      
+                                    => ['table'      => 'glpi_plugin_printercounters_countertypes_recordmodels',
+                                             'joinparams' => ['jointype'   => 'child']
+                                        ]
+                                  ];
+
       $tab[17]['table']         = 'glpi_plugin_printercounters_countertypes_recordmodels';
       $tab[17]['field']         = 'oid';
       $tab[17]['name']          = __('OID', 'printercounters');
       $tab[17]['forcegroupby']  = true;
       $tab[17]['massiveaction'] = false;
-      $tab[17]['joinparams']    = array('jointype'   => 'child');
-      
+      $tab[17]['joinparams']    = ['jointype'   => 'child'];
+
       $tab[18]['table']         = 'glpi_plugin_printercounters_countertypes_recordmodels';
       $tab[18]['field']         = 'oid_type';
       $tab[18]['name']          = __('OID type', 'printercounters');
       $tab[18]['forcegroupby']  = true;
       $tab[18]['massiveaction'] = false;
       $tab[18]['datatype']       = 'specific';
-      $tab[18]['joinparams']    = array('jointype'   => 'child');
-      
+      $tab[18]['joinparams']    = ['jointype'   => 'child'];
+
       $tab[19]['table']          = $this->getTable();
       $tab[19]['field']          = 'enable_toner_level';
       $tab[19]['name']           = __('Enable toner level', 'printercounters');
       $tab[19]['datatype']       = 'bool';
       $tab[19]['massiveaction']  = true;
 
-      
       $tab[20]['table']          = $this->getTable();
       $tab[20]['field']          = 'enable_printer_info';
       $tab[20]['name']           = __('Enable printer informations', 'printercounters');
       $tab[20]['datatype']       = 'bool';
       $tab[20]['massiveaction']  = true;
-      
+
       return $tab;
    }
-   
-  /** 
+
+   /**
    * Get additional fields in form
-   * 
+   *
    * @return array
    */
    function getAdditionalFields() {
 
-      $tab = array(
-                   array('name'  => 'mac_address_conformity',
+      $tab = [
+                   ['name'  => 'mac_address_conformity',
                          'label' => __('MAC Address Conformity', 'printercounters'),
                          'type'  => 'bool',
-                         'list'  => true),
-                   array('name'  => 'sysdescr_conformity',
+                         'list'  => true],
+                   ['name'  => 'sysdescr_conformity',
                          'label' => __('Sysdescr Conformity', 'printercounters'),
                          'type'  => 'bool',
-                         'list'  => true),
-                   array('name'  => 'serial_conformity',
+                         'list'  => true],
+                   ['name'  => 'serial_conformity',
                          'label' => __('Serial Conformity', 'printercounters')."<p class='red'> "
                                     .__('Warning import the serial number can not be effective if the setting is enabled', 'printercounters')."</p>",
                          'type'  => 'bool',
-                         'list'  => true),
-                   array('name'  => 'enable_toner_level',
+                         'list'  => true],
+                   ['name'  => 'enable_toner_level',
                          'label' => __('Enable toner level', 'printercounters'),
                          'type'  => 'bool',
-                         'list'  => true),
-                   array('name'  => 'enable_printer_info',
+                         'list'  => true],
+                   ['name'  => 'enable_printer_info',
                          'label' => __('Enable printer informations', 'printercounters'),
                          'type'  => 'bool',
-                         'list'  => true),
-                   );
+                         'list'  => true],
+                   ];
 
       return $tab;
    }
-      
-  /** 
+
+   /**
    * Form header
    */
    function displayHeader() {
       Html::header($this->getTypeName(), '', "tools", "pluginprintercountersmenu", "recordmodel");
    }
-   
+
    /**
     * Actions done at the end of the getEmpty function
     *
@@ -238,35 +237,35 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
       // Set session saved if exists
       $this->setSessionValues();
    }
-   
-  /** 
+
+   /**
    * Set session values in object
-   * 
+   *
    * @return type
    */
-   function setSessionValues(){
-      if(isset($_SESSION['plugin_printercounters']['recordmodel']) && !empty($_SESSION['plugin_printercounters']['recordmodel'])){
-         foreach($_SESSION['plugin_printercounters']['recordmodel'] as $key => $val){
+   function setSessionValues() {
+      if (isset($_SESSION['plugin_printercounters']['recordmodel']) && !empty($_SESSION['plugin_printercounters']['recordmodel'])) {
+         foreach ($_SESSION['plugin_printercounters']['recordmodel'] as $key => $val) {
             $this->fields[$key] = $val;
          }
       }
       unset($_SESSION['plugin_printercounters']['recordmodel']);
    }
-   
+
    /**
     * get conformtity configuration
     *
-    * 
+    *
     * @global type $DB
     * @param array $items_id
     * @param int $itemtype
     * @return array
     */
-   public function getRecordModelConfig(array $items_id, $itemtype){
+   public function getRecordModelConfig(array $items_id, $itemtype) {
       global $DB;
-      
-      $output = array();
-      
+
+      $output = [];
+
       // Get conformity configuration
       $itemjoin  = getTableForItemType("PluginPrintercountersItem_Recordmodel");
       $itemjoin2 = getTableForItemType("PluginPrintercountersCountertype_Recordmodel");
@@ -304,7 +303,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
             $output[$data['items_id']]['oid'][$data['oid_type']][] = $data['oid'];
 
             $output[$data['items_id']]['serial'] = $data['serial'];
-            
+
             $output[$data['items_id']]['mac_address_conformity'] = $data['mac_address_conformity'];
             $output[$data['items_id']]['sysdescr_conformity']    = $data['sysdescr_conformity'];
             $output[$data['items_id']]['serial_conformity']      = $data['serial_conformity'];
@@ -315,15 +314,15 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
 
       return $output;
    }
-   
+
    /**
     * Duplicate recordmodel for an item if needed
-    * 
+    *
     * @param type $itemtype
     * @param type $items_id
     * @param type $entities_id
     */
-   function duplicateRecordmodelForItem($itemtype, $items_id, $entities_id){
+   function duplicateRecordmodelForItem($itemtype, $items_id, $entities_id) {
       $item_recordmodel = new PluginPrintercountersItem_Recordmodel($itemtype, $items_id);
       $data = $item_recordmodel->getItem_RecordmodelForItem();
       if (!empty($data)) {
@@ -343,7 +342,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
             $data['is_recursive'] = $data['recordmodels_recursivity'];
             if ($newId = $this->add($data)) {
                // Update item_recordmodels id
-               $item_recordmodel->update(array('id' => $item_recordmodels_id, 'plugin_printercounters_recordmodels_id' => $newId));
+               $item_recordmodel->update(['id' => $item_recordmodels_id, 'plugin_printercounters_recordmodels_id' => $newId]);
 
                // Duplicate OID
                $countertype_recordmodel = new PluginPrintercountersCountertype_Recordmodel();
@@ -358,19 +357,19 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
          }
       }
    }
-   
+
    /**
     * Duplicate recordmodel
-    * 
+    *
     * @param type $recordmodels_id
     */
-   function duplicateRecordmodel($recordmodels_id){
+   function duplicateRecordmodel($recordmodels_id) {
 
       if ($this->getFromDB($recordmodels_id)) {
          // Duplicate the recordmodel
          unset($this->fields['id']);
          $this->fields['name'] = $this->fields['name'].' - '.__('Copy', 'printercounters').' '.PluginPrintercountersToolbox::getCopyNumber($this->fields['name'], $this->getTable());
-         
+
          if ($newId = $this->add($this->fields)) {
             // Duplicate OID
             $countertype_recordmodel = new PluginPrintercountersCountertype_Recordmodel();
@@ -381,23 +380,23 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
                $value['plugin_printercounters_countertypes_id'] = $value['countertypes_id'];
                $countertype_recordmodel->add($value);
             }
-            
+
             return true;
          }
       }
-      
+
       return false;
    }
 
    /**
     * Check conformtity rules
-    * 
+    *
     * @param PluginPrintercountersCommonSNMPObject $snmpObject
     * @param type $conformity_conf
     * @return type
     */
-   public function checkConformity(PluginPrintercountersCommonSNMPObject $snmpObject, $conformity_conf){
-      
+   public function checkConformity(PluginPrintercountersCommonSNMPObject $snmpObject, $conformity_conf) {
+
       $record_result = PluginPrintercountersRecord::$SUCCESS;
       $record_type = PluginPrintercountersRecord::$AUTOMATIC_TYPE;
 
@@ -415,12 +414,12 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
             case $snmp::ERRNO_TIMEOUT :
                $record_result = PluginPrintercountersRecord::$IP_FAIL;
                $record_type = PluginPrintercountersRecord::$HOST_ERROR_TYPE;
-               return array($record_result, $record_type);
+               return [$record_result, $record_type];
          }
       }
-      
+
       // Check sysdescr
-      $sysdescr_ok = array();
+      $sysdescr_ok = [];
       if ($conformity_conf['sysdescr_conformity']) {
          if (isset($conformity_conf['oid'][PluginPrintercountersCountertype_Recordmodel::SYSDESCR])) {
             foreach (array_unique($conformity_conf['oid'][PluginPrintercountersCountertype_Recordmodel::SYSDESCR]) as $sysdescr_oid) {
@@ -433,9 +432,9 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
             if (!in_array(1, $sysdescr_ok)) {
                $record_result = PluginPrintercountersRecord::$SYSDESCR_FAIL;
                $record_type = PluginPrintercountersRecord::$HOST_ERROR_TYPE;
-               return array($record_result, $record_type);
+               return [$record_result, $record_type];
             }
-         
+
          } else {
             throw new PluginPrintercountersException(__('Please set the sysdescr OID in your record model', 'printercounters'), 0, null, $this->items_id, $this->itemtype);
          }
@@ -444,7 +443,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
       // Check MAC address
       if ($conformity_conf['mac_address_conformity']) {
          $printer_mac = strtolower(PluginPrintercountersToolbox::getValidMacAddress($snmpObject->mac));
-        
+
          if ($oid_mac = $snmpObject->walk(PluginPrintercountersPrinter::SNMP_PRINTER_MAC_ADDRESS, PluginPrintercountersPrinter::ERROR_BOOL)) {
             foreach ($oid_mac as $key => $value) {
                $valid_mac = PluginPrintercountersToolbox::getValidMacAddress($value);
@@ -458,12 +457,12 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
          if (!$printer_mac || !$oid_mac || !in_array($printer_mac, $oid_mac)) {
             $record_result = PluginPrintercountersRecord::$MAC_FAIL;
             $record_type = PluginPrintercountersRecord::$HOST_ERROR_TYPE;
-            return array($record_result, $record_type);
+            return [$record_result, $record_type];
          }
       }
 
       // Check serial
-      $serial_ok = array();
+      $serial_ok = [];
       if ($conformity_conf['serial_conformity']) {
          if (isset($conformity_conf['oid'][PluginPrintercountersCountertype_Recordmodel::SERIAL])) {
             foreach (array_unique($conformity_conf['oid'][PluginPrintercountersCountertype_Recordmodel::SERIAL]) as $serial_oid) {
@@ -476,9 +475,9 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
             if (!in_array(1, $serial_ok)) {
                $record_result = PluginPrintercountersRecord::$SERIAL_FAIL;
                $record_type = PluginPrintercountersRecord::$HOST_ERROR_TYPE;
-               return array($record_result, $record_type);
+               return [$record_result, $record_type];
             }
-            
+
          } else {
             throw new PluginPrintercountersException(__('Please set the serial OID in your record model', 'printercounters'), 0, null, $this->items_id, $this->itemtype);
          }
@@ -489,28 +488,28 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
          switch ($snmpObject->getErrorNumber()) {
             // Check if all oids are good
             case $snmp::ERRNO_ERROR_IN_REPLY: case $snmp::ERRNO_OID_NOT_INCREASING: case $snmp::ERRNO_OID_PARSING_ERROR : case $snmp::ERRNO_MULTIPLE_SET_QUERIES :
-               $record_result = PluginPrintercountersRecord::$OID_FAIL;
-               $record_type = PluginPrintercountersRecord::$HOST_ERROR_TYPE;
-               return array($record_result, $record_type);
+                        $record_result = PluginPrintercountersRecord::$OID_FAIL;
+                        $record_type = PluginPrintercountersRecord::$HOST_ERROR_TYPE;
+               return [$record_result, $record_type];
             // Unknown error
             default :
                $record_result = PluginPrintercountersRecord::$UNKNOWN_FAIL;
                $record_type = PluginPrintercountersRecord::$HOST_ERROR_TYPE;
-               return array($record_result, $record_type);
+               return [$record_result, $record_type];
          }
       }
-      
-      return array($record_result, $record_type);
+
+      return [$record_result, $record_type];
    }
-   
-  /** 
+
+   /**
    * Actions done before add
-   * 
+   *
    * @param type $input
    * @return type
    */
    function prepareInputForAdd($input) {
-      
+
       if (!$this->checkMandatoryFields($input)) {
          $_SESSION['plugin_printercounters']['recordmodel'] = $input;
          return false;
@@ -524,35 +523,35 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
 
       return $input;
    }
-   
-  /** 
+
+   /**
    * Actions done before update
-   * 
+   *
    * @param type $input
    * @return type
    */
    function prepareInputForUpdate($input) {
-      
-      if(!$this->checkMandatoryFields($input)){
+
+      if (!$this->checkMandatoryFields($input)) {
          return false;
       }
 
       return $input;
    }
-   
-  /** 
-   * Check mandatory fields 
-   * 
+
+   /**
+   * Check mandatory fields
+   *
    * @param type $input
    * @return boolean
    */
-   function checkMandatoryFields($input){
-      $msg     = array();
+   function checkMandatoryFields($input) {
+      $msg     = [];
       $checkKo = false;
-      
-      $mandatory_fields = array('name'     => __('Name'));
-      
-      foreach($input as $key => $value){
+
+      $mandatory_fields = ['name'     => __('Name')];
+
+      foreach ($input as $key => $value) {
          if (array_key_exists($key, $mandatory_fields)) {
             if (empty($value)) {
                $msg[] = $mandatory_fields[$key];
@@ -560,37 +559,37 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
             }
          }
       }
-      
+
       if ($checkKo) {
          Session::addMessageAfterRedirect(sprintf(__("Mandatory fields are not filled. Please correct: %s"), implode(', ', $msg)), false, ERROR);
          return false;
       }
       return true;
    }
-   
+
    /**
     * Massive actions to be added
-    * 
+    *
     * @param $input array of input datas
     *
     * @return array of results (nbok, nbko, nbnoright counts)
     **/
-   function massiveActions(){
-      
+   function massiveActions() {
+
       $prefix = $this->getType().MassiveAction::CLASS_ACTION_SEPARATOR;
-      
+
       switch ($this->itemtype) {
          case "PluginPrintercountersRecordmodel":
-            $output = array();
+            $output = [];
             if ($this->canCreate()) {
-               $output = array (
+               $output =  [
                   $prefix."plugin_printercounters_duplicate_recordmodel" => __('Duplicate recordmodel', 'printercounters')
-               );
+               ];
             }
             return $output;
       }
    }
-   
+
    /**
     * @since version 0.85
     *
@@ -600,7 +599,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
                                                        array $ids) {
 
       $recordmodel = new self();
-      
+
       foreach ($ids as $key => $val) {
          if ($recordmodel->can($key, UPDATE)) {
             $result = false;
@@ -628,18 +627,18 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
          }
       }
    }
-   
+
    /**
     * Get the standard massive actions which are forbidden
-    * 
+    *
     * @return an array of massive actions
    **/
    function getForbiddenStandardMassiveAction() {
 
       $forbidden = parent::getForbiddenStandardMassiveAction();
       $forbidden[] = 'merge';
-      
+
       return $forbidden;
    }
-   
+
 }

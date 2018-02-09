@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,17 +33,17 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersAjax
- * 
+ *
  * Ajax functions
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersAjax extends CommonDBTM {
-   
-  /**
+
+   /**
    * Js edition system
-   * 
+   *
    * @global type $CFG_GLPI
    * @param type $toupdate
    * @param type $function_name
@@ -52,21 +52,21 @@ class PluginPrintercountersAjax extends CommonDBTM {
    * @param type $parenttype
    * @param type $parents_id
    */
-   static function getJSEdition($toupdate, $function_name, $itemtype, $items_id, $parenttype, $parents_id){
+   static function getJSEdition($toupdate, $function_name, $itemtype, $items_id, $parenttype, $parents_id) {
       global $CFG_GLPI;
-      
+
       $parent = getItemForItemtype($parenttype);
-      
+
       echo "\n<script type='text/javascript' >\n";
             echo "function $function_name() {\n";
-            $params = array('type'                        => $itemtype,
+            $params = ['type'                        => $itemtype,
                             'parenttype'                  => $parenttype,
                             $parent->getForeignKeyField() => $parents_id,
-                            'id'                          => $items_id);
+                            'id'                          => $items_id];
             Ajax::updateItemJsCode($toupdate,
                                    $CFG_GLPI["root_doc"]."/plugins/printercounters/ajax/viewsubitem.php", $params);
             echo "};";
             echo "</script>\n";
    }
-   
+
 }

@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -42,8 +42,8 @@ function usage() {
 function readargs () {
    global $itemtype, $sonprocess_nbr, $record_type,  $log;
 
-   for ($i=1 ; $i<$_SERVER["argc"] ; $i++) {
-      $it = explode("=",$_SERVER["argv"][$i]);
+   for ($i=1; $i<$_SERVER["argc"]; $i++) {
+      $it = explode("=", $_SERVER["argv"][$i]);
       switch ($it[0]) {
          case '--itemtype' :
             $itemtype=$it[1];
@@ -81,13 +81,13 @@ function exit_if_soft_lock() {
 
 function exit_if_already_running($pidfile) {
 
-   # No pidfile, probably no daemon present
+   // No pidfile, probably no daemon present
    if (!file_exists($pidfile)) {
       return 1;
    }
    $pid=intval(file_get_contents($pidfile));
 
-   # No pid, probably no daemon present
+   // No pid, probably no daemon present
    if (!$pid || @pcntl_getpriority($pid)===false) {
       return 1;
    }
@@ -100,9 +100,11 @@ function cleanup ($pidfile) {
    @unlink($pidfile);
 
    $dir=opendir(GLPI_LOCK_DIR);
-   if ($dir) while ($name=readdir($dir)) {
-      if (strpos($name, "lock_entity")===0) {
-         unlink(GLPI_LOCK_DIR."/".$name);
+   if ($dir) {
+      while ($name=readdir($dir)) {
+         if (strpos($name, "lock_entity")===0) {
+            unlink(GLPI_LOCK_DIR."/".$name);
+         }
       }
    }
 }
@@ -112,7 +114,7 @@ if (!isset($_SERVER["argv"][0])) {
    header("HTTP/1.0 403 Forbidden");
    die("403 Forbidden");
 }
-ini_set("memory_limit","-1");
+ini_set("memory_limit", "-1");
 ini_set("max_execution_time", "0");
 
 chdir(dirname($_SERVER["argv"][0]));
@@ -125,13 +127,13 @@ $record_type    = 'normal';
 $sonprocess_nbr = 2;
 
 if (function_exists("sys_get_temp_dir")) {
-   # PHP > 5.2.x
+   // PHP > 5.2.x
    $pidfile = sys_get_temp_dir()."/printercounters_fullsync.pid";
 } else if (DIRECTORY_SEPARATOR=='/') {
-   # Unix/Linux
+   // Unix/Linux
    $pidfile = "/tmp/printercounters_fullsync.pid";
 } else {
-   # Windows
+   // Windows
    $pidfile = GLPI_LOG_DIR . "/printercounters_fullsync.pid";
 }
 $logfilename = GLPI_LOG_DIR."/printercounters_fullsync.log";
@@ -153,9 +155,9 @@ file_put_contents($pidfile, getmypid());
 fwrite($log, date("r") . " " . $_SERVER["argv"][0] . " started\n");
 
 if (function_exists("pcntl_fork")) {
-   # Unix/Linux
-   $pids=array();
-   for ($i=0 ; $i<$sonprocess_nbr ; ) {
+   // Unix/Linux
+   $pids=[];
+   for ($i=0; $i<$sonprocess_nbr;) {
       $i++;
       $pid=pcntl_fork();
       if ($pid == -1) {
@@ -166,11 +168,11 @@ if (function_exists("pcntl_fork")) {
          file_put_contents($pidfile, ";".$i.'$$$'.$pid, FILE_APPEND);
          $pids[$pid]=1;
 
-      } else  {
+      } else {
          $cmd="php -q -d -f printercounters_fullsync.php --record_type=$record_type --sonprocess_nbr=$sonprocess_nbr ".
               " --sonprocess_id=$i --itemtype=$itemtype --process_id=$processid";
 
-         $out=array();
+         $out=[];
          exec($cmd, $out, $ret);
          foreach ($out as $line) {
             fwrite ($log, $line."\n");
@@ -190,11 +192,11 @@ if (function_exists("pcntl_fork")) {
       }
    }
 } else {
-   # Windows - No fork, so Only one process :(
+   // Windows - No fork, so Only one process :(
    $cmd="php -q -d -f printercounters_fullsync.php --record_type=$record_type --sonprocess_nbr=1"
          . " --sonprocess_id=1 --itemtype=$itemtype --process_id=$processid";
 
-   $out=array();
+   $out=[];
    exec($cmd, $out, $ret);
    foreach ($out as $line) {
       fwrite ($log, $line."\n");
@@ -204,4 +206,3 @@ if (function_exists("pcntl_fork")) {
 cleanup($pidfile);
 fwrite ($log, date("r") . " " . $_SERVER["argv"][0] . " ended\n\n");
 
-?>

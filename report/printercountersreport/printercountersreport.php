@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -49,12 +49,12 @@ $datecriteria->setEndDate(date('Y-m-d H:i:s'));
 $report->displayCriteriasForm();
 
 //colname with sort allowed
-$columns = array('name'         => array('sorton' => 'name'),
-                 'serial'       => array('sorton' => 'serial'),
-                 'location'     => array('sorton' => 'location'),
-                 'manufacturer' => array('sorton' => 'manufacturer'),
-                 'model'        => array('sorton' => 'model'),
-                 'budget'       => array('sorton' => 'budget'));
+$columns = ['name'         => ['sorton' => 'name'],
+                 'serial'       => ['sorton' => 'serial'],
+                 'location'     => ['sorton' => 'location'],
+                 'manufacturer' => ['sorton' => 'manufacturer'],
+                 'model'        => ['sorton' => 'model'],
+                 'budget'       => ['sorton' => 'budget']];
 
 $output_type = Search::HTML_OUTPUT;
 
@@ -211,23 +211,23 @@ if ($res && $nbtot > 0) {
 
    $jalon1Minor3Month = date('Y-m-d H:i:s', strtotime($datecriteria->getStartDate()." - 3 MONTH"));
    $jalon1Plus3Month  = date('Y-m-d H:i:s', strtotime($datecriteria->getStartDate()." + 3 MONTH"));
-   
+
    while ($data = $DB->fetch_assoc($res)) {
       $item_billingmodel = new PluginPrintercountersItem_Billingmodel($itemtype, $data['id']);
-      
+
       // Get record start ~ 3 month
       $sub_condition = "AND `glpi_plugin_printercounters_records`.`result` = ".PluginPrintercountersRecord::$SUCCESS;
       $condition     = "AND `".$record->getTable()."`.`date` <= '".$jalon1Plus3Month."' 
                         AND `".$record->getTable()."`.`date` >= '".$jalon1Minor3Month."' ".$sub_condition;
 
-      $record1 = $record->getRecords($data['id'], $itemtype, array('condition'     => $condition));
-      
+      $record1 = $record->getRecords($data['id'], $itemtype, ['condition'     => $condition]);
+
       $total_monochrome_record1 = 0;
       $total_color_record1      = 0;
 
       if (!empty($record1)) {
-         // Find closest record from start date   
-         $dates = array();
+         // Find closest record from start date
+         $dates = [];
          foreach ($record1 as $records) {
             $dates[] = $records['date'];
          }
@@ -255,10 +255,10 @@ if ($res && $nbtot > 0) {
       $condition     = "AND `".$record->getTable()."`.`date` >= '".$datecriteria->getStartDate()."'
                         AND `".$record->getTable()."`.`date` <= '".$datecriteria->getEndDate()."' ".$sub_condition;
 
-      $record2 = $record->getRecords($data['id'], $itemtype, array('condition'     => $condition,
+      $record2 = $record->getRecords($data['id'], $itemtype, ['condition'     => $condition,
                                                                    'sub_condition' => $sub_condition,
                                                                    'last_record'   => true,
-                                                                   'record_date'   => $datecriteria->getEndDate()));
+                                                                   'record_date'   => $datecriteria->getEndDate()]);
       $total_monochrome_record2 = 0;
       $total_color_record2      = 0;
       foreach ($record2 as $records) {
@@ -276,7 +276,7 @@ if ($res && $nbtot > 0) {
       // Get all records
       $condition = " AND `".$record->getTable()."`.`date` <= '".$datecriteria->getEndDate()."' 
                      AND `".$record->getTable()."`.`date` >= '".$datecriteria->getStartDate()."'";
-      $records = $record->getRecords($data['id'], $itemtype, array('condition' => $condition));
+      $records = $record->getRecords($data['id'], $itemtype, ['condition' => $condition]);
       $records = $item_billingmodel->computeRecordCost($records);
 
       $row_num++;
@@ -329,7 +329,7 @@ function showTitle($output_type, &$num, $title, $columnname, $sort = false) {
    $link = $_SERVER['PHP_SELF'];
    $first = true;
    foreach ($_REQUEST as $name => $value) {
-      if (!in_array($name, array('sort', 'order', 'PHPSESSID'))) {
+      if (!in_array($name, ['sort', 'order', 'PHPSESSID'])) {
          $link .= ($first ? '?' : '&amp;');
          $link .= $name.'='.urlencode($value);
          $first = false;
@@ -379,18 +379,18 @@ function getOrderByFields($default, $columns) {
          return $column['sorton'];
       }
    }
-   return array();
+   return [];
 }
 
 /**
  * Get the closest date
- * 
+ *
  * @param type $array
  * @param type $date
  */
 function findClosestDate($array, $date) {
 
-   $interval = array();
+   $interval = [];
    foreach ($array as $day) {
       $interval[] = abs(strtotime($date) - strtotime($day));
    }
@@ -401,4 +401,3 @@ function findClosestDate($array, $date) {
    return $array[$closest];
 }
 
-?>

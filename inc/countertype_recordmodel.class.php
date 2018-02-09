@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,15 +33,15 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersCountertype_Recordmodel
- * 
+ *
  * This class allows to add and manage counter types and OIDs on the record model
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
-   
-   static $types = array('PluginPrintercountersRecordmodel');
+
+   static $types = ['PluginPrintercountersRecordmodel'];
 
    // OID types
    const COLOR                    = 1;
@@ -56,15 +56,15 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    const NUMBER_OF_PRINTED_PAPERS = 10;
 
    static $rightname = 'plugin_printercounters';
-    
+
    /**
     * functions mandatory
     * getTypeName(), canCreate(), canView()
     * */
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return _n('Counter type of record model', 'Counter types of record model', $nb, 'printercounters');
    }
-    
+
    /**
     * Display tab for each users
     *
@@ -87,7 +87,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       }
       return '';
    }
-   
+
    /**
     * Display content for each users
     *
@@ -99,126 +99,127 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
     */
    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       $field = new self();
-      
+
       if (in_array($item->getType(), self::$types)) {
          $field->showForRecordmodel($item);
       }
       return true;
    }
-   
+
    /**
     * Show countertypes form
     *
     * @param $ID        integer  ID of the item
     * @param $options   array    options used
     */
-   function showForm($ID, $options=array()) {
-      
+   function showForm($ID, $options = []) {
+
       if ($ID > 0) {
          $script = "$('#printercounters_viewAddCounters').show();";
       } else {
          $script = "$('#printercounters_viewAddCounters').hide();";
          $options['plugin_printercounters_recordmodels_id'] = $options['parent']->getField('id');
       }
-      
+
       $this->initForm($ID, $options);
-      
+
       echo html::scriptBlock($script);
-      
+
       $this->initForm($ID, $options);
 
       $data = $this->getCounterTypes($options['parent']->getField('id'));
-            
-      $used_countertypes = array();
-      if(!empty($data)){
-         foreach($data as $field){
+
+      $used_countertypes = [];
+      if (!empty($data)) {
+         foreach ($data as $field) {
             $used_countertypes[] = $field['countertypes_id'];
          }
       }
-      
+
       $this->showFormHeader($options);
       echo "<tr class='tab_bg_1'>";
       // Dropdown countertype
       echo "<td class='center'>";
       echo PluginPrintercountersCountertype::getTypeName(2).'&nbsp;';
-      Dropdown::show("PluginPrintercountersCountertype", 
-              array('name'  => 'plugin_printercounters_countertypes_id', 
+      Dropdown::show("PluginPrintercountersCountertype",
+              ['name'  => 'plugin_printercounters_countertypes_id',
                     'value' => $this->fields['plugin_printercounters_countertypes_id'],
-                    'used'  => $used_countertypes));
+                    'used'  => $used_countertypes]);
       echo "</td>";
       // OID
       echo "<td class='center'>";
       echo __('OID', 'printercounters').'&nbsp;';
-      Html::autocompletionTextField($this, "oid", array('value' => $this->fields['oid']));
+      Html::autocompletionTextField($this, "oid", ['value' => $this->fields['oid']]);
       echo "</td>";
       // OID type
       echo "<td class='center'>";
       echo __('OID type', 'printercounters').'&nbsp;';
-      self::dropdownOidType(array('value'                                  => $this->fields['oid_type'],
-                                  'plugin_printercounters_recordmodels_id' => $options['parent']->getField('id')));
+      self::dropdownOidType(['value'                                  => $this->fields['oid_type'],
+                                  'plugin_printercounters_recordmodels_id' => $options['parent']->getField('id')]);
       echo "<input type='hidden' name='plugin_printercounters_recordmodels_id' value='".$options['parent']->getField('id')."' >";
       echo "</td>";
       echo "</tr>";
-      
+
       $this->showFormButtons($options);
 
       return true;
    }
-   
+
    /**
     * Show countertypes for recordmodels
-    * 
+    *
     * @param type $item
     */
    function showForRecordmodel($item) {
 
       $recordmodel = new PluginPrintercountersRecordmodel();
-      $canedit = ($recordmodel->can($item->fields['id'],UPDATE) && $this->canCreate());
-      
+      $canedit = ($recordmodel->can($item->fields['id'], UPDATE) && $this->canCreate());
+
       $data = $this->getCounterTypes($item->fields['id']);
-      
+
       $rand = mt_rand();
-  
+
       // JS edition
       if ($canedit) {
          echo "<div id='viewcountertype".$item->fields['id']."_$rand'></div>\n";
-         PluginPrintercountersAjax::getJSEdition("viewcountertype".$item->fields['id']."_$rand", 
-                                                 "viewAddCounterType".$item->fields['id']."_$rand", 
+         PluginPrintercountersAjax::getJSEdition("viewcountertype".$item->fields['id']."_$rand",
+                                                 "viewAddCounterType".$item->fields['id']."_$rand",
                                                  $this->getType(),
-                                                 -1, 
-                                                 'PluginPrintercountersRecordmodel', 
+                                                 -1,
+                                                 'PluginPrintercountersRecordmodel',
                                                  $item->fields['id']);
          echo "<div class='center firstbloc'>".
                "<a class='vsubmit' id='printercounters_viewAddCounters' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
          echo __('Add a new counter', 'printercounters')."</a></div>\n";
       }
-      
-      if(!empty($data))
+
+      if (!empty($data)) {
          $this->listItems($item->fields['id'], $data, $canedit, $rand);
+      }
 
    }
-   
+
    /**
     * List countertypes data for recordmodel
-    * 
+    *
     * @param type $ID
     * @param type $data
     * @param type $canedit
     * @param type $rand
     */
-   private function listItems($ID, $data, $canedit, $rand){
+   private function listItems($ID, $data, $canedit, $rand) {
 
       echo "<div class='center'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];
          Html::showMassiveActions($massiveactionparams);
       }
       echo "<table class='tab_cadre_fixehov'>";
       echo "<tr class='tab_bg_1'>";
       echo "<th colspan='4'>".PluginPrintercountersCountertype::getTypeName(2)."</th>";
       echo "</tr>";
-      
+
       echo "<tr class='tab_bg_1'>";
       echo "<th width='10'>";
       if ($canedit) {
@@ -229,22 +230,22 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       echo "<th>".__('OID', 'printercounters')."</th>";
       echo "<th>".__('OID type', 'printercounters')."</th>";
       echo "</tr>";
-      
-      foreach($data as $field){
+
+      foreach ($data as $field) {
          $onclick = ($canedit
                       ? "style='cursor:pointer' onClick=\"viewEditCounterType".$field['plugin_printercounters_recordmodels_id']."_".
                         $field['id']."_$rand();\"": '');
-         
+
          echo "<tr class='tab_bg_2'>";
          echo "<td width='10'>";
          if ($canedit) {
             Html::showMassiveActionCheckBox(__CLASS__, $field['id']);
             // JS edition
-            PluginPrintercountersAjax::getJSEdition("viewcountertype".$ID."_$rand", 
-                                                    "viewEditCounterType".$field['plugin_printercounters_recordmodels_id']."_".$field["id"]."_$rand", 
+            PluginPrintercountersAjax::getJSEdition("viewcountertype".$ID."_$rand",
+                                                    "viewEditCounterType".$field['plugin_printercounters_recordmodels_id']."_".$field["id"]."_$rand",
                                                     $this->getType(),
-                                                    $field["id"], 
-                                                    'PluginPrintercountersRecordmodel', 
+                                                    $field["id"],
+                                                    'PluginPrintercountersRecordmodel',
                                                     $field["plugin_printercounters_recordmodels_id"]);
          }
          echo "</td>";
@@ -262,25 +263,25 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       if ($canedit) {
          $massiveactionparams['ontop'] = false;
          Html::showMassiveActions($massiveactionparams);
-         Html::closeForm(); 
+         Html::closeForm();
       }
-      
+
       echo "</table>";
       echo "</div>";
    }
 
    /**
     * Get counter types data for recordmodels
-    * 
+    *
     * @global type $DB
     * @param type $recordmodels_id
     * @return type
     */
-   function getCounterTypes($recordmodels_id){
+   function getCounterTypes($recordmodels_id) {
       global $DB;
-      
-      $output = array();
-      
+
+      $output = [];
+
       $query = "SELECT `glpi_plugin_printercounters_countertypes`.`name` as countertypes_name, 
                        `glpi_plugin_printercounters_countertypes`.`id` as countertypes_id, 
                        `".$this->getTable()."`.`plugin_printercounters_recordmodels_id`,
@@ -298,27 +299,27 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
             $output[$data['id']] = $data;
          }
       }
-      
+
       return $output;
    }
-   
-   /** 
+
+   /**
    * Function get all record model counters
-   * 
+   *
    * @global type $DB
    * @param type $items_id
    * @param type $itemtype
    * @param type $order
    * @return type
    */
-   function getRecordmodelCountersForItem($items_id, $itemtype, $order=null) {
+   function getRecordmodelCountersForItem($items_id, $itemtype, $order = null) {
       global $DB;
 
       $itemjoin  = getTableForItemType("PluginPrintercountersCountertype");
       $itemjoin2 = getTableForItemType("PluginPrintercountersRecordmodel");
       $itemjoin3 = getTableForItemType("PluginPrintercountersItem_Recordmodel");
 
-      $output = array();
+      $output = [];
 
       $query = "SELECT `".$itemjoin."`.`name` as counters_name,
                        `".$itemjoin."`.`id` as countertypes_id,
@@ -338,11 +339,11 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
           AND `".$this->getTable()."`.`oid_type` != '".self::NUMBER_OF_PRINTED_PAPERS."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::NAME."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::SYSDESCR."'";
-      
-      if($order != null){
+
+      if ($order != null) {
          $query .= " ORDER BY $order";
       }
-      
+
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
          while ($data = $DB->fetch_assoc($result)) {
@@ -352,10 +353,10 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
 
       return $output;
    }
-   
-    /** 
+
+    /**
    * Function get all record model counters
-   * 
+   *
    * @global type $DB
    * @param type $items_id
    * @param type $itemtype
@@ -368,8 +369,8 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       $itemjoin  = getTableForItemType("PluginPrintercountersCountertype");
       $itemjoin2 = getTableForItemType("PluginPrintercountersRecordmodel");
       $itemjoin3 = getTableForItemType("PluginPrintercountersItem_Recordmodel");
-      
-      $output = array();
+
+      $output = [];
 
       $query = "SELECT `".$this->getTable()."`.`oid`
                FROM ".$this->getTable()."
@@ -383,32 +384,32 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
                AND LOWER(`".$itemjoin3."`.`itemtype`) = '".strtolower($itemtype)."' 
                AND `".$this->getTable()."`.`oid_type` = '".$oid_type."'";
 
-      if($oid_type == self::SERIAL){
+      if ($oid_type == self::SERIAL) {
          $query .= "AND `".$itemjoin2."`.`serial_conformity` = '0'";
       }
-      
+
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
          return $DB->result($result, 0, 'oid');
       }
       return false;
    }
-   
-   /** 
+
+   /**
     * Function get counters data for multiple record models
-    * 
+    *
     * @global type $DB
     * @param array $recordmodels_id
     * @param type $order
     * @return type
     */
-   function getRecordmodelCounters(array $recordmodels_id, $order=null) {
+   function getRecordmodelCounters(array $recordmodels_id, $order = null) {
       global $DB;
 
       $itemjoin  = getTableForItemType("PluginPrintercountersCountertype");
       $itemjoin2 = getTableForItemType("PluginPrintercountersRecordmodel");
 
-      $output = array();
+      $output = [];
 
       $query = "SELECT `".$itemjoin."`.`name` as counters_name,
                        `".$itemjoin."`.`id` as countertypes_id,
@@ -425,11 +426,11 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
           AND `".$this->getTable()."`.`oid_type` != '".self::NUMBER_OF_PRINTED_PAPERS."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::NAME."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::SYSDESCR."'";
-      
-      if($order != null){
+
+      if ($order != null) {
          $query .= " ORDER BY $order";
       }
-      
+
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
          while ($data = $DB->fetch_assoc($result)) {
@@ -445,28 +446,28 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
     *
     * @return an array
     */
-   static function dropdownOidType(array $options = array()) {
+   static function dropdownOidType(array $options = []) {
       global $DB;
 
-      if(isset($options['plugin_printercounters_recordmodels_id'])){
+      if (isset($options['plugin_printercounters_recordmodels_id'])) {
          $query = "SELECT `glpi_plugin_printercounters_countertypes_recordmodels`.`oid_type` as oid_type
                    FROM `glpi_plugin_printercounters_countertypes_recordmodels`
                    WHERE `glpi_plugin_printercounters_countertypes_recordmodels`.`plugin_printercounters_recordmodels_id` = ".$options['plugin_printercounters_recordmodels_id'];
 
-         $output = array();
+         $output = [];
 
          $result = $DB->query($query);
          if ($DB->numrows($result)) {
             while ($data = $DB->fetch_assoc($result)) {
-               if(empty($options['value'])
-                  || (!empty($options['value']) && $options['value'] != $data['oid_type'])){
+               if (empty($options['value'])
+                  || (!empty($options['value']) && $options['value'] != $data['oid_type'])) {
                   $output[$data['oid_type']] = $data['oid_type'];
                }
             }
          }
          $options['used'] = $output;
       }
-      
+
       return Dropdown::showFromArray('oid_type', self::getAllOidTypeArray(), $options);
    }
 
@@ -481,8 +482,8 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
          return $data[$value];
       }
    }
-    
-       
+
+
    /**
     * Get the OID type list
     *
@@ -491,7 +492,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    static function getAllOidTypeArray() {
 
       // To be overridden by class
-      $tab = array(0                              => Dropdown::EMPTY_VALUE,
+      $tab = [0                              => Dropdown::EMPTY_VALUE,
                    self::COLOR                    => __('Color', 'printercounters'),
                    self::MONOCHROME               => __('Monochrome', 'printercounters'),
                    self::BLACKANDWHITE            => __('Black and white', 'printercounters'),
@@ -501,13 +502,13 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
                    self::MODEL                    => __('Printer model'),
                    self::NUMBER_OF_PRINTED_PAPERS => __('Number of printed papers', 'printercounters'),
                    self::NAME                     => __('Name') . " " . strtolower(__('Printer')),
-                   self::OTHER                    => __('Other', 'printercounters'));
+                   self::OTHER                    => __('Other', 'printercounters')];
 
       return $tab;
    }
-  /** 
+   /**
    * Get search options
-   * 
+   *
    * @return array
    */
    function getSearchOptions() {
@@ -524,13 +525,13 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       $tab[73]['field']          = 'oid';
       $tab[73]['name']           = __('OID', 'printercounters');
       $tab[73]['massiveaction']  = true;
-      
+
       $tab[74]['table']          = $this->getTable();
       $tab[74]['field']          = 'oid_type';
       $tab[74]['name']           = __('OID type', 'printercounters');
       $tab[74]['datatype']       = 'specific';
       $tab[74]['massiveaction']  = true;
-    
+
       $tab[75]['table']          = 'glpi_plugin_printercounters_recordmodels';
       $tab[75]['field']          = 'name';
       $tab[75]['name']           = PluginPrintercountersRecordmodel::getTypeName();
@@ -539,7 +540,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
 
       return $tab;
    }
-   
+
    /**
     * @since version 0.84
     *
@@ -547,10 +548,10 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
     * @param $values
     * @param $options   array
     */
-   static function getSpecificValueToDisplay($field, $values, array $options=array()) {
+   static function getSpecificValueToDisplay($field, $values, array $options = []) {
 
       if (!is_array($values)) {
-         $values = array($field => $values);
+         $values = [$field => $values];
       }
       switch ($field) {
          case 'oid_type' :
@@ -558,8 +559,8 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       }
       return parent::getSpecificValueToDisplay($field, $values, $options);
    }
-   
-   
+
+
    /**
     * @since version 0.84
     *
@@ -570,120 +571,120 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
     *
     * @return string
     */
-   static function getSpecificValueToSelect($field, $name='', $values='', array $options=array()) {
+   static function getSpecificValueToSelect($field, $name = '', $values = '', array $options = []) {
       if (!is_array($values)) {
-         $values = array($field => $values);
+         $values = [$field => $values];
       }
       $options['display'] = false;
       $options['value']   = $values[$field];
-      switch ($field) {       
+      switch ($field) {
          case 'oid_type':
             return self::dropdownOidType($options);
       }
       return parent::getSpecificValueToSelect($field, $name, $values, $options);
    }
-   
-  
-   
-  /** 
+
+
+
+   /**
    * Function fill counters if recordmodel has changed
-   * 
+   *
    * @param array $input
    * @param array $recordmodels_id
    * @return type
    */
-   function fillCountersGap(array $input, array $recordmodels_id){
-      
-      $recordmodels_data = array();
-      foreach($recordmodels_id as $val){
-         $recordmodels_data[$val] = array();
+   function fillCountersGap(array $input, array $recordmodels_id) {
+
+      $recordmodels_data = [];
+      foreach ($recordmodels_id as $val) {
+         $recordmodels_data[$val] = [];
       }
-      
+
       $data = $this->getRecordmodelCounters($recordmodels_id);
-      if(!empty($data)){
+      if (!empty($data)) {
          foreach ($data as $val) {
             $recordmodels_data[$val['recordmodels_id']][] = $val;
          }
       }
-         
-      if(!empty($recordmodels_data) && !empty($input)){
+
+      if (!empty($recordmodels_data) && !empty($input)) {
          foreach ($input as $records_id => $row) {
             foreach ($recordmodels_data as $recordmodels_id => $counters) {
                foreach ($counters as $value) {
                   if ($recordmodels_id == $row['recordmodels_id'] && !in_array($value['countertypes_id'], array_keys($row['counters']))) {
-                     $input[$records_id]['counters'][$value['countertypes_id']] = array('counters_name'                 => $value['counters_name'], 
+                     $input[$records_id]['counters'][$value['countertypes_id']] = ['counters_name'                 => $value['counters_name'],
                                                                                         'countertypes_recordmodels_id'  => $value['countertypes_recordmodels_id'],
                                                                                         'counters_value'                =>  0,
-                                                                                        'counters_id'                   =>  0);
+                                                                                        'counters_id'                   =>  0];
                   }
                }
             }
             ksort($input[$records_id]['counters']);
          }
       }
-      
+
       return $input;
    }
-   
-  /** 
+
+   /**
    * Actions done before add
-   * 
+   *
    * @param type $input
    * @return boolean
    */
    function prepareInputForAdd($input) {
-      if(!$this->checkMandatoryFields($input)){
+      if (!$this->checkMandatoryFields($input)) {
          return false;
       }
-      
+
       return $input;
    }
-   
-  /** 
+
+   /**
    * Actions done before update
-   * 
+   *
    * @param type $input
    * @return boolean
    */
    function prepareInputForUpdate($input) {
-      if(!$this->checkMandatoryFields($input)){
+      if (!$this->checkMandatoryFields($input)) {
          return false;
       }
-      
+
       $this->checkCounterOidUpdate($input);
 
       return $input;
    }
-   
-  /** 
+
+   /**
    * Check if OID change, then delete old record counters
-   * 
+   *
    * @param type $input
    * @return boolean
    */
-   function checkCounterOidUpdate($input){
+   function checkCounterOidUpdate($input) {
 
       if ($this->fields['oid'] != $input['oid']) {
          $counter = new PluginPrintercountersCounter();
-         $counter->deleteByCriteria(array('plugin_printercounters_countertypes_recordmodels_id' => $input['id']), 1);
+         $counter->deleteByCriteria(['plugin_printercounters_countertypes_recordmodels_id' => $input['id']], 1);
       }
    }
-   
-  /** 
-   * Check mandatory fields 
-   * 
+
+   /**
+   * Check mandatory fields
+   *
    * @param type $input
    * @return boolean
    */
-   function checkMandatoryFields($input){
-      $msg     = array();
+   function checkMandatoryFields($input) {
+      $msg     = [];
       $checkKo = false;
-      
-      $mandatory_fields = array('oid_type'                               => __('OID type', 'printercounters'),
+
+      $mandatory_fields = ['oid_type'                               => __('OID type', 'printercounters'),
                                 'oid'                                    => __('OID', 'printercounters'),
-                                'plugin_printercounters_countertypes_id' => PluginPrintercountersCountertype::getTypeName());
-      
-      foreach($input as $key => $value){
+                                'plugin_printercounters_countertypes_id' => PluginPrintercountersCountertype::getTypeName()];
+
+      foreach ($input as $key => $value) {
          if (array_key_exists($key, $mandatory_fields)) {
             if (empty($value)) {
                $msg[] = $mandatory_fields[$key];
@@ -691,31 +692,30 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
             }
          }
       }
-      
+
       if ($checkKo) {
          Session::addMessageAfterRedirect(sprintf(__("Mandatory fields are not filled. Please correct: %s"), implode(', ', $msg)), true, ERROR);
          return false;
       }
       return true;
    }
-   
-  /** 
+
+   /**
    * Actions done after update
    */
    function post_addItem($history = 1) {
-      
-      if ($this->fields['oid_type'] != self::SERIAL 
-         && $this->fields['oid_type'] != self::SYSDESCR 
-            && $this->fields['oid_type'] != self::NAME 
+
+      if ($this->fields['oid_type'] != self::SERIAL
+         && $this->fields['oid_type'] != self::SYSDESCR
+            && $this->fields['oid_type'] != self::NAME
                && $this->fields['oid_type'] != self::NUMBER_OF_PRINTED_PAPERS
                   && $this->fields['oid_type'] != self::MODEL) {
          // Add countertype for billingmodels liked to the recordmodel
          $pagecost = new PluginPrintercountersPagecost();
          $pagecost->addCounterTypeForBillings($this->fields['plugin_printercounters_recordmodels_id'], $this->fields['plugin_printercounters_countertypes_id']);
       }
-      
+
       parent::post_addItem($history);
    }
 
 }
-?>

@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,9 +33,9 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersAdditional_data
- * 
+ *
  * This class allows to add additional data of printers (like toner level, drum level ...)
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
@@ -43,12 +43,12 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
    var $items_id;
    var $itemtype;
-   
+
    static $rightname = 'plugin_printercounters';
- 
+
    /**
     * Constructor
-    * 
+    *
     * @param type $itemtype
     * @param type $items_id
     */
@@ -59,7 +59,7 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
       parent::__construct();
    }
-   
+
    static function getTypeName($nb = 2) {
       return __('Printer counters', 'printercounters')." : "._n("Additional data", "Additional datas", $nb, 'printercounters');
    }
@@ -67,8 +67,8 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
    /**
     * Function sets itemtype id
     *
-    * @param string $itemtype 
-    * @throws Exception 
+    * @param string $itemtype
+    * @throws Exception
     */
    public function setItemtype($itemtype) {
 
@@ -91,7 +91,7 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
    /**
     * Function send notification for additional data
-    * 
+    *
     * @global type $DB
     * @global type $CFG_GLPI
     * @param type $additionalData
@@ -103,8 +103,8 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
       if ($CFG_GLPI["notifications_mailing"] && $config['enable_toner_alert']) {
          $alert   = new Alert();
-         
-         $types = array(PluginPrintercountersPrinter::TONER_TYPE, PluginPrintercountersPrinter::DRUM_TYPE);
+
+         $types = [PluginPrintercountersPrinter::TONER_TYPE, PluginPrintercountersPrinter::DRUM_TYPE];
 
          // if you change this query, please don't forget to also change in showDebug()
          $query_alert = "SELECT `glpi_plugin_printercounters_additionals_datas`.`id` as additional_datas_id,
@@ -116,7 +116,7 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
                                AND `glpi_alerts`.`itemtype` = 'PluginPrintercountersAdditional_Data')
                         WHERE `glpi_plugin_printercounters_additionals_datas`.`type` IN ('".implode("','", $types)."');";
 
-         $items   = array();
+         $items   = [];
 
          foreach ($DB->request($query_alert) as $data) {
             $alert_date = strtotime($data['alerts_date']);
@@ -127,24 +127,24 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
                      $treshold = $config['toner_treshold'];
                      break;
                }
-               if ($val['id'] == $data['additional_datas_id'] 
-                       && $val['value'] <= $treshold 
+               if ($val['id'] == $data['additional_datas_id']
+                       && $val['value'] <= $treshold
                        && ($alert_date+$repeat) < time()) {
-                  
+
                   $items[$val['id']] = $val;
                   // if alert exists -> delete
                   if (!empty($data['alerts_id'])) {
-                     $alert->delete(array("id" => $data['alerts_id']));
+                     $alert->delete(["id" => $data['alerts_id']]);
                   }
                   break;
                }
             }
          }
-         
+
          // Send notification
          if (!empty($items)) {
             foreach ($types as $type) {
-               switch($type){
+               switch ($type) {
                   case PluginPrintercountersPrinter::TONER_TYPE:
                      $options['items']    = $items;
                      $options['items_id'] = $additionalData['items_id'];
@@ -169,14 +169,14 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
    /**
     * Function set additional data for a printer
-    * 
-    * @param array    $input : array('type'                                        
+    *
+    * @param array    $input : array('type'
      'name'
      'value'
      'plugin_printecounters_items_recordmodels_id')
     */
    public function setAdditionalData($input) {
-      
+
       if (!empty($input['additional_datas'])) {
          // Find previous data of printer
          $found_datas = $this->find("`plugin_printercounters_items_recordmodels_id`=".$input['items_recordmodels_id']);
@@ -185,35 +185,35 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
             $found = 0;
             if (!empty($found_datas)) {
                foreach ($found_datas as $data) {
-                  if ($data['type'] == $val['type'] 
-                          && $data['sub_type'] == $val['sub_type'] 
+                  if ($data['type'] == $val['type']
+                          && $data['sub_type'] == $val['sub_type']
                           && $data['plugin_printercounters_items_recordmodels_id'] == $input['items_recordmodels_id']) {
                      $found = $data['id'];
                      break;
                   }
                }
             }
-            
+
             if ($found) {
                // Update
                $val['id'] = $found;
-               $this->update(array('id'                                           => $val['id'],
+               $this->update(['id'                                           => $val['id'],
                                    'type'                                         => $val['type'],
                                    'sub_type'                                     => $val['sub_type'],
                                    'name'                                         => addslashes($val['name']),
                                    'value'                                        => addslashes($val['value']),
-                                   'plugin_printercounters_items_recordmodels_id' => $input['items_recordmodels_id']));
+                                   'plugin_printercounters_items_recordmodels_id' => $input['items_recordmodels_id']]);
             } else {
                // Add
                if ($val['type'] == PluginPrintercountersPrinter::OTHER_TYPE && empty($val['value'])) {
                   $val['id'] = 0;
                   continue;
                }
-               $val['id'] = $this->add(array('type'                                         => $val['type'],
+               $val['id'] = $this->add(['type'                                         => $val['type'],
                                              'sub_type'                                     => $val['sub_type'],
                                              'name'                                         => addslashes($val['name']),
                                              'value'                                        => addslashes($val['value']),
-                                             'plugin_printercounters_items_recordmodels_id' => $input['items_recordmodels_id']));
+                                             'plugin_printercounters_items_recordmodels_id' => $input['items_recordmodels_id']]);
             }
          }
          $this->alertAdditionalData($input);
@@ -221,7 +221,7 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
       return false;
    }
-   
+
    /**
     * Function show additional data
     */
@@ -251,14 +251,14 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         $colors = array(PluginPrintercountersPrinter::CARTRIDGE_COLOR_BLACK,
+         $colors = [PluginPrintercountersPrinter::CARTRIDGE_COLOR_BLACK,
                          PluginPrintercountersPrinter::CARTRIDGE_COLOR_CYAN,
                          PluginPrintercountersPrinter::CARTRIDGE_COLOR_MAGENTA,
-                         PluginPrintercountersPrinter::CARTRIDGE_COLOR_YELLOW);
-         
-         $toner  = array();
-         $other  = array();
-         $enbale = array();
+                         PluginPrintercountersPrinter::CARTRIDGE_COLOR_YELLOW];
+
+         $toner  = [];
+         $other  = [];
+         $enbale = [];
          while ($data = $DB->fetch_assoc($result)) {
             switch ($data['type']) {
                case PluginPrintercountersPrinter::TONER_TYPE;
@@ -271,7 +271,7 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
             $enbale['enable_toner_level']  = $data['enable_toner_level'];
             $enbale['enable_printer_info'] = $data['enable_printer_info'];
          }
-         
+
          if ($enbale['enable_toner_level'] || $enbale['enable_printer_info']) {
             echo "<table class='tab_cadre_fixe'>";
             echo "<tr class='tab_bg_1'>";
@@ -321,7 +321,7 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
                      if ($data['type'] == PluginPrintercountersPrinter::OTHER_TYPE) {
                         echo "<tr class='tab_bg_1'>";
                         echo "<td>".$data['name']."</td>";
-                        switch($data['sub_type']){
+                        switch ($data['sub_type']) {
                            case PluginPrintercountersPrinter::PRINTER_UPTIME:
                               if (preg_match('/\((\d+\))/i', $data['value'], $matches)) {
                                  echo "<td>".$this->convertTime(intval($matches[1])/100)."</td>";
@@ -345,15 +345,15 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
          }
       }
    }
-   
+
    /**
     * Function convert seconds to time string
     */
-   function convertTime($timestamp){
+   function convertTime($timestamp) {
 
       $units = Toolbox::getTimestampTimeUnits($timestamp);
 
-      return sprintf(__('%1$s%2$d days %3$d hours %4$d minutes %5$d seconds'), 
+      return sprintf(__('%1$s%2$d days %3$d hours %4$d minutes %5$d seconds'),
               '', $units['day'], $units['hour'], $units['minute'], $units['second']);
    }
 

@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,51 +33,51 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersItem_Ticket
- * 
+ *
  * This class allows to add and manage tickets on the items
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersItem_Ticket extends CommonDBTM {
-   
-   static $types = array('Printer');
+
+   static $types = ['Printer'];
    static $rightname = 'plugin_printercounters';
-   
+
    protected $itemtype;
    protected $items_id;
-   
+
    // Event types
    static $NB_RECORD_ERROR = 1;
    static $NO_RECORD_DELAY = 2;
 
-   
+
    /**
     * Constructor
-    * 
+    *
     * @param type $itemtype
     * @param type $items_id
     */
-   public function __construct($itemtype = 'printer', $items_id=0) {
+   public function __construct($itemtype = 'printer', $items_id = 0) {
       $this->setItemtype($itemtype);
       $this->setitems_id($items_id);
-      
+
       parent::__construct();
    }
-   
+
    /**
     * functions mandatory
     * getTypeName(), canCreate(), canView()
     * */
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return _n('Ticket creation', 'Tickets creation', $nb, 'printercounters');
    }
 
    /**
     * Function sets itemtype id
     *
-    * @param string $itemtype 
-    * @throws Exception 
+    * @param string $itemtype
+    * @throws Exception
     */
    public function setItemtype($itemtype) {
 
@@ -87,7 +87,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
 
       $this->itemtype = $itemtype;
    }
-   
+
    /**
     * Function sets items id
     *
@@ -97,21 +97,21 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
 
       $this->items_id = $items_id;
    }
-   
+
       /**
     * Function Show the event dropdown
-    * 
+    *
     * @param type $name
     * @param array $options
     * @return type
     */
-    static function dropdownEvent($name='event_type', array $options=array()) {
-       return Dropdown::showFromArray($name, array_merge(array(Dropdown::EMPTY_VALUE), self::getAllEventArray()), $options);
-    }
-    
+   static function dropdownEvent($name = 'event_type', array $options = []) {
+      return Dropdown::showFromArray($name, array_merge([Dropdown::EMPTY_VALUE], self::getAllEventArray()), $options);
+   }
+
    /**
     * Function get the event
-    * 
+    *
     * @param type $value
     * @return type
     */
@@ -121,7 +121,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
          return $data[$value];
       }
    }
-    
+
    /**
     * Function Get the event list
     *
@@ -130,32 +130,36 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
    static function getAllEventArray() {
 
       // To be overridden by class
-      $tab = array(self::$NB_RECORD_ERROR => __('Consecutive errors', 'printercounters'), 
-                   self::$NO_RECORD_DELAY => __('No records', 'printercounters'));
+      $tab = [self::$NB_RECORD_ERROR => __('Consecutive errors', 'printercounters'),
+                   self::$NO_RECORD_DELAY => __('No records', 'printercounters')];
 
       return $tab;
    }
-   
+
    /**
     * Function show for record model
-    * 
+    *
     * @param type $item
     * @return boolean
     */
    function showTickets($config) {
-      
-      if (!$this->canView()) return false;
-      if (!$canedit = $this->canCreate()) return false;
+
+      if (!$this->canView()) {
+         return false;
+      }
+      if (!$canedit = $this->canCreate()) {
+         return false;
+      }
 
       $rand = mt_rand();
-      
+
       if (isset($_POST["start"])) {
          $start = $_POST["start"];
       } else {
          $start = 0;
       }
       $data = $this->getItems($start);
-      
+
       echo "<form name='form' method='post' action='".
          Toolbox::getItemTypeFormURL('PluginPrintercountersConfig')."'>";
 
@@ -169,7 +173,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       echo __('No successful records', 'printercounters');
       echo "</th>";
       echo "</tr>";
-      
+
       echo "<tr class='tab_bg_1'>";
       echo "<td>";
       echo __('Number of consecutive errors', 'printercounters');
@@ -184,61 +188,61 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       echo "&nbsp;".__('since', 'printercounters');
       echo "</td>";
       echo "<td>";
-      Dropdown::showTimeStamp("no_record_delay_ticket", array('min'             => DAY_TIMESTAMP,
+      Dropdown::showTimeStamp("no_record_delay_ticket", ['min'             => DAY_TIMESTAMP,
                                                               'max'             => 190*DAY_TIMESTAMP,
                                                               'step'            => DAY_TIMESTAMP,
                                                               'value'           => $config["no_record_delay_ticket"],
                                                               'addfirstminutes' => false,
-                                                              'inhours'         => false));
+                                                              'inhours'         => false]);
       echo "</td>";
       echo "</tr>";
-      
+
       echo "<tr class='tab_bg_1'>";
       echo "<td>".__('since', 'printercounters')."</td>";
       echo "<td>";
-      Dropdown::showTimeStamp("nb_errors_delay_ticket", array('min'             => DAY_TIMESTAMP,
+      Dropdown::showTimeStamp("nb_errors_delay_ticket", ['min'             => DAY_TIMESTAMP,
                                                               'max'             => 15*DAY_TIMESTAMP,
                                                               'step'            => DAY_TIMESTAMP,
                                                               'value'           => $config["nb_errors_delay_ticket"],
                                                               'addfirstminutes' => false,
-                                                              'inhours'         => false));
+                                                              'inhours'         => false]);
       echo "</td>";
       echo "<td>";
       echo __('For the item status', 'printercounters');
       echo "</td>";
       echo "<td>";
-      $state = array();
+      $state = [];
       $dbu   = new DbUtils();
       foreach ($dbu->getAllDataFromTable(getTableForItemType('State')) as $value) {
          $state[$value['id']] = $value['name'];
       }
-      Dropdown::showFromArray('items_status', $state, array('multiple'        => true, 
-                                                            'values'          => !empty($config["items_status"])?$config["items_status"]:array(), 
-                                                            'size'            => 10, 
+      Dropdown::showFromArray('items_status', $state, ['multiple'        => true,
+                                                            'values'          => !empty($config["items_status"])?$config["items_status"]:[],
+                                                            'size'            => 10,
                                                             'mark_unmark_all' => true,
-                                                            'width'           => 250));
+                                                            'width'           => 250]);
       echo "</td>";
       echo "</tr>";
-      
+
       // Ticket fields
       echo "<tr class='tab_bg_1'>";
       echo "<th colspan='4'>";
       echo __('Ticket fields', 'printercounters');
       echo "</th>";
       echo "</tr>";
-      
+
       // Category
       echo "<tr class='tab_bg_1'>";
       echo "<td>";
       echo __('Category assigned to the new ticket', 'printercounters');
       echo "</td>";
       echo "<td>";
-      ITILCategory::dropdown(array('name'  => 'tickets_category',
-                                   'value' => $config["tickets_category"]));
+      ITILCategory::dropdown(['name'  => 'tickets_category',
+                                   'value' => $config["tickets_category"]]);
       echo "</td>";
       echo "<td colspan='2'></td>";
       echo "</tr>";
-      
+
       // Add item group / user
       echo "<tr class='tab_bg_1'>";
       echo "<td>";
@@ -254,7 +258,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       Dropdown::showYesNo("add_item_user", $config["add_item_user"]);
       echo "</td>";
       echo "</tr>";
-      
+
       // Description
       echo "<tr class='tab_bg_1'>";
       echo "<td>";
@@ -274,25 +278,25 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
          $this->listItems($data, $start, $rand);
       }
    }
-   
+
    /**
     * Function list items
-    * 
+    *
     * @global type $CFG_GLPI
     * @param type $ID
     * @param type $data
     * @param type $canedit
     * @param type $rand
     */
-   private function listItems($data, $start, $rand, $canedit=true){
-      
+   private function listItems($data, $start, $rand, $canedit = true) {
+
       $item = getItemForItemtype($this->itemtype);
-      
+
       echo "<div class='center'>";
 
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];
          Html::showMassiveActions($massiveactionparams);
       }
 
@@ -327,26 +331,26 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
          Html::showMassiveActions($massiveactionparams);
          Html::closeForm();
       }
-      
+
       echo "</table>";
       echo "</div>";
    }
-   
+
    /**
     * Function get items
-    * 
+    *
     * @global type $DB
     * @param type $start
     * @return type
     */
-   function getItems($start=0){
+   function getItems($start = 0) {
       global $DB;
-      
-      $output = array();
-      
+
+      $output = [];
+
       $itemjoin = getTableForItemType('Ticket');
       $itemjoin2 = getTableForItemType($this->itemtype);
-      
+
       $query = "SELECT `".$this->getTable()."`.`id`, 
                        `".$this->getTable()."`.`items_id`,
                        `".$this->getTable()."`.`itemtype`, 
@@ -370,20 +374,20 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
             $output[$data['id']] = $data;
          }
       }
-      
+
       return $output;
    }
 
-   
+
    //######################### CRON FUNCTIONS #####################################################
 
    static function cronInfo($name) {
-      
+
       switch ($name) {
          case 'PrintercountersCreateTicket':
-            return array('description' => __('Create a ticket if there are consecutive errors on records OR no records since a defined date', 'printercounters'));
+            return ['description' => __('Create a ticket if there are consecutive errors on records OR no records since a defined date', 'printercounters')];
       }
-      return array();
+      return [];
    }
 
    /**
@@ -391,41 +395,45 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
     *
     * @param $task for log, if NULL display
     */
-   static function cronPrintercountersCreateTicket($task = NULL) {
+   static function cronPrintercountersCreateTicket($task = null) {
 
       $cron_status   = 1;
       $config        = new PluginPrintercountersConfig();
       $ticket        = new self();
-      $message       = array();
+      $message       = [];
 
       $config_data = $config->getInstance();
       $data = $ticket->getItems();
-      $item_ticket_data = array();
+      $item_ticket_data = [];
       foreach ($data as $val) {
          $item_ticket_data[$val['events_type']][] = $val['items_id'];
       }
 
       // Check no automatic or manual recrods since a defined date
       $result = $ticket->checkNoRecordForDelay($config_data, $item_ticket_data, $task);
-      if (!empty($result)) $message[] = $result;
+      if (!empty($result)) {
+         $message[] = $result;
+      }
 
       // Check consecutive errors on records
       $result = $ticket->checkConsecutiveRecordError($config_data, $item_ticket_data, $task);
-      if (!empty($result)) $message[] = $result;
+      if (!empty($result)) {
+         $message[] = $result;
+      }
 
       // Display message
       self::displayCronMessage($message, $task);
 
       return $cron_status;
    }
-   
+
    /**
     * Display cron messages
-    * 
+    *
     * @param type $message
     * @param type $task
     */
-   static function displayCronMessage($message, $task = NULL){
+   static function displayCronMessage($message, $task = null) {
       $message = array_unique($message);
       if (!empty($message)) {
          foreach ($message as $value) {
@@ -437,28 +445,28 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
          }
       }
    }
-   
+
    /**
     * Function check consecutive errors on records
-    * 
+    *
     * @global type $DB
     * @param array $config_data
     * @param array $item_ticket_data : already used items
     * @return type
     */
-   function checkConsecutiveRecordError($config_data, $item_ticket_data){
+   function checkConsecutiveRecordError($config_data, $item_ticket_data) {
       global $DB;
-           
-      $items_ko      = array();
-      $items_data    = array();
-      $items         = array();
-      $message       = array();
-      
+
+      $items_ko      = [];
+      $items_data    = [];
+      $items         = [];
+      $message       = [];
+
       if (!empty($config_data['nb_errors_delay_ticket'])) {
          $itemjoin1 = getTableForItemType("PluginPrintercountersRecord");
          $itemjoin2 = getTableForItemType("PluginPrintercountersItem_Recordmodels");
          $itemjoin3 = getTableForItemType($this->itemtype);
-      
+
          // Get all recordmodels items
          $query = "SELECT `".$itemjoin2."`.`items_id`,
                           `".$itemjoin2."`.`itemtype`,
@@ -486,7 +494,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
                }
             }
          }
-         
+
          // Search if there's no automatic and manual record since a defined date
          $query = "SELECT COUNT(`".$itemjoin1."`.`id`) as bad_record_count,
                           `".$itemjoin2."`.`items_id`,
@@ -498,16 +506,16 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
                    AND `".$itemjoin1."`.`record_type` != '".PluginPrintercountersRecord::$MANUAL_TYPE."' 
                    AND `".$itemjoin1."`.`record_type` != '".PluginPrintercountersRecord::$AUTOMATIC_TYPE."' 
                    GROUP BY `".$itemjoin2."`.`items_id`;";
-  
+
          $result = $DB->query($query);
          if ($DB->numrows($result)) {
             while ($data = $DB->fetch_assoc($result)) {
-               if($data['bad_record_count'] >= $config_data['nb_errors_ticket']){
+               if ($data['bad_record_count'] >= $config_data['nb_errors_ticket']) {
                   $items_ko[$data['itemtype']][] = $data['items_id'];
                }
             }
          }
-         
+
          // If not ok create ticket
          if (!empty($items)) {
             foreach ($items as $itemtype => $item) {
@@ -519,32 +527,32 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
             }
          }
       }
-      
+
       return implode(", ", array_unique($message));
    }
-   
+
    /**
     * Function check no automatic or manual records since a defined date
-    * 
+    *
     * @global type $DB
     * @param array $config_data
     * @param array $item_ticket_data : already used items
     * @return type
     */
-   function checkNoRecordForDelay($config_data, $item_ticket_data){
+   function checkNoRecordForDelay($config_data, $item_ticket_data) {
       global $DB;
-           
-      $items_ok      = array();
-      $items_data    = array();
-      $items         = array();
-      $message       = array();
-      
+
+      $items_ok      = [];
+      $items_data    = [];
+      $items         = [];
+      $message       = [];
+
       if (!empty($config_data['no_record_delay_ticket'])) {
-         
+
          $itemjoin1 = getTableForItemType("PluginPrintercountersRecord");
          $itemjoin2 = getTableForItemType("PluginPrintercountersItem_Recordmodels");
          $itemjoin3 = getTableForItemType($this->itemtype);
-      
+
          // Get all recordmodels items
          $query = "SELECT `".$itemjoin2."`.`items_id`,
                           `".$itemjoin2."`.`itemtype`,
@@ -559,11 +567,11 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
                    RIGHT JOIN $itemjoin3 
                       ON (`".$itemjoin2."`.`items_id` = `".$itemjoin3."`.`id` 
                          AND `".$itemjoin2."`.`itemtype` = '".$this->itemtype."'";
-         
+
          if (isset($config_data['items_status']) && !empty($config_data['items_status'])) {
             $query .= "  AND `".$itemjoin3."`.`states_id` IN('".implode("','", $config_data['items_status'])."')";
          }
-         
+
          $query .= "  )
                    LEFT JOIN $itemjoin1 
                       ON (`".$itemjoin1."`.`plugin_printercounters_items_recordmodels_id` = `".$itemjoin2."`.`id`)
@@ -591,7 +599,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
                    AND (`".$itemjoin1."`.`record_type` = '".PluginPrintercountersRecord::$MANUAL_TYPE."' 
                       OR `".$itemjoin1."`.`record_type` = '".PluginPrintercountersRecord::$AUTOMATIC_TYPE."')
                    GROUP BY `".$itemjoin2."`.`items_id`;";
-  
+
          $result = $DB->query($query);
          if ($DB->numrows($result)) {
             while ($data = $DB->fetch_assoc($result)) {
@@ -610,45 +618,45 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
             }
          }
       }
-      
+
       return implode(", ", array_unique($message));
    }
-   
+
    /**
     * Function create ticket
-    * 
+    *
     * @param type $input
     * @param type $config_data
     * @param type $events_type
     * @return type
     */
-   private function createTicket($input, $config_data, $events_type){
+   private function createTicket($input, $config_data, $events_type) {
 
       $ticket = new Ticket();
-      
+
       $item = new $input['itemtype']();
       $item->getFromDB($input['items_id']);
 
-      if ($tickets_id = $ticket->add(array('_users_id_assign'    => $config_data['add_item_user'] ? $input['users_id_tech'] : "",
-                                           '_users_id_requester' => $config_data['add_item_user'] ? $input['users_id'] : "", 
-                                           '_groups_id_assign'   => $config_data['add_item_group'] ? $input['groups_id_tech'] : "", 
+      if ($tickets_id = $ticket->add(['_users_id_assign'    => $config_data['add_item_user'] ? $input['users_id_tech'] : "",
+                                           '_users_id_requester' => $config_data['add_item_user'] ? $input['users_id'] : "",
+                                           '_groups_id_assign'   => $config_data['add_item_group'] ? $input['groups_id_tech'] : "",
                                            'entities_id'         => $input['entities_id'],
                                            'status'              => $ticket::INCOMING,
                                            'itilcategories_id'   => $config_data['tickets_category'],
-                                           'items_id'            => array($input['itemtype'] => array($input['items_id'])),
+                                           'items_id'            => [$input['itemtype'] => [$input['items_id']]],
                                            'name'                => _n($item->getType(), $item->getType().'s', 1)." - ".$item->fields['name'].' '.self::getEvent($events_type),
-                                           'content'             => $config_data['tickets_content']))) {
-         
+                                           'content'             => $config_data['tickets_content']])) {
+
          $item_ticket = new PluginPrintercountersItem_Ticket();
-         $item_ticket->add(array('items_id'    => $input['items_id'], 
-                                 'itemtype'    => $input['itemtype'], 
-                                 'tickets_id'  => $tickets_id, 
-                                 'events_type' => $events_type));
-         
+         $item_ticket->add(['items_id'    => $input['items_id'],
+                                 'itemtype'    => $input['itemtype'],
+                                 'tickets_id'  => $tickets_id,
+                                 'events_type' => $events_type]);
+
          return "<a href='".Toolbox::getItemTypeFormURL('PluginPrintercountersConfig')."?glpi_tab=PluginPrintercountersConfig$2&itemtype=PluginPrintercountersConfig'>".__('Tickets created for : ', 'printercounters').self::getEvent($events_type)."</a>";
       }
    }
-   
+
    function getForbiddenStandardMassiveAction() {
 
       $forbidden = parent::getForbiddenStandardMassiveAction();
@@ -659,4 +667,3 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       return $forbidden;
    }
 }
-?>

@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -43,4 +43,3 @@ if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
 } else {
    Html::helpFooter();
 }
-?>

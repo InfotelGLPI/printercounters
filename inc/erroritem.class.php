@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,21 +33,21 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersRecord
- * 
+ *
  * This class allows to add and manage the counter records of the items
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersErrorItem extends CommonDBTM {
 
    static $rightname = 'plugin_printercounters';
-   
+
    // Record result
    static $NO_ERROR    = 0;
    static $SOFT_STATE  = 1;
    static $HARD_STATE  = 2;
-   
+
    var $items_id;
    var $itemtype;
    var $error_counter;
@@ -55,19 +55,19 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
 
    /**
     * Constructor
-    * 
+    *
     * @param type $itemtype
     * @param type $items_id
     */
-   public function __construct($itemtype = 'printer', $items_id = 0, $error_counter=0, $max_error_retries=0) {
+   public function __construct($itemtype = 'printer', $items_id = 0, $error_counter = 0, $max_error_retries = 0) {
 
       $this->forceTable("glpi_plugin_printercounters_items_recordmodels");
-      
+
       $this->setItemtype($itemtype);
       $this->setItems_id($items_id);
       $this->setError_counter($error_counter);
       $this->setMax_error_retries($max_error_retries);
-      
+
       parent::__construct();
    }
 
@@ -78,8 +78,8 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
    /**
     * Function sets itemtype id
     *
-    * @param string $itemtype 
-    * @throws Exception 
+    * @param string $itemtype
+    * @throws Exception
     */
    public function setItemtype($itemtype) {
 
@@ -99,7 +99,7 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
 
       $this->items_id = $items_id;
    }
-   
+
    /**
     * Function sets error_counter id
     *
@@ -109,7 +109,7 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
 
       $this->error_counter = $error_counter;
    }
-   
+
    /**
     * Function sets max_error_retries
     *
@@ -119,36 +119,36 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
 
       $this->max_error_retries = $max_error_retries;
    }
-   
+
    /**
     * Function add printer in the error list
     */
-   public function addToErrorItems(){
+   public function addToErrorItems() {
       $this->getFromDBByQuery("WHERE `items_id` = '".$this->items_id."' AND `itemtype` = '".$this->itemtype."'");
       $error_counter = intval($this->fields['error_counter']) + 1;
-      $this->update(array('id' => $this->fields['id'], 'error_counter' => $error_counter, 'status' => self::$SOFT_STATE));
+      $this->update(['id' => $this->fields['id'], 'error_counter' => $error_counter, 'status' => self::$SOFT_STATE]);
    }
-   
+
    /**
-    * Function remove printer of the error list 
+    * Function remove printer of the error list
     */
-   public function removeErrorItem(){
+   public function removeErrorItem() {
       $this->getFromDBByQuery("WHERE `items_id` = '".$this->items_id."' AND `itemtype` = '".$this->itemtype."'");
-      $this->update(array('id' => $this->fields['id'], 'error_counter' => 0, 'status' => self::$NO_ERROR));
+      $this->update(['id' => $this->fields['id'], 'error_counter' => 0, 'status' => self::$NO_ERROR]);
    }
-   
+
    /**
     * Function update printer error counter
     */
-   public function incrementErrorCounter(){
+   public function incrementErrorCounter() {
       $this->getFromDBByQuery("WHERE `items_id` = '".$this->items_id."' AND `itemtype` = '".$this->itemtype."'");
       $error_counter = intval($this->fields['error_counter']) + 1;
-      $this->update(array('id' => $this->fields['id'], 'error_counter' => $error_counter));
+      $this->update(['id' => $this->fields['id'], 'error_counter' => $error_counter]);
    }
-   
+
    /**
     * Function get the result
-    * 
+    *
     * @param type $value
     * @return type
     */
@@ -167,38 +167,38 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
    static function getAllStatusArray() {
 
       // To be overridden by class
-      $tab = array(self::$NO_ERROR      => __('No errors', 'printercounters'),
+      $tab = [self::$NO_ERROR      => __('No errors', 'printercounters'),
                    self::$SOFT_STATE    => __('Soft state', 'printercounters'),
-                   self::$HARD_STATE    => __('Hard state', 'printercounters'));
+                   self::$HARD_STATE    => __('Hard state', 'printercounters')];
 
       return $tab;
    }
-   
+
    /**
     * Function Show if the item is in error state
-    * 
+    *
     * @global type $CFG_GLPI
     */
-   function showErrorItem(){
+   function showErrorItem() {
       global $CFG_GLPI;
-      
+
       if ($nbErrors = $this->isInError()) {
          $message = self::getTypeName().'. '.__('Number of errors', 'printercounters').' : '.$nbErrors;
          Html::displayTitle($CFG_GLPI['root_doc']."/pics/warning.png", $message, $message);
       }
    }
-   
-   
+
+
    /**
     * Function Is item in error
-    * 
+    *
     * @return boolean
     */
-   function isInError(){
+   function isInError() {
         // Get config
       $config      = new PluginPrintercountersConfig();
       $config_data = $config->getInstance();
-      
+
       if ($config_data['enable_error_handler']) {
          $data = $this->find("`items_id`= '".$this->items_id."' AND LOWER(`itemtype`) = '".strtolower($this->itemtype)."'");
          $data = reset($data);
@@ -207,13 +207,13 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
             return $data['error_counter'];
          }
       }
-      
+
       return false;
    }
-   
+
    /**
     * Show general records config
-    * 
+    *
     * @param type $config
     */
    function showErrorItemConfig($config) {
@@ -230,13 +230,13 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
       echo "<tr class='tab_bg_1'>";
       echo "<td>".__('Enable record error handler', 'printercounters')."</td>";
       echo "<td>";
-      $rand = Dropdown::showYesNo('enable_error_handler', $config['enable_error_handler'], -1, array('on_change' => 'enableErrorHandler();'));
+      $rand = Dropdown::showYesNo('enable_error_handler', $config['enable_error_handler'], -1, ['on_change' => 'enableErrorHandler();']);
       echo "</td>";
       echo "<td class='enable_error_handler_config' style='display:none;'>".__('Maximum number of interrogation for records in error', 'printercounters')."</td>";
       echo "<td class='enable_error_handler_config' style='display:none;'>";
-      Dropdown::showNumber("max_error_counter",  array('value' => $config['max_error_counter'],
+      Dropdown::showNumber("max_error_counter", ['value' => $config['max_error_counter'],
                                                        'min'   => 0,
-                                                       'max'   => 10));
+                                                       'max'   => 10]);
       echo "<script type='text/javascript'>";
       echo "function enableErrorHandler(){";
       echo "   $(document).ready(function () {
@@ -270,7 +270,7 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
       $this->listItems();
    }
 
-   private function listItems(){
+   private function listItems() {
 
       $fields = $this->find("`error_counter` > 0");
 
@@ -305,9 +305,9 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
 
       switch ($name) {
          case 'PrintercountersErrorItem':
-            return array('description' => __('Interrogation of printers in host error', 'printercounters'));
+            return ['description' => __('Interrogation of printers in host error', 'printercounters')];
       }
-      return array();
+      return [];
    }
 
    /**
@@ -315,7 +315,7 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
     *
     * @param $task for log, if NULL display
     */
-   static function cronPluginPrintercountersErrorItem($task = NULL) {
+   static function cronPluginPrintercountersErrorItem($task = null) {
 
       $cron_status   = 1;
 
@@ -328,13 +328,13 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
          $errorItem   = new self();
          $errorList   = $errorItem->find("`status` IN ('".self::$HARD_STATE."', '".self::$SOFT_STATE."')");
 
-         $message       = array();
+         $message       = [];
 
          if (!empty($errorList)) {
             foreach ($errorList as $error) {
-               $errorItem     = new self($error['itemtype'], 
-                                         $error['items_id'], 
-                                         $error['error_counter'], 
+               $errorItem     = new self($error['itemtype'],
+                                         $error['items_id'],
+                                         $error['error_counter'],
                                          $config_data['max_error_counter']);
 
                list($message, $error) = $errorItem->initRecord();
@@ -343,18 +343,18 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
             }
          }
       }
-      
+
       return $cron_status;
    }
-      
+
    /**
     * Display cron messages
-    * 
+    *
     * @param type $message
     * @param type $task
     */
-   static function displayCronMessage($message, $task = NULL){
-      
+   static function displayCronMessage($message, $task = null) {
+
       $message = array_unique($message);
       if (!empty($message)) {
          foreach ($message as $value) {
@@ -367,17 +367,17 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
          }
       }
    }
-   
+
    /**
     * Function init record for items in error
     */
-   function initRecord(){
-      $messages                = array();
+   function initRecord() {
+      $messages                = [];
       $error                   = false;
-      $search_results          = array();
-      
+      $search_results          = [];
+
       $record = new PluginPrintercountersRecord();
-      
+
       // Get items ip addresses for each processes
       $process      = new PluginPrintercountersProcess(-1, 1, $this->itemtype, $this->items_id);
       $ip_addresses = $process->getIPAddressesForProcess(true);
@@ -399,28 +399,28 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
          switch (strtolower($this->itemtype)) {
             case 'printer':
                foreach ($ip_addresses as $printers_id => $cards) {
-                  $search_results   = array();
+                  $search_results   = [];
                   foreach ($cards as $addresses) {
                      foreach ($addresses['ip'] as $ip) {
                         if (!empty($ip)) {
                            try {
-                              $printer = new PluginPrintercountersPrinter($printers_id, 
-                                                                          $this->itemtype, 
-                                                                          $ip, 
-                                                                          $addresses['mac'], 
-                                                                          isset($record_config[$printers_id]) ? $record_config[$printers_id] : array(), 
-                                                                          isset($snmp_auth[$printers_id]) ? $snmp_auth[$printers_id] : array());
+                              $printer = new PluginPrintercountersPrinter($printers_id,
+                                                                          $this->itemtype,
+                                                                          $ip,
+                                                                          $addresses['mac'],
+                                                                          isset($record_config[$printers_id]) ? $record_config[$printers_id] : [],
+                                                                          isset($snmp_auth[$printers_id]) ? $snmp_auth[$printers_id] : []);
                               // Get OIDs
                               $printer->getOID();
                               $init_search = $printer->initSearch($recordmodel_config[$printers_id]);
                               if (isset($init_search['counters']['counters']) && !empty($init_search['counters']['counters'])) {
                                  $search_results[] = $init_search;
                               }
-                              
+
                               // Unset mutex / close session
                               $item_recordmodel->unsetMutex($printer->item_recordmodel);
                               $printer->closeSNMPSession();
-                              
+
                            } catch (PluginPrintercountersException $e) {
                               $messages[] = $e->getPrintercountersMessage();
                               $error      = true;
@@ -431,7 +431,7 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
 
                   // Set record
                   if (!empty($search_results)) {
-                     $search_result_ok = array();
+                     $search_result_ok = [];
                      foreach ($search_results as $results) {
                         if ($results['record_result'] == PluginPrintercountersRecord::$SUCCESS) {
                            $search_result_ok[] = $results;
@@ -441,11 +441,11 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
                      // If all records are wrong
                      if (empty($search_result_ok)) {
                         // Max retries is not reached
-                        if ($this->error_counter < $this->max_error_retries){
+                        if ($this->error_counter < $this->max_error_retries) {
                            $this->incrementErrorCounter();
                            $messages[] = __('Error on item, soft state', 'printercounters').' (itemtype : '.$this->itemtype.', items_id : '.$printers_id.')';
-                           
-                        // Max retry, set record in database, remove from error list
+
+                           // Max retry, set record in database, remove from error list
                         } else {
                            foreach ($search_results as $key => $results) {
                               $record->setRecord($results['counters'], $results['record_result'], $results['record_type'], date('Y-m-d H:i:s', time() + $key));
@@ -455,13 +455,13 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
                            $messages[] = __('Error on item, hard state', 'printercounters').' (itemtype : '.$this->itemtype.', items_id : '.$printers_id.')';
                         }
 
-                     // If at least one record is successfull set it in database, remove from error list
+                        // If at least one record is successfull set it in database, remove from error list
                      } else {
                         $record->setRecord($search_result_ok[0]['counters'], $search_result_ok[0]['record_result'], $search_result_ok[0]['record_type'], date('Y-m-d H:i:s'));
                         $this->removeErrorItem();
                         $messages[] = __('Record success', 'printercounters').' (itemtype : '.$this->itemtype.', items_id : '.$printers_id.')';
                      }
-                     
+
                   } else {
                      $messages[] = __('No results, please check OIDs of your record model', 'printercounters').' (itemtype : '.$this->itemtype.', items_id : '.$printers_id.')';
                      $error      = true;
@@ -479,8 +479,8 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
          $error      = true;
       }
 
-      return array($messages, $error);
+      return [$messages, $error];
    }
 
-   
+
 }

@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,20 +33,20 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersException
- * 
+ *
  * This class adds custom exception management for the plugin
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersException extends Exception {
-   
+
    protected $itemptype;
    protected $items_id;
-   
+
    /**
     * Constructor
-    * 
+    *
     * @param string $message
     * @param int $code
     * @param Exception $previous
@@ -56,10 +56,10 @@ class PluginPrintercountersException extends Exception {
    public function __construct($message, $code, $previous, $items_id, $itemtype) {
       $this->setItemtype($itemtype);
       $this->setItems_id($items_id);
-      
+
       parent::__construct($message, $code, $previous);
    }
-   
+
    /**
     * Function sets items_id
     *
@@ -68,7 +68,7 @@ class PluginPrintercountersException extends Exception {
    public function setItems_id($items_id) {
       $this->items_id = $items_id;
    }
-   
+
    /**
     * Function sets itemtype
     *
@@ -77,14 +77,14 @@ class PluginPrintercountersException extends Exception {
    public function setItemtype($itemtype) {
       $this->itemptype = $itemtype;
    }
-   
-   
+
+
    /**
     * Function sets plugin error message
     * @return string
     */
-   function getPrintercountersMessage(){
-      
+   function getPrintercountersMessage() {
+
       // Debug mode
       $user = new User();
       $user->getFromDB(Session::getLoginUserID());
@@ -92,8 +92,8 @@ class PluginPrintercountersException extends Exception {
          $trace = $this->getTraceAsString();
          $trace = preg_replace('/#(\d)/', '<br>#$1', $trace);
          return __('SNMP Error: ', 'printercounters').$this->getMessage().' '.$trace.' (itemtype : '.$this->itemptype.', items_id : '.$this->items_id.')<br>';
-         
-      // Normal mode
+
+         // Normal mode
       } else {
          return __('SNMP Error: ', 'printercounters').$this->getMessage().' (itemtype : '.$this->itemptype.', items_id : '.$this->items_id.')';
       }

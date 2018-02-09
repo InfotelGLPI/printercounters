@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -39,26 +39,25 @@ if (isset($_POST["add"])) {
    // Check update rights for fields
    $countertype_recordmodel->check(-1, CREATE, $_POST);
    $newID = $countertype_recordmodel->add($_POST);
-   
+
    Html::back();
 
-} elseif (isset($_POST["update"])) {
+} else if (isset($_POST["update"])) {
    // Check update rights for fields
    $countertype_recordmodel->check($_POST['id'], UPDATE, $_POST);
    $countertype_recordmodel->update($_POST);
 
    Html::back();
 
-} elseif (isset($_POST["purge"])) {
+} else if (isset($_POST["purge"])) {
    // Check update rights for fields
    $countertype_recordmodel->check($_POST['id'], DELETE, $_POST);
    $countertype_recordmodel->delete($_POST, 1);
    Html::back();
-   
+
 } else {
    $countertype_recordmodel->checkGlobal(READ);
    Html::header(PluginPrintercountersCountertype::getTypeName(1), '', "tools", "pluginprintercountersmenu", "countertype");
-   $countertype_recordmodel->display(array('id' => $_GET["id"]));
+   $countertype_recordmodel->display(['id' => $_GET["id"]]);
    Html::footer();
 }
-?>

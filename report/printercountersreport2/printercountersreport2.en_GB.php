@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -28,4 +28,3 @@
  */
 $LANG['plugin_printercounters']['printercountersreport2'] = "List of printers with no statement for more than 3 months";
 
-?>

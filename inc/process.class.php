@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -34,9 +34,9 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersProcess
- * 
+ *
  * This class manages the partition of the printers to query on each process
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
@@ -46,11 +46,11 @@ class PluginPrintercountersProcess extends CommonDBTM {
    protected $process_nbr;
    protected $itemtype;
    protected $items_id;
-   
+
    const MUTEX_TIMEOUT = 3600;
    const SIGKILL = 9;
    const SIGTERM = 15;
-   
+
    static $rightname = 'plugin_printercounters';
 
 
@@ -67,11 +67,11 @@ class PluginPrintercountersProcess extends CommonDBTM {
       if ($itemtype !== null) {
          $this->setItemtype($itemtype);
       }
-      
+
       if ($items_id !== null) {
          $this->setItems_id($items_id);
       }
-      
+
       if ($process_id !== null) {
          $this->setProcessId($process_id);
       }
@@ -80,16 +80,16 @@ class PluginPrintercountersProcess extends CommonDBTM {
          $this->setProcessNumber($process_nbr);
       }
    }
-   
-   static function getTypeName($nb=0) {
+
+   static function getTypeName($nb = 0) {
       return _n('Process', 'Processes', $nb, 'printercounters');
    }
-   
+
    /**
     * Function sets process id
     *
-    * @param string $process_id process id 
-    * @throws Exception 
+    * @param string $process_id process id
+    * @throws Exception
     */
    public function setProcessId($process_id) {
 
@@ -99,12 +99,12 @@ class PluginPrintercountersProcess extends CommonDBTM {
 
       $this->process_id = $process_id;
    }
-   
+
    /**
     * Function sets process number
     *
     * @param string $process_nbr number of processs
-    * @throws Exception 
+    * @throws Exception
     */
    public function setProcessNumber($process_nbr) {
 
@@ -114,12 +114,12 @@ class PluginPrintercountersProcess extends CommonDBTM {
 
       $this->process_nbr = $process_nbr;
    }
-   
+
    /**
     * Function sets item type
     *
     * @param string $itemtype item type
-    * @throws Exception 
+    * @throws Exception
     */
    public function setItemtype($itemtype) {
 
@@ -129,7 +129,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
 
       $this->itemtype = $itemtype;
    }
-   
+
    /**
     * Function sets Items id
     *
@@ -146,23 +146,23 @@ class PluginPrintercountersProcess extends CommonDBTM {
 
       $this->items_id = $items_id;
    }
-   
+
    /**
     * Function gets ip adresses for an item type shared by processs
-    * 
+    *
     * @global type $DB
     * @return type
     */
-   public function getIPAddressesForProcess($errorHandler=false) {
+   public function getIPAddressesForProcess($errorHandler = false) {
       global $DB;
 
-      $ip = array();
-      
+      $ip = [];
+
       // Filter printers according to their periodicity
-      if($this->items_id <= 0){
+      if ($this->items_id <= 0) {
          $items_id = $this->selectPrinterToSearch(false, $errorHandler);
       } else {
-         $items_id = array($this->items_id);
+         $items_id = [$this->items_id];
          $error_item = new PluginPrintercountersErrorItem($this->itemtype, $this->items_id);
          if ($error_item->isInError() > 0 && !$errorHandler) {
             return $ip;
@@ -170,7 +170,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
       }
 
       $itemjoin = getTableForItemType($this->itemtype);
-      
+
       $query = "SELECT `glpi_networkports`.`id` as cards_id,
                        `glpi_ipaddresses`.`name` as ip,
                        `glpi_networkports`.`items_id`,
@@ -182,10 +182,10 @@ class PluginPrintercountersProcess extends CommonDBTM {
                 WHERE LOWER(`glpi_networkports`.`itemtype`) = LOWER('".$this->itemtype."')
                 AND `".$itemjoin."`.`id` IN ('".implode("','", $items_id)."')";
 
-      if($this->items_id > 0){
+      if ($this->items_id > 0) {
          $query .= " AND `".$itemjoin."`.`id` = ".$this->items_id;
       }
-      
+
       $result_ocs = $DB->query($query);
       if ($DB->numrows($result_ocs) > 0) {
          while ($data = $DB->fetch_array($result_ocs)) {
@@ -198,37 +198,37 @@ class PluginPrintercountersProcess extends CommonDBTM {
       $items_id = array_keys($ip);
       $item_recordmodels = new PluginPrintercountersItem_Recordmodel();
       $item_recordmodels->setMutex($items_id, $this->process_id);
-      
+
       return $ip;
    }
-   
+
    /**
     * Function select items to search according to their periodicity
-    * 
+    *
     * @global type $DB
     * @param bool $more_data : get all data, default false : get only items_id
     * @param string $condition
     * @return type
     */
-   function selectPrinterToSearch($more_data=false, $errorHandler=false, $condition=''){
+   function selectPrinterToSearch($more_data = false, $errorHandler = false, $condition = '') {
       global $DB;
-      
-      $output = array();
+
+      $output = [];
 
       $itemjoin  = getTableForItemType("PluginPrintercountersItem_Recordmodel");
       $itemjoin3 = getTableForItemType("PluginPrintercountersRecord");
       $itemjoin4 = getTableForItemType("Entity");
       $itemjoin5 = getTableForItemType($this->itemtype);
-      
+
       // Repartition between all processes
       $where_multi_process = '';
       if (($this->process_nbr != -1)
               && ($this->process_id != -1)
               && ($this->process_nbr > 1)) {
-         
+
          $where_multi_process = " AND `".$itemjoin."`.`items_id` % $this->process_nbr = ".($this->process_id - 1);
       }
-      
+
       $query = "SELECT `".$itemjoin3."`.`id` as records_id,
                        `".$itemjoin."`.`items_id`,
                        `".$itemjoin5."`.`name` as items_name,
@@ -250,11 +250,11 @@ class PluginPrintercountersProcess extends CommonDBTM {
              ON (`".$itemjoin."`.`items_id` = `".$itemjoin5."`.`id`)
           WHERE LOWER(`".$itemjoin."`.`itemtype`) = LOWER('".$this->itemtype."')
           AND `".$itemjoin5."`.`is_deleted` = 0 ";
-      
+
       $query .= $where_multi_process;
-      
-      $query .= " $condition GROUP BY `".$itemjoin."`.`items_id`";  
-      
+
+      $query .= " $condition GROUP BY `".$itemjoin."`.`items_id`";
+
       // Items in error
       $config      = new PluginPrintercountersConfig();
       $config_data = $config->getInstance();
@@ -273,7 +273,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
             while ($data = $DB->fetch_assoc($result)) {
                $output[] = $data['items_id'];
             }
-         // Normal
+            // Normal
          } else {
             while ($data = $DB->fetch_assoc($result)) {
                // Is item can be fetch ?
@@ -307,16 +307,16 @@ class PluginPrintercountersProcess extends CommonDBTM {
 
    /**
     * Function shows running processes form
-    * 
+    *
     * @param type $config
     * @return boolean
     */
-   public function showProcesses($config){
+   public function showProcesses($config) {
 
-      if (!$this->canCreate()){
+      if (!$this->canCreate()) {
          return false;
       }
-      
+
       echo "<div align='center'><table class='tab_cadre_fixe'>";
       echo "<tr><th colspan='6'>".self::getTypeName(2)."</th></tr>";
       echo "<tr class='tab_bg_1'>";
@@ -329,13 +329,13 @@ class PluginPrintercountersProcess extends CommonDBTM {
       echo "</tr>";
       echo "</table></div>";
    }
-   
+
    /**
     * Function get running printercounters processes
-    * 
+    *
     * @global type $CFG_GLPI
     */
-   public function getProcesses(){
+   public function getProcesses() {
       global $CFG_GLPI;
 
       if (function_exists("sys_get_temp_dir")) {
@@ -345,23 +345,23 @@ class PluginPrintercountersProcess extends CommonDBTM {
          // Unix/Linux
          $pidfile = "/tmp/printercounters_fullsync.pid";
       }
-     
+
       // Sow processes only for UNIX
       if (file_exists($pidfile) && DIRECTORY_SEPARATOR=='/') {
          $nb_col = 8;
-         
+
          // Get all processes data
          $pids = explode(';', file_get_contents($pidfile));
-         $pids_id = array();
-         
-         $rows = array();
+         $pids_id = [];
+
+         $rows = [];
          foreach ($pids as &$pid) {
             if (strpos($pid, '$$$')) {
                list($id, $pid) = explode('$$$', $pid);
                $pids_id[$pid] = $id;
             }
             for ($i=1;$i<=$nb_col;$i++) {
-               $output = array();
+               $output = [];
                exec("ps -f -p $pid | egrep $pid | tr -s ' ' | cut -d ' ' -f $i", $output);
                if (!empty($output)) {
                   $rows[$pid][$i] = $output;
@@ -373,7 +373,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
          if (!empty($rows)) {
             // Get process items
             $process_items = $this->getProcessItems();
-            
+
             echo "<table class='tab_cadre'>";
             // Header
             echo "<tr class='tab_bg_1'>";
@@ -409,25 +409,25 @@ class PluginPrintercountersProcess extends CommonDBTM {
             echo "</td>";
             echo "</tr>";
             echo "</table>";
-            
+
          } else {
             $this->cleanup($pidfile);
             echo __('No processes', 'printercounters');
          }
-         
+
       } else {
          echo __('No processes', 'printercounters');
       }
    }
-   
-   /** 
-    * getFieldName 
-    * 
+
+   /**
+    * getFieldName
+    *
     * @param type $field
     * @return type
     */
    function getFieldName($field) {
-      
+
       switch ($field) {
          case 1:       return __('UID', 'printercounters');
          case 2:       return __('PID', 'printercounters');
@@ -441,40 +441,42 @@ class PluginPrintercountersProcess extends CommonDBTM {
          default : return '';
       }
    }
-   
+
    /**
     * Function kill processes with sons
-    * 
+    *
     * @param int $pid
     * @param type $signal
     * @return string
     */
    public function killProcesses($pid, $signal) {
-      
+
       $error   = false;
       $message = '';
-      
+
       if (DIRECTORY_SEPARATOR=='/') {
          // Unix/Linux
          exec("ps -ef| awk '\$3 == '$pid' { print  \$2 }'", $output, $ret);
-         if ($ret) return 'you need ps, grep, and awk';
+         if ($ret) {
+            return 'you need ps, grep, and awk';
+         }
          while (list(, $t) = each($output)) {
             if ($t != $pid) {
                $this->killProcesses($t, $signal);
             }
          }
-         if(!posix_kill($pid, $signal)){
+         if (!posix_kill($pid, $signal)) {
             $message = posix_strerror(posix_get_last_error());
             $error   = true;
          }
       }
-      
-      return array($message, $error);
+
+      return [$message, $error];
    }
-   
+
    /**
     * Function clean pid file
-    * 
+    *
     * @param int $pid
     * @param type $signal
     * @return string
@@ -484,28 +486,29 @@ class PluginPrintercountersProcess extends CommonDBTM {
       @unlink($pidfile);
 
       $dir = opendir(GLPI_LOCK_DIR);
-      if ($dir)
+      if ($dir) {
          while ($name = readdir($dir)) {
             if (strpos($name, "lock_entity") === 0) {
                unlink(GLPI_LOCK_DIR."/".$name);
             }
          }
+      }
    }
-   
-  /**
+
+   /**
    * Function get records for an item
-   * 
+   *
    * @global type $DB
    * @return string
    */
-   function getProcessItems(){
+   function getProcessItems() {
       global $DB;
 
       $itemjoin = getTableForItemType("PluginPrintercountersItem_Recordmodel");
       $itemjoin2 = getTableForItemType($this->itemtype);
-      
-      $output = array();
-      
+
+      $output = [];
+
       $query = "SELECT `".$itemjoin."`.`process_id`, 
                        `".$itemjoin2."`.`name` as items_name,
                        `".$itemjoin."`.`items_id`
@@ -517,12 +520,11 @@ class PluginPrintercountersProcess extends CommonDBTM {
       if ($DB->numrows($result)) {
          while ($data = $DB->fetch_assoc($result)) {
             $link = Toolbox::getItemTypeFormURL($this->itemtype).'?id='.$data['items_id'];
-            $output[$data['process_id']][] =  array('items_name' => $data['items_name'], 'items_id' => $data['items_id'], 'items_link' => "<a href='$link' target='_blank'>".$data['items_name']."</a>");
+            $output[$data['process_id']][] =  ['items_name' => $data['items_name'], 'items_id' => $data['items_id'], 'items_link' => "<a href='$link' target='_blank'>".$data['items_name']."</a>"];
          }
       }
-      
+
       return $output;
    }
 
 }
-?>

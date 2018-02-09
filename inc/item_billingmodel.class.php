@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,25 +33,25 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersItem_Billingmodel
- * 
+ *
  * This class allows to add and manage billing models on the items
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
-   static $types = array('Printer');
+   static $types = ['Printer'];
    static $rightname = 'plugin_printercounters';
-   
+
    public $dohistory = false;
    protected $itemtype;
    protected $items_id;
-   
+
 
    /**
     * Constructor
-    * 
+    *
     * @param type $itemtype
     * @param type $items_id
     */
@@ -78,8 +78,8 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
    /**
     * Function sets itemtype id
     *
-    * @param string $itemtype 
-    * @throws Exception 
+    * @param string $itemtype
+    * @throws Exception
     */
    public function setItemtype($itemtype) {
 
@@ -101,8 +101,8 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
    }
 
    /**
-    * getFieldName 
-    * 
+    * getFieldName
+    *
     * @param type $field
     * @return type
     */
@@ -179,13 +179,13 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * showForItem
-    * 
+    *
     * @param type $item
     * @return boolean
     */
    function showForItem($item) {
 
-      $used = array();
+      $used = [];
 
       $data = $this->find("`items_id` = '".$item->getID()."' AND `itemtype` = '".$item->getType()."'");
       if (!empty($data)) {
@@ -205,9 +205,9 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
          echo "<tr class='tab_bg_1'>";
          echo "<td class='center'>";
          echo PluginPrintercountersBillingmodel::getTypeName()."&nbsp;";
-         Dropdown::show("PluginPrintercountersBillingmodel", array('name'    => 'plugin_printercounters_billingmodels_id',
+         Dropdown::show("PluginPrintercountersBillingmodel", ['name'    => 'plugin_printercounters_billingmodels_id',
                                                                     'entity' => $item->fields['entities_id'],
-                                                                    'used'   => $used));
+                                                                    'used'   => $used]);
          echo "<input type='hidden' name='itemtype' value='".$this->itemtype."' >";
          echo "<input type='hidden' name='items_id' value='".$this->items_id."' >";
          echo "&nbsp;<input type='submit' name='add' class='submit' value='"._sx('button', 'Add')."'>";
@@ -218,16 +218,16 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
          Html::closeForm();
       }
 
-      // Record history     
+      // Record history
       if (!empty($data)) {
          $search = new PluginPrintercountersSearch();
-         $search->showSearch($this, array('massiveaction' => true));
+         $search->showSearch($this, ['massiveaction' => true]);
       }
    }
 
    /**
     * showForBillingmodel
-    * 
+    *
     * @param type $item
     * @return boolean
     */
@@ -243,8 +243,8 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       } else {
          $start = 0;
       }
-      $data = $this->getItems($item->fields['id'], array('start' => $start, 'addLimit' => true));
-      $rows = count($this->getItems($item->fields['id'], array('addLimit' => false)));
+      $data = $this->getItems($item->fields['id'], ['start' => $start, 'addLimit' => true]);
+      $rows = count($this->getItems($item->fields['id'], ['addLimit' => false]));
 
       if ($canedit) {
          echo "<form name='form' method='post' action='".Toolbox::getItemTypeFormURL($this->getType())."'>";
@@ -256,10 +256,10 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
          // Dropdown item
          echo "<td class='center'>";
          echo $itemtype::getTypeName(2).'&nbsp;';
-         Dropdown::show($itemtype, array('name' => 'items_id',
+         Dropdown::show($itemtype, ['name' => 'items_id',
              'entity' => $item->fields['entities_id'],
              'entity_sons' => true,
-             'condition' => " `".getTableForItemType($itemtype)."`.`id` NOT IN (SELECT `items_id` FROM ".$this->getTable()." WHERE itemtype = '".$itemtype."')"));
+             'condition' => " `".getTableForItemType($itemtype)."`.`id` NOT IN (SELECT `items_id` FROM ".$this->getTable()." WHERE itemtype = '".$itemtype."')"]);
          echo "</td>";
          echo "</tr>";
 
@@ -281,7 +281,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * listItems
-    * 
+    *
     * @param array $data
     * @param bool $canedit
     * @param int $start
@@ -295,7 +295,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       echo "<div class='center'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];
          Html::showMassiveActions($massiveactionparams);
       }
 
@@ -355,16 +355,16 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * Get item billingmodel items
-    * 
+    *
     * @global type $DB
     * @param type $billingmodels_id
     * @param type $options : - bool addLimit : add limit to the search
     *                        - int start     : start line
     *                        - int limit     : number of lines
-    * 
+    *
     * @return type
     */
-   function getItems($billingmodels_id = 0, $options = array()) {
+   function getItems($billingmodels_id = 0, $options = []) {
       global $DB;
 
       $params['start'] = 0;
@@ -377,7 +377,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
          }
       }
 
-      $output = array();
+      $output = [];
 
       $itemjoin = getTableForItemType($this->itemtype);
       $itemjoin2 = getTableForItemType($this->itemtype.'Model');
@@ -458,17 +458,17 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * Get billingmodel data for items
-    * 
+    *
     * @global type $DB
     * @param type $items_id
     * @param type $itemtype
     * @param type $options : - bool addLimit : add limit to the search
     *                        - int start     : start line
     *                        - int limit     : number of lines
-    * 
+    *
     * @return type
     */
-   function getBillingmodelForItem($items_id = 0, $itemtype = null, $options = array()) {
+   function getBillingmodelForItem($items_id = 0, $itemtype = null, $options = []) {
       global $DB;
 
       $params['start'] = 0;
@@ -483,7 +483,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
          }
       }
 
-      $output = array();
+      $output = [];
 
       $itemjoin = getTableForItemType($itemtype);
       $itemjoin2 = getTableForItemType($itemtype.'Model');
@@ -498,7 +498,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
       $query = "SELECT `".$itemjoin."`.`name` as items_name,
                        `".$itemjoin."`.`entities_id`,";
-      
+
       if ($params['addItemDetails']) {
          $query .= "   `".$itemjoin6."`.`name` as entities_name,
                        `".$itemjoin3."`.`name` as states_name,
@@ -506,7 +506,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
                        `".$itemjoin2."`.`name` as models_name,
                        `".$itemjoin5."`.`name` as locations_name,";
       }
-      
+
       $query .= "      `".$this->getTable()."`.`id`,
                         GROUP_CONCAT(`".$itemjoin."`.`id` SEPARATOR '$$$$') as items_id,
                         GROUP_CONCAT(DISTINCT CONCAT(`".$itemjoin10."`.`cost`,'$$',`".$itemjoin10."`.`plugin_printercounters_countertypes_id`) SEPARATOR '$$$$') as counters_cost,
@@ -518,17 +518,17 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
                        `".$itemjoin9."`.`is_recursive` as billingmodels_recursivity,
                        `".$itemjoin7."`.`plugin_printercounters_recordmodels_id` as currentitem_recordmodels_id,
                        `".$itemjoin7."`.`itemtype`";
-      
+
       if ($params['addItemDetails']) {
          $query .= "      ,`glpi_plugin_printercounters_records`.`date` as last_record_date,
                           `glpi_plugin_printercounters_records`.`record_type` as last_record_type";
       }
-      
+
       $query .= "
           FROM ".$this->getTable()."
           LEFT JOIN `".$itemjoin."` 
              ON (`".$this->getTable()."`.`items_id` = `".$itemjoin."`.`id`)";
-      
+
       if ($params['addItemDetails']) {
          $query .= "
              LEFT JOIN `".$itemjoin2."` 
@@ -542,7 +542,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
              LEFT JOIN `".$itemjoin6."` 
                 ON (`".$itemjoin6."`.`id` = `".$itemjoin."`.`entities_id`)";
       }
-      
+
       $query .= "
           LEFT JOIN `".$itemjoin9."` 
              ON (`".$itemjoin9."`.`id` = `".$this->getTable()."`.`plugin_printercounters_billingmodels_id`) 
@@ -552,7 +552,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
              ON (`".$itemjoin7."`.`items_id` = `$itemjoin`.`id` 
                  AND LOWER(`".$itemjoin7."`.`itemtype`) = LOWER('".$itemtype."')
                 )";
-      
+
       if ($params['addItemDetails']) {
          $query .= "
              LEFT JOIN `$itemjoin8`
@@ -564,7 +564,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
                         )
                    )";
       }
-      
+
       $query .= "
           WHERE 1";
 
@@ -611,7 +611,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * Check if the item can be added in the billingmodel
-    * 
+    *
     * @global type $DB
     * @param type $billingmodels_id
     * @param type $items_id
@@ -620,7 +620,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
    function checkItem($billingmodels_id, $items_id = 0) {
       global $DB;
 
-      $output = array();
+      $output = [];
 
       $itemjoin = getTableForItemType('PluginPrintercountersBillingmodel');
       $itemjoin2 = getTableForItemType('PluginPrintercountersRecordmodel');
@@ -651,17 +651,17 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * Clean if the item cannot be in the billingmodel
-    * 
+    *
     * @param type $billingmodels_id
     */
    function cleanItems($billingmodels_id) {
 
-      $items = $this->getItems($billingmodels_id, array('addLimit' => false));
+      $items = $this->getItems($billingmodels_id, ['addLimit' => false]);
       $check_items = $this->checkItem($billingmodels_id);
       if (!empty($items) && !empty($check_items)) {
          foreach ($items as $data) {
             if (!in_array($data['items_id'], array_keys($check_items))) {
-               $this->deleteByCriteria(array('items_id' => $data['items_id']), 1);
+               $this->deleteByCriteria(['items_id' => $data['items_id']], 1);
             }
          }
       }
@@ -669,17 +669,17 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * Compute records costs
-    * 
+    *
     * @param type $records
     * @param type $oid_type
     * @return type
     */
-   function computeRecordCost($records, $oid_type = array()) {
+   function computeRecordCost($records, $oid_type = []) {
 
       $total_record_cost = 0;
       $total_page_number = 0;
       // Specific oid
-      $total_oid_type = array();
+      $total_oid_type = [];
       if (!empty($oid_type)) {
          foreach ($oid_type as $type) {
             $total_oid_type[$type]['page_number'] = 0;
@@ -688,17 +688,17 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       }
 
       $itemtype = strtolower($this->itemtype);
-      
+
       if (!empty($records)) {
-         $used = array();
-         $all = array();
+         $used = [];
+         $all = [];
 
          // Get counter costs with billing
-         $billings = $this->getBillingmodelForItem($this->items_id, $this->itemtype, array('addLimit' => false, 'addItemDetails' => false, 'order' => "`glpi_plugin_printercounters_billingmodels`.`application_date` DESC"));
+         $billings = $this->getBillingmodelForItem($this->items_id, $this->itemtype, ['addLimit' => false, 'addItemDetails' => false, 'order' => "`glpi_plugin_printercounters_billingmodels`.`application_date` DESC"]);
 
          // Set counter costs for each records according to the application date
          $successLabel = PluginPrintercountersRecord::getResult(PluginPrintercountersRecord::$SUCCESS);
-         
+
          foreach ($records as $id => &$record) {
             $record['record_cost'] = 0;
             $record['page_number'] = 0;
@@ -709,9 +709,9 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
                   $record['page_number_'.$type] = 0;
                }
             }
-            
+
             $record['application_date'] = null;
-            
+
             // Get only successful records for computation
             if (($record['result'] == PluginPrintercountersRecord::$SUCCESS || $record['result'] == $successLabel)) {
                $all[$itemtype][$record['items_id']][] = $id;
@@ -727,7 +727,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
                           && strtolower($billing['itemtype']) == $itemtype
                           && ($record['result'] == PluginPrintercountersRecord::$SUCCESS || $record['result'] == $successLabel)
                           && $billing['application_date'] <= $record['date']) {
-                     
+
                      // Get counters costs
                      foreach ($record['counters'] as $countertypes_id => &$counters) {
                         if (in_array($countertypes_id, array_keys($billing['counters']))) {
@@ -761,9 +761,9 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
                            if ($volume < 0) {
                               $volume = 0;
                            }
-                           
+
                            $records[$id]['page_number'] += $volume;
-                           
+
                            if (!empty($oid_type)) {
                               foreach ($oid_type as $type) {
                                  if (isset($counter['oid_type']) && $type == $counter['oid_type']) {
@@ -773,10 +773,10 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
                            }
                         }
                      }
-                     
+
                      // Total of page number for all
                      $total_page_number += $records[$id]['page_number'];
-                     
+
                      // Total of page number for specific oid types
                      if (!empty($oid_type)) {
                         foreach ($oid_type as $type) {
@@ -811,7 +811,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
                               $old_billing = (($volume * 2) / 6) * $records[$records_id[$key - 1]]['counters'][$countertypes_id]['cost'];
                               $new_billing = (($volume * 4) / 6) * $counter['cost'];
                               $counter['counters_cost'] = $old_billing + $new_billing;
-                              // Else 
+                              // Else
                            } else {
                               $counter['counters_cost'] = $volume * $counter['cost'];
                            }
@@ -833,7 +833,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
                      // Total of record cost for all
                      $total_record_cost += $records[$id]['record_cost'];
-                     
+
                      // Total of record cost for specific oid types
                      if (!empty($oid_type)) {
                         foreach ($oid_type as $type) {
@@ -846,15 +846,15 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
          }
       }
 
-      return array('records'           => $records, 
-                   'total_record_cost' => $total_record_cost, 
-                   'total_page_number' => $total_page_number, 
-                   'total_oid_type'    => $total_oid_type);
+      return ['records'           => $records,
+                   'total_record_cost' => $total_record_cost,
+                   'total_page_number' => $total_page_number,
+                   'total_oid_type'    => $total_oid_type];
    }
 
    /**
     * Get search options
-    * 
+    *
     * @return array
     */
    function getSearchOptions() {
@@ -878,9 +878,9 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       $tab[102]['field'] = 'name';
       $tab[102]['name'] = __('Entity');
       $tab[102]['massiveaction'] = false;
-      $tab[102]['joinparams'] = array('beforejoin'
-          => array('table' => 'glpi_plugin_printercounters_billingmodels')
-      );
+      $tab[102]['joinparams'] = ['beforejoin'
+          => ['table' => 'glpi_plugin_printercounters_billingmodels']
+      ];
 
       $tab[103]['table'] = 'glpi_plugin_printercounters_countertypes';
       $tab[103]['field'] = 'name';
@@ -888,11 +888,11 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       $tab[103]['massiveaction'] = false;
       $tab[103]['datatype'] = 'dropdown';
       $tab[103]['forcegroupby'] = true;
-      $tab[103]['joinparams'] = array('beforejoin'
-          => array('table' => 'glpi_plugin_printercounters_pagecosts',
-              'joinparams' => array('jointype' => 'child',
-                  'beforejoin' => array('table' => 'glpi_plugin_printercounters_billingmodels')))
-      );
+      $tab[103]['joinparams'] = ['beforejoin'
+          => ['table' => 'glpi_plugin_printercounters_pagecosts',
+              'joinparams' => ['jointype' => 'child',
+                  'beforejoin' => ['table' => 'glpi_plugin_printercounters_billingmodels']]]
+      ];
 
       $tab[104]['table'] = 'glpi_plugin_printercounters_pagecosts';
       $tab[104]['field'] = 'cost';
@@ -900,36 +900,36 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       $tab[104]['massiveaction'] = false;
       $tab[104]['forcegroupby'] = true;
       $tab[104]['datatype'] = 'specific';
-      $tab[104]['joinparams'] = array('beforejoin'
-          => array('table' => 'glpi_plugin_printercounters_billingmodels')
-      );
+      $tab[104]['joinparams'] = ['beforejoin'
+          => ['table' => 'glpi_plugin_printercounters_billingmodels']
+      ];
 
       $tab[106]['table'] = 'glpi_contracts';
       $tab[106]['field'] = 'name';
       $tab[106]['name'] = $this->getFieldName('contracts_id');
       $tab[106]['datatype'] = 'dropdown';
       $tab[106]['massiveaction'] = false;
-      $tab[106]['joinparams'] = array('beforejoin'
-          => array('table' => 'glpi_plugin_printercounters_billingmodels')
-      );
+      $tab[106]['joinparams'] = ['beforejoin'
+          => ['table' => 'glpi_plugin_printercounters_billingmodels']
+      ];
 
       $tab[107]['table'] = 'glpi_suppliers';
       $tab[107]['field'] = 'name';
       $tab[107]['name'] = $this->getFieldName('suppliers_id');
       $tab[107]['datatype'] = 'dropdown';
       $tab[107]['massiveaction'] = false;
-      $tab[107]['joinparams'] = array('beforejoin'
-          => array('table' => 'glpi_plugin_printercounters_billingmodels')
-      );
+      $tab[107]['joinparams'] = ['beforejoin'
+          => ['table' => 'glpi_plugin_printercounters_billingmodels']
+      ];
 
       $tab[108]['table'] = 'glpi_budgets';
       $tab[108]['field'] = 'name';
       $tab[108]['name'] = $this->getFieldName('budgets_id');
       $tab[108]['datatype'] = 'dropdown';
       $tab[108]['massiveaction'] = false;
-      $tab[108]['joinparams'] = array('beforejoin'
-          => array('table' => 'glpi_plugin_printercounters_billingmodels')
-      );
+      $tab[108]['joinparams'] = ['beforejoin'
+          => ['table' => 'glpi_plugin_printercounters_billingmodels']
+      ];
 
       $tab[109]['table'] = getTableForItemType($itemtype);
       $tab[109]['field'] = 'id';
@@ -953,7 +953,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * Add search options for an item
-    * 
+    *
     * @return array
     */
    function getAddSearchOptions() {
@@ -963,44 +963,44 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       $tab[6099]['name'] = __('Printer counters', 'printercounters').' - '.PluginPrintercountersBillingmodel::getTypeName(1);
       $tab[6099]['datatype'] = 'dropdown';
       $tab[6099]['massiveaction'] = false;
-      $tab[6099]['joinparams'] = array('beforejoin' => array('table' => 'glpi_plugin_printercounters_items_billingmodels',
-              'joinparams' => array('jointype' => 'itemtype_item',
-                  'beforejoin' => array('table' => getTableForItemType($this->itemtype))))
-      );
+      $tab[6099]['joinparams'] = ['beforejoin' => ['table' => 'glpi_plugin_printercounters_items_billingmodels',
+              'joinparams' => ['jointype' => 'itemtype_item',
+                  'beforejoin' => ['table' => getTableForItemType($this->itemtype)]]]
+      ];
 
       return $tab;
    }
 
    /**
     * Massive actions to be added
-    * 
+    *
     * @param $input array of input datas
     *
     * @return array of results (nbok, nbko, nbnoright counts)
     * */
    function massiveActions() {
-      
+
       $prefix = $this->getType().MassiveAction::CLASS_ACTION_SEPARATOR;
 
       if ($this->canCreate()) {
          switch ($this->itemtype) {
             case "Printer":
-               return array(
+               return [
                    $prefix."plugin_printercounters_billingmodel" => __('Printer counters', 'printercounters').' - '.__('Set billing model', 'printercounters'),
-               );
+               ];
          }
       }
    }
 
    /**
     * Massive actions display
-    * 
+    *
     * @param $input array of input datas
     *
     * @return array of results (nbok, nbko, nbnoright counts)
     * */
    static function showMassiveActionsSubForm(MassiveAction $ma) {
-      
+
       $itemtype         = $ma->getItemtype(false);
       $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
 
@@ -1009,7 +1009,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
             case 'printer':
                switch ($ma->getAction()) {
                   case "plugin_printercounters_billingmodel":
-                     Dropdown::show("PluginPrintercountersBillingmodel", array('name' => 'plugin_printercounters_billingmodels_id'));
+                     Dropdown::show("PluginPrintercountersBillingmodel", ['name' => 'plugin_printercounters_billingmodels_id']);
                      break;
                }
                return parent::showMassiveActionsSubForm($ma);
@@ -1027,24 +1027,24 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       $itemtype         = $ma->getItemtype(false);
       $item_billingmodel = new self();
 
-//      $data = $item_billingmodel->find("`items_id` IN ('".implode("','", $ids)."') AND LOWER(`itemtype`)=LOWER('".$itemtype."')");
-//      $item_data = array();
-//      foreach ($data as $key => $val) {
-//         $item_data[$val['items_id']] = $val;
-//      }
+      //      $data = $item_billingmodel->find("`items_id` IN ('".implode("','", $ids)."') AND LOWER(`itemtype`)=LOWER('".$itemtype."')");
+      //      $item_data = array();
+      //      foreach ($data as $key => $val) {
+      //         $item_data[$val['items_id']] = $val;
+      //      }
 
       foreach ($ids as $key => $val) {
          if ($item->can($key, UPDATE)) {
             $result = false;
             switch ($ma->getAction()) {
                case "plugin_printercounters_billingmodel":
-//                  if (isset($item_data[$key])) {
-//                     $result = $item_billingmodel->update(array('id' => $item_data[$key]['id'], 'plugin_printercounters_billingmodels_id' => $ma->POST['plugin_printercounters_billingmodels_id']));
-//                  } else {
-                     $result = $item_billingmodel->add(array('plugin_printercounters_billingmodels_id' => $ma->POST['plugin_printercounters_billingmodels_id'],
+                  //                  if (isset($item_data[$key])) {
+                  //                     $result = $item_billingmodel->update(array('id' => $item_data[$key]['id'], 'plugin_printercounters_billingmodels_id' => $ma->POST['plugin_printercounters_billingmodels_id']));
+                  //                  } else {
+                     $result = $item_billingmodel->add(['plugin_printercounters_billingmodels_id' => $ma->POST['plugin_printercounters_billingmodels_id'],
                                                              'items_id'                                => $key,
-                                                             'itemtype'                                => $itemtype));
-//                  }
+                                                             'itemtype'                                => $itemtype]);
+                  //                  }
                   break;
                default :
                   return parent::doSpecificMassiveActions($ma->POST);
@@ -1065,7 +1065,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * Search function : addRestriction
-    * 
+    *
     * @return string
     */
    function addRestriction() {
@@ -1083,16 +1083,16 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * Search function : addOrder
-    * 
+    *
     * @return string
     */
    function addOrder() {
 
-      $order_by = array();
+      $order_by = [];
       $options = Search::getCleanedOptions($this->getType());
       foreach ($options as $num => $val) {
          if ($val['table'] == getTableForItemType('PluginPrintercountersBillingmodel') && $val['field'] == 'application_date') {
-            $order_by = array($num, 'DESC');
+            $order_by = [$num, 'DESC'];
             break;
          }
       }
@@ -1102,7 +1102,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * Actions done before add
-    * 
+    *
     * @param type $input
     * @return boolean
     */
@@ -1116,7 +1116,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
    /**
     * Actions done before update
-    * 
+    *
     * @param type $input
     * @return boolean
     */
@@ -1129,19 +1129,19 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
    }
 
    /**
-    * checkMandatoryFields 
-    * 
+    * checkMandatoryFields
+    *
     * @param type $input
     * @return boolean
     */
    function checkMandatoryFields($input) {
-      $msg = array();
+      $msg = [];
       $checkKo = false;
 
       $item = getItemForItemtype($this->itemtype);
 
-      $mandatory_fields = array('plugin_printercounters_billingmodels_id' => PluginPrintercountersBillingmodel::getTypeName(),
-          'items_id' => $item::getTypeName());
+      $mandatory_fields = ['plugin_printercounters_billingmodels_id' => PluginPrintercountersBillingmodel::getTypeName(),
+          'items_id' => $item::getTypeName()];
 
       foreach ($input as $key => $value) {
          if (array_key_exists($key, $mandatory_fields)) {
@@ -1180,4 +1180,3 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
 }
 
-?>

@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -29,4 +29,3 @@
 $LANG['plugin_printercounters']['printercountersreport4']['title'] = "Counter records by printer";
 $LANG['plugin_printercounters']['printercountersreport4']['date']  = "Page number at %s";
 $LANG['plugin_printercounters']['printercountersreport4']['date2'] = "Page number from %s1 to %s2";
-?>

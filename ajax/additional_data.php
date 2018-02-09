@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -40,11 +40,10 @@ if (!isset($_POST['action'])) {
    $_POST['action'] = $_GET['action'];
 }
 
-switch($_POST['action']){
+switch ($_POST['action']) {
    case 'showAdditionalData':
       header("Content-Type: text/html; charset=UTF-8");
       $additional_data->showAdditionalData();
       break;
 }
 
-?>

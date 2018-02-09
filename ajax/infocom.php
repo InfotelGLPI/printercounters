@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -32,7 +32,7 @@ include ("../../../inc/includes.php");
 Session::checkLoginUser();
 //Html::header_nocache();
 
-switch($_POST['action']){
+switch ($_POST['action']) {
    case 'getTco':
       header('Content-Type: application/json; charset=UTF-8"');
       $result = 0;
@@ -42,8 +42,7 @@ switch($_POST['action']){
             $result = $item_recordmodel->fields['global_tco'];
          }
       }
-      echo json_encode(array('global_tco' => Html::formatNumber($result)));
+      echo json_encode(['global_tco' => Html::formatNumber($result)]);
       break;
 }
 
-?>

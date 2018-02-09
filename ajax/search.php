@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -35,29 +35,34 @@ header("Content-Type: text/html; charset=UTF-8");
 
 $search = new PluginPrintercountersSearch();
 
-switch($_POST['action']){
+switch ($_POST['action']) {
    case 'addSearchField':
-      if (!isset($_POST['item'])) exit;
+      if (!isset($_POST['item'])) {
+         exit;
+      }
       $search->addSearchField($_POST['search_count'], unserialize(base64_decode($_POST['item'])));
       break;
-   
+
    case 'resetSearchField':
-      if (!isset($_POST['item'])) exit;
+      if (!isset($_POST['item'])) {
+         exit;
+      }
       $item = unserialize(base64_decode($_POST['item']));
       $search->showHistoryGenericSearch($item);
       break;
-      
+
    case 'initSearch':
-      if (!isset($_POST['item'])) exit;
+      if (!isset($_POST['item'])) {
+         exit;
+      }
       $item = unserialize(base64_decode($_POST['item']));
       $search->manageHistoryGetValues($item, $_POST);
       $search->showHistory($item);
       break;
-      
+
    case 'reloadCsrf':
       Session::cleanCSRFTokens();
       echo Session::getNewCSRFToken();
       break;
 }
 
-?>

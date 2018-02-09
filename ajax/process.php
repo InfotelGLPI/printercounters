@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -34,18 +34,17 @@ Session::checkLoginUser();
 
 $process = new PluginPrintercountersProcess();
 
-switch($_POST['action']){
+switch ($_POST['action']) {
    case 'killProcess':
       header('Content-Type: application/json; charset=UTF-8"');
       list($messages, $error) = $process->killProcesses($_POST['items_id'], PluginPrintercountersProcess::SIGKILL);
-      echo json_encode(array('message'    => $messages, 
-                             'error'      => $error));
+      echo json_encode(['message'    => $messages,
+                             'error'      => $error]);
       break;
-   
+
    case 'getProcesses':
       header("Content-Type: text/html; charset=UTF-8");
       $process->getProcesses();
       break;
 }
 
-?>

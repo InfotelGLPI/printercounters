@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -42,13 +42,13 @@ $report = new PluginReportsAutoReport($title);
 $report->displayCriteriasForm();
 
 //colname with sort allowed
-$columns = array('name'         => array('sorton' => 'name'),
-                 'entity'        => array('sorton' => 'entity'),
-                 'serial'       => array('sorton' => 'serial'),
-                 'location'     => array('sorton' => 'location'),
-                 'manufacturer' => array('sorton' => 'manufacturer'),
-                 'model'        => array('sorton' => 'model'),
-                 'date'         => array('sorton' => 'date'));
+$columns = ['name'         => ['sorton' => 'name'],
+                 'entity'        => ['sorton' => 'entity'],
+                 'serial'       => ['sorton' => 'serial'],
+                 'location'     => ['sorton' => 'location'],
+                 'manufacturer' => ['sorton' => 'manufacturer'],
+                 'model'        => ['sorton' => 'model'],
+                 'date'         => ['sorton' => 'date']];
 
 $output_type = Search::HTML_OUTPUT;
 
@@ -74,7 +74,7 @@ if (isset($_POST["display_type"])) {
 // SQL statement
 $entity_restrict = getEntitiesRestrictRequest("AND", "glpi_printers", "", $_SESSION['glpiactiveentities']);
 
-$items_ok = array();
+$items_ok = [];
 $query = " SELECT `glpi_plugin_printercounters_items_recordmodels`.`id` as id, 
                   `glpi_plugin_printercounters_items_recordmodels`.`items_id`,
                   min(`glpi_plugin_printercounters_records`.`date`),
@@ -153,7 +153,7 @@ if ($output_type == Search::HTML_OUTPUT) {
    echo "</table>";
    Html::closeForm();
    echo "</div>";
-   
+
    echo "<div class='center'>";
    echo "<table class='tab_cadre_fixe'>";
    echo "<tr class='tab_bg_1'><th>".$report->getFullTitle()."</th></tr>\n";
@@ -226,7 +226,7 @@ if ($res && $nbtot > 0) {
 
    $record = new PluginPrintercountersRecord();
    $itemjoin2 = getTableForItemType("PluginPrintercountersItem_Recordmodel");
-   
+
    while ($data = $DB->fetch_assoc($res)) {
       // Get last record
       $condition = " AND `".$record->getTable()."`.`date` IN (SELECT max(`".$record->getTable()."`.`date`) FROM ".$record->getTable();
@@ -235,9 +235,9 @@ if ($res && $nbtot > 0) {
       $condition .= " WHERE `".$itemjoin2."`.`items_id` = ".Toolbox::cleanInteger($data['id']);
       $condition .= " AND `".$record->getTable()."`.`result` = ".PluginPrintercountersRecord::$SUCCESS;
       $condition .= ")";
-      $records = $record->getRecords($data['id'], 'Printer', array('condition' => $condition));
+      $records = $record->getRecords($data['id'], 'Printer', ['condition' => $condition]);
       $records = reset($records);
-  
+
       $row_num++;
       $num = 1;
       echo Search::showNewLine($output_type, false, $data['is_deleted']);
@@ -285,7 +285,7 @@ function showTitle($output_type, &$num, $title, $columnname, $sort = false) {
    $link = $_SERVER['PHP_SELF'];
    $first = true;
    foreach ($_REQUEST as $name => $value) {
-      if (!in_array($name, array('sort', 'order', 'PHPSESSID'))) {
+      if (!in_array($name, ['sort', 'order', 'PHPSESSID'])) {
          $link .= ($first ? '?' : '&amp;');
          $link .= $name.'='.urlencode($value);
          $first = false;
@@ -336,7 +336,6 @@ function getOrderByFields($default, $columns) {
          return $column['sorton'];
       }
    }
-   return array();
+   return [];
 }
 
-?>

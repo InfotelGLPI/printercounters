@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -26,16 +26,16 @@
  along with printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
- 
+
 if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
 }
 
 /**
  * Class PluginPrintercountersCountertype_RecordmodelInjection
- * 
+ *
  * This class allows to inject OIDs on the record models with the plugin Datainjection
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
@@ -54,35 +54,35 @@ class PluginPrintercountersCountertype_RecordmodelInjection extends PluginPrinte
 
 
    function connectedTo() {
-      return array();
+      return [];
    }
 
 
-   
+
    function getOptions($primary_type = '') {
-      
+
       $tab = Search::getOptions(get_parent_class($this));
-      
+
       //Remove some options because some fields cannot be imported
       $blacklist     = PluginDatainjectionCommonInjectionLib::getBlacklistedOptions(get_parent_class($this));
-      $notimportable = array(2);
-      
-      $options['displaytype']   = array("dropdown" => array(72, 75));
-      
+      $notimportable = [2];
+
+      $options['displaytype']   = ["dropdown" => [72, 75]];
+
       $options['ignore_fields'] = array_merge($blacklist, $notimportable);
-      
+
       return PluginDatainjectionCommonInjectionLib::addToSearchOptions($tab, $options, $this);
    }
    /**
     * Standard method to add an object into glpi
- 
+
     *
     * @param values fields to add into glpi
     * @param options options used during creation
     *
     * @return an array of IDs of newly created objects : for example array(Computer=>1, Networkport=>10)
    **/
-   function addOrUpdateObject($values=array(), $options=array()) {
+   function addOrUpdateObject($values = [], $options = []) {
 
       $lib = new PluginDatainjectionCommonInjectionLib($this, $values, $options);
       $lib->processAddOrUpdate();
@@ -92,4 +92,3 @@ class PluginPrintercountersCountertype_RecordmodelInjection extends PluginPrinte
 
 }
 
-?>

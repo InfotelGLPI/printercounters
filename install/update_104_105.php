@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -38,12 +38,12 @@ function update104to105() {
    $migration = new Migration(105);
 
    // Toner level
-   $migration->addField('glpi_plugin_printercounters_recordmodels', 'enable_toner_level', 'bool', array('value' => '0'));
-   $migration->addField('glpi_plugin_printercounters_recordmodels', 'enable_printer_info', 'bool', array('value' => '0'));
-   $migration->addField('glpi_plugin_printercounters_configs', 'enable_toner_alert', 'bool', array('value' => '0'));
-   $migration->addField('glpi_plugin_printercounters_configs', 'toner_alert_repeat', 'integer', array('value' => '0'));
-   $migration->addField('glpi_plugin_printercounters_configs', 'toner_treshold', 'integer', array('value' => '0'));
-   
+   $migration->addField('glpi_plugin_printercounters_recordmodels', 'enable_toner_level', 'bool', ['value' => '0']);
+   $migration->addField('glpi_plugin_printercounters_recordmodels', 'enable_printer_info', 'bool', ['value' => '0']);
+   $migration->addField('glpi_plugin_printercounters_configs', 'enable_toner_alert', 'bool', ['value' => '0']);
+   $migration->addField('glpi_plugin_printercounters_configs', 'toner_alert_repeat', 'integer', ['value' => '0']);
+   $migration->addField('glpi_plugin_printercounters_configs', 'toner_treshold', 'integer', ['value' => '0']);
+
    // Create additional_datas table
    $query_snmpset = "CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_additionals_datas` (
                         `id` int(11) NOT NULL auto_increment,
@@ -56,17 +56,16 @@ function update104to105() {
                         UNIQUE KEY `unicity` (`plugin_printercounters_items_recordmodels_id`, `sub_type`),
                         KEY `type` (`type`)
                      ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-   
+
    $DB->queryOrDie($query_snmpset, "Create additional datas table");
-   
+
    // Add record notification
    include_once(GLPI_ROOT ."/plugins/printercounters/inc/notificationtargetadditional_data.class.php");
-   call_user_func(array("PluginPrintercountersNotificationTargetAdditional_Data",'install')); 
+   call_user_func(["PluginPrintercountersNotificationTargetAdditional_Data",'install']);
    $migration->displayMessage("Add record notifications");
-   
+
    $migration->executeMigration();
 
    return true;
 }
 
-?>

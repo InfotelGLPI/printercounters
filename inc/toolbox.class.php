@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -33,9 +33,9 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersToolbox
- * 
+ *
  * This class adds usefull functions
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
@@ -43,14 +43,14 @@ class PluginPrintercountersToolbox {
 
    /**
     * Check if mac address is valid and return it in the format 00:00:00:00:00:00:00:00
-    * 
+    *
     * @param type $mac
     * @return boolean
     */
    static function getValidMacAddress($mac) {
 
       if (preg_match("/^([0-9a-f]{1,2}[\.:\-\s]){5}([0-9a-f]{1,2})$/i", $mac)) {
-         $mac = str_replace(array('.', '-', ' '), ':', $mac);
+         $mac = str_replace(['.', '-', ' '], ':', $mac);
 
          $hexa = explode(':', $mac);
          foreach ($hexa as &$value) {
@@ -65,7 +65,7 @@ class PluginPrintercountersToolbox {
 
    /**
     * Get number of same item name
-    * 
+    *
     * @global type $DB
     * @param type $name
     * @param type $table
@@ -87,14 +87,13 @@ class PluginPrintercountersToolbox {
 
       return 0;
    }
-   
-   static function replaceAccents($string){
-      $unwanted_array = array(    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+
+   static function replaceAccents($string) {
+      $unwanted_array = [    'Š'=>'S', 'š'=>'s', 'Ž'=>'Z', 'ž'=>'z', 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
                             'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O', 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U',
                             'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'ss', 'à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'a', 'å'=>'a', 'æ'=>'a', 'ç'=>'c',
                             'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i', 'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o',
-                            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' );
+                            'ö'=>'o', 'ø'=>'o', 'ù'=>'u', 'ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y' ];
       return strtr($string, $unwanted_array);
    }
 }
-?>

@@ -9,7 +9,7 @@
  -------------------------------------------------------------------------
 
  LICENSE
-      
+
  This file is part of printercounters.
 
  printercounters is free software; you can redistribute it and/or modify
@@ -34,30 +34,30 @@ if (!defined('GLPI_ROOT')) {
 
 /**
  * Class PluginPrintercountersSnmpset
- * 
+ *
  * This class allows to add and manage the snmpsets used for the conforimty check of the items
- * 
+ *
  * @package    Printercounters
  * @author     Ludovic Dupont
  */
 class PluginPrintercountersSnmpset extends CommonDBTM {
 
    static $rightname = 'plugin_printercounters';
-   
+
    /**
     * functions mandatory
     * getTypeName(), canCreate(), canView()
     * */
-   static function getTypeName($nb=0) {
+   static function getTypeName($nb = 0) {
       return __('Snmpset', 'Snmpsets', $nb, 'printercounters');
    }
-   
+
    // Printercounter's authorized profiles have right
    static function canSnmpSet() {
       return Session::haveRight('plugin_printercounters_snmpset', 1);
    }
 
-   
+
    /**
     * Display tab for item
     *
@@ -68,7 +68,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
    function getTabNameForItem(CommonGLPI $item, $withtemplate = 0) {
 
       if (!$withtemplate) {
-         switch($item->getType()){
+         switch ($item->getType()) {
             case 'PluginPrintercountersConfig' :
                if ($_SESSION['glpishow_count_on_tabs']) {
                   $dbu = new DbUtils();
@@ -82,7 +82,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       }
       return '';
    }
-   
+
    /**
     * Display content for each users
     *
@@ -94,36 +94,36 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
     */
    static function displayTabContentForItem(CommonGLPI $item, $tabnum = 1, $withtemplate = 0) {
       $snmpset = new self();
-      
-      switch($item->getType()){
+
+      switch ($item->getType()) {
          case 'PluginPrintercountersConfig' :
             $snmpset->showForRecordmodel($item);
             break;
       }
       return true;
    }
-   
+
    /**
     * Function show item
     *
     * @param $ID        integer  ID of the item
     * @param $options   array    options used
     */
-   function showForm($ID, $options=array()) {
-      
+   function showForm($ID, $options = []) {
+
       if ($ID > 0) {
          $script = "$('#printercounters_viewAddSnmpset').show();";
       } else {
          $script = "$('#printercounters_viewAddSnmpset').hide();";
          $options['plugin_printercounters_configs_id'] = $options['parent']->getField('id');
       }
-      
+
       $this->initForm($ID, $options);
-      
+
       echo html::scriptBlock($script);
-      
+
       $this->showFormHeader($options);
-      
+
       // Tags available
       echo "<tr class='tab_bg_1'>";
       echo "<td rowspan='4'>";
@@ -141,7 +141,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       echo "</table>";
       echo "</td>";
       echo "</tr>";
-      
+
       // Name
       echo "<tr class='tab_bg_1'>";
       echo "<td>";
@@ -153,7 +153,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       echo "<input type='checkbox' $checked value='1' name='set_name' value='1'/>";
       echo "</td>";
       echo "</tr>";
-      
+
       // Location
       echo "<tr class='tab_bg_1'>";
       echo "<td>";
@@ -165,7 +165,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       echo "<input type='checkbox' $checked value='1' name='set_location' value='1'/>";
       echo "</td>";
       echo "</tr>";
-      
+
       // Contact
       echo "<tr class='tab_bg_1'>";
       echo "<td>";
@@ -189,74 +189,78 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       echo "</textarea>";
       echo "</td>";
       echo "</tr>";
-      
+
       echo "</td>";
       echo "</tr>";
-      
+
       $this->showFormButtons($options);
 
       return true;
    }
-   
+
    /**
     * Function show for record model
-    * 
+    *
     * @param type $item
     * @return boolean
     */
    function showSnmpSet($config) {
-      
-      if (!$this->canView()) return false;
-      if (!$canedit = $this->canCreate()) return false;
-      
+
+      if (!$this->canView()) {
+         return false;
+      }
+      if (!$canedit = $this->canCreate()) {
+         return false;
+      }
+
       $rand = mt_rand();
-      
+
       if (isset($_POST["start"])) {
          $start = $_POST["start"];
       } else {
          $start = 0;
       }
       $data = $this->getItems($start, getEntitiesRestrictRequest("AND", $this->getTable(), "", $_SESSION['glpiactiveentities'], true));
-      
+
       if ($canedit) {
          echo "<div id='viewsnmpset".$config['configs_id']."_$rand'></div>\n";
-         PluginPrintercountersAjax::getJSEdition("viewsnmpset".$config['configs_id']."_$rand", 
-                                                 "viewAddSnmpset".$config['configs_id']."_$rand", 
+         PluginPrintercountersAjax::getJSEdition("viewsnmpset".$config['configs_id']."_$rand",
+                                                 "viewAddSnmpset".$config['configs_id']."_$rand",
                                                  $this->getType(),
-                                                 -1, 
-                                                 'PluginPrintercountersConfig', 
+                                                 -1,
+                                                 'PluginPrintercountersConfig',
                                                  $config['configs_id']);
          echo "<div class='center firstbloc'>".
                "<a class='vsubmit' id='printercounters_viewAddSnmpset' href='javascript:viewAddSnmpset".$config['configs_id']."_$rand();'>";
          echo __('Add a new snmpset', 'printercounters')."</a></div>\n";
          echo "<script type='text/javascript'>viewAddSnmpset".$config['configs_id']."_$rand();</script>";
       }
-      
+
       if (!empty($data)) {
          $this->listItems($config['configs_id'], $data, $canedit, $rand);
       }
    }
-   
+
    /**
     * Function list items
-    * 
+    *
     * @global type $CFG_GLPI
     * @param type $ID
     * @param type $data
     * @param type $canedit
     * @param type $rand
     */
-   private function listItems($ID, $data, $canedit, $rand){
+   private function listItems($ID, $data, $canedit, $rand) {
       global $CFG_GLPI;
 
       echo "<div class='center'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
-         $massiveactionparams = array('item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand);
+         $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];
          Html::showMassiveActions($massiveactionparams);
       }
-      
-//      Html::printAjaxPager(self::getTypeName(2), $start, countElementsInTable($this->getTable()));
+
+      //      Html::printAjaxPager(self::getTypeName(2), $start, countElementsInTable($this->getTable()));
       echo "<table class='tab_cadre_fixehov'>";
       echo "<tr class='tab_bg_1'>";
       echo "<th width='10'>";
@@ -270,21 +274,21 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       echo "<th>".__('Set printer contact informations', 'printercounters')."</th>";
       echo "<th>".__('Tag')."</th>";
       echo "</tr>";
-      
-      foreach($data as $field){
+
+      foreach ($data as $field) {
          $onclick = ($canedit
                       ? "style='cursor:pointer' onClick=\"viewEditSnmpset".$ID."_".
                         $field['id']."_$rand();\"": '');
-                  
+
          echo "<tr class='tab_bg_2'>";
          echo "<td width='10'>";
          if ($canedit) {
             Html::showMassiveActionCheckBox(__CLASS__, $field['id']);
-            PluginPrintercountersAjax::getJSEdition("viewsnmpset".$ID."_$rand", 
-                                                    "viewEditSnmpset".$ID."_".$field["id"]."_$rand", 
+            PluginPrintercountersAjax::getJSEdition("viewsnmpset".$ID."_$rand",
+                                                    "viewEditSnmpset".$ID."_".$field["id"]."_$rand",
                                                     $this->getType(),
-                                                    $field["id"], 
-                                                    'PluginPrintercountersConfig', 
+                                                    $field["id"],
+                                                    'PluginPrintercountersConfig',
                                                     $ID);
          }
          echo "</td>";
@@ -296,28 +300,28 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
          echo "<td $onclick>".nl2br($field['contact'])."</td>";
          echo "</tr>";
       }
-      
+
       if ($canedit) {
          $massiveactionparams['ontop'] = false;
          Html::showMassiveActions($massiveactionparams);
-         Html::closeForm(); 
+         Html::closeForm();
       }
       echo "</table>";
       echo "</div>";
    }
-   
+
    /**
     * Function get items for record models
-    * 
+    *
     * @global type $DB
     * @param type $start
     * @return type
     */
-   function getItems($start=0, $condition=null){
+   function getItems($start = 0, $condition = null) {
       global $DB;
-      
-      $output = array();
-      
+
+      $output = [];
+
       $query = "SELECT `".$this->getTable()."`.`id`, 
                        `".$this->getTable()."`.`set_name`,
                        `".$this->getTable()."`.`set_location`,
@@ -334,53 +338,53 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
             $output[$data['id']] = $data;
          }
       }
-      
+
       return $output;
    }
-   
+
    /**
     * Function set values on printer
-    * 
+    *
     * @param type $items_id
     * @param type $itemtype
     * @return type
     */
-   function snmpSet($items_id, $itemtype){
+   function snmpSet($items_id, $itemtype) {
 
-      $messages = array();
+      $messages = [];
       $error    = false;
-      
+
       $additional_data = new PluginPrintercountersAdditional_data();
 
       // Get items ip addresses for each processes
       $process      = new PluginPrintercountersProcess(0, 1, $itemtype, $items_id);
       $ip_addresses = $process->getIPAddressesForProcess();
 
-         if (!empty($ip_addresses)) {
-            // Get SNMP authentication by items
-            $snmpauthentication  = new PluginPrintercountersSnmpauthentication();
-            $snmp_auth = $snmpauthentication->getItemAuthentication(array_keys($ip_addresses), $itemtype);
-            $snmp_auth[$items_id]['community'] = $snmp_auth[$items_id]['community_write'];// Set write community
+      if (!empty($ip_addresses)) {
+         // Get SNMP authentication by items
+         $snmpauthentication  = new PluginPrintercountersSnmpauthentication();
+         $snmp_auth = $snmpauthentication->getItemAuthentication(array_keys($ip_addresses), $itemtype);
+         $snmp_auth[$items_id]['community'] = $snmp_auth[$items_id]['community_write'];// Set write community
 
-            // Get record config by items (timeout, nb retries)
-            $item_recordmodel  = new PluginPrintercountersItem_Recordmodel();
-            $record_config     = $item_recordmodel->getItemRecordConfig(array_keys($ip_addresses), $itemtype);
+         // Get record config by items (timeout, nb retries)
+         $item_recordmodel  = new PluginPrintercountersItem_Recordmodel();
+         $record_config     = $item_recordmodel->getItemRecordConfig(array_keys($ip_addresses), $itemtype);
 
-            // Init counters search
-            switch (strtolower($itemtype)) {
-               case 'printer':
-                  foreach ($ip_addresses as $printers_id => $cards) {
-                     foreach ($cards as $addresses) {
-                        foreach ($addresses['ip'] as $ip) {
-                           if (!empty($ip)) {
-                              try {
-                                 $printer = new PluginPrintercountersPrinter($printers_id,
-                                                                             $itemtype,
-                                                                             $ip,
-                                                                             $addresses['mac'],
-                                                                             isset($record_config[$printers_id]) ? $record_config[$printers_id] : array(),
-                                                                             isset($snmp_auth[$printers_id])     ? $snmp_auth[$printers_id]     : array());
-            
+         // Init counters search
+         switch (strtolower($itemtype)) {
+            case 'printer':
+               foreach ($ip_addresses as $printers_id => $cards) {
+                  foreach ($cards as $addresses) {
+                     foreach ($addresses['ip'] as $ip) {
+                        if (!empty($ip)) {
+                           try {
+                              $printer = new PluginPrintercountersPrinter($printers_id,
+                                                                          $itemtype,
+                                                                          $ip,
+                                                                          $addresses['mac'],
+                                                                          isset($record_config[$printers_id]) ? $record_config[$printers_id] : [],
+                                                                          isset($snmp_auth[$printers_id])     ? $snmp_auth[$printers_id]     : []);
+
                               // Set values on printer
                               $SNMPsetValues = $this->getItems(0, getEntitiesRestrictRequest("AND", $this->getTable(), "", $record_config[$printers_id]['entities_id'], true));
                               $SNMPsetValues = reset($SNMPsetValues);
@@ -414,77 +418,76 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
                                     }
                                     $val = Toolbox::substr($val, 0, 255);
                                  }
-                                 
+
                                  $SNMPsetValues = $printer->setValues($SNMPsetValues);
                                  if (!empty($SNMPsetValues)) {
                                     $SNMPsetValues['items_recordmodels_id'] = $record_config[$printers_id]['plugin_items_recordmodels_id'];
                                     $additional_data->setAdditionalData($SNMPsetValues);
                                  }
-                                 
+
                                  break 2;
-                                 
+
                               } else {
                                  $messages[] = __('SNMPset configuration is not found in the printer entity', 'printercounters');
                                  $error      = true;
                               }
 
                               // Close session
-                                 $printer->closeSNMPSession();
+                              $printer->closeSNMPSession();
 
-                              } catch (PluginPrintercountersException $e) {
-                                 $messages[] = $e->getPrintercountersMessage();
-                                 $error      = true;
-                              }
+                           } catch (PluginPrintercountersException $e) {
+                              $messages[] = $e->getPrintercountersMessage();
+                              $error      = true;
                            }
                         }
                      }
                   }
-                  break;
-            }
-
-         } else {
-            $messages[] = __('IP not found', 'printercounters');
-            $error      = true;
+               }
+               break;
          }
-      
-      
-      return array($messages, $error);
+
+      } else {
+         $messages[] = __('IP not found', 'printercounters');
+         $error      = true;
+      }
+
+      return [$messages, $error];
    }
-   
+
    /**
     * Function get tag traduction
-    * 
+    *
     * @param type $input
     * @return type
     */
-   function getTagTraduction($input, $itemtype, $items_id){
-      
+   function getTagTraduction($input, $itemtype, $items_id) {
+
       if (!empty($input)) {
          preg_match_all("/##printer\.(\w*)##/", $input, $tags);
 
          $input = str_replace("\n", " - ", Html::cleanPostForTextArea($input));
-         
+
          $item = getItemForItemtype($itemtype);
          $item->getFromDB($items_id);
 
-         $replaceValue = array();
+         $replaceValue = [];
          foreach ($tags[1] as $tag) {
             $value = $item->getField($tag);
             switch ($tag) {
                case 'users_id': case 'users_id_tech':
-                  if (!empty($value)) {
-                     $replaceValue[] = Dropdown::getDropdownName('glpi_users', $item->getField($tag));
-                  }
+                     if (!empty($value)) {
+                        $replaceValue[] = Dropdown::getDropdownName('glpi_users', $item->getField($tag));
+                     }
                   break;
                case 'contact': case 'contact_num':
-                  if (!empty($value)) {
-                     $replaceValue[] = $item->getField($tag);
-                  }
+                     if (!empty($value)) {
+                        $replaceValue[] = $item->getField($tag);
+                     }
                   break;
                case 'groups_id':case 'groups_id_tech':
-                  if (!empty($value)) {
-                     $replaceValue[] = Dropdown::getDropdownName('glpi_groups', $item->getField($tag));
-                  }
+                     if (!empty($value)) {
+                        $replaceValue[] = Dropdown::getDropdownName('glpi_groups', $item->getField($tag));
+                     }
                   break;
                case 'user_num':
                   $value = $item->getField('users_id');
@@ -495,95 +498,95 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
                   }
                   break;
             }
-//            $input = preg_replace("/##printer\.".$tag."##/", $replaceValue, $input);
+            //            $input = preg_replace("/##printer\.".$tag."##/", $replaceValue, $input);
          }
 
          return implode(" - ", $replaceValue);
       }
-      
+
       return false;
    }
 
    /**
     * Function get tags
-    * 
+    *
     * @return type
     */
-   function getTags(){
+   function getTags() {
 
-      return array(__('User')                                  => '##printer.users_id##', 
-                   __('Alternate username')                    => '##printer.contact##', 
-                   __('Technician in charge of the hardware')  => '##printer.users_id_tech##', 
-                   __('Group')                                 => '##printer.groups_id##', 
+      return [__('User')                                  => '##printer.users_id##',
+                   __('Alternate username')                    => '##printer.contact##',
+                   __('Technician in charge of the hardware')  => '##printer.users_id_tech##',
+                   __('Group')                                 => '##printer.groups_id##',
                    __('Group in charge of the hardware')       => '##printer.groups_id_tech##',
                    __('User phone', 'printercounters')         => '##printer.user_num##',
-                   __('Alternate username number')             => '##printer.contact_num##');
+                   __('Alternate username number')             => '##printer.contact_num##'];
    }
-   
-  
-  /** 
+
+
+   /**
    * Get search options
-   * 
+   *
    * @return array
    */
    function getSearchOptions() {
-      
+
       $tab[111]['table']          = $this->getTable();
       $tab[111]['field']          = 'set_name';
       $tab[111]['name']           = __('Set printer name', 'printercounters');
       $tab[111]['massiveaction']  = true;
       $tab[111]['datatype']       = 'bool';
-      
+
       $tab[112]['table']          = $this->getTable();
       $tab[112]['field']          = 'set_location';
       $tab[112]['name']           = __('Set printer location', 'printercounters');
       $tab[112]['massiveaction']  = true;
       $tab[112]['datatype']       = 'bool';
-      
+
       $tab[113]['table']          = $this->getTable();
       $tab[113]['field']          = 'set_contact';
       $tab[113]['name']           = __('Set printer contact informations', 'printercounters');
       $tab[113]['massiveaction']  = true;
       $tab[113]['datatype']       = 'bool';
-      
+
       $tab[114]['table']          = $this->getTable();
       $tab[114]['field']          = 'contact';
       $tab[114]['name']           = __('Tag');
       $tab[114]['massiveaction']  = true;
       $tab[114]['datatype']       = 'text';
-      
+
       return $tab;
    }
-   
-  /** 
+
+   /**
    * Actions done before add
-   * 
+   *
    * @param type $input
    * @return type
    */
    function prepareInputForAdd($input) {
-      if(!$this->checkDuplicateFields($input)){
+      if (!$this->checkDuplicateFields($input)) {
          return false;
       }
-      
+
       return $input;
    }
-   
-  /** 
-   * checkMandatoryFields 
-   * 
+
+   /**
+   * checkMandatoryFields
+   *
    * @param type $input
    * @return boolean
    */
-   function checkDuplicateFields($input){
-      
+   function checkDuplicateFields($input) {
+
       $data = $this->getItems(0, getEntitiesRestrictRequest("AND", $this->getTable(), "", $_SESSION['glpiactiveentities'], true));
-      
-      $msg     = array();
+
+      $msg     = [];
       $checkKo = false;
-      
-      $fields = array('entities_id' => __('SNMPset is already configured for this entity', 'printercounters'));
-      
+
+      $fields = ['entities_id' => __('SNMPset is already configured for this entity', 'printercounters')];
+
       foreach ($data as $key => $value) {
          if ($value['entities_id'] == $input['entities_id']) {
             $msg[] = $fields['entities_id'];
@@ -598,4 +601,3 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       return true;
    }
 }
-?>
