@@ -637,7 +637,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       $item = new $input['itemtype']();
       $item->getFromDB($input['items_id']);
 
-      if ($tickets_id = $ticket->add(['_users_id_assign'    => $config_data['add_item_user'] ? $input['users_id_tech'] : "",
+      if ($tickets_id = $ticket->add(Toolbox::addslashes_deep(['_users_id_assign'    => $config_data['add_item_user'] ? $input['users_id_tech'] : "",
                                            '_users_id_requester' => $config_data['add_item_user'] ? $input['users_id'] : "",
                                            '_groups_id_assign'   => $config_data['add_item_group'] ? $input['groups_id_tech'] : "",
                                            'entities_id'         => $input['entities_id'],
@@ -645,7 +645,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
                                            'itilcategories_id'   => $config_data['tickets_category'],
                                            'items_id'            => [$input['itemtype'] => [$input['items_id']]],
                                            'name'                => _n($item->getType(), $item->getType().'s', 1)." - ".$item->fields['name'].' '.self::getEvent($events_type),
-                                           'content'             => $config_data['tickets_content']])) {
+                                           'content'             => $config_data['tickets_content']]))) {
 
          $item_ticket = new PluginPrintercountersItem_Ticket();
          $item_ticket->add(['items_id'    => $input['items_id'],
