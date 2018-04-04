@@ -452,20 +452,15 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       if (isset($options['plugin_printercounters_recordmodels_id'])) {
          $query = "SELECT `glpi_plugin_printercounters_countertypes_recordmodels`.`oid_type` as oid_type
                    FROM `glpi_plugin_printercounters_countertypes_recordmodels`
-                   WHERE `glpi_plugin_printercounters_countertypes_recordmodels`.`plugin_printercounters_recordmodels_id` = ".$options['plugin_printercounters_recordmodels_id'];
+                   WHERE `oid_type` = ". self::NAME ." 
+                   AND `plugin_printercounters_recordmodels_id` = ".$options['plugin_printercounters_recordmodels_id'];
 
          $output = [];
 
          $result = $DB->query($query);
          if ($DB->numrows($result)) {
-            while ($data = $DB->fetch_assoc($result)) {
-               if (empty($options['value'])
-                  || (!empty($options['value']) && $options['value'] != $data['oid_type'])) {
-                  $output[$data['oid_type']] = $data['oid_type'];
-               }
-            }
+            $options['used'][self::NAME] = self::NAME;
          }
-         $options['used'] = $output;
       }
 
       return Dropdown::showFromArray('oid_type', self::getAllOidTypeArray(), $options);
@@ -493,16 +488,16 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
 
       // To be overridden by class
       $tab = [0                              => Dropdown::EMPTY_VALUE,
-                   self::COLOR                    => __('Color', 'printercounters'),
-                   self::MONOCHROME               => __('Monochrome', 'printercounters'),
-                   self::BLACKANDWHITE            => __('Black and white', 'printercounters'),
-                   self::BICOLOR                  => __('Bichromie', 'printercounters'),
-                   self::SERIAL                   => __('Serial number', 'printercounters'),
-                   self::SYSDESCR                 => __('Sysdescr', 'printercounters'),
-                   self::MODEL                    => __('Printer model'),
-                   self::NUMBER_OF_PRINTED_PAPERS => __('Number of printed papers', 'printercounters'),
-                   self::NAME                     => __('Name') . " " . strtolower(__('Printer')),
-                   self::OTHER                    => __('Other', 'printercounters')];
+              self::COLOR                    => __('Color', 'printercounters'),
+              self::MONOCHROME               => __('Monochrome', 'printercounters'),
+              self::BLACKANDWHITE            => __('Black and white', 'printercounters'),
+              self::BICOLOR                  => __('Bichromie', 'printercounters'),
+              self::SERIAL                   => __('Serial number', 'printercounters'),
+              self::SYSDESCR                 => __('Sysdescr', 'printercounters'),
+              self::MODEL                    => __('Printer model'),
+              self::NUMBER_OF_PRINTED_PAPERS => __('Number of printed papers', 'printercounters'),
+              self::NAME                     => __('Name') . " " . strtolower(__('Printer')),
+              self::OTHER                    => __('Other', 'printercounters')];
 
       return $tab;
    }
