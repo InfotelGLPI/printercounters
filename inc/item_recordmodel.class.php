@@ -1571,7 +1571,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
             // Parsing $SEARCHOPTION to find changed field
             foreach ($searchopt as $id_search_option => $val2) {
-               if (!is_array($val2)) {
+               if (!is_array($val2) || !isset($val2['table'])) {
                   // skip sub-title
                   continue;
                }

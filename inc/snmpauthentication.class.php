@@ -514,7 +514,8 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
    function setDefaultAuthentication($input) {
 
       if ($input['is_default']) {
-         $default = $this->find("`is_default` = 1 AND `id` != '".$input['id']."'");
+         $condition = isset($input['id']) ? "AND `id` != '".$input['id']."'" : "";
+         $default = $this->find("`is_default` = 1 $condition");
          if (!empty($default)) {
             foreach ($default as $authentication) {
                $snmpAuthentification = new self();
