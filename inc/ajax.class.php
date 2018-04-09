@@ -69,4 +69,62 @@ class PluginPrintercountersAjax extends CommonDBTM {
             echo "</script>\n";
    }
 
+
+   /**
+    * Create fixed modal window
+    * After display it using $name.dialog("open");
+    *
+    * @since version 0.84
+    *
+    * @param string $name    name of the js object
+    * @param array  $options Possible options:
+    *          - width       (default 800)
+    *          - height      (default 400)
+    *          - modal       is a modal window? (default true)
+    *          - container   specify a html element to render (default empty to html.body)
+    *          - title       window title (default empty)
+    *          - display     display or get string? (default true)
+    *
+    * @return void|string (see $options['display'])
+    */
+   static function createFixedModalWindow($name, $options = []) {
+
+      $param = ['width'     => 800,
+                'height'    => 400,
+                'modal'     => true,
+                'container' => '',
+                'title'     => '',
+                'display'   => true];
+
+      if (count($options)) {
+         foreach ($options as $key => $val) {
+            if (isset($param[$key])) {
+               $param[$key] = $val;
+            }
+         }
+      }
+
+      $out  =  "<script type='text/javascript'>\n";
+      $out .= "var $name=";
+      if (!empty($param['container'])) {
+         $out .= Html::jsGetElementbyID(Html::cleanId($param['container']));
+      } else {
+         $out .= "$('<div></div>')";
+      }
+      $out .= ".dialog({\n
+         width:".$param['width'].",\n
+         autoOpen: false,\n
+         height:".$param['height'].",\n
+         modal: ".($param['modal']?'true':'false').",\n
+         title: \"".addslashes($param['title'])."\"\n
+         });\n";
+      $out .= "</script>";
+
+      if ($param['display']) {
+         echo $out;
+      } else {
+         return $out;
+      }
+
+   }
 }

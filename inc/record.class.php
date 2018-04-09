@@ -233,13 +233,10 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       Html::requireJs('printercounters');
 
-      echo Html::scriptBlock('$(document).ready(function() {
+      echo Html::scriptBlock('
          var printercountersAction = $(document).printercountersAction();
-         });');
+         ');
 
-      //      echo '<script type="text/javascript">';
-      //      echo 'var printercountersAction = $(document).printercountersAction();';
-      //      echo '</script>';
    }
 
    /**
@@ -482,9 +479,15 @@ class PluginPrintercountersRecord extends CommonDBTM {
                $output[$row[$types['records_id']]]['budget']            = $row[$types['budget']];
 
                // Set counters
-               $countertypes  = explode((isset($searchopt[$types['countertypes_id']]['splititems']) && $searchopt[$types['countertypes_id']]['splititems']) ? Search::LBHR : Search::LBBR, $row[$types['countertypes_id']]);
-               $counternames  = explode((isset($searchopt[$types['counters_name']]['splititems']) && $searchopt[$types['counters_name']]['splititems']) ? Search::LBHR : Search::LBBR, $row[$types['counters_name']]);
-               $countervalues = explode((isset($searchopt[$types['counters_value']]['splititems']) && $searchopt[$types['counters_value']]['splititems']) ? Search::LBHR : Search::LBBR, $row[$types['counters_value']]);
+               $countertypes  = explode((isset($searchopt[$types['countertypes_id']]['splititems']) && $searchopt[$types['countertypes_id']]['splititems'])
+                                           ? Search::LBHR
+                                           : Search::LBBR, $row[$types['countertypes_id']]);
+               $counternames  = explode((isset($searchopt[$types['counters_name']]['splititems']) && $searchopt[$types['counters_name']]['splititems'])
+                                           ? Search::LBHR
+                                           : Search::LBBR, $row[$types['counters_name']]);
+               $countervalues = explode((isset($searchopt[$types['counters_value']]['splititems']) && $searchopt[$types['counters_value']]['splititems'])
+                                           ? Search::LBHR
+                                           : Search::LBBR, $row[$types['counters_value']]);
                foreach ($countertypes as $key => $countertype) {
                   $output[$row[$types['records_id']]]['counters'][$countertype] = ['counters_name'  => $counternames[$key],
                                                                                         'counters_value' => $countervalues[$key]];
@@ -1216,7 +1219,8 @@ class PluginPrintercountersRecord extends CommonDBTM {
          }
       }
 
-      Ajax::createFixedModalWindow('manual_record_window', ['title'       => $p['title'],
+      PluginPrintercountersAjax::createFixedModalWindow('manual_record_window', ['title'       => $p['title'],
+
                                                                  'extraparams' => $p['extraparams'],
                                                                  'width'       => $p['width'],
                                                                  'height'      => $p['height']]);
@@ -1543,8 +1547,8 @@ class PluginPrintercountersRecord extends CommonDBTM {
                   foreach ($last_record as $record) {
                      foreach ($record['counters'] as $last_counter) {
                         foreach ($input['counters'] as $countertypes_recordmodels_id => $counters) {
-                           foreach ($counters as $counters_id => $value) {
-                              if ($last_counter['countertypes_recordmodels_id'] == $countertypes_recordmodels_id && $value < $last_counter['counters_value']) {
+                           foreach ($counters as $value) {
+                              if (($last_counter['countertypes_recordmodels_id'] == $countertypes_recordmodels_id) && $value < $last_counter['counters_value']) {
                                  $msg[]   = __('Error : Counters cannot be lower than the previous', 'printercounters');
                                  $checkKo = true;
                                  break 3;
