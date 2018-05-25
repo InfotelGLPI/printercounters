@@ -548,7 +548,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
                   $allItemsId[] = $items_id;
                   // Record must be sorted by date DESC and items_id
                   uasort($record, function($a, $b) {
-                     return ($b["date"] - $a["date"]);
+                     return (strtotime($b["date"]) - strtotime($a["date"]));
                   });
                   foreach ($record as $key => $val) {
                      $recordResults[$key] = $val;
