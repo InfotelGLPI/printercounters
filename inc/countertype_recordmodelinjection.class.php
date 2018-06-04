@@ -42,7 +42,7 @@ if (!defined('GLPI_ROOT')) {
 class PluginPrintercountersCountertype_RecordmodelInjection extends PluginPrintercountersCountertype_Recordmodel
                                              implements PluginDatainjectionInjectionInterface {
 
-   static function getTable() {
+   static function getTable($classname = null) {
       $parenttype = get_parent_class();
       return $parenttype::getTable();
    }
