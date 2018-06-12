@@ -34,7 +34,7 @@ include (GLPI_ROOT."/inc/includes.php");
 header("Content-type: application/javascript");
 
 //not executed in self-service interface & right verification
-if ($_SESSION['glpiactiveprofile']['interface'] == "central") {
+if (Session::getCurrentInterface() == "central") {
    // Get item type
    $itemtype = PluginPrintercountersItem_Recordmodel::$types;
 

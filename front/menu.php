@@ -29,7 +29,7 @@
 
 include ('../../../inc/includes.php');
 
-if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
+if (Session::getCurrentInterface() == 'central') {
    Html::header(PluginPrintercountersMenu::getTypeName(2), '', "tools", "pluginprintercountersmenu", "menu");
 } else {
    Html::helpHeader(PluginPrintercountersMenu::getTypeName(2));
@@ -38,7 +38,7 @@ if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
 $menu = new PluginPrintercountersMenu();
 $menu->showMenu();
 
-if ($_SESSION['glpiactiveprofile']['interface'] == 'central') {
+if (Session::getCurrentInterface() == 'central') {
    Html::footer();
 } else {
    Html::helpFooter();
