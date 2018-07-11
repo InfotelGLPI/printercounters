@@ -556,13 +556,13 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          // Periodicity
          echo "<td>".__('Periodicity of automatic record', 'printercounters')."</td>";
          echo "<td>";
-         Dropdown::showTimeStamp("periodicity", ['min'             => DAY_TIMESTAMP,
-                                                      'max'             => 15*DAY_TIMESTAMP,
-                                                      'step'            => DAY_TIMESTAMP,
-                                                      'value'           => $data['periodicity'],
-                                                      'addfirstminutes' => false,
-                                                      'inhours'         => false,
-                                                      'width'           => $width]);
+         Dropdown::showTimeStamp("periodicity", ['min'             => HOUR_TIMESTAMP,
+                                                 'max'             => 15 * DAY_TIMESTAMP,
+                                                 'step'            => HOUR_TIMESTAMP,
+                                                 'value'           => $data['periodicity'],
+                                                 'addfirstminutes' => false,
+                                                 'inhours'         => false,
+                                                 'width'           => $width]);
          echo "</td>";
 
          // Retries
@@ -667,9 +667,9 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          'name'               => $this->getFieldName('periodicity'),
          'datatype'           => 'timestamp',
          'searchtype'         => ['equals', 'notequals'],
-         'min'                => DAY_TIMESTAMP,
+         'min'                => HOUR_TIMESTAMP,
          'max'                => 15 * DAY_TIMESTAMP,
-         'step'               => DAY_TIMESTAMP,
+         'step'               => HOUR_TIMESTAMP,
          'addfirstminutes'    => false,
          'inhours'            => false,
          'massiveaction'      => false
@@ -900,9 +900,9 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
                case "plugin_printercounters_periodicity":
                   if ($item_recordmodel->canCreate()) {
-                     Dropdown::showTimeStamp("periodicity", ['min'             => DAY_TIMESTAMP,
+                     Dropdown::showTimeStamp("periodicity", ['min'             => HOUR_TIMESTAMP,
                                                                   'max'             => 15*DAY_TIMESTAMP,
-                                                                  'step'            => DAY_TIMESTAMP,
+                                                                  'step'            => HOUR_TIMESTAMP,
                                                                   'addfirstminutes' => false,
                                                                   'inhours'         => false]);
                   }
