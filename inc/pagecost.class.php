@@ -331,31 +331,47 @@ class PluginPrintercountersPagecost extends CommonDBTM {
    }
 
    /**
-    * Get search options
+    * Provides search options configuration. Do not rely directly
+    * on this, @see CommonDBTM::searchOptions instead.
     *
-    * @return boolean
-    */
-   function getSearchOptions() {
+    * @since 9.3
+    *
+    * This should be overloaded in Class
+    *
+    * @return array a *not indexed* array of search options
+    *
+    * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
+    **/
+   public function rawSearchOptions() {
 
-      $tab = parent::getSearchOptions();
+      $tab = parent::rawSearchOptions();
 
-      $tab[72]['table']          = 'glpi_plugin_printercounters_countertypes';
-      $tab[72]['field']          = 'name';
-      $tab[72]['name']           = PluginPrintercountersCountertype::getTypeName();
-      $tab[72]['datatype']       = 'dropdown';
-      $tab[72]['massiveaction']  = false;
+      $tab[] = [
+         'id'                 => '72',
+         'table'              => 'glpi_plugin_printercounters_countertypes',
+         'field'              => 'name',
+         'name'               => PluginPrintercountersCountertype::getTypeName(),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false
+      ];
 
-      $tab[73]['table']          = $this->getTable();
-      $tab[73]['field']          = 'cost';
-      $tab[73]['datatype']       = 'specific';
-      $tab[73]['name']           = __('Cost');
-      $tab[73]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '73',
+         'table'              => $this->getTable(),
+         'field'              => 'cost',
+         'datatype'           => 'specific',
+         'name'               => __('Cost'),
+         'massiveaction'      => true
+      ];
 
-      $tab[75]['table']          = 'glpi_plugin_printercounters_billingmodels';
-      $tab[75]['field']          = 'name';
-      $tab[75]['name']           = PluginPrintercountersBillingmodel::getTypeName();
-      $tab[75]['datatype']       = 'dropdown';
-      $tab[75]['massiveaction']  = false;
+      $tab[] = [
+         'id'                 => '75',
+         'table'              => 'glpi_plugin_printercounters_billingmodels',
+         'field'              => 'name',
+         'name'               => PluginPrintercountersBillingmodel::getTypeName(),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false
+      ];
 
       return $tab;
    }

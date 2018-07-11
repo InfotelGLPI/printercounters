@@ -1418,7 +1418,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       }
 
       $model_printer = new PrinterModel();
-      if ($model_printer->getFromDBByQuery("WHERE `name` = '" . $result[1] . "'")) {
+      if ($model_printer->getFromDBByCrit(['name' => $result[1]])) {
          $model_printer_id = $model_printer->getID();
       } else {
          // add
@@ -1453,8 +1453,10 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       // Update TCO
       $item_recordmodel = new PluginPrintercountersItem_Recordmodel($this->itemtype, $this->items_id);
-      $item_recordmodel->getFromDBByQuery("WHERE LOWER(`itemtype`) = LOWER('".$this->itemtype."') AND `items_id`=".$this->items_id." LIMIT 1");
-      if ($item_recordmodel->update(['id' => $item_recordmodel->getField('id'), 'global_tco' => ($records['total_record_cost'] + $tco)])) {
+      $item_recordmodel->getFromDBByCrit(['LOWER(`itemtype`)' => "LOWER('".$this->itemtype."')",
+                                          'items_id' => $this->items_id]);
+      if ($item_recordmodel->update(['id' => $item_recordmodel->getField('id'),
+                                     'global_tco' => ($records['total_record_cost'] + $tco)])) {
          $result = Html::formatNumber($records['total_record_cost'] + $tco);
       } else {
          $error   = true;
@@ -1478,7 +1480,8 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $query = "SELECT `".$itemjoin2."`.`value` + `".$itemjoin."`.`ticket_tco` as tco
           FROM ".$itemjoin."
           LEFT JOIN `$itemjoin2` 
-             ON (`".$itemjoin2."`.`items_id` = `$itemjoin`.`id` AND LOWER(`".$itemjoin2."`.`itemtype`) = LOWER('".$this->itemtype."'))
+             ON (`".$itemjoin2."`.`items_id` = `$itemjoin`.`id` 
+             AND LOWER(`".$itemjoin2."`.`itemtype`) = LOWER('".$this->itemtype."'))
           WHERE `".$itemjoin."`.`id` = ".Toolbox::cleanInteger($this->items_id);
 
       $result = $DB->query($query);
@@ -1725,226 +1728,335 @@ class PluginPrintercountersRecord extends CommonDBTM {
    }
 
    /**
-   * Get search options
-   *
-   * @return array
-   */
-   function getSearchOptions() {
+    * Provides search options configuration. Do not rely directly
+    * on this, @see CommonDBTM::searchOptions instead.
+    *
+    * @since 9.3
+    *
+    * This should be overloaded in Class
+    *
+    * @return array a *not indexed* array of search options
+    *
+    * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
+    **/
+   public function rawSearchOptions() {
 
       $tab = [];
 
       $itemtype = $this->itemtype;
       $item = getItemForItemtype($itemtype);
 
-      $tab[79]['table']          = $this->getTable();
-      $tab[79]['field']          = 'id';
-      $tab[79]['name']           = $this->getFieldName('record_id');
-      $tab[79]['datatype']       = 'numeric';
-      $tab[79]['massiveaction']  = false;
-      $tab[79]['nosearch']       = true;
-      $tab[79]['nodisplay']      = true;
-      $tab[79]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '79',
+         'table'              => $this->getTable(),
+         'field'              => 'id',
+         'name'               => $this->getFieldName('record_id'),
+         'datatype'           => 'numeric',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => '1',
+         'nosort'             => true
+      ];
 
-      $tab[80]['table']          = $this->getTable();
-      $tab[80]['field']          = 'date';
-      $tab[80]['name']           = $this->getFieldName('date');
-      $tab[80]['datatype']       = 'datetime';
-      $tab[80]['massiveaction']  = false;
-      $tab[80]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '80',
+         'table'              => $this->getTable(),
+         'field'              => 'date',
+         'name'               => $this->getFieldName('date'),
+         'datatype'           => 'datetime',
+         'massiveaction'      => false,
+         'nosort'             => true
+      ];
 
-      $tab[81]['table']          = 'glpi_plugin_printercounters_recordmodels';
-      $tab[81]['field']          = 'name';
-      $tab[81]['linkfield']      = 'last_recordmodels_id';
-      $tab[81]['name']           = $this->getFieldName('recordmodels');
-      $tab[81]['datatype']       = 'itemlink';
-      $tab[81]['massiveaction']  = false;
-      $tab[81]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '81',
+         'table'              => 'glpi_plugin_printercounters_recordmodels',
+         'field'              => 'name',
+         'linkfield'          => 'last_recordmodels_id',
+         'name'               => $this->getFieldName('recordmodels'),
+         'datatype'           => 'itemlink',
+         'massiveaction'      => false,
+         'nosort'             => true
+      ];
 
-      $tab[82]['table']          = 'glpi_entities';
-      $tab[82]['field']          = 'name';
-      $tab[82]['name']           = $this->getFieldName('entities_id');
-      $tab[82]['massiveaction']  = false;
-      $tab[82]['datatype']       = 'itemlink';
-      $tab[82]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '82',
+         'table'              => 'glpi_entities',
+         'field'              => 'name',
+         'name'               => $this->getFieldName('entities_id'),
+         'massiveaction'      => false,
+         'datatype'           => 'itemlink',
+         'nosort'             => true
+      ];
 
-      $tab[83]['table']          = 'glpi_plugin_printercounters_countertypes';
-      $tab[83]['field']          = 'name';
-      $tab[83]['name']           = $this->getFieldName('counters_name');
-      $tab[83]['datatype']       = 'dropdown';
-      $tab[83]['massiveaction']  = false;
-      $tab[83]['nosearch']       = true;
-      $tab[83]['nosort']         = true;
-      $tab[83]['forcegroupby']   = true;
-      $tab[83]['joinparams']     = ['beforejoin'
-                                          => ['table'      => 'glpi_plugin_printercounters_countertypes_recordmodels',
-                                                   'joinparams' => ['beforejoin' => ['table'      => 'glpi_plugin_printercounters_counters',
-                                                                                               'joinparams' => ['jointype'   => 'child',
-                                                                                                                     'beforejoin' => ['table' => 'glpi_plugin_printercounters_records']]]]]
-                                        ];
+      $tab[] = [
+         'id'                 => '83',
+         'table'              => 'glpi_plugin_printercounters_countertypes',
+         'field'              => 'name',
+         'name'               => $this->getFieldName('counters_name'),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nosort'             => true,
+         'forcegroupby'       => true,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_countertypes_recordmodels',
+               'joinparams'         => [
+                  'beforejoin'         => [
+                     'table'              => 'glpi_plugin_printercounters_counters',
+                     'joinparams'         => [
+                        'jointype'           => 'child',
+                        'beforejoin'         => [
+                           'table'              => $this->getTable()
+                        ]
+                     ]
+                  ]
+               ]
+            ]
+         ]
+      ];
 
-      $tab[84]['table']          = 'glpi_plugin_printercounters_counters';
-      $tab[84]['field']          = 'value';
-      $tab[84]['name']           = $this->getFieldName('counters_value');
-      $tab[84]['datatype']       = 'dropdown';
-      $tab[84]['massiveaction']  = false;
-      $tab[84]['joinparams']     = ['jointype'   => 'child'];
-      $tab[84]['nosearch']       = true;
-      $tab[84]['forcegroupby']   = true;
-      $tab[84]['nosort']         = true;
-      $tab[84]['splititems']     = true;
+      $tab[] = [
+         'id'                 => '84',
+         'table'              => 'glpi_plugin_printercounters_counters',
+         'field'              => 'value',
+         'name'               => $this->getFieldName('counters_value'),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false,
+         'joinparams'         => [
+            'jointype'           => 'child'
+         ],
+         'nosearch'           => true,
+         'forcegroupby'       => true,
+         'nosort'             => true,
+         'splititems'         => '1'
+      ];
 
-      $tab[85]['table']               = $this->getTable();
-      $tab[85]['field']               = 'record_type';
-      $tab[85]['name']                = $this->getFieldName('record_type');
-      $tab[85]['datatype']            = 'specific';
-      $tab[85]['searchequalsonfield'] = true;
-      $tab[85]['searchtype']          = 'equals';
-      $tab[85]['massiveaction']       = false;
-      $tab[85]['nosort']              = true;
+      $tab[] = [
+         'id'                 => '85',
+         'table'              => $this->getTable(),
+         'field'              => 'record_type',
+         'name'               => $this->getFieldName('record_type'),
+         'datatype'           => 'specific',
+         'searchequalsonfield' => '1',
+         'searchtype'         => 'equals',
+         'massiveaction'      => false,
+         'nosort'             => true
+      ];
 
-      $tab[86]['table']               = $this->getTable();
-      $tab[86]['field']               = 'result';
-      $tab[86]['name']                = $this->getFieldName('result');
-      $tab[86]['datatype']            = 'specific';
-      $tab[86]['searchequalsonfield'] = true;
-      $tab[86]['searchtype']          = 'equals';
-      $tab[86]['massiveaction']       = false;
-      $tab[86]['nosort']              = true;
+      $tab[] = [
+         'id'                 => '86',
+         'table'              => $this->getTable(),
+         'field'              => 'result',
+         'name'               => $this->getFieldName('result'),
+         'datatype'           => 'specific',
+         'searchequalsonfield' => '1',
+         'searchtype'         => 'equals',
+         'massiveaction'      => false,
+         'nosort'             => true
+      ];
 
-      $tab[87]['table']          = 'glpi_locations';
-      $tab[87]['field']          = 'completename';
-      $tab[87]['name']           = $this->getFieldName('locations_id');
-      $tab[87]['datatype']       = 'itemlink';
-      $tab[87]['massiveaction']  = false;
-      $tab[87]['nosort']         = true;
-      $tab[87]['joinparams']     = ['beforejoin'
-                                          => ['table'      => getTableForItemType($itemtype),
-                                                   'linkfield'  => 'items_id',
-                                                   'joinparams' => ['beforejoin' => ['table' => 'glpi_plugin_printercounters_items_recordmodels']]]
-                                   ];
+      $tab[] = [
+         'id'                 => '87',
+         'table'              => 'glpi_locations',
+         'field'              => 'completename',
+         'name'               => $this->getFieldName('locations_id'),
+         'datatype'           => 'itemlink',
+         'massiveaction'      => false,
+         'nosort'             => true,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_printers',
+               'linkfield'          => 'items_id',
+               'joinparams'         => [
+                  'beforejoin'         => [
+                     'table'              => 'glpi_plugin_printercounters_items_recordmodels'
+                  ]
+               ]
+            ]
+         ]
+      ];
 
-      $tab[88]['table']          = 'glpi_plugin_printercounters_budgets';
-      $tab[88]['field']          = 'name';
-      $tab[88]['name']           = $this->getFieldName('budgets_id');
-      $tab[88]['massiveaction']  = false;
-      $tab[88]['datatype']       = 'itemlink';
-      $tab[88]['linkfield']      = 'entities_id';
-      $tab[88]['nosort']         = true;
-      $tab[88]['joinparams']     = ['condition'  => "AND NEWTABLE.`begin_date` <= REFTABLE.`date` AND NEWTABLE.`end_date` >= REFTABLE.`date`"];
+      $tab[] = [
+         'id'                 => '88',
+         'table'              => 'glpi_plugin_printercounters_budgets',
+         'field'              => 'name',
+         'name'               => $this->getFieldName('budgets_id'),
+         'massiveaction'      => false,
+         'datatype'           => 'itemlink',
+         'linkfield'          => 'entities_id',
+         'nosort'             => true,
+         'joinparams'         => [
+            'condition'          => 'AND NEWTABLE.`begin_date` <= REFTABLE.`date` AND NEWTABLE.`end_date` >= REFTABLE.`date`'
+         ]
+      ];
 
-      $tab[89]['table']          = getTableForItemType($itemtype);
-      $tab[89]['field']          = 'name';
-      $tab[89]['name']           = $item::getTypeName();
-      $tab[89]['datatype']       = 'dropdown';
-      $tab[89]['massiveaction']  = false;
-      $tab[89]['linkfield']      = 'items_id';
-      $tab[89]['nosearch']       = true;
-      $tab[89]['nodisplay']      = true;
-      $tab[89]['nosort']         = true;
-      $tab[89]['joinparams']     = ['beforejoin'
-                                          => ['table' => 'glpi_plugin_printercounters_items_recordmodels']
-                                   ];
+      $tab[] = [
+         'id'                 => '89',
+         'table'              => getTableForItemType($itemtype),
+         'field'              => 'name',
+         'name'               => $item::getTypeName(),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false,
+         'linkfield'          => 'items_id',
+         'nosearch'           => true,
+         'nodisplay'          => '1',
+         'nosort'             => true,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_items_recordmodels'
+            ]
+         ]
+      ];
 
-      $tab[91]['table']          = getTableForItemType($itemtype);
-      $tab[91]['field']          = 'id';
-      $tab[91]['name']           = $item::getTypeName().' ID';
-      $tab[91]['datatype']       = 'number';
-      $tab[91]['massiveaction']  = false;
-      $tab[91]['linkfield']      = 'items_id';
-      $tab[91]['nosearch']       = true;
-      $tab[91]['nodisplay']      = true;
-      $tab[91]['nosort']         = true;
-      $tab[91]['joinparams']     = ['beforejoin'
-                                          => ['table' => 'glpi_plugin_printercounters_items_recordmodels']
-                                   ];
+      $tab[] = [
+         'id'                 => '91',
+         'table'              => getTableForItemType($itemtype),
+         'field'              => 'id',
+         'name'               => $item::getTypeName().' ID',
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'linkfield'          => 'items_id',
+         'nosearch'           => true,
+         'nodisplay'          => '1',
+         'nosort'             => true,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_items_recordmodels'
+            ]
+         ]
+      ];
 
-      $tab[92]['table']          = getTableForItemType($this->itemtype.'Model');
-      $tab[92]['field']          = 'name';
-      $tab[92]['name']           = __('Model');
-      $tab[92]['massiveaction']  = false;
-      $tab[92]['datatype']       = 'dropdown';
-      $tab[92]['nosearch']       = true;
-      $tab[92]['nodisplay']      = true;
-      $tab[92]['nosort']         = true;
-      $tab[92]['joinparams']     = ['beforejoin'
-                                          => ['table'      => getTableForItemType($itemtype),
-                                                   'linkfield'  => 'items_id',
-                                                   'joinparams' => ['beforejoin' => ['table' => 'glpi_plugin_printercounters_items_recordmodels']]]
-                                   ];
+      $tab[] = [
+         'id'                 => '92',
+         'table'              => getTableForItemType($this->itemtype.'Model'),
+         'field'              => 'name',
+         'name'               => __('Model'),
+         'massiveaction'      => false,
+         'datatype'           => 'dropdown',
+         'nosearch'           => true,
+         'nodisplay'          => '1',
+         'nosort'             => true,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => getTableForItemType($itemtype),
+               'linkfield'          => 'items_id',
+               'joinparams'         => [
+                  'beforejoin'         => [
+                     'table'              => 'glpi_plugin_printercounters_items_recordmodels'
+                  ]
+               ]
+            ]
+         ]
+      ];
 
-      $tab[93]['table']          = $this->getTable();
-      $tab[93]['field']          = 'last_recordmodels_id';
-      $tab[93]['name']           = $this->getFieldName('last_recordmodels_id');
-      $tab[93]['datatype']       = 'number';
-      $tab[93]['massiveaction']  = false;
-      $tab[93]['nosearch']       = true;
-      $tab[93]['nodisplay']      = true;
-      $tab[93]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '93',
+         'table'              => $this->getTable(),
+         'field'              => 'last_recordmodels_id',
+         'name'               => $this->getFieldName('last_recordmodels_id'),
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => '1',
+         'nosort'             => true
+      ];
 
-      $tab[94]['table']          = 'glpi_plugin_printercounters_countertypes';
-      $tab[94]['field']          = 'id';
-      $tab[94]['name']           = $this->getFieldName('counters_name');
-      $tab[94]['datatype']       = 'number';
-      $tab[94]['massiveaction']  = false;
-      $tab[94]['nosearch']       = true;
-      $tab[94]['nodisplay']      = true;
-      $tab[94]['nosort']         = true;
-      $tab[94]['forcegroupby']   = true;
-      $tab[94]['joinparams']     = ['beforejoin'
-                                          => ['table'      => 'glpi_plugin_printercounters_countertypes_recordmodels',
-                                                   'joinparams' => ['beforejoin' => ['table'      => 'glpi_plugin_printercounters_counters',
-                                                                                               'joinparams' => ['jointype'   => 'child',
-                                                                                                                     'beforejoin' => ['table' => 'glpi_plugin_printercounters_records']]]]]
-                                        ];
+      $tab[] = [
+         'id'                 => '94',
+         'table'              => 'glpi_plugin_printercounters_countertypes',
+         'field'              => 'id',
+         'name'               => $this->getFieldName('counters_name'),
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => '1',
+         'nosort'             => true,
+         'forcegroupby'       => true,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_countertypes_recordmodels',
+               'joinparams'         => [
+                  'beforejoin'         => [
+                     'table'              => 'glpi_plugin_printercounters_counters',
+                     'joinparams'         => [
+                        'jointype'           => 'child',
+                        'beforejoin'         => [
+                           'table'              => $this->getTable()
+                        ]
+                     ]
+                  ]
+               ]
+            ]
+         ]
+      ];
 
-      $tab[95]['table']          = 'glpi_plugin_printercounters_items_recordmodels';
-      $tab[95]['field']          = 'itemtype';
-      $tab[95]['name']           = 'itemtype';
-      $tab[95]['massiveaction']  = false;
-      $tab[95]['nosearch']       = true;
-      $tab[95]['nodisplay']      = true;
-      $tab[95]['nosql']          = true;
-      $tab[95]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '95',
+         'table'              => 'glpi_plugin_printercounters_items_recordmodels',
+         'field'              => 'itemtype',
+         'name'               => __('Type'),
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => '1',
+         'nosql'              => '1',
+         'nosort'             => true
+      ];
 
-      $tab[96]['table']          = 'glpi_plugin_printercounters_recordmodels';
-      $tab[96]['field']          = 'name';
-      $tab[96]['name']           = $this->getFieldName('recordmodels');
-      $tab[96]['datatype']       = 'dropdown';
-      $tab[96]['massiveaction']  = false;
-      $tab[96]['nosearch']       = true;
-      $tab[96]['nodisplay']      = true;
-      $tab[96]['nosql']          = true;
-      $tab[96]['nosort']         = true;
-      $tab[96]['joinparams']     = ['beforejoin'
-                                          => ['table' => 'glpi_plugin_printercounters_items_recordmodels']
-                                   ];
+      $tab[] = [
+         'id'                 => '96',
+         'table'              => 'glpi_plugin_printercounters_recordmodels',
+         'field'              => 'name',
+         'name'               => $this->getFieldName('recordmodels'),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => '1',
+         'nosql'              => '1',
+         'nosort'             => true,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_items_recordmodels'
+            ]
+         ]
+      ];
 
-      $tab[97]['table']          = 'glpi_plugin_printercounters_pagecosts';
-      $tab[97]['field']          = 'cost';
-      $tab[97]['name']           = $this->getFieldName('cost');
-      $tab[97]['datatype']       = 'specific';
-      $tab[97]['massiveaction']  = false;
-      $tab[97]['nosearch']       = true;
-      $tab[97]['nosql']          = true;
-      $tab[97]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '97',
+         'table'              => 'glpi_plugin_printercounters_pagecosts',
+         'field'              => 'cost',
+         'name'               => $this->getFieldName('cost'),
+         'datatype'           => 'specific',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nosql'              => '1',
+         'nosort'             => true
+      ];
 
-      $tab[98]['table']           = 'glpi_plugin_printercounters_items_recordmodels';
-      $tab[98]['field']           = 'id';
-      $tab[98]['name']            = __('ID');
-      $tab[98]['datatype']        = 'number';
-      $tab[98]['massiveaction']   = false;
-      $tab[98]['nosearch']        = true;
-      $tab[98]['nodisplay']       = true;
-      $tab[98]['nosort']          = true;
+      $tab[] = [
+         'id'                 => '98',
+         'table'              => 'glpi_plugin_printercounters_items_recordmodels',
+         'field'              => 'id',
+         'name'               => __('ID'),
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => '1',
+         'nosort'             => true
+      ];
 
-      $tab[99]['table']          = 'glpi_entities';
-      $tab[99]['field']          = 'id';
-      $tab[99]['name']           = $this->getFieldName('entities_id');
-      $tab[99]['massiveaction']  = false;
-      $tab[99]['nosearch']       = true;
-      $tab[99]['nodisplay']      = true;
-      $tab[99]['datatype']       = 'dropdown';
-      $tab[99]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '99',
+         'table'              => 'glpi_entities',
+         'field'              => 'id',
+         'name'               => __('Entity'),
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => '1',
+         'datatype'           => 'dropdown',
+         'nosort'             => true
+      ];
 
       return $tab;
    }

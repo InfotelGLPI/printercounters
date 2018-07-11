@@ -330,10 +330,14 @@ class PluginPrintercountersSearch extends CommonDBTM {
          echo "</div>";
 
          // Show list of items
-         $canedit = ($item->canCreate() && $params['massiveaction'] && !(empty($this->input) && empty($this->dataSearch)));
+         $canedit = ($item->canCreate() && $params['massiveaction']
+                     && !(empty($this->input)
+                          && empty($this->dataSearch)));
          if ($canedit) {
             Html::openMassiveActionsForm('mass'.__CLASS__.$item->rand);
-            $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$item->rand, 'fixed' => $params['fixedDisplay']];
+            $massiveactionparams = ['item' => __CLASS__,
+                                    'container' => 'mass'.__CLASS__.$item->rand,
+                                    'fixed' => $params['fixedDisplay']];
             Html::showMassiveActions($massiveactionparams);
          }
 
@@ -398,7 +402,8 @@ class PluginPrintercountersSearch extends CommonDBTM {
       if (empty($this->input) && empty($this->dataSearch)) {
          echo Search::showHeader($this->output_type, 0, 1, true);
          echo Search::showNewLine($this->output_type);
-         echo Search::showItem($this->output_type, __('No historical'), $col_num, $row_num, 'class="center"');
+         echo Search::showItem($this->output_type, __('No historical'), $col_num, $row_num,
+                               'class="center"');
          echo Search::showEndLine($this->output_type);
          echo Search::showFooter($this->output_type, $item::getTypeName());
 
@@ -412,7 +417,9 @@ class PluginPrintercountersSearch extends CommonDBTM {
          echo Search::showHeader($this->output_type, count($this->input), 8, $item->fixedDisplay);
          echo Search::showNewLine($this->output_type);
          if ($canedit && $this->output_type == Search::HTML_OUTPUT) {
-            echo Search::showHeaderItem($this->output_type, Html::getCheckAllAsCheckbox('mass'.__CLASS__.$item->rand), $col_num);
+            echo Search::showHeaderItem($this->output_type,
+                                        Html::getCheckAllAsCheckbox('mass'.__CLASS__.$item->rand),
+                                        $col_num);
          }
          $searchopt            = [];
          $itemtype             = $item->getType();
@@ -427,10 +434,11 @@ class PluginPrintercountersSearch extends CommonDBTM {
                $linkto = "javascript:printercountersSearch.initSearch('".$CFG_GLPI["root_doc"]."', "
                                               . "'search_form".$item->rand."', "
                                               . "'history_showForm".$item->rand."', "
-                                              .str_replace('"', "'", json_encode(['start' => $this->current_search['start'],
-                                                                                       'limit' => $this->current_search['limit'],
-                                                                                       'order' => (($this->current_search['order'] == "ASC") ? "DESC" : "ASC"),
-                                                                                       'sort'  => $num])).");";
+                                              .str_replace('"', "'",
+                                                           json_encode(['start' => $this->current_search['start'],
+                                                                        'limit' => $this->current_search['limit'],
+                                                                        'order' => (($this->current_search['order'] == "ASC") ? "DESC" : "ASC"),
+                                                                        'sort'  => $num])) . ");";
             }
             echo Search::showHeaderItem($this->output_type, $val["name"], $col_num, $linkto, ($this->current_search['sort'] == $num), $this->current_search['order']);
          }
@@ -563,11 +571,12 @@ class PluginPrintercountersSearch extends CommonDBTM {
       foreach ($searchopt[$item->getType()] as $key => $val) {
          // Do not search on Group Name
          if (is_array($val) && (!isset($val['nosql']) || $val['nosql'] == false)) {
-            if (!in_array($searchopt[$item->getType()][$key]["table"], $blacklist_tables)) {
+            if (isset($searchopt[$item->getType()][$key]["table"])
+                && !in_array($searchopt[$item->getType()][$key]["table"], $blacklist_tables)) {
                $query .= self::addLeftJoin($item->getType(), $item->getTable(), $already_link_tables,
-                                          $searchopt[$item->getType()][$key]["table"],
-                                          $searchopt[$item->getType()][$key]["linkfield"], 0, 0,
-                                          $searchopt[$item->getType()][$key]["joinparams"]);
+                                           $searchopt[$item->getType()][$key]["table"],
+                                           $searchopt[$item->getType()][$key]["linkfield"], 0, 0,
+                                           $searchopt[$item->getType()][$key]["joinparams"]);
             }
          }
       }
@@ -1724,211 +1733,41 @@ class PluginPrintercountersSearch extends CommonDBTM {
    static function addSelect($itemtype, $ID, $num, $meta = 0, $meta_type = 0) {
       global $CFG_GLPI;
 
-      $searchopt   = &Search::getOptions($itemtype);
-      $table       = $searchopt[$ID]["table"];
-      $field       = $searchopt[$ID]["field"];
-      $addtable    = "";
-      $NAME        = "ITEM";
-      $complexjoin = '';
+      $searchopt = &Search::getOptions($itemtype);
 
-      if (isset($searchopt[$ID]['joinparams'])) {
-         $complexjoin = Search::computeComplexJoinID($searchopt[$ID]['joinparams']);
-      }
+      if (isset($searchopt[$ID]["table"]) && isset($searchopt[$ID]["field"])) {
+         $table       = $searchopt[$ID]["table"];
+         $field       = $searchopt[$ID]["field"];
+         $addtable    = "";
+         $NAME        = "ITEM";
+         $complexjoin = '';
 
-      if (((($table != getTableForItemType($itemtype))
-            && (!isset($CFG_GLPI["union_search_type"][$itemtype])
-                || ($CFG_GLPI["union_search_type"][$itemtype] != $table)))
-           || !empty($complexjoin))
-          && ($searchopt[$ID]["linkfield"] != getForeignKeyFieldForTable($table))) {
-         //         $addtable .= "_".$searchopt[$ID]["linkfield"];
-      }
-
-      if (!empty($complexjoin)) {
-         //         $addtable .= "_".$complexjoin;
-      }
-
-      if ($meta) {
-         //          $NAME = "META";
-         if (getTableForItemType($meta_type)!=$table) {
-            $addtable .= "_".$meta_type;
+         if (isset($searchopt[$ID]['joinparams'])) {
+            $complexjoin = Search::computeComplexJoinID($searchopt[$ID]['joinparams']);
          }
-      }
 
-      // Plugin can override core definition for its type
-      if ($plug = isPluginItemType($itemtype)) {
-         $function = 'plugin_'.$plug['plugin'].'_addSelect';
-         if (function_exists($function)) {
-            $out = $function($itemtype, $ID, $num);
-            if (!empty($out)) {
-               return $out;
+         if (((($table != getTableForItemType($itemtype))
+               && (!isset($CFG_GLPI["union_search_type"][$itemtype])
+                   || ($CFG_GLPI["union_search_type"][$itemtype] != $table)))
+              || !empty($complexjoin))
+             && ($searchopt[$ID]["linkfield"] != getForeignKeyFieldForTable($table))) {
+            //         $addtable .= "_".$searchopt[$ID]["linkfield"];
+         }
+
+         if (!empty($complexjoin)) {
+            //         $addtable .= "_".$complexjoin;
+         }
+
+         if ($meta) {
+            //          $NAME = "META";
+            if (getTableForItemType($meta_type) != $table) {
+               $addtable .= "_" . $meta_type;
             }
          }
-      }
 
-      $tocompute      = "`$table$addtable`.`$field`";
-      $tocomputeid    = "`$table$addtable`.`id`";
-
-      $tocomputetrans = "IFNULL(`$table".$addtable."_trans`.`value`,'".Search::NULLVALUE."') ";
-
-      $ADDITONALFIELDS = '';
-      if (isset($searchopt[$ID]["additionalfields"])
-          && count($searchopt[$ID]["additionalfields"])) {
-         foreach ($searchopt[$ID]["additionalfields"] as $key) {
-            if ($meta
-                || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
-               $ADDITONALFIELDS .= " GROUP_CONCAT(DISTINCT CONCAT(IFNULL(`$table$addtable`.`$key`,
-                                                                         '".Search::NULLVALUE."'),
-                                                   '$$', $tocomputeid) SEPARATOR '$$$$')
-                                    AS `".$NAME."_".$num."_$key`, ";
-            } else {
-               $ADDITONALFIELDS .= "`$table$addtable`.`$key` AS `".$NAME."_".$num."_$key`, ";
-            }
-         }
-      }
-
-      // Virtual display no select : only get additional fields
-      if (strpos($field, '_virtual') === 0) {
-         return $ADDITONALFIELDS;
-      }
-
-      switch ($table.".".$field) {
-
-         case "glpi_users.name" :
-            if ($itemtype != 'User') {
-               if ((isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
-                  $addaltemail = "";
-                  if ((($itemtype == 'Ticket') || ($itemtype == 'Problem'))
-                      && isset($searchopt[$ID]['joinparams']['beforejoin']['table'])
-                      && (($searchopt[$ID]['joinparams']['beforejoin']['table']
-                            == 'glpi_tickets_users')
-                          || ($searchopt[$ID]['joinparams']['beforejoin']['table']
-                                == 'glpi_problems_users')
-                          || ($searchopt[$ID]['joinparams']['beforejoin']['table']
-                                == 'glpi_changes_users'))) { // For tickets_users
-
-                     $ticket_user_table
-                        = $searchopt[$ID]['joinparams']['beforejoin']['table'].
-                          "_".Search::computeComplexJoinID($searchopt[$ID]['joinparams']['beforejoin']
-                                                                   ['joinparams']);
-                     $addaltemail
-                        = "GROUP_CONCAT(DISTINCT CONCAT(`$ticket_user_table`.`users_id`, ' ',
-                                                        `$ticket_user_table`.`alternative_email`)
-                                                        SEPARATOR '$$$$') AS `".$NAME."_".$num."_2`, ";
-                  }
-                  return " GROUP_CONCAT(DISTINCT `$table$addtable`.`id` SEPARATOR '$$$$')
-                                       AS `".$NAME."_".$num."`,
-                           $addaltemail
-                           $ADDITONALFIELDS";
-
-               }
-               return " `$table$addtable`.`$field` AS `".$NAME."_$num`,
-                        `$table$addtable`.`realname` AS `".$NAME."_".$num."_realname`,
-                        `$table$addtable`.`id`  AS `".$NAME."_".$num."_id`,
-                        `$table$addtable`.`firstname` AS `".$NAME."_".$num."_firstname`,
-                        $ADDITONALFIELDS";
-            }
-            break;
-
-         case "glpi_softwarelicenses.number" :
-            return " FLOOR(SUM(`$table$addtable`.`$field`)
-                           * COUNT(DISTINCT `$table$addtable`.`id`)
-                           / COUNT(`$table$addtable`.`id`)) AS `".$NAME."_".$num."`,
-                     MIN(`$table$addtable`.`$field`) AS `".$NAME."_".$num."_min`,
-                      $ADDITONALFIELDS";
-
-         case "glpi_profiles.name" :
-            if (($itemtype == 'User')
-                && ($ID == 20)) {
-               return " GROUP_CONCAT(`$table$addtable`.`$field` SEPARATOR '$$$$') AS `".$NAME."_$num`,
-                        GROUP_CONCAT(`glpi_profiles_users`.`entities_id` SEPARATOR '$$$$')
-                                    AS `".$NAME."_".$num."_entities_id`,
-                        GROUP_CONCAT(`glpi_profiles_users`.`is_recursive` SEPARATOR '$$$$')
-                                    AS `".$NAME."_".$num."_is_recursive`,
-                        GROUP_CONCAT(`glpi_profiles_users`.`is_dynamic` SEPARATOR '$$$$')
-                                    AS `".$NAME."_".$num."_is_dynamic`,
-                        $ADDITONALFIELDS";
-            }
-            break;
-
-         case "glpi_entities.completename" :
-            if (($itemtype == 'User')
-                && ($ID == 80)) {
-               return " GROUP_CONCAT(`$table$addtable`.`completename` SEPARATOR '$$$$')
-                                    AS `".$NAME."_$num`,
-                        GROUP_CONCAT(`glpi_profiles_users`.`profiles_id` SEPARATOR '$$$$')
-                                    AS `".$NAME."_".$num."_profiles_id`,
-                        GROUP_CONCAT(`glpi_profiles_users`.`is_recursive` SEPARATOR '$$$$')
-                                    AS `".$NAME."_".$num."_is_recursive`,
-                        GROUP_CONCAT(`glpi_profiles_users`.`is_dynamic` SEPARATOR '$$$$')
-                                    AS `".$NAME."_".$num."_is_dynamic`,
-                        $ADDITONALFIELDS";
-            }
-            break;
-
-         case "glpi_auth_tables.name":
-            $user_searchopt = Search::getOptions('User');
-            return " `glpi_users`.`authtype` AS `".$NAME."_".$num."`,
-                     `glpi_users`.`auths_id` AS `".$NAME."_".$num."_auths_id`,
-                     `glpi_authldaps".$addtable."_".
-                           Search::computeComplexJoinID($user_searchopt[30]['joinparams'])."`.`$field`
-                              AS `".$NAME."_".$num."_ldapname`,
-                     `glpi_authmails".$addtable."_".
-                           Search::computeComplexJoinID($user_searchopt[31]['joinparams'])."`.`$field`
-                              AS `".$NAME."_".$num."_mailname`,
-                     $ADDITONALFIELDS";
-
-         case "glpi_softwarelicenses.name" :
-         case "glpi_softwareversions.name" :
-            if ($meta) {
-               return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwares`.`name`, ' - ',
-                                                     `$table$addtable`.`$field`, '$$',
-                                                     `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                    AS `".$NAME."_".$num."`,
-                        $ADDITONALFIELDS";
-            }
-            break;
-
-         case "glpi_softwarelicenses.serial" :
-         case "glpi_softwarelicenses.otherserial" :
-         case "glpi_softwarelicenses.comment" :
-         case "glpi_softwareversions.comment" :
-            if ($meta) {
-               return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwares`.`name`, ' - ',
-                                                     `$table$addtable`.`$field`,'$$',
-                                                     `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                    AS `".$NAME."_".$num."`,
-                        $ADDITONALFIELDS";
-            }
-            return " GROUP_CONCAT(DISTINCT CONCAT(`$table$addtable`.`name`, ' - ',
-                                                  `$table$addtable`.`$field`, '$$',
-                                                  `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                 AS `".$NAME."_".$num."`,
-                     $ADDITONALFIELDS";
-
-         case "glpi_states.name" :
-            if ($meta && ($meta_type == 'Software')) {
-               return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwares`.`name`, ' - ',
-                                                     `glpi_softwareversions$addtable`.`name`, ' - ',
-                                                     `$table$addtable`.`$field`, '$$',
-                                                     `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                     AS `".$NAME."_".$num."`,
-                        $ADDITONALFIELDS";
-            } else if ($itemtype == 'Software') {
-               return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwareversions`.`name`, ' - ',
-                                                     `$table$addtable`.`$field`,'$$',
-                                                     `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                    AS `".$NAME."_".$num."`,
-                        $ADDITONALFIELDS";
-            }
-            break;
-      }
-
-      //// Default cases
-      // Link with plugin tables
-      if (preg_match("/^glpi_plugin_([a-z0-9]+)/", $table, $matches)) {
-         if (count($matches) == 2) {
-            $plug     = $matches[1];
-            $function = 'plugin_'.$plug.'_addSelect';
+         // Plugin can override core definition for its type
+         if ($plug = isPluginItemType($itemtype)) {
+            $function = 'plugin_' . $plug['plugin'] . '_addSelect';
             if (function_exists($function)) {
                $out = $function($itemtype, $ID, $num);
                if (!empty($out)) {
@@ -1936,80 +1775,253 @@ class PluginPrintercountersSearch extends CommonDBTM {
                }
             }
          }
-      }
 
-      if (isset($searchopt[$ID]["computation"])) {
-         $tocompute = $searchopt[$ID]["computation"];
-         $tocompute = str_replace("TABLE", "`$table$addtable`", $tocompute);
-      }
-      // Preformat items
-      if (isset($searchopt[$ID]["datatype"])) {
-         switch ($searchopt[$ID]["datatype"]) {
-            case "count" :
-               return " COUNT(DISTINCT `$table$addtable`.`$field`) AS `".$NAME."_".$num."`,
-                     $ADDITONALFIELDS";
+         $tocompute   = "`$table$addtable`.`$field`";
+         $tocomputeid = "`$table$addtable`.`id`";
 
-            case "date_delay" :
-               $interval = "MONTH";
-               if (isset($searchopt[$ID]['delayunit'])) {
-                  $interval = $searchopt[$ID]['delayunit'];
-               }
+         $tocomputetrans = "IFNULL(`$table" . $addtable . "_trans`.`value`,'" . Search::NULLVALUE . "') ";
 
-               $add_minus = '';
-               if (isset($searchopt[$ID]["datafields"][3])) {
-                  $add_minus = "-`$table$addtable`.`".$searchopt[$ID]["datafields"][3]."`";
-               }
+         $ADDITONALFIELDS = '';
+         if (isset($searchopt[$ID]["additionalfields"])
+             && count($searchopt[$ID]["additionalfields"])) {
+            foreach ($searchopt[$ID]["additionalfields"] as $key) {
                if ($meta
                    || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
-                  return " GROUP_CONCAT(DISTINCT ADDDATE(`$table$addtable`.`".
-                                                            $searchopt[$ID]["datafields"][1]."`,
-                                                         INTERVAL (`$table$addtable`.`".
-                                                                    $searchopt[$ID]["datafields"][2].
-                                                                    "` $add_minus) $interval)
-                                         SEPARATOR '$$$$') AS `".$NAME."_$num`,
-                           $ADDITONALFIELDS";
+                  $ADDITONALFIELDS .= " GROUP_CONCAT(DISTINCT CONCAT(IFNULL(`$table$addtable`.`$key`,
+                                                                         '" . Search::NULLVALUE . "'),
+                                                   '$$', $tocomputeid) SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_" . $num . "_$key`, ";
+               } else {
+                  $ADDITONALFIELDS .= "`$table$addtable`.`$key` AS `" . $NAME . "_" . $num . "_$key`, ";
                }
-               return "ADDDATE(`$table$addtable`.`".$searchopt[$ID]["datafields"][1]."`,
-                               INTERVAL (`$table$addtable`.`".$searchopt[$ID]["datafields"][2].
-                                          "` $add_minus) $interval) AS `".$NAME."_$num`,
+            }
+         }
+
+         // Virtual display no select : only get additional fields
+         if (strpos($field, '_virtual') === 0) {
+            return $ADDITONALFIELDS;
+         }
+
+         switch ($table . "." . $field) {
+
+            case "glpi_users.name" :
+               if ($itemtype != 'User') {
+                  if ((isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
+                     $addaltemail = "";
+                     if ((($itemtype == 'Ticket') || ($itemtype == 'Problem'))
+                         && isset($searchopt[$ID]['joinparams']['beforejoin']['table'])
+                         && (($searchopt[$ID]['joinparams']['beforejoin']['table']
+                              == 'glpi_tickets_users')
+                             || ($searchopt[$ID]['joinparams']['beforejoin']['table']
+                                 == 'glpi_problems_users')
+                             || ($searchopt[$ID]['joinparams']['beforejoin']['table']
+                                 == 'glpi_changes_users'))) { // For tickets_users
+
+                        $ticket_user_table
+                           = $searchopt[$ID]['joinparams']['beforejoin']['table'] .
+                             "_" . Search::computeComplexJoinID($searchopt[$ID]['joinparams']['beforejoin']
+                                                                ['joinparams']);
+                        $addaltemail
+                           = "GROUP_CONCAT(DISTINCT CONCAT(`$ticket_user_table`.`users_id`, ' ',
+                                                        `$ticket_user_table`.`alternative_email`)
+                                                        SEPARATOR '$$$$') AS `" . $NAME . "_" . $num . "_2`, ";
+                     }
+                     return " GROUP_CONCAT(DISTINCT `$table$addtable`.`id` SEPARATOR '$$$$')
+                                       AS `" . $NAME . "_" . $num . "`,
+                           $addaltemail
+                           $ADDITONALFIELDS";
+
+                  }
+                  return " `$table$addtable`.`$field` AS `" . $NAME . "_$num`,
+                        `$table$addtable`.`realname` AS `" . $NAME . "_" . $num . "_realname`,
+                        `$table$addtable`.`id`  AS `" . $NAME . "_" . $num . "_id`,
+                        `$table$addtable`.`firstname` AS `" . $NAME . "_" . $num . "_firstname`,
+                        $ADDITONALFIELDS";
+               }
+               break;
+
+            case "glpi_softwarelicenses.number" :
+               return " FLOOR(SUM(`$table$addtable`.`$field`)
+                           * COUNT(DISTINCT `$table$addtable`.`id`)
+                           / COUNT(`$table$addtable`.`id`)) AS `" . $NAME . "_" . $num . "`,
+                     MIN(`$table$addtable`.`$field`) AS `" . $NAME . "_" . $num . "_min`,
+                      $ADDITONALFIELDS";
+
+            case "glpi_profiles.name" :
+               if (($itemtype == 'User')
+                   && ($ID == 20)) {
+                  return " GROUP_CONCAT(`$table$addtable`.`$field` SEPARATOR '$$$$') AS `" . $NAME . "_$num`,
+                        GROUP_CONCAT(`glpi_profiles_users`.`entities_id` SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_" . $num . "_entities_id`,
+                        GROUP_CONCAT(`glpi_profiles_users`.`is_recursive` SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_" . $num . "_is_recursive`,
+                        GROUP_CONCAT(`glpi_profiles_users`.`is_dynamic` SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_" . $num . "_is_dynamic`,
+                        $ADDITONALFIELDS";
+               }
+               break;
+
+            case "glpi_entities.completename" :
+               if (($itemtype == 'User')
+                   && ($ID == 80)) {
+                  return " GROUP_CONCAT(`$table$addtable`.`completename` SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_$num`,
+                        GROUP_CONCAT(`glpi_profiles_users`.`profiles_id` SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_" . $num . "_profiles_id`,
+                        GROUP_CONCAT(`glpi_profiles_users`.`is_recursive` SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_" . $num . "_is_recursive`,
+                        GROUP_CONCAT(`glpi_profiles_users`.`is_dynamic` SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_" . $num . "_is_dynamic`,
+                        $ADDITONALFIELDS";
+               }
+               break;
+
+            case "glpi_auth_tables.name":
+               $user_searchopt = Search::getOptions('User');
+               return " `glpi_users`.`authtype` AS `" . $NAME . "_" . $num . "`,
+                     `glpi_users`.`auths_id` AS `" . $NAME . "_" . $num . "_auths_id`,
+                     `glpi_authldaps" . $addtable . "_" .
+                      Search::computeComplexJoinID($user_searchopt[30]['joinparams']) . "`.`$field`
+                              AS `" . $NAME . "_" . $num . "_ldapname`,
+                     `glpi_authmails" . $addtable . "_" .
+                      Search::computeComplexJoinID($user_searchopt[31]['joinparams']) . "`.`$field`
+                              AS `" . $NAME . "_" . $num . "_mailname`,
+                     $ADDITONALFIELDS";
+
+            case "glpi_softwarelicenses.name" :
+            case "glpi_softwareversions.name" :
+               if ($meta) {
+                  return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwares`.`name`, ' - ',
+                                                     `$table$addtable`.`$field`, '$$',
+                                                     `$table$addtable`.`id`) SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_" . $num . "`,
+                        $ADDITONALFIELDS";
+               }
+               break;
+
+            case "glpi_softwarelicenses.serial" :
+            case "glpi_softwarelicenses.otherserial" :
+            case "glpi_softwarelicenses.comment" :
+            case "glpi_softwareversions.comment" :
+               if ($meta) {
+                  return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwares`.`name`, ' - ',
+                                                     `$table$addtable`.`$field`,'$$',
+                                                     `$table$addtable`.`id`) SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_" . $num . "`,
+                        $ADDITONALFIELDS";
+               }
+               return " GROUP_CONCAT(DISTINCT CONCAT(`$table$addtable`.`name`, ' - ',
+                                                  `$table$addtable`.`$field`, '$$',
+                                                  `$table$addtable`.`id`) SEPARATOR '$$$$')
+                                 AS `" . $NAME . "_" . $num . "`,
+                     $ADDITONALFIELDS";
+
+            case "glpi_states.name" :
+               if ($meta && ($meta_type == 'Software')) {
+                  return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwares`.`name`, ' - ',
+                                                     `glpi_softwareversions$addtable`.`name`, ' - ',
+                                                     `$table$addtable`.`$field`, '$$',
+                                                     `$table$addtable`.`id`) SEPARATOR '$$$$')
+                                     AS `" . $NAME . "_" . $num . "`,
+                        $ADDITONALFIELDS";
+               } else if ($itemtype == 'Software') {
+                  return " GROUP_CONCAT(DISTINCT CONCAT(`glpi_softwareversions`.`name`, ' - ',
+                                                     `$table$addtable`.`$field`,'$$',
+                                                     `$table$addtable`.`id`) SEPARATOR '$$$$')
+                                    AS `" . $NAME . "_" . $num . "`,
+                        $ADDITONALFIELDS";
+               }
+               break;
+         }
+
+         //// Default cases
+         // Link with plugin tables
+         if (preg_match("/^glpi_plugin_([a-z0-9]+)/", $table, $matches)) {
+            if (count($matches) == 2) {
+               $plug     = $matches[1];
+               $function = 'plugin_' . $plug . '_addSelect';
+               if (function_exists($function)) {
+                  $out = $function($itemtype, $ID, $num);
+                  if (!empty($out)) {
+                     return $out;
+                  }
+               }
+            }
+         }
+
+         if (isset($searchopt[$ID]["computation"])) {
+            $tocompute = $searchopt[$ID]["computation"];
+            $tocompute = str_replace("TABLE", "`$table$addtable`", $tocompute);
+         }
+         // Preformat items
+         if (isset($searchopt[$ID]["datatype"])) {
+            switch ($searchopt[$ID]["datatype"]) {
+               case "count" :
+                  return " COUNT(DISTINCT `$table$addtable`.`$field`) AS `" . $NAME . "_" . $num . "`,
+                     $ADDITONALFIELDS";
+
+               case "date_delay" :
+                  $interval = "MONTH";
+                  if (isset($searchopt[$ID]['delayunit'])) {
+                     $interval = $searchopt[$ID]['delayunit'];
+                  }
+
+                  $add_minus = '';
+                  if (isset($searchopt[$ID]["datafields"][3])) {
+                     $add_minus = "-`$table$addtable`.`" . $searchopt[$ID]["datafields"][3] . "`";
+                  }
+                  if ($meta
+                      || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
+                     return " GROUP_CONCAT(DISTINCT ADDDATE(`$table$addtable`.`" .
+                            $searchopt[$ID]["datafields"][1] . "`,
+                                                         INTERVAL (`$table$addtable`.`" .
+                            $searchopt[$ID]["datafields"][2] .
+                            "` $add_minus) $interval)
+                                         SEPARATOR '$$$$') AS `" . $NAME . "_$num`,
+                           $ADDITONALFIELDS";
+                  }
+                  return "ADDDATE(`$table$addtable`.`" . $searchopt[$ID]["datafields"][1] . "`,
+                               INTERVAL (`$table$addtable`.`" . $searchopt[$ID]["datafields"][2] .
+                         "` $add_minus) $interval) AS `" . $NAME . "_$num`,
                        $ADDITONALFIELDS";
 
-            case "itemlink" :
-               if ($meta
-                  || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
-                  return " GROUP_CONCAT(DISTINCT CONCAT($tocompute, '$$' ,
+               case "itemlink" :
+                  if ($meta
+                      || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
+                     return " GROUP_CONCAT(DISTINCT CONCAT($tocompute, '$$' ,
                                                         `$table$addtable`.`id`) SEPARATOR '$$$$')
-                                       AS `".$NAME."_$num`,
+                                       AS `" . $NAME . "_$num`,
                            $ADDITONALFIELDS";
-               }
-               return " $tocompute AS `".$NAME."_$num`,
-                        `$table$addtable`.`id` AS `".$NAME."_".$num."_id`,
+                  }
+                  return " $tocompute AS `" . $NAME . "_$num`,
+                        `$table$addtable`.`id` AS `" . $NAME . "_" . $num . "_id`,
                         $ADDITONALFIELDS";
+            }
          }
-      }
-      // Default case
-      if ($meta
-          || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"]
-              && !isset($searchopt[$ID]["computation"]))) { // Not specific computation
-         $TRANS = '';
-         if (Session::haveTranslations(getItemTypeForTable($table), $field)) {
-            $TRANS = "GROUP_CONCAT(DISTINCT CONCAT(IFNULL($tocomputetrans, '".Search::NULLVALUE."'),
+         // Default case
+         if ($meta
+             || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"]
+                 && !isset($searchopt[$ID]["computation"]))) { // Not specific computation
+            $TRANS = '';
+            if (Session::haveTranslations(getItemTypeForTable($table), $field)) {
+               $TRANS = "GROUP_CONCAT(DISTINCT CONCAT(IFNULL($tocomputetrans, '" . Search::NULLVALUE . "'),
                                                    '$$',$tocomputeid) SEPARATOR '$$$$')
-                                  AS `".$NAME."_".$num."_trans`, ";
+                                  AS `" . $NAME . "_" . $num . "_trans`, ";
 
-         }
-         return " GROUP_CONCAT(DISTINCT CONCAT(IFNULL($tocompute, '".Search::NULLVALUE."'),
+            }
+            return " GROUP_CONCAT(DISTINCT CONCAT(IFNULL($tocompute, '" . Search::NULLVALUE . "'),
                                                '$$',$tocomputeid) SEPARATOR '$$$$')
-                              AS `".$NAME."_$num`,
+                              AS `" . $NAME . "_$num`,
                   $TRANS
                   $ADDITONALFIELDS";
-      }
-      $TRANS = '';
-      if (Session::haveTranslations(getItemTypeForTable($table), $field)) {
-         $TRANS = $tocomputetrans." AS `".$NAME."_".$num."_trans`, ";
+         }
+         $TRANS = '';
+         if (Session::haveTranslations(getItemTypeForTable($table), $field)) {
+            $TRANS = $tocomputetrans . " AS `" . $NAME . "_" . $num . "_trans`, ";
 
+         }
+         return "$tocompute AS `" . $NAME . "_$num`, $TRANS $ADDITONALFIELDS";
       }
-      return "$tocompute AS `".$NAME."_$num`, $TRANS $ADDITONALFIELDS";
    }
 
 

@@ -63,66 +63,101 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
    }
 
    /**
-   * Get search options
-   *
-   * @return array
-   */
-   function getSearchOptions() {
-      $tab = parent::getSearchOptions();
+    * Provides search options configuration. Do not rely directly
+    * on this, @see CommonDBTM::searchOptions instead.
+    *
+    * @since 9.3
+    *
+    * This should be overloaded in Class
+    *
+    * @return array a *not indexed* array of search options
+    *
+    * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
+    **/
+   public function rawSearchOptions() {
 
-      $tab[62]['table']          = $this->getTable();
-      $tab[62]['field']          = 'version';
-      $tab[62]['name']           = __('Version');
-      $tab[62]['datatype']       = 'specific';
-      $tab[62]['massiveaction']  = true;
+      $tab = parent::rawSearchOptions();
 
-      $tab[43]['table']          = $this->getTable();
-      $tab[43]['field']          = 'community';
-      $tab[43]['name']           = __('Community', 'printercounters');
-      $tab[43]['datatype']       = 'specific';
-      $tab[43]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '62',
+         'table'              => $this->getTable(),
+         'field'              => 'version',
+         'name'               => __('Version'),
+         'datatype'           => 'specific',
+         'massiveaction'      => true
+      ];
 
-      $tab[44]['table']          = $this->getTable();
-      $tab[44]['field']          = 'authentication_encrypt';
-      $tab[44]['name']           = __('Authentication encryption', 'printercounters');
-      $tab[44]['datatype']       = 'specific';
-      $tab[44]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '43',
+         'table'              => $this->getTable(),
+         'field'              => 'community',
+         'name'               => __('Community', 'printercounters'),
+         'datatype'           => 'specific',
+         'massiveaction'      => true
+      ];
 
-      $tab[45]['table']          = $this->getTable();
-      $tab[45]['field']          = 'data_encrypt';
-      $tab[45]['name']           = __('Data encryption', 'printercounters');
-      $tab[45]['datatype']       = 'specific';
-      $tab[45]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '44',
+         'table'              => $this->getTable(),
+         'field'              => 'authentication_encrypt',
+         'name'               => __('Authentication encryption', 'printercounters'),
+         'datatype'           => 'specific',
+         'massiveaction'      => true
+      ];
 
-      $tab[46]['table']          = $this->getTable();
-      $tab[46]['field']          = 'user';
-      $tab[46]['name']           = __('User');
-      $tab[46]['datatype']       = 'text';
-      $tab[46]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '45',
+         'table'              => $this->getTable(),
+         'field'              => 'data_encrypt',
+         'name'               => __('Data encryption', 'printercounters'),
+         'datatype'           => 'specific',
+         'massiveaction'      => true
+      ];
 
-      $tab[47]['table']          = $this->getTable();
-      $tab[47]['field']          = 'authentication_password';
-      $tab[47]['name']           = __('Authentication password', 'printercounters');
-      $tab[47]['datatype']       = 'specific';
-      $tab[47]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '46',
+         'table'              => $this->getTable(),
+         'field'              => 'user',
+         'name'               => __('User'),
+         'datatype'           => 'text',
+         'massiveaction'      => true
+      ];
 
-      $tab[48]['table']          = $this->getTable();
-      $tab[48]['field']          = 'data_password';
-      $tab[48]['name']           = __('Data password', 'printercounters');
-      $tab[48]['datatype']       = 'specific';
-      $tab[48]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '47',
+         'table'              => $this->getTable(),
+         'field'              => 'authentication_password',
+         'name'               => __('Authentication password', 'printercounters'),
+         'datatype'           => 'specific',
+         'massiveaction'      => true
+      ];
 
-      $tab[49]['table']          = $this->getTable();
-      $tab[49]['field']          = 'community_write';
-      $tab[49]['name']           = __('Community write', 'printercounters');
-      $tab[49]['datatype']       = 'specific';
-      $tab[49]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '48',
+         'table'              => $this->getTable(),
+         'field'              => 'data_password',
+         'name'               => __('Data password', 'printercounters'),
+         'datatype'           => 'specific',
+         'massiveaction'      => true
+      ];
 
-      $tab[50]['table']          = $this->getTable();
-      $tab[50]['field']          = 'is_default';
-      $tab[50]['name']           = __('Is default', 'printercounters');
-      $tab[50]['datatype']       = 'bool';
-      $tab[50]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '49',
+         'table'              => $this->getTable(),
+         'field'              => 'community_write',
+         'name'               => __('Community write', 'printercounters'),
+         'datatype'           => 'specific',
+         'massiveaction'      => true
+      ];
+
+      $tab[] = [
+         'id'                 => '50',
+         'table'              => $this->getTable(),
+         'field'              => 'is_default',
+         'name'               => __('Is default', 'printercounters'),
+         'datatype'           => 'bool',
+         'massiveaction'      => true
+      ];
 
       return $tab;
    }

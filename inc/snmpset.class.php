@@ -525,35 +525,54 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
 
 
    /**
-   * Get search options
-   *
-   * @return array
-   */
-   function getSearchOptions() {
+    * Provides search options configuration. Do not rely directly
+    * on this, @see CommonDBTM::searchOptions instead.
+    *
+    * @since 9.3
+    *
+    * This should be overloaded in Class
+    *
+    * @return array a *not indexed* array of search options
+    *
+    * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
+    **/
+   public function rawSearchOptions() {
 
-      $tab[111]['table']          = $this->getTable();
-      $tab[111]['field']          = 'set_name';
-      $tab[111]['name']           = __('Set printer name', 'printercounters');
-      $tab[111]['massiveaction']  = true;
-      $tab[111]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '111',
+         'table'              => $this->getTable(),
+         'field'              => 'set_name',
+         'name'               => __('Set printer name', 'printercounters'),
+         'massiveaction'      => true,
+         'datatype'           => 'bool'
+      ];
 
-      $tab[112]['table']          = $this->getTable();
-      $tab[112]['field']          = 'set_location';
-      $tab[112]['name']           = __('Set printer location', 'printercounters');
-      $tab[112]['massiveaction']  = true;
-      $tab[112]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '112',
+         'table'              => $this->getTable(),
+         'field'              => 'set_location',
+         'name'               => __('Set printer location', 'printercounters'),
+         'massiveaction'      => true,
+         'datatype'           => 'bool'
+      ];
 
-      $tab[113]['table']          = $this->getTable();
-      $tab[113]['field']          = 'set_contact';
-      $tab[113]['name']           = __('Set printer contact informations', 'printercounters');
-      $tab[113]['massiveaction']  = true;
-      $tab[113]['datatype']       = 'bool';
+      $tab[] = [
+         'id'                 => '113',
+         'table'              => $this->getTable(),
+         'field'              => 'set_contact',
+         'name'               => __('Set printer contact informations', 'printercounters'),
+         'massiveaction'      => true,
+         'datatype'           => 'bool'
+      ];
 
-      $tab[114]['table']          = $this->getTable();
-      $tab[114]['field']          = 'contact';
-      $tab[114]['name']           = __('Tag');
-      $tab[114]['massiveaction']  = true;
-      $tab[114]['datatype']       = 'text';
+      $tab[] = [
+         'id'                 => '114',
+         'table'              => $this->getTable(),
+         'field'              => 'contact',
+         'name'               => __('Tag'),
+         'massiveaction'      => true,
+         'datatype'           => 'text'
+      ];
 
       return $tab;
    }

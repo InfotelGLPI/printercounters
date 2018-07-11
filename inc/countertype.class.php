@@ -47,9 +47,21 @@ class PluginPrintercountersCountertype extends CommonDropdown {
       return _n("Counter type", "Counter types", $nb, 'printercounters');
    }
 
-   function getSearchOptions() {
+   /**
+    * Provides search options configuration. Do not rely directly
+    * on this, @see CommonDBTM::searchOptions instead.
+    *
+    * @since 9.3
+    *
+    * This should be overloaded in Class
+    *
+    * @return array a *not indexed* array of search options
+    *
+    * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
+    **/
+   public function rawSearchOptions() {
 
-      $tab = parent::getSearchOptions();
+      $tab = parent::rawSearchOptions();
 
       return $tab;
    }

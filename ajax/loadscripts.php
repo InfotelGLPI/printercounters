@@ -38,7 +38,7 @@ switch ($_POST['action']) {
       foreach (PluginPrintercountersItem_Recordmodel::$types as $item) {
          if (isset($_SERVER['HTTP_REFERER'])
                && strpos($_SERVER['HTTP_REFERER'], strtolower($item)) !== false
-               && $_SESSION['glpiactiveprofile']['interface'] == "central") {
+               && Session::getCurrentInterface() == "central") {
 
             $params = ['root_doc'   => $CFG_GLPI['root_doc'],
                             'itemtype'   => $item,

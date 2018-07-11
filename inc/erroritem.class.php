@@ -124,26 +124,32 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
     * Function add printer in the error list
     */
    public function addToErrorItems() {
-      $this->getFromDBByQuery("WHERE `items_id` = '".$this->items_id."' AND `itemtype` = '".$this->itemtype."'");
-      $error_counter = intval($this->fields['error_counter']) + 1;
-      $this->update(['id' => $this->fields['id'], 'error_counter' => $error_counter, 'status' => self::$SOFT_STATE]);
+      if ($this->getFromDBByCrit(['items_id' => $this->items_id,
+                              'itemtype' => $this->itemtype])) {
+         $error_counter = intval($this->fields['error_counter']) + 1;
+         $this->update(['id' => $this->fields['id'], 'error_counter' => $error_counter, 'status' => self::$SOFT_STATE]);
+      }
    }
 
    /**
     * Function remove printer of the error list
     */
    public function removeErrorItem() {
-      $this->getFromDBByQuery("WHERE `items_id` = '".$this->items_id."' AND `itemtype` = '".$this->itemtype."'");
-      $this->update(['id' => $this->fields['id'], 'error_counter' => 0, 'status' => self::$NO_ERROR]);
+      if ($this->getFromDBByCrit(['items_id' => $this->items_id,
+                                  'itemtype' => $this->itemtype])) {
+         $this->update(['id' => $this->fields['id'], 'error_counter' => 0, 'status' => self::$NO_ERROR]);
+      }
    }
 
    /**
     * Function update printer error counter
     */
    public function incrementErrorCounter() {
-      $this->getFromDBByQuery("WHERE `items_id` = '".$this->items_id."' AND `itemtype` = '".$this->itemtype."'");
-      $error_counter = intval($this->fields['error_counter']) + 1;
-      $this->update(['id' => $this->fields['id'], 'error_counter' => $error_counter]);
+      if ($this->getFromDBByCrit(['items_id' => $this->items_id,
+                                  'itemtype' => $this->itemtype])) {
+         $error_counter = intval($this->fields['error_counter']) + 1;
+         $this->update(['id' => $this->fields['id'], 'error_counter' => $error_counter]);
+      }
    }
 
    /**

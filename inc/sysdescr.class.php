@@ -262,18 +262,27 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
       return $output;
    }
 
-
    /**
-   * Get search options
-   *
-   * @return array
-   */
-   function getSearchOptions() {
+    * Provides search options configuration. Do not rely directly
+    * on this, @see CommonDBTM::searchOptions instead.
+    *
+    * @since 9.3
+    *
+    * This should be overloaded in Class
+    *
+    * @return array a *not indexed* array of search options
+    *
+    * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
+    **/
+   public function rawSearchOptions() {
 
-      $tab[111]['table']          = $this->getTable();
-      $tab[111]['field']          = 'sysdescr';
-      $tab[111]['name']           = self::getTypeName();
-      $tab[111]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '111',
+         'table'              => $this->getTable(),
+         'field'              => 'sysdescr',
+         'name'               => self::getTypeName(),
+         'massiveaction'      => true
+      ];
 
       return $tab;
    }

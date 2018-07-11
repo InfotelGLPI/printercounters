@@ -38,7 +38,8 @@ switch ($_POST['action']) {
       $result = 0;
       if (isset($_POST['items_id']) && isset($_POST['itemtype'])) {
          $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
-         if ($item_recordmodel->getFromDBByQuery(" WHERE LOWER(`itemtype`)=LOWER('".$_POST['itemtype']."') AND `items_id`=".$_POST['items_id'])) {
+         if ($item_recordmodel->getFromDBByCrit(['LOWER(itemtype)' => "LOWER('" . $_POST['itemtype'] . "')",
+                                                 'items_id'        => $_POST['items_id']])) {
             $result = $item_recordmodel->fields['global_tco'];
          }
       }

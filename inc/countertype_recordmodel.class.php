@@ -501,37 +501,57 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
 
       return $tab;
    }
+
    /**
-   * Get search options
-   *
-   * @return array
-   */
-   function getSearchOptions() {
+    * Provides search options configuration. Do not rely directly
+    * on this, @see CommonDBTM::searchOptions instead.
+    *
+    * @since 9.3
+    *
+    * This should be overloaded in Class
+    *
+    * @return array a *not indexed* array of search options
+    *
+    * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
+    **/
+   public function rawSearchOptions() {
 
-      $tab = parent::getSearchOptions();
+      $tab = parent::rawSearchOptions();
 
-      $tab[72]['table']          = 'glpi_plugin_printercounters_countertypes';
-      $tab[72]['field']          = 'name';
-      $tab[72]['name']           = PluginPrintercountersCountertype::getTypeName();
-      $tab[72]['datatype']       = 'dropdown';
-      $tab[72]['massiveaction']  = false;
+      $tab[] = [
+         'id'                 => '72',
+         'table'              => 'glpi_plugin_printercounters_countertypes',
+         'field'              => 'name',
+         'name'               => PluginPrintercountersCountertype::getTypeName(),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false
+      ];
 
-      $tab[73]['table']          = $this->getTable();
-      $tab[73]['field']          = 'oid';
-      $tab[73]['name']           = __('OID', 'printercounters');
-      $tab[73]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '73',
+         'table'              => $this->getTable(),
+         'field'              => 'oid',
+         'name'               => __('OID', 'printercounters'),
+         'massiveaction'      => true
+      ];
 
-      $tab[74]['table']          = $this->getTable();
-      $tab[74]['field']          = 'oid_type';
-      $tab[74]['name']           = __('OID type', 'printercounters');
-      $tab[74]['datatype']       = 'specific';
-      $tab[74]['massiveaction']  = true;
+      $tab[] = [
+         'id'                 => '74',
+         'table'              => $this->getTable(),
+         'field'              => 'oid_type',
+         'name'               => __('OID type', 'printercounters'),
+         'datatype'           => 'specific',
+         'massiveaction'      => true
+      ];
 
-      $tab[75]['table']          = 'glpi_plugin_printercounters_recordmodels';
-      $tab[75]['field']          = 'name';
-      $tab[75]['name']           = PluginPrintercountersRecordmodel::getTypeName();
-      $tab[75]['datatype']       = 'dropdown';
-      $tab[75]['massiveaction']  = false;
+      $tab[] = [
+         'id'                 => '75',
+         'table'              => 'glpi_plugin_printercounters_recordmodels',
+         'field'              => 'name',
+         'name'               => PluginPrintercountersRecordmodel::getTypeName(),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false
+      ];
 
       return $tab;
    }

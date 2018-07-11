@@ -853,100 +853,153 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
    }
 
    /**
-    * Get search options
+    * Provides search options configuration. Do not rely directly
+    * on this, @see CommonDBTM::searchOptions instead.
     *
-    * @return array
-    */
-   function getSearchOptions() {
+    * @since 9.3
+    *
+    * This should be overloaded in Class
+    *
+    * @return array a *not indexed* array of search options
+    *
+    * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
+    **/
+   public function rawSearchOptions() {
 
       $itemtype = $this->itemtype;
       $item = getItemForItemtype($itemtype);
 
-      $tab[100]['table'] = 'glpi_plugin_printercounters_billingmodels';
-      $tab[100]['field'] = 'name';
-      $tab[100]['name'] = __('Name');
-      $tab[100]['datatype'] = 'itemlink';
-      $tab[100]['massiveaction'] = false;
-
-      $tab[101]['table'] = 'glpi_plugin_printercounters_billingmodels';
-      $tab[101]['field'] = 'application_date';
-      $tab[101]['name'] = $this->getFieldName('date');
-      $tab[101]['datatype'] = 'datetime';
-      $tab[101]['massiveaction'] = false;
-
-      $tab[102]['table'] = 'glpi_entities';
-      $tab[102]['field'] = 'name';
-      $tab[102]['name'] = __('Entity');
-      $tab[102]['massiveaction'] = false;
-      $tab[102]['joinparams'] = ['beforejoin'
-          => ['table' => 'glpi_plugin_printercounters_billingmodels']
+      $tab[] = [
+         'id'                 => '100',
+         'table'              => 'glpi_plugin_printercounters_billingmodels',
+         'field'              => 'name',
+         'name'               => __('Name'),
+         'datatype'           => 'itemlink',
+         'massiveaction'      => false
       ];
 
-      $tab[103]['table'] = 'glpi_plugin_printercounters_countertypes';
-      $tab[103]['field'] = 'name';
-      $tab[103]['name'] = $this->getFieldName('counters_name');
-      $tab[103]['massiveaction'] = false;
-      $tab[103]['datatype'] = 'dropdown';
-      $tab[103]['forcegroupby'] = true;
-      $tab[103]['joinparams'] = ['beforejoin'
-          => ['table' => 'glpi_plugin_printercounters_pagecosts',
-              'joinparams' => ['jointype' => 'child',
-                  'beforejoin' => ['table' => 'glpi_plugin_printercounters_billingmodels']]]
+      $tab[] = [
+         'id'                 => '101',
+         'table'              => 'glpi_plugin_printercounters_billingmodels',
+         'field'              => 'application_date',
+         'name'               => $this->getFieldName('date'),
+         'datatype'           => 'datetime',
+         'massiveaction'      => false
       ];
 
-      $tab[104]['table'] = 'glpi_plugin_printercounters_pagecosts';
-      $tab[104]['field'] = 'cost';
-      $tab[104]['name'] = $this->getFieldName('cost');
-      $tab[104]['massiveaction'] = false;
-      $tab[104]['forcegroupby'] = true;
-      $tab[104]['datatype'] = 'specific';
-      $tab[104]['joinparams'] = ['beforejoin'
-          => ['table' => 'glpi_plugin_printercounters_billingmodels']
+      $tab[] = [
+         'id'                 => '102',
+         'table'              => 'glpi_entities',
+         'field'              => 'name',
+         'name'               => __('Entity'),
+         'massiveaction'      => false,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_billingmodels'
+            ]
+         ]
       ];
 
-      $tab[106]['table'] = 'glpi_contracts';
-      $tab[106]['field'] = 'name';
-      $tab[106]['name'] = $this->getFieldName('contracts_id');
-      $tab[106]['datatype'] = 'dropdown';
-      $tab[106]['massiveaction'] = false;
-      $tab[106]['joinparams'] = ['beforejoin'
-          => ['table' => 'glpi_plugin_printercounters_billingmodels']
+      $tab[] = [
+         'id'                 => '103',
+         'table'              => 'glpi_plugin_printercounters_countertypes',
+         'field'              => 'name',
+         'name'               => $this->getFieldName('counters_name'),
+         'massiveaction'      => false,
+         'datatype'           => 'dropdown',
+         'forcegroupby'       => true,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_pagecosts',
+               'joinparams'         => [
+                  'jointype'           => 'child',
+                  'beforejoin'         => [
+                     'table'              => 'glpi_plugin_printercounters_billingmodels'
+                  ]
+               ]
+            ]
+         ]
       ];
 
-      $tab[107]['table'] = 'glpi_suppliers';
-      $tab[107]['field'] = 'name';
-      $tab[107]['name'] = $this->getFieldName('suppliers_id');
-      $tab[107]['datatype'] = 'dropdown';
-      $tab[107]['massiveaction'] = false;
-      $tab[107]['joinparams'] = ['beforejoin'
-          => ['table' => 'glpi_plugin_printercounters_billingmodels']
+      $tab[] = [
+         'id'                 => '104',
+         'table'              => 'glpi_plugin_printercounters_pagecosts',
+         'field'              => 'cost',
+         'name'               => $this->getFieldName('cost'),
+         'massiveaction'      => false,
+         'forcegroupby'       => true,
+         'datatype'           => 'specific',
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_billingmodels'
+            ]
+         ]
       ];
 
-      $tab[108]['table'] = 'glpi_budgets';
-      $tab[108]['field'] = 'name';
-      $tab[108]['name'] = $this->getFieldName('budgets_id');
-      $tab[108]['datatype'] = 'dropdown';
-      $tab[108]['massiveaction'] = false;
-      $tab[108]['joinparams'] = ['beforejoin'
-          => ['table' => 'glpi_plugin_printercounters_billingmodels']
+      $tab[] = [
+         'id'                 => '106',
+         'table'              => 'glpi_contracts',
+         'field'              => 'name',
+         'name'               => $this->getFieldName('contracts_id'),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_billingmodels'
+            ]
+         ]
       ];
 
-      $tab[109]['table'] = getTableForItemType($itemtype);
-      $tab[109]['field'] = 'id';
-      $tab[109]['name'] = $item::getTypeName().' ID';
-      $tab[109]['datatype'] = 'number';
-      $tab[109]['massiveaction'] = false;
-      $tab[109]['linkfield'] = 'items_id';
-      $tab[109]['nosearch'] = true;
-      $tab[109]['nodisplay'] = true;
+      $tab[] = [
+         'id'                 => '107',
+         'table'              => 'glpi_suppliers',
+         'field'              => 'name',
+         'name'               => $this->getFieldName('suppliers_id'),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_billingmodels'
+            ]
+         ]
+      ];
 
-      $tab[110]['table'] = $this->getTable();
-      $tab[110]['field'] = 'id';
-      $tab[110]['name'] = __('ID');
-      $tab[110]['datatype'] = 'number';
-      $tab[110]['massiveaction'] = false;
-      $tab[110]['nosearch'] = true;
-      $tab[110]['nodisplay'] = true;
+      $tab[] = [
+         'id'                 => '108',
+         'table'              => 'glpi_budgets',
+         'field'              => 'name',
+         'name'               => $this->getFieldName('budgets_id'),
+         'datatype'           => 'dropdown',
+         'massiveaction'      => false,
+         'joinparams'         => [
+            'beforejoin'         => [
+               'table'              => 'glpi_plugin_printercounters_billingmodels'
+            ]
+         ]
+      ];
+
+      $tab[] = [
+         'id'                 => '109',
+         'table'              => getTableForItemType($itemtype),
+         'field'              => 'id',
+         'name'               => $item::getTypeName().' ID',
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'linkfield'          => 'items_id',
+         'nosearch'           => true,
+         'nodisplay'          => '1'
+      ];
+
+      $tab[] = [
+         'id'                 => '110',
+         'table'              => $this->getTable(),
+         'field'              => 'id',
+         'name'               => __('ID'),
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => true
+      ];
 
       return $tab;
    }
@@ -1073,7 +1126,9 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       $options = Search::getCleanedOptions($this->getType());
       $restriction = '';
       foreach ($options as $num => $val) {
-         if ($val['table'] == getTableForItemType($this->itemtype) && $val['field'] == 'id') {
+         if (isset($val['table']) && isset($val['field'])
+             && $val['table'] == getTableForItemType($this->itemtype)
+             && $val['field'] == 'id') {
             $restriction .= PluginPrintercountersSearch::addWhere('', 0, $this->getType(), $num, 'equals', $this->items_id);
          }
       }

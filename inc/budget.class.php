@@ -107,7 +107,9 @@ class PluginPrintercountersBudget extends CommonDropdown {
       $restriction = '';
       foreach ($options as $num => $val) {
          if ($val['table'] == 'glpi_entities' && $val['field'] == 'id') {
-            $restriction .= PluginPrintercountersSearch::addWhere('', 0, $this->getType(), $num, 'under', $_SESSION['glpiactive_entity']);
+            $restriction .= PluginPrintercountersSearch::addWhere('', 0, $this->getType(),
+                                                                  $num, 'under',
+                                                                  $_SESSION['glpiactive_entity']);
          }
       }
 
@@ -139,12 +141,21 @@ class PluginPrintercountersBudget extends CommonDropdown {
          echo Search::showItem($search->output_type, '', $col_num, $row_num, "class='tab_bg_1'");
       }
       echo Search::showItem($search->output_type, "<b>".__('Total')."</b>", $col_num, $row_num, "class='tab_bg_1'");
-      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_amount'], false, 2)."</b>", $col_num, $row_num, "class='tab_bg_1'");
-      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_record_amount'], false, 2)."</b>", $col_num, $row_num, "class='tab_bg_1'");
-      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_usage_rate'])."%</b>", $col_num, $row_num, "class='tab_bg_1'");
-      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_color_rate'])."%</b>", $col_num, $row_num, "class='tab_bg_1'");
-      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_page_number'], false, 0)."</b>", $col_num, $row_num, "class='tab_bg_1'");
-      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_color_page_rate'])."%</b>", $col_num, $row_num, "class='tab_bg_1'");
+      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_amount'],
+                                                                           false, 2)."</b>",
+                            $col_num, $row_num, "class='tab_bg_1'");
+      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_record_amount'],
+                                                                           false, 2)."</b>",
+                            $col_num, $row_num, "class='tab_bg_1'");
+      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_usage_rate'])."%</b>",
+                            $col_num, $row_num, "class='tab_bg_1'");
+      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_color_rate'])."%</b>",
+                            $col_num, $row_num, "class='tab_bg_1'");
+      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_page_number'],
+                                                                           false, 0)."</b>",
+                            $col_num, $row_num, "class='tab_bg_1'");
+      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_color_page_rate'])."%</b>",
+                            $col_num, $row_num, "class='tab_bg_1'");
       echo Search::showItem($search->output_type, '', $col_num, $row_num, "class='tab_bg_1'");
       echo Search::showItem($search->output_type, '', $col_num, $row_num, "class='tab_bg_1'");
       echo Search::showEndLine($search->output_type);
@@ -180,14 +191,23 @@ class PluginPrintercountersBudget extends CommonDropdown {
             }
             echo Search::showItem($search->output_type, $tree.$history['budget'], $col_num, $row_num);
             echo Search::showItem($search->output_type, $history['entities_name'], $col_num, $row_num);
-            echo Search::showItem($search->output_type, Html::formatNumber($history['amount'], false, 2), $col_num, $row_num);
-            echo Search::showItem($search->output_type, Html::formatNumber($history['record_amount'], false, 2), $col_num, $row_num);
-            echo Search::showItem($search->output_type, Html::formatNumber($history['usage_rate'])."%", $col_num, $row_num);
-            echo Search::showItem($search->output_type, Html::formatNumber($history['color_rate'])."%", $col_num, $row_num);
-            echo Search::showItem($search->output_type, Html::formatNumber($history['total_page_number'], false, 0), $col_num, $row_num);
-            echo Search::showItem($search->output_type, Html::formatNumber($history['color_page_rate'])."%", $col_num, $row_num);
-            echo Search::showItem($search->output_type, Html::convDateTime($history['begin_date']), $col_num, $row_num);
-            echo Search::showItem($search->output_type, Html::convDateTime($history['end_date']), $col_num, $row_num);
+            echo Search::showItem($search->output_type, Html::formatNumber($history['amount'], false, 2),
+                                  $col_num, $row_num);
+            echo Search::showItem($search->output_type, Html::formatNumber($history['record_amount'],
+                                                                           false, 2),
+                                  $col_num, $row_num);
+            echo Search::showItem($search->output_type, Html::formatNumber($history['usage_rate'])."%",
+                                  $col_num, $row_num);
+            echo Search::showItem($search->output_type, Html::formatNumber($history['color_rate'])."%",
+                                  $col_num, $row_num);
+            echo Search::showItem($search->output_type, Html::formatNumber($history['total_page_number'], false, 0),
+                                  $col_num, $row_num);
+            echo Search::showItem($search->output_type, Html::formatNumber($history['color_page_rate'])."%",
+                                  $col_num, $row_num);
+            echo Search::showItem($search->output_type, Html::convDateTime($history['begin_date']),
+                                  $col_num, $row_num);
+            echo Search::showItem($search->output_type, Html::convDateTime($history['end_date']),
+                                  $col_num, $row_num);
             echo Search::showEndLine($search->output_type);
          }
 
@@ -303,7 +323,9 @@ class PluginPrintercountersBudget extends CommonDropdown {
          }
 
          // Get record amount
-         list($output, $total) = $this->getRecordsAmountForBudget($output, PluginPrintercountersCountertype_Recordmodel::COLOR, $params['use_repartition']);
+         list($output, $total) = $this->getRecordsAmountForBudget($output,
+                                                                  PluginPrintercountersCountertype_Recordmodel::COLOR,
+                                                                  $params['use_repartition']);
          list($output, $total) = $this->computeUsageRate($output, $total);
          list($output, $total) = $this->computeColorRate($output, $total);
 
@@ -548,7 +570,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
                   $allItemsId[] = $items_id;
                   // Record must be sorted by date DESC and items_id
                   uasort($record, function($a, $b) {
-                     return ($b["date"] - $a["date"]);
+                     return (strtotime($b["date"]) - strtotime($a["date"]));
                   });
                   foreach ($record as $key => $val) {
                      $recordResults[$key] = $val;
@@ -1019,124 +1041,171 @@ class PluginPrintercountersBudget extends CommonDropdown {
    }
 
    /**
-   * Get search options
-   *
-   * @return array
-   */
-   function getSearchOptions() {
+    * Provides search options configuration. Do not rely directly
+    * on this, @see CommonDBTM::searchOptions instead.
+    *
+    * @since 9.3
+    *
+    * This should be overloaded in Class
+    *
+    * @return array a *not indexed* array of search options
+    *
+    * @see https://glpi-developer-documentation.rtfd.io/en/master/devapi/search.html
+    **/
+   public function rawSearchOptions() {
 
-      $tab = [];
+      $tab[] = [
+         'id'                 => '20',
+         'table'              => $this->getTable(),
+         'field'              => 'name',
+         'name'               => __('Budget'),
+         'datatype'           => 'itemlink',
+         'massiveaction'      => false,
+         'nosort'             => true
+      ];
 
-      $tab[20]['table']          = $this->getTable();
-      $tab[20]['field']          = 'name';
-      $tab[20]['name']           = __('Budget');
-      $tab[20]['datatype']       = 'itemlink';
-      $tab[20]['massiveaction']  = false;
-      $tab[20]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '21',
+         'table'              => 'glpi_entities',
+         'field'              => 'completename',
+         'datatype'           => 'dropdown',
+         'name'               => __('Entity'),
+         'massiveaction'      => true,
+         'nosort'             => true
+      ];
 
-      $tab[21]['table']          = 'glpi_entities';
-      $tab[21]['field']          = 'completename';
-      $tab[21]['datatype']       = 'dropdown';
-      $tab[21]['name']           = __('Entity');
-      $tab[21]['massiveaction']  = true;
-      $tab[21]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '22',
+         'table'              => $this->getTable(),
+         'field'              => 'amount',
+         'name'               => __('Amount', 'printercounters'),
+         'massiveaction'      => false,
+         'nosort'             => true
+      ];
 
-      $tab[22]['table']          = $this->getTable();
-      $tab[22]['field']          = 'amount';
-      $tab[22]['name']           = __('Amount', 'printercounters');
-      $tab[22]['massiveaction']  = false;
-      $tab[22]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '23',
+         'table'              => 'glpi_plugin_printercounters_records',
+         'field'              => 'record_amount',
+         'name'               => _n('Record amount', 'Records amount', 1, 'printercounters'),
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nosql'              => true,
+         'nosort'             => true
+      ];
 
-      $tab[23]['table']           = 'glpi_plugin_printercounters_records';
-      $tab[23]['field']           = 'record_amount';
-      $tab[23]['name']            = _n('Record amount', 'Records amount', 1, 'printercounters');
-      $tab[23]['massiveaction']   = false;
-      $tab[23]['nosearch']        = true;
-      $tab[23]['nosql']           = true;
-      $tab[23]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '24',
+         'table'              => $this->getTable(),
+         'field'              => 'usage_rate',
+         'name'               => __('Usage rate', 'printercounters'),
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nosql'              => true,
+         'nosort'             => true
+      ];
 
-      $tab[24]['table']          = $this->getTable();
-      $tab[24]['field']          = 'usage_rate';
-      $tab[24]['name']           = __('Usage rate', 'printercounters');
-      $tab[24]['datatype']       = 'number';
-      $tab[24]['massiveaction']  = false;
-      $tab[24]['nosearch']       = true;
-      $tab[24]['nosql']          = true;
-      $tab[24]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '25',
+         'table'              => $this->getTable(),
+         'field'              => 'color_rate',
+         'name'               => __('Color rate', 'printercounters'),
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nosql'              => true,
+         'nosort'             => true
+      ];
 
-      $tab[25]['table']          = $this->getTable();
-      $tab[25]['field']          = 'color_rate';
-      $tab[25]['name']           = __('Color rate', 'printercounters');
-      $tab[25]['datatype']       = 'number';
-      $tab[25]['massiveaction']  = false;
-      $tab[25]['nosearch']       = true;
-      $tab[25]['nosql']          = true;
-      $tab[25]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '26',
+         'table'              => $this->getTable(),
+         'field'              => 'total_page_number',
+         'name'               => __('Total page number', 'printercounters'),
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nosql'              => true,
+         'nosort'             => true
+      ];
 
-      $tab[26]['table']          = $this->getTable();
-      $tab[26]['field']          = 'total_page_number';
-      $tab[26]['name']           = __('Total page number', 'printercounters');
-      $tab[26]['datatype']       = 'number';
-      $tab[26]['massiveaction']  = false;
-      $tab[26]['nosearch']       = true;
-      $tab[26]['nosql']          = true;
-      $tab[26]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '27',
+         'table'              => $this->getTable(),
+         'field'              => 'color_page_rate',
+         'name'               => __('Color page rate', 'printercounters'),
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nosql'              => true,
+         'nosort'             => true
+      ];
 
-      $tab[27]['table']          = $this->getTable();
-      $tab[27]['field']          = 'color_page_rate';
-      $tab[27]['name']           = __('Color page rate', 'printercounters');
-      $tab[27]['datatype']       = 'number';
-      $tab[27]['massiveaction']  = false;
-      $tab[27]['nosearch']       = true;
-      $tab[27]['nosql']          = true;
-      $tab[27]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '28',
+         'table'              => $this->getTable(),
+         'field'              => 'begin_date',
+         'name'               => __('Begin date'),
+         'datatype'           => 'datetime',
+         'massiveaction'      => true,
+         'nosort'             => true
+      ];
 
-      $tab[28]['table']          = $this->getTable();
-      $tab[28]['field']          = 'begin_date';
-      $tab[28]['name']           = __('Begin date');
-      $tab[28]['datatype']       = 'datetime';
-      $tab[28]['massiveaction']  = true;
-      $tab[28]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '29',
+         'table'              => $this->getTable(),
+         'field'              => 'end_date',
+         'name'               => __('End date'),
+         'datatype'           => 'datetime',
+         'massiveaction'      => true,
+         'nosort'             => true
+      ];
 
-      $tab[29]['table']          = $this->getTable();
-      $tab[29]['field']          = 'end_date';
-      $tab[29]['name']           = __('End date');
-      $tab[29]['datatype']       = 'datetime';
-      $tab[29]['massiveaction']  = true;
-      $tab[29]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '30',
+         'table'              => $this->getTable(),
+         'field'              => 'id',
+         'name'               => __('ID'),
+         'datatype'           => 'number',
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => true,
+         'nosort'             => true
+      ];
 
-      $tab[30]['table']           = $this->getTable();
-      $tab[30]['field']           = 'id';
-      $tab[30]['name']            = __('ID');
-      $tab[30]['datatype']        = 'number';
-      $tab[30]['massiveaction']   = false;
-      $tab[30]['nosearch']        = true;
-      $tab[30]['nodisplay']       = true;
-      $tab[30]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '31',
+         'table'              => 'glpi_entities',
+         'field'              => 'id',
+         'name'               => __('ID'),
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => true,
+         'nosort'             => true
+      ];
 
-      $tab[31]['table']           = 'glpi_entities';
-      $tab[31]['field']           = 'id';
-      $tab[31]['name']            = __('ID');
-      $tab[31]['massiveaction']   = false;
-      $tab[31]['nosearch']        = true;
-      $tab[31]['nodisplay']       = true;
-      $tab[31]['nosort']         = true;
+      $tab[] = [
+         'id'                 => '32',
+         'table'              => 'glpi_entities',
+         'field'              => 'level',
+         'name'               => __('Level'),
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => true,
+         'nosort'             => true
+      ];
 
-      $tab[32]['table']           = 'glpi_entities';
-      $tab[32]['field']           = 'level';
-      $tab[32]['name']            = __('Level');
-      $tab[32]['massiveaction']   = false;
-      $tab[32]['nosearch']        = true;
-      $tab[32]['nodisplay']       = true;
-      $tab[32]['nosort']         = true;
-
-      $tab[33]['table']           = 'glpi_entities';
-      $tab[33]['field']           = 'entities_id';
-      $tab[33]['name']            = __('Parent');
-      $tab[33]['massiveaction']   = false;
-      $tab[33]['nosearch']        = true;
-      $tab[33]['nodisplay']       = true;
-      $tab[33]['nosort']          = true;
+      $tab[] = [
+         'id'                 => '33',
+         'table'              => 'glpi_entities',
+         'field'              => 'entities_id',
+         'name'               => __('Parent'),
+         'massiveaction'      => false,
+         'nosearch'           => true,
+         'nodisplay'          => true,
+         'nosort'             => true
+      ];
 
       return $tab;
    }

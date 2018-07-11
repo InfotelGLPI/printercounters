@@ -34,16 +34,16 @@ include (GLPI_ROOT."/inc/includes.php");
 header("Content-type: application/javascript");
 
 //not executed in self-service interface & right verification
-if ($_SESSION['glpiactiveprofile']['interface'] == "central") {
+if (Session::getCurrentInterface() == "central") {
    // Get item type
    $itemtype = PluginPrintercountersItem_Recordmodel::$types;
 
    if (!empty($itemtype)) {
-      $params = ['root_doc'    => $CFG_GLPI['root_doc'],
-                      'itemtype'    => $itemtype[0],
-                      'itemToShow'  => 'Infocom',
-                      'glpi_tab'    => 'Infocom$1',
-                      'lang'        => ['global_tco' => __('Global TCO', 'printercounters')]];
+      $params = ['root_doc'   => $CFG_GLPI['root_doc'],
+                 'itemtype'   => $itemtype[0],
+                 'itemToShow' => 'Infocom',
+                 'glpi_tab'   => 'Infocom$1',
+                 'lang'       => ['global_tco' => __('Global TCO', 'printercounters')]];
 
       echo "printercounters_addelements(".json_encode($params).");";
    }
