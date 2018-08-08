@@ -56,8 +56,9 @@ function plugin_printercounters_install() {
    }
 
    // Update 102 to 103
+   $dbu = new DbUtils();
    if ($DB->tableExists("glpi_plugin_printercounters_records")
-         && !isIndex('glpi_plugin_printercounters_records', 'date')) {
+         && !$dbu->isIndex('glpi_plugin_printercounters_records', 'date')) {
       include(GLPI_ROOT."/plugins/printercounters/install/update_102_103.php");
       update102to103();
    }
@@ -244,7 +245,7 @@ function plugin_item_purge_printercounters($item) {
       case 'PluginPrintercountersCounter' :
          // If no counter delete record associated
          $dbu = new DbUtils();
-         if ($dbu->countElementsInTable(getTableForItemType("PluginPrintercountersCounter"),
+         if ($dbu->countElementsInTable($dbu->getTableForItemType("PluginPrintercountersCounter"),
                                         "`plugin_printercounters_records_id` = ".$item->getField('plugin_printercounters_records_id')) == 0) {
             $temp = new PluginPrintercountersRecord();
             $temp->deleteByCriteria(['id' => $item->getField('plugin_printercounters_records_id')], 1);

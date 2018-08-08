@@ -55,7 +55,8 @@ class PluginPrintercountersAjax extends CommonDBTM {
    static function getJSEdition($toupdate, $function_name, $itemtype, $items_id, $parenttype, $parents_id) {
       global $CFG_GLPI;
 
-      $parent = getItemForItemtype($parenttype);
+      $dbu    = new DbUtils();
+      $parent = $dbu->getItemForItemtype($parenttype);
 
       echo "\n<script type='text/javascript' >\n";
             echo "function $function_name() {\n";

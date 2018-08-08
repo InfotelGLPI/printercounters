@@ -334,8 +334,6 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
          $errorItem   = new self();
          $errorList   = $errorItem->find("`status` IN ('".self::$HARD_STATE."', '".self::$SOFT_STATE."')");
 
-         $message       = [];
-
          if (!empty($errorList)) {
             foreach ($errorList as $error) {
                $errorItem     = new self($error['itemtype'],

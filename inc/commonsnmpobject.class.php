@@ -454,7 +454,8 @@ abstract class PluginPrintercountersCommonSNMPObject {
          switch ($error_type) {
             case self::ERROR_NUMBER : return $error_number;
             case self::ERROR_BOOL   : return $error_bool;
-            default : throw new PluginPrintercountersException($error_message, 0, null, $this->items_id, $this->itemtype);
+            default : throw new PluginPrintercountersException($error_message, 0, null,
+                                                               $this->items_id, $this->itemtype);
          }
       }
    }

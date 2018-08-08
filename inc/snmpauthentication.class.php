@@ -451,11 +451,12 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
       global $DB;
 
       $output = [];
+      $dbu    = new DbUtils();
 
       if (!empty($items_id) && !empty($itemtype)) {
          $itemjoin = "PluginPrintercountersItem_Recordmodel";
 
-         $query = "SELECT `".getTableForItemType($itemjoin)."`.`items_id`,
+         $query = "SELECT `".$dbu->getTableForItemType($itemjoin)."`.`items_id`,
                           `".$this->getTable()."`.`version`,
                           `".$this->getTable()."`.`community`,
                           `".$this->getTable()."`.`community_write`,
@@ -465,10 +466,10 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
                           `".$this->getTable()."`.`authentication_password`,
                           `".$this->getTable()."`.`data_password`
              FROM ".$this->getTable()."
-             LEFT JOIN `".getTableForItemType($itemjoin)."` 
-                ON (`".getTableForItemType($itemjoin)."`.`plugin_printercounters_snmpauthentications_id` = `".$this->getTable()."`.`id`)
-             WHERE `".getTableForItemType($itemjoin)."`.`items_id` IN ('".implode("','", $items_id)."')
-             AND LOWER(`".getTableForItemType($itemjoin)."`.`itemtype`)='".$itemtype."'";
+             LEFT JOIN `".$dbu->getTableForItemType($itemjoin)."` 
+                ON (`".$dbu->getTableForItemType($itemjoin)."`.`plugin_printercounters_snmpauthentications_id` = `".$this->getTable()."`.`id`)
+             WHERE `".$dbu->getTableForItemType($itemjoin)."`.`items_id` IN ('".implode("','", $items_id)."')
+             AND LOWER(`".$dbu->getTableForItemType($itemjoin)."`.`itemtype`)='".$itemtype."'";
 
          $result = $DB->query($query);
          if ($DB->numrows($result)) {

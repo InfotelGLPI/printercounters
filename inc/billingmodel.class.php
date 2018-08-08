@@ -340,12 +340,14 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
     */
    function duplicateBillingmodelForItem($itemtype, $items_id, $entities_id) {
       $item_billingmodel = new PluginPrintercountersItem_Billingmodel();
-      $billings = $item_billingmodel->getBillingmodelForItem($items_id, $itemtype, ['addLimit' => false]);
-
+      $billings          = $item_billingmodel->getBillingmodelForItem($items_id, $itemtype,
+                                                                      ['addLimit' => false]);
+      $dbu               = new DbUtils();
       if (!empty($billings)) {
          foreach ($billings as $data) {
             // Get anscestors of the item entity
-            $entities_ancestors = getAncestorsOf('glpi_entities', $entities_id);
+
+            $entities_ancestors = $dbu->getAncestorsOf('glpi_entities', $entities_id);
             $entities_ancestors[$entities_id] = $entities_id;
 
             // If billingmodel is not in parent item entities

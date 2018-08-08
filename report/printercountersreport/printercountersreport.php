@@ -77,8 +77,9 @@ if (isset($_POST["display_type"])) {
    }
 }
 
+$dbu = new DbUtils();
 // SQL statement
-$entity_restrict = getEntitiesRestrictRequest("AND", "glpi_printers", "", $_SESSION['glpiactiveentities']);
+$entity_restrict = $dbu->getEntitiesRestrictRequest("AND", "glpi_printers", "", $_SESSION['glpiactiveentities']);
 $query = "SELECT `glpi_printers`.`id`,
                  `glpi_printers`.`name` as name,
                  `glpi_printermodels`.`name` as model,

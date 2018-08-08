@@ -98,7 +98,7 @@
                   }
                }
             });
-        }
+        };
 
          /**
          *  Add search field
@@ -131,7 +131,7 @@
                   }
                }
              });
-         }
+         };
 
          /**
          *  Delete search field
@@ -142,7 +142,7 @@
                 $('#' + toupdate + search_count).remove();
                 $('#' + fieldcounter).val(parseInt(search_count) - 1);
             }
-         }
+         };
 
          /**
          *  Reset search field
@@ -172,7 +172,7 @@
                      object.initSearch(root_doc, formName, historyFormName);
                }
              });
-         }
+         };
 
          return this;
     }
@@ -220,7 +220,7 @@
                   }
                }
             });
-        }
+        };
 
          /**
          * Init error item
@@ -251,7 +251,7 @@
                   }
                }
              });
-         }
+         };
 
          /**
          *  Init printercounters actions
@@ -358,7 +358,7 @@
                   }
                }
              });
-         }
+         };
 
          /**
          *  Get scroll X Y position for modal window
@@ -450,7 +450,7 @@ function printercounters_addelements(params) {
              return results[1] || 0;
          }
             return undefined;
-        }
+        };
          // get item id
          var items_id = parseInt($.urlParam('id'));
          //only in edit form

@@ -169,7 +169,8 @@ class PluginPrintercountersProcess extends CommonDBTM {
          }
       }
 
-      $itemjoin = getTableForItemType($this->itemtype);
+      $dbu      = new DbUtils();
+      $itemjoin = $dbu->getTableForItemType($this->itemtype);
 
       $query = "SELECT `glpi_networkports`.`id` as cards_id,
                        `glpi_ipaddresses`.`name` as ip,
@@ -214,11 +215,12 @@ class PluginPrintercountersProcess extends CommonDBTM {
       global $DB;
 
       $output = [];
+      $dbu    = new DbUtils();
 
-      $itemjoin  = getTableForItemType("PluginPrintercountersItem_Recordmodel");
-      $itemjoin3 = getTableForItemType("PluginPrintercountersRecord");
-      $itemjoin4 = getTableForItemType("Entity");
-      $itemjoin5 = getTableForItemType($this->itemtype);
+      $itemjoin  = $dbu->getTableForItemType("PluginPrintercountersItem_Recordmodel");
+      $itemjoin3 = $dbu->getTableForItemType("PluginPrintercountersRecord");
+      $itemjoin4 = $dbu->getTableForItemType("Entity");
+      $itemjoin5 = $dbu->getTableForItemType($this->itemtype);
 
       // Repartition between all processes
       $where_multi_process = '';
@@ -460,7 +462,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
          if ($ret) {
             return 'you need ps, grep, and awk';
          }
-         while (list(, $t) = each($output)) {
+         foreach ($output as $t) {
             if ($t != $pid) {
                $this->killProcesses($t, $signal);
             }
@@ -504,8 +506,9 @@ class PluginPrintercountersProcess extends CommonDBTM {
    function getProcessItems() {
       global $DB;
 
-      $itemjoin = getTableForItemType("PluginPrintercountersItem_Recordmodel");
-      $itemjoin2 = getTableForItemType($this->itemtype);
+      $dbu       = new DbUtils();
+      $itemjoin  = $dbu->getTableForItemType("PluginPrintercountersItem_Recordmodel");
+      $itemjoin2 = $dbu->getTableForItemType($this->itemtype);
 
       $output = [];
 

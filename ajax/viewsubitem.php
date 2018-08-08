@@ -42,8 +42,9 @@ if (!isset($_POST['parenttype'])) {
    exit();
 }
 
-if (($item = getItemForItemtype($_POST['type']))
-    && ($parent = getItemForItemtype($_POST['parenttype']))) {
+$dbu = new DbUtils();
+if (($item = $dbu->getItemForItemtype($_POST['type']))
+    && ($parent = $dbu->getItemForItemtype($_POST['parenttype']))) {
 
    if (isset($_POST[$parent->getForeignKeyField()])
        && isset($_POST["id"])

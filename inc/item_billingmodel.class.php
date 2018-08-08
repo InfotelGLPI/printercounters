@@ -256,10 +256,11 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
          // Dropdown item
          echo "<td class='center'>";
          echo $itemtype::getTypeName(2).'&nbsp;';
+         $dbu = new DbUtils();
          Dropdown::show($itemtype, ['name' => 'items_id',
              'entity' => $item->fields['entities_id'],
              'entity_sons' => true,
-             'condition' => " `".getTableForItemType($itemtype)."`.`id` NOT IN (SELECT `items_id` FROM ".$this->getTable()." WHERE itemtype = '".$itemtype."')"]);
+             'condition' => " `".$dbu->getTableForItemType($itemtype)."`.`id` NOT IN (SELECT `items_id` FROM ".$this->getTable()." WHERE itemtype = '".$itemtype."')"]);
          echo "</td>";
          echo "</tr>";
 
@@ -378,17 +379,18 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       }
 
       $output = [];
+      $dbu    = new DbUtils();
 
-      $itemjoin = getTableForItemType($this->itemtype);
-      $itemjoin2 = getTableForItemType($this->itemtype.'Model');
-      $itemjoin3 = getTableForItemType('State');
-      $itemjoin4 = getTableForItemType($this->itemtype.'Type');
-      $itemjoin5 = getTableForItemType('Location');
-      $itemjoin6 = getTableForItemType('Entity');
-      $itemjoin7 = getTableForItemType('PluginPrintercountersItem_Recordmodel');
-      $itemjoin8 = getTableForItemType('PluginPrintercountersRecord');
-      $itemjoin9 = getTableForItemType('PluginPrintercountersBillingmodel');
-      $itemjoin10 = getTableForItemType('PluginPrintercountersPageCost');
+      $itemjoin   = $dbu->getTableForItemType($this->itemtype);
+      $itemjoin2  = $dbu->getTableForItemType($this->itemtype . 'Model');
+      $itemjoin3  = $dbu->getTableForItemType('State');
+      $itemjoin4  = $dbu->getTableForItemType($this->itemtype . 'Type');
+      $itemjoin5  = $dbu->getTableForItemType('Location');
+      $itemjoin6  = $dbu->getTableForItemType('Entity');
+      $itemjoin7  = $dbu->getTableForItemType('PluginPrintercountersItem_Recordmodel');
+      $itemjoin8  = $dbu->getTableForItemType('PluginPrintercountersRecord');
+      $itemjoin9  = $dbu->getTableForItemType('PluginPrintercountersBillingmodel');
+      $itemjoin10 = $dbu->getTableForItemType('PluginPrintercountersPageCost');
 
       $query = "SELECT `".$itemjoin."`.`name` as items_name,
                        `".$itemjoin."`.`id` as items_id, 
@@ -484,17 +486,18 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       }
 
       $output = [];
+      $dbu    = new DbUtils();
 
-      $itemjoin = getTableForItemType($itemtype);
-      $itemjoin2 = getTableForItemType($itemtype.'Model');
-      $itemjoin3 = getTableForItemType('State');
-      $itemjoin4 = getTableForItemType($itemtype.'Type');
-      $itemjoin5 = getTableForItemType('Location');
-      $itemjoin6 = getTableForItemType('Entity');
-      $itemjoin7 = getTableForItemType('PluginPrintercountersItem_Recordmodel');
-      $itemjoin8 = getTableForItemType('PluginPrintercountersRecord');
-      $itemjoin9 = getTableForItemType('PluginPrintercountersBillingmodel');
-      $itemjoin10 = getTableForItemType('PluginPrintercountersPageCost');
+      $itemjoin   = $dbu->getTableForItemType($itemtype);
+      $itemjoin2  = $dbu->getTableForItemType($itemtype . 'Model');
+      $itemjoin3  = $dbu->getTableForItemType('State');
+      $itemjoin4  = $dbu->getTableForItemType($itemtype . 'Type');
+      $itemjoin5  = $dbu->getTableForItemType('Location');
+      $itemjoin6  = $dbu->getTableForItemType('Entity');
+      $itemjoin7  = $dbu->getTableForItemType('PluginPrintercountersItem_Recordmodel');
+      $itemjoin8  = $dbu->getTableForItemType('PluginPrintercountersRecord');
+      $itemjoin9  = $dbu->getTableForItemType('PluginPrintercountersBillingmodel');
+      $itemjoin10 = $dbu->getTableForItemType('PluginPrintercountersPageCost');
 
       $query = "SELECT `".$itemjoin."`.`name` as items_name,
                        `".$itemjoin."`.`entities_id`,";
@@ -621,10 +624,11 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       global $DB;
 
       $output = [];
+      $dbu    = new DbUtils();
 
-      $itemjoin = getTableForItemType('PluginPrintercountersBillingmodel');
-      $itemjoin2 = getTableForItemType('PluginPrintercountersRecordmodel');
-      $itemjoin3 = getTableForItemType('PluginPrintercountersItem_Recordmodel');
+      $itemjoin  = $dbu->getTableForItemType('PluginPrintercountersBillingmodel');
+      $itemjoin2 = $dbu->getTableForItemType('PluginPrintercountersRecordmodel');
+      $itemjoin3 = $dbu->getTableForItemType('PluginPrintercountersItem_Recordmodel');
 
       $query = "SELECT `".$itemjoin3."`.`items_id`
           FROM ".$itemjoin3."
@@ -867,7 +871,8 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
    public function rawSearchOptions() {
 
       $itemtype = $this->itemtype;
-      $item = getItemForItemtype($itemtype);
+      $dbu      = new DbUtils();
+      $item     = $dbu->getItemForItemtype($itemtype);
 
       $tab[] = [
          'id'                 => '100',
@@ -980,7 +985,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
       $tab[] = [
          'id'                 => '109',
-         'table'              => getTableForItemType($itemtype),
+         'table'              => $dbu->getTableForItemType($itemtype),
          'field'              => 'id',
          'name'               => $item::getTypeName().' ID',
          'datatype'           => 'number',
@@ -1010,6 +1015,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
     * @return array
     */
    function getAddSearchOptions() {
+      $dbu = new DbUtils();
 
       $tab[6099]['table'] = 'glpi_plugin_printercounters_billingmodels';
       $tab[6099]['field'] = 'name';
@@ -1018,7 +1024,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
       $tab[6099]['massiveaction'] = false;
       $tab[6099]['joinparams'] = ['beforejoin' => ['table' => 'glpi_plugin_printercounters_items_billingmodels',
               'joinparams' => ['jointype' => 'itemtype_item',
-                  'beforejoin' => ['table' => getTableForItemType($this->itemtype)]]]
+                  'beforejoin' => ['table' => $dbu->getTableForItemType($this->itemtype)]]]
       ];
 
       return $tab;
@@ -1123,13 +1129,15 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
     */
    function addRestriction() {
 
-      $options = Search::getCleanedOptions($this->getType());
+      $options     = Search::getCleanedOptions($this->getType());
       $restriction = '';
+      $dbu         = new DbUtils();
       foreach ($options as $num => $val) {
          if (isset($val['table']) && isset($val['field'])
-             && $val['table'] == getTableForItemType($this->itemtype)
+             && $val['table'] == $dbu->getTableForItemType($this->itemtype)
              && $val['field'] == 'id') {
-            $restriction .= PluginPrintercountersSearch::addWhere('', 0, $this->getType(), $num, 'equals', $this->items_id);
+            $restriction .= PluginPrintercountersSearch::addWhere('', 0, $this->getType(), $num,
+                                                                  'equals', $this->items_id);
          }
       }
 
@@ -1144,9 +1152,10 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
    function addOrder() {
 
       $order_by = [];
-      $options = Search::getCleanedOptions($this->getType());
+      $options  = Search::getCleanedOptions($this->getType());
+      $dbu      = new DbUtils();
       foreach ($options as $num => $val) {
-         if ($val['table'] == getTableForItemType('PluginPrintercountersBillingmodel') && $val['field'] == 'application_date') {
+         if ($val['table'] == $dbu->getTableForItemType('PluginPrintercountersBillingmodel') && $val['field'] == 'application_date') {
             $order_by = [$num, 'DESC'];
             break;
          }
@@ -1190,13 +1199,14 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
     * @return boolean
     */
    function checkMandatoryFields($input) {
-      $msg = [];
+      $msg     = [];
       $checkKo = false;
+      $dbu     = new DbUtils();
 
-      $item = getItemForItemtype($this->itemtype);
+      $item = $dbu->getItemForItemtype($this->itemtype);
 
       $mandatory_fields = ['plugin_printercounters_billingmodels_id' => PluginPrintercountersBillingmodel::getTypeName(),
-          'items_id' => $item::getTypeName()];
+                           'items_id'                                => $item::getTypeName()];
 
       foreach ($input as $key => $value) {
          if (array_key_exists($key, $mandatory_fields)) {

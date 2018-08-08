@@ -70,9 +70,9 @@ if (isset($_POST["display_type"])) {
       $limit = 0;
    }
 }
-
+$dbu = new DbUtils();
 // SQL statement
-$entity_restrict = getEntitiesRestrictRequest("AND", "glpi_printers", "", $_SESSION['glpiactiveentities']);
+$entity_restrict = $dbu->getEntitiesRestrictRequest("AND", "glpi_printers", "", $_SESSION['glpiactiveentities']);
 
 $items_ok = [];
 $query = " SELECT `glpi_plugin_printercounters_items_recordmodels`.`id` as id, 
@@ -225,7 +225,7 @@ if ($res && $nbtot > 0) {
    echo Search::showEndLine($output_type);
 
    $record = new PluginPrintercountersRecord();
-   $itemjoin2 = getTableForItemType("PluginPrintercountersItem_Recordmodel");
+   $itemjoin2 = $dbu->getTableForItemType("PluginPrintercountersItem_Recordmodel");
 
    while ($data = $DB->fetch_assoc($res)) {
       // Get last record

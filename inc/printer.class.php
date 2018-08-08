@@ -504,19 +504,20 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
       $itemjoin3 = "PluginPrintercountersCountertype_Recordmodel";
 
       $output = [];
+      $dbu    = new DbUtils();
 
-      $query = "SELECT `".getTableForItemType($itemjoin3)."`.`id` as countertypes_recordmodels_id,
-                       `".getTableForItemType($itemjoin3)."`.`oid` as oid
-          FROM ".getTableForItemType($itemjoin3)."
-          LEFT JOIN `".getTableForItemType($itemjoin2)."` 
-             ON (`".getTableForItemType($itemjoin2)."`.`plugin_printercounters_recordmodels_id` = `".getTableForItemType($itemjoin3)."`.`plugin_printercounters_recordmodels_id`)
-          WHERE `".getTableForItemType($itemjoin2)."`.`items_id`=".$this->items_id." 
-          AND LOWER(`".getTableForItemType($itemjoin2)."`.`itemtype`)='".$this->itemtype."'
-          AND `".getTableForItemType($itemjoin3)."`.`oid_type`!='".PluginPrintercountersCountertype_Recordmodel::SERIAL."' 
-          AND `".getTableForItemType($itemjoin3)."`.`oid_type`!='".PluginPrintercountersCountertype_Recordmodel::NUMBER_OF_PRINTED_PAPERS."' 
-          AND `".getTableForItemType($itemjoin3)."`.`oid_type`!='".PluginPrintercountersCountertype_Recordmodel::MODEL."' 
-          AND `".getTableForItemType($itemjoin3)."`.`oid_type`!='".PluginPrintercountersCountertype_Recordmodel::NAME."' 
-          AND `".getTableForItemType($itemjoin3)."`.`oid_type`!='".PluginPrintercountersCountertype_Recordmodel::SYSDESCR."'";
+      $query = "SELECT `".$dbu->getTableForItemType($itemjoin3)."`.`id` as countertypes_recordmodels_id,
+                       `".$dbu->getTableForItemType($itemjoin3)."`.`oid` as oid
+          FROM ".$dbu->getTableForItemType($itemjoin3)."
+          LEFT JOIN `".$dbu->getTableForItemType($itemjoin2)."` 
+             ON (`".$dbu->getTableForItemType($itemjoin2)."`.`plugin_printercounters_recordmodels_id` = `".$dbu->getTableForItemType($itemjoin3)."`.`plugin_printercounters_recordmodels_id`)
+          WHERE `".$dbu->getTableForItemType($itemjoin2)."`.`items_id`=".$this->items_id." 
+          AND LOWER(`".$dbu->getTableForItemType($itemjoin2)."`.`itemtype`)='".$this->itemtype."'
+          AND `".$dbu->getTableForItemType($itemjoin3)."`.`oid_type`!='".PluginPrintercountersCountertype_Recordmodel::SERIAL."' 
+          AND `".$dbu->getTableForItemType($itemjoin3)."`.`oid_type`!='".PluginPrintercountersCountertype_Recordmodel::NUMBER_OF_PRINTED_PAPERS."' 
+          AND `".$dbu->getTableForItemType($itemjoin3)."`.`oid_type`!='".PluginPrintercountersCountertype_Recordmodel::MODEL."' 
+          AND `".$dbu->getTableForItemType($itemjoin3)."`.`oid_type`!='".PluginPrintercountersCountertype_Recordmodel::NAME."' 
+          AND `".$dbu->getTableForItemType($itemjoin3)."`.`oid_type`!='".PluginPrintercountersCountertype_Recordmodel::SYSDESCR."'";
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {

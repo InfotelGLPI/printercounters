@@ -213,7 +213,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       echo "<td>";
       $state = [];
       $dbu   = new DbUtils();
-      foreach ($dbu->getAllDataFromTable(getTableForItemType('State')) as $value) {
+      foreach ($dbu->getAllDataFromTable($dbu->getTableForItemType('State')) as $value) {
          $state[$value['id']] = $value['name'];
       }
       Dropdown::showFromArray('items_status', $state, ['multiple'        => true,
@@ -289,8 +289,8 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
     * @param type $rand
     */
    private function listItems($data, $start, $rand, $canedit = true) {
-
-      $item = getItemForItemtype($this->itemtype);
+      $dbu  = new DbUtils();
+      $item = $dbu->getItemForItemtype($this->itemtype);
 
       echo "<div class='center'>";
 
@@ -300,7 +300,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
          Html::showMassiveActions($massiveactionparams);
       }
 
-      Html::printAjaxPager(self::getTypeName(2), $start, countElementsInTable($this->getTable()));
+      Html::printAjaxPager(self::getTypeName(2), $start, $dbu->countElementsInTable($this->getTable()));
       echo "<table class='tab_cadre_fixehov'>";
       echo "<tr class='tab_bg_1'>";
       echo "<th width='10'>";
@@ -347,9 +347,10 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       global $DB;
 
       $output = [];
+      $dbu    = new DbUtils();
 
-      $itemjoin = getTableForItemType('Ticket');
-      $itemjoin2 = getTableForItemType($this->itemtype);
+      $itemjoin = $dbu->getTableForItemType('Ticket');
+      $itemjoin2 = $dbu->getTableForItemType($this->itemtype);
 
       $query = "SELECT `".$this->getTable()."`.`id`, 
                        `".$this->getTable()."`.`items_id`,
@@ -457,15 +458,16 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
    function checkConsecutiveRecordError($config_data, $item_ticket_data) {
       global $DB;
 
-      $items_ko      = [];
-      $items_data    = [];
-      $items         = [];
-      $message       = [];
+      $items_ko   = [];
+      $items_data = [];
+      $items      = [];
+      $message    = [];
+      $dbu        = new DbUtils();
 
       if (!empty($config_data['nb_errors_delay_ticket'])) {
-         $itemjoin1 = getTableForItemType("PluginPrintercountersRecord");
-         $itemjoin2 = getTableForItemType("PluginPrintercountersItem_Recordmodels");
-         $itemjoin3 = getTableForItemType($this->itemtype);
+         $itemjoin1 = $dbu->getTableForItemType("PluginPrintercountersRecord");
+         $itemjoin2 = $dbu->getTableForItemType("PluginPrintercountersItem_Recordmodels");
+         $itemjoin3 = $dbu->getTableForItemType($this->itemtype);
 
          // Get all recordmodels items
          $query = "SELECT `".$itemjoin2."`.`items_id`,
@@ -542,16 +544,17 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
    function checkNoRecordForDelay($config_data, $item_ticket_data) {
       global $DB;
 
-      $items_ok      = [];
-      $items_data    = [];
-      $items         = [];
-      $message       = [];
+      $items_ok   = [];
+      $items_data = [];
+      $items      = [];
+      $message    = [];
+      $dbu        = new DbUtils();
 
       if (!empty($config_data['no_record_delay_ticket'])) {
 
-         $itemjoin1 = getTableForItemType("PluginPrintercountersRecord");
-         $itemjoin2 = getTableForItemType("PluginPrintercountersItem_Recordmodels");
-         $itemjoin3 = getTableForItemType($this->itemtype);
+         $itemjoin1 = $dbu->getTableForItemType("PluginPrintercountersRecord");
+         $itemjoin2 = $dbu->getTableForItemType("PluginPrintercountersItem_Recordmodels");
+         $itemjoin3 = $dbu->getTableForItemType($this->itemtype);
 
          // Get all recordmodels items
          $query = "SELECT `".$itemjoin2."`.`items_id`,

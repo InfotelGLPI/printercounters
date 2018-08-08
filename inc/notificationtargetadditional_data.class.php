@@ -97,7 +97,8 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
             break;
       }
 
-      $item = getItemForItemtype($options['itemtype']);
+      $dbu  = new DbUtils();
+      $item = $dbu->getItemForItemtype($options['itemtype']);
       $item->getFromDB($options['items_id']);
 
       $this->data['##printercountersadditionaldatas.itemlink##']      = $this->formatURL('', strtolower($item->getType())."_".$item->getField("id")."_PluginPrintercountersItem_Recordmodel$1");

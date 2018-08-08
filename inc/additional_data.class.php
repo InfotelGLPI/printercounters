@@ -228,9 +228,10 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
    function showAdditionalData() {
       global $DB;
 
+      $dbu       = new DbUtils();
       $itemjoin  = "glpi_plugin_printercounters_additionals_datas";
-      $itemjoin2 = getTableForItemType('PluginPrintercountersItem_Recordmodel');
-      $itemjoin3 = getTableForItemType('PluginPrintercountersRecordmodel');
+      $itemjoin2 = $dbu->getTableForItemType('PluginPrintercountersItem_Recordmodel');
+      $itemjoin3 = $dbu->getTableForItemType('PluginPrintercountersRecordmodel');
 
       $query = "SELECT `".$itemjoin."`.`id`,
                        `".$itemjoin."`.`name`,

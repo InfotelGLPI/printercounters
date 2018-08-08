@@ -254,10 +254,11 @@ class PluginPrintercountersProfile extends Profile {
    static function initProfile() {
       global $DB;
       $profile = new self();
+      $dbu     = new DbUtils();
 
       //Add new rights in glpi_profilerights table
       foreach ($profile->getAllRights(true) as $data) {
-         if (countElementsInTable("glpi_profilerights",
+         if ($dbu->countElementsInTable("glpi_profilerights",
                                   "`name` = '".$data['field']."'") == 0) {
             ProfileRight::addProfileRights([$data['field']]);
          }
@@ -305,15 +306,15 @@ class PluginPrintercountersProfile extends Profile {
     * @param $profile
    **/
    static function addDefaultProfileInfos($profiles_id, $rights, $drop_existing = false) {
-      global $DB;
 
+      $dbu          = new DbUtils();
       $profileRight = new ProfileRight();
       foreach ($rights as $right => $value) {
-         if (countElementsInTable('glpi_profilerights',
+         if ($dbu->countElementsInTable('glpi_profilerights',
                                    "`profiles_id`='$profiles_id' AND `name`='$right'") && $drop_existing) {
             $profileRight->deleteByCriteria(['profiles_id' => $profiles_id, 'name' => $right]);
          }
-         if (!countElementsInTable('glpi_profilerights',
+         if (!$dbu->countElementsInTable('glpi_profilerights',
                                    "`profiles_id`='$profiles_id' AND `name`='$right'")) {
             $myright['profiles_id'] = $profiles_id;
             $myright['name']        = $right;

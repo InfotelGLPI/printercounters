@@ -258,6 +258,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       }
       $data = $this->getItems($item->fields['id'], ['start' => $start, 'addLimit' => true]);
       $rows = count($this->getItems($item->fields['id'], ['addLimit' => false]));
+      $dbu  = new DbUtils();
 
       if ($canedit) {
          echo "<form name='form' method='post' action='".Toolbox::getItemTypeFormURL($this->getType())."'>";
@@ -272,7 +273,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          Dropdown::show($itemtype, ['name'        => 'items_id',
                                          'entity'      => $item->fields['entities_id'],
                                          'entity_sons' => true,
-                                         'condition'   => " `".getTableForItemType($itemtype)."`.`id` NOT IN (SELECT `items_id` FROM ".$this->getTable()." WHERE itemtype = '".$itemtype."')"]);
+                                         'condition'   => " `".$dbu->getTableForItemType($itemtype)."`.`id` NOT IN (SELECT `items_id` FROM ".$this->getTable()." WHERE itemtype = '".$itemtype."')"]);
          echo "</td>";
          echo "</tr>";
 
@@ -392,15 +393,16 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       }
 
       $output = [];
+      $dbu    = new DbUtils();
 
-      $itemjoin   = getTableForItemType($this->itemtype);
-      $itemjoin2  = getTableForItemType($this->itemtype.'Model');
-      $itemjoin3  = getTableForItemType('State');
-      $itemjoin4  = getTableForItemType($this->itemtype.'Type');
-      $itemjoin5  = getTableForItemType('Location');
-      $itemjoin6  = getTableForItemType('Entity');
-      $itemjoin7  = getTableForItemType('PluginPrintercountersItem_Recordmodel');
-      $itemjoin8  = getTableForItemType('PluginPrintercountersRecord');
+      $itemjoin   = $dbu->getTableForItemType($this->itemtype);
+      $itemjoin2  = $dbu->getTableForItemType($this->itemtype.'Model');
+      $itemjoin3  = $dbu->getTableForItemType('State');
+      $itemjoin4  = $dbu->getTableForItemType($this->itemtype.'Type');
+      $itemjoin5  = $dbu->getTableForItemType('Location');
+      $itemjoin6  = $dbu->getTableForItemType('Entity');
+      $itemjoin7  = $dbu->getTableForItemType('PluginPrintercountersItem_Recordmodel');
+      $itemjoin8  = $dbu->getTableForItemType('PluginPrintercountersRecord');
 
       $query = "SELECT `".$itemjoin."`.`name` as items_name,
                        `".$itemjoin."`.`id` as items_id, 
@@ -468,9 +470,10 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       global $DB;
 
       $output = [];
+      $dbu    = new DbUtils();
 
-      $itemjoin = getTableForItemType('PluginPrintercountersRecordmodel');
-      $itemjoin2 = getTableForItemType($this->itemtype);
+      $itemjoin  = $dbu->getTableForItemType('PluginPrintercountersRecordmodel');
+      $itemjoin2 = $dbu->getTableForItemType($this->itemtype);
 
       $query = "SELECT `".$this->getTable()."`.`id`, 
                        `".$this->getTable()."`.`plugin_printercounters_snmpauthentications_id`,
@@ -615,11 +618,12 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
    public function rawSearchOptions() {
 
       $itemtype = $this->itemtype;
-      $item     = getItemForItemtype($itemtype);
+      $dbu      = new DbUtils();
+      $item     = $dbu->getItemForItemtype($itemtype);
 
       $tab[] = [
          'id'                 => '89',
-         'table'              => getTableForItemType($itemtype),
+         'table'              => $dbu->getTableForItemType($itemtype),
          'field'              => 'name',
          'name'               => $item::getTypeName(),
          'datatype'           => 'itemlink',
@@ -638,7 +642,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          'datatype'           => 'dropdown',
          'joinparams'         => [
             'beforejoin'         => [
-               'table'              => getTableForItemType($itemtype),
+               'table'              => $dbu->getTableForItemType($itemtype),
                'linkfield'          => 'items_id'
             ]
          ]
@@ -720,7 +724,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
       $tab[] = [
          'id'                 => '97',
-         'table'              => getTableForItemType($itemtype),
+         'table'              => $dbu->getTableForItemType($itemtype),
          'field'              => 'id',
          'name'               => $item::getTypeName(),
          'massiveaction'      => false,
@@ -739,6 +743,8 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
    * @return array
    */
    function getAddSearchOptions() {
+
+      $dbu = new DbUtils();
 
       $tab[6091]['table']          = 'glpi_plugin_printercounters_records';
       $tab[6091]['field']          = 'date';
@@ -778,17 +784,17 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       $tab[6093]['massiveaction']  = false;
       $tab[6093]['datatype']       = 'bool';
       $tab[6093]['joinparams']     = ['jointype'   => 'itemtype_item',
-                                          'beforejoin' => ['table' => getTableForItemType($this->itemtype)]
+                                          'beforejoin' => ['table' => $dbu->getTableForItemType($this->itemtype)]
                                    ];
 
-      $tab[6094]['table']          = 'glpi_plugin_printercounters_recordmodels';
-      $tab[6094]['field']          = 'name';
-      $tab[6094]['name']           = __('Printercounters', 'printercounters').' - '.PluginPrintercountersRecordmodel::getTypeName(1);
-      $tab[6094]['datatype']       = 'dropdown';
-      $tab[6094]['massiveaction']  = false;
-      $tab[6094]['joinparams']     = ['beforejoin' => ['table'      => 'glpi_plugin_printercounters_items_recordmodels',
-                                                                 'joinparams' => ['jointype'   => 'itemtype_item',
-                                                                                       'beforejoin' => ['table' => getTableForItemType($this->itemtype)]]]
+      $tab[6094]['table']         = 'glpi_plugin_printercounters_recordmodels';
+      $tab[6094]['field']         = 'name';
+      $tab[6094]['name']          = __('Printercounters', 'printercounters') . ' - ' . PluginPrintercountersRecordmodel::getTypeName(1);
+      $tab[6094]['datatype']      = 'dropdown';
+      $tab[6094]['massiveaction'] = false;
+      $tab[6094]['joinparams']    = ['beforejoin' => ['table'      => 'glpi_plugin_printercounters_items_recordmodels',
+                                                      'joinparams' => ['jointype'   => 'itemtype_item',
+                                                                       'beforejoin' => ['table' => $dbu->getTableForItemType($this->itemtype)]]]
                                           ];
 
       $tab[6095]['table']          = 'glpi_plugin_printercounters_items_recordmodels';
@@ -800,13 +806,14 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
       $tab[6096]['table']          = 'glpi_plugin_printercounters_snmpauthentications';
       $tab[6096]['field']          = 'name';
-      $tab[6096]['name']           = __('Printercounters', 'printercounters').' - '.PluginPrintercountersSnmpauthentication::getTypeName(1);
+      $tab[6096]['name']           = __('Printercounters', 'printercounters') . ' - ' . PluginPrintercountersSnmpauthentication::getTypeName(1);
       $tab[6096]['datatype']       = 'dropdown';
       $tab[6096]['massiveaction']  = false;
       $tab[6096]['joinparams']     = ['beforejoin' => ['table'      => 'glpi_plugin_printercounters_items_recordmodels',
-                                                                 'joinparams' => ['jointype'   => 'itemtype_item',
-                                                                                       'beforejoin' => ['table' => getTableForItemType($this->itemtype)]]]
-                                          ];
+                                                      'joinparams' => ['jointype'   => 'itemtype_item',
+                                                                       'beforejoin' =>
+                                                                          ['table' => $dbu->getTableForItemType($this->itemtype)]]]
+      ];
 
       $tab[6097]['table']          = 'glpi_plugin_printercounters_items_recordmodels';
       $tab[6097]['field']          = 'nb_retries';
@@ -815,7 +822,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       $tab[6097]['searchtype']     = 'equals';
       $tab[6097]['datatype']       = 'number';
       $tab[6097]['joinparams']     = ['jointype'   => 'itemtype_item',
-                                           'beforejoin' => ['table' => getTableForItemType($this->itemtype)]
+                                           'beforejoin' => ['table' => $dbu->getTableForItemType($this->itemtype)]
                                     ];
 
       $tab[6098]['table']          = $this->getTable();
@@ -825,7 +832,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       $tab[6098]['nosearch']       = true;
       $tab[6098]['datatype']       = 'decimal';
       $tab[6098]['joinparams']     = ['jointype'   => 'itemtype_item',
-                                     'beforejoin' => ['table' => getTableForItemType($this->itemtype)]
+                                     'beforejoin' => ['table' => $dbu->getTableForItemType($this->itemtype)]
                               ];
 
       $tab[6100]['table']          = 'glpi_plugin_printercounters_items_recordmodels';
@@ -835,7 +842,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       $tab[6100]['searchtype']     = 'equals';
       $tab[6100]['datatype']       = 'number';
       $tab[6100]['joinparams']     = ['jointype'   => 'itemtype_item',
-                                           'beforejoin' => ['table' => getTableForItemType($this->itemtype)]
+                                           'beforejoin' => ['table' => $dbu->getTableForItemType($this->itemtype)]
                                     ];
 
       return $tab;
@@ -1012,8 +1019,8 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       $ids = $_SESSION["plugin_printercounters"]["ids"];
 
       $itemtype = $ma->getItemtype(false);
-
-      $item = getItemForItemtype($itemtype);
+      $dbu      = new DbUtils();
+      $item     = $dbu->getItemForItemtype($itemtype);
 
       $item_data = $ma->POST['item_data'];
 
@@ -1240,8 +1247,9 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
     */
    function addRestriction() {
       $options = Search::getCleanedOptions($this->getType());
+      $dbu     = new DbUtils();
       foreach ($options as $num => $val) {
-         if ($val['table'] == getTableForItemType($this->itemtype) && $val['field'] == 'name') {
+         if ($val['table'] == $dbu->getTableForItemType($this->itemtype) && $val['field'] == 'name') {
             return PluginPrintercountersSearch::addWhere('', 1, $this->getType(), $num, 'equals', null);
          }
       }
@@ -1314,17 +1322,18 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       $count      = 0;
       $sort       = null;
       $order      = "ASC";
+      $dbu        = new DbUtils();
 
       foreach ($searchopt as $num => $val) {
          if ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'date') {
             $types['date']      = 'ITEM_'.$count;
             $search_num['date'] = $num;
 
-         } else if ($val['table'] == getTableForItemType($this->itemtype) && $val['field'] == 'id') {
+         } else if ($val['table'] == $dbu->getTableForItemType($this->itemtype) && $val['field'] == 'id') {
             $types['id']      = 'ITEM_'.$count;
             $search_num['id'] = $num;
 
-         } else if ($val['table'] == getTableForItemType($this->itemtype) && $val['field'] == 'name') {
+         } else if ($val['table'] == $dbu->getTableForItemType($this->itemtype) && $val['field'] == 'name') {
             $types['name']      = 'ITEM_'.$count;
             $search_num['name'] = $num;
 
@@ -1520,8 +1529,9 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
    function getItemRecordConfig($items_id, $itemtype) {
       global $DB;
 
-      $output = [];
-      $itemjoin = getTableForItemType($itemtype);
+      $output   = [];
+      $dbu      = new DbUtils();
+      $itemjoin = $dbu->getTableForItemType($itemtype);
 
       if (!empty($items_id) && !empty($itemtype)) {
          $query = "SELECT `".$this->getTable()."`.`id` as plugin_items_recordmodels_id,
@@ -1604,8 +1614,8 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          if (!is_array($searchopt)) {
             return false;
          }
-
-         $item = getItemForItemtype($this->fields['itemtype']);
+         $dbu  = new DbUtils();
+         $item = $dbu->getItemForItemtype($this->fields['itemtype']);
 
          foreach ($this->oldvalues as $key => $oldval) {
             $changes = [];
@@ -1620,11 +1630,15 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
                // Linkfield or standard field not massive action enable
                if (($val2['field'] == $key && $val2['table'] == $this->getTable())
                        || ($key == getForeignKeyFieldForItemType('PluginPrintercountersRecordmodel')
-                               && $val2['field'] == 'name' && $val2['table'] == getTableForItemType('PluginPrintercountersRecordmodel')
+                               && $val2['field'] == 'name'
+                           && $val2['table'] == $dbu->getTableForItemType('PluginPrintercountersRecordmodel')
                        || ($key == getForeignKeyFieldForItemType('PluginPrintercountersSnmpauthentication')
-                               && $val2['field'] == 'name' && $val2['table'] == getTableForItemType('PluginPrintercountersSnmpauthentication')))) {
+                               && $val2['field'] == 'name'
+                           && $val2['table'] == $dbu->getTableForItemType('PluginPrintercountersSnmpauthentication')))) {
 
-                  $changes = [$id_search_option, $item->getValueToDisplay($searchopt[$id_search_option], addslashes($oldval)), $item->getValueToDisplay($searchopt[$id_search_option], $this->fields[$key])];
+                  $changes = [$id_search_option, $item->getValueToDisplay($searchopt[$id_search_option],
+                                                                          addslashes($oldval)),
+                              $item->getValueToDisplay($searchopt[$id_search_option], $this->fields[$key])];
                   break;
                }
             }
@@ -1728,8 +1742,9 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
    function checkMandatoryFields($input) {
       $msg     = [];
       $checkKo = false;
+      $dbu     = new DbUtils();
 
-      $item = getItemForItemtype($this->itemtype);
+      $item = $dbu->getItemForItemtype($this->itemtype);
 
       $mandatory_fields = ['plugin_printercounters_snmpauthentications_id'  => PluginPrintercountersSnmpauthentication::getTypeName(),
                                 'plugin_printercounters_recordmodels_id'         => PluginPrintercountersRecordmodel::getTypeName(),

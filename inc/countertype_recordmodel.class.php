@@ -315,9 +315,10 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    function getRecordmodelCountersForItem($items_id, $itemtype, $order = null) {
       global $DB;
 
-      $itemjoin  = getTableForItemType("PluginPrintercountersCountertype");
-      $itemjoin2 = getTableForItemType("PluginPrintercountersRecordmodel");
-      $itemjoin3 = getTableForItemType("PluginPrintercountersItem_Recordmodel");
+      $dbu       = new DbUtils();
+      $itemjoin  = $dbu->getTableForItemType("PluginPrintercountersCountertype");
+      $itemjoin2 = $dbu->getTableForItemType("PluginPrintercountersRecordmodel");
+      $itemjoin3 = $dbu->getTableForItemType("PluginPrintercountersItem_Recordmodel");
 
       $output = [];
 
@@ -366,11 +367,10 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    function getOIDRecordmodelCountersForItem($items_id, $itemtype, $oid_type) {
       global $DB;
 
-      $itemjoin  = getTableForItemType("PluginPrintercountersCountertype");
-      $itemjoin2 = getTableForItemType("PluginPrintercountersRecordmodel");
-      $itemjoin3 = getTableForItemType("PluginPrintercountersItem_Recordmodel");
-
-      $output = [];
+      $dbu       = new DbUtils();
+      $itemjoin  = $dbu->getTableForItemType("PluginPrintercountersCountertype");
+      $itemjoin2 = $dbu->getTableForItemType("PluginPrintercountersRecordmodel");
+      $itemjoin3 = $dbu->getTableForItemType("PluginPrintercountersItem_Recordmodel");
 
       $query = "SELECT `".$this->getTable()."`.`oid`
                FROM ".$this->getTable()."
@@ -406,8 +406,9 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
    function getRecordmodelCounters(array $recordmodels_id, $order = null) {
       global $DB;
 
-      $itemjoin  = getTableForItemType("PluginPrintercountersCountertype");
-      $itemjoin2 = getTableForItemType("PluginPrintercountersRecordmodel");
+      $dbu       = new DbUtils();
+      $itemjoin  = $dbu->getTableForItemType("PluginPrintercountersCountertype");
+      $itemjoin2 = $dbu->getTableForItemType("PluginPrintercountersRecordmodel");
 
       $output = [];
 
@@ -454,8 +455,6 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
                    FROM `glpi_plugin_printercounters_countertypes_recordmodels`
                    WHERE `oid_type` = ". self::NAME ." 
                    AND `plugin_printercounters_recordmodels_id` = ".$options['plugin_printercounters_recordmodels_id'];
-
-         $output = [];
 
          $result = $DB->query($query);
          if ($DB->numrows($result)) {

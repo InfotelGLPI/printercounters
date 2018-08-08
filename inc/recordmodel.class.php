@@ -103,6 +103,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
     **/
    public function rawSearchOptions() {
 
+      $dbu = new DbUtils();
       $tab = [];
 
       $tab[] = [
@@ -161,7 +162,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
 
       $tab[] = [
          'id'            => 15,
-         'table'         => getTableForItemType($this->itemtype),
+         'table'         => $dbu->getTableForItemType($this->itemtype),
          'field'         => 'name',
          'forcegroupby'  => true,
          'name'          => __('Linked items', 'printercounters'),
@@ -172,7 +173,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
                              'beforejoin'
                                          => ['table'      => 'glpi_plugin_printercounters_items_recordmodels',
                                              'joinparams' => ['jointype' => 'child']
-                             ]
+                                         ]
          ],
       ];
 
@@ -313,12 +314,13 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
       global $DB;
 
       $output = [];
+      $dbu    = new DbUtils();
 
       // Get conformity configuration
-      $itemjoin  = getTableForItemType("PluginPrintercountersItem_Recordmodel");
-      $itemjoin2 = getTableForItemType("PluginPrintercountersCountertype_Recordmodel");
-      $itemjoin3 = getTableForItemType("PluginPrintercountersSysdescr");
-      $itemjoin4 = getTableForItemType($itemtype);
+      $itemjoin  = $dbu->getTableForItemType("PluginPrintercountersItem_Recordmodel");
+      $itemjoin2 = $dbu->getTableForItemType("PluginPrintercountersCountertype_Recordmodel");
+      $itemjoin3 = $dbu->getTableForItemType("PluginPrintercountersSysdescr");
+      $itemjoin4 = $dbu->getTableForItemType($itemtype);
 
       $query = "SELECT `" . $this->getTable() . "`.`mac_address_conformity`,
                        `" . $this->getTable() . "`.`sysdescr_conformity`,
@@ -373,11 +375,13 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
    function duplicateRecordmodelForItem($itemtype, $items_id, $entities_id) {
       $item_recordmodel = new PluginPrintercountersItem_Recordmodel($itemtype, $items_id);
       $data             = $item_recordmodel->getItem_RecordmodelForItem();
+
       if (!empty($data)) {
          $data = reset($data);
+         $dbu = new DbUtils();
 
          // Get anscestors of the item entity
-         $entities_ancestors               = getAncestorsOf('glpi_entities', $entities_id);
+         $entities_ancestors               = $dbu->getAncestorsOf('glpi_entities', $entities_id);
          $entities_ancestors[$entities_id] = $entities_id;
 
          // If recordmodel is not in parent item entities

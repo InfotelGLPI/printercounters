@@ -91,10 +91,11 @@ $startDate = $datecriteria->getEndDate();
 
 if ($endDate != 'NULL' && $startDate != 'NULL') {
    // Get all dates between begin and end
-   $format = 'My';
+   $format    = 'My';
+   $dbu       = new DbUtils();
    $tmp_datas = getDatesBetween2Dates($datecriteria->getStartDate(), $datecriteria->getEndDate(), $format);
 
-   $entity_restrict = getEntitiesRestrictRequest("AND", "glpi_plugin_printercounters_budgets", "", $_SESSION['glpiactiveentities']);
+   $entity_restrict = $dbu->getEntitiesRestrictRequest("AND", "glpi_plugin_printercounters_budgets", "", $_SESSION['glpiactiveentities']);
 
    $query = "SELECT `glpi_plugin_printercounters_budgets`.*, 
                     `glpi_entities`.`level` as entities_level, 

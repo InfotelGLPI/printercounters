@@ -251,7 +251,6 @@ class PluginPrintercountersBudget extends CommonDropdown {
          }
       }
 
-      $searchopt = [];
       $searchopt = &Search::getOptions($this->getType());
 
       $output = [];
@@ -773,7 +772,8 @@ class PluginPrintercountersBudget extends CommonDropdown {
       }
 
       // Get array of budget sons
-      $entities_sons = getSonsOf('glpi_entities', $selected_budget['entities_id']);
+      $dbu           = new DbUtils();
+      $entities_sons = $dbu->getSonsOf('glpi_entities', $selected_budget['entities_id']);
       if ($selected_budget['entities_id'] == -1) {
          $entities_sons[0] = 0;
       }
@@ -1009,9 +1009,9 @@ class PluginPrintercountersBudget extends CommonDropdown {
    function getItems($condition = null) {
       global $DB;
 
-      $output = [];
-
-      $itemjoin  = getTableForItemType('Entity');
+      $output   = [];
+      $dbu      = new DbUtils();
+      $itemjoin = $dbu->getTableForItemType('Entity');
 
       $query = "SELECT `".$this->getTable()."`.`name`, 
                        `".$this->getTable()."`.`id` as budgets_id, 
@@ -1348,7 +1348,6 @@ class PluginPrintercountersBudget extends CommonDropdown {
     * @return type
     */
    function checkParentAmount($budgets, $budgets_id = 0, $parent_budget = [], $result = true, $rootLevel = 0) {
-      global $CFG_GLPI;
 
       $amount = 0;
       foreach ($budgets as $budget) {

@@ -220,7 +220,9 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       } else {
          $start = 0;
       }
-      $data = $this->getItems($start, getEntitiesRestrictRequest("AND", $this->getTable(), "", $_SESSION['glpiactiveentities'], true));
+      $dbu = new DbUtils();
+      $data = $this->getItems($start,
+                              $dbu->getEntitiesRestrictRequest("AND", $this->getTable(), "", $_SESSION['glpiactiveentities'], true));
 
       if ($canedit) {
          echo "<div id='viewsnmpset".$config['configs_id']."_$rand'></div>\n";
@@ -353,6 +355,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
 
       $messages = [];
       $error    = false;
+      $dbu      = new DbUtils();
 
       $additional_data = new PluginPrintercountersAdditional_data();
 
@@ -386,7 +389,11 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
                                                                           isset($snmp_auth[$printers_id])     ? $snmp_auth[$printers_id]     : []);
 
                               // Set values on printer
-                              $SNMPsetValues = $this->getItems(0, getEntitiesRestrictRequest("AND", $this->getTable(), "", $record_config[$printers_id]['entities_id'], true));
+                              $SNMPsetValues = $this->getItems(0,
+                                                               $dbu->getEntitiesRestrictRequest("AND",
+                                                                                                $this->getTable(), "",
+                                                                                                $record_config[$printers_id]['entities_id'],
+                                                                                                true));
                               $SNMPsetValues = reset($SNMPsetValues);
                               if (!empty($SNMPsetValues)) {
                                  foreach ($SNMPsetValues as $key => &$val) {
@@ -466,8 +473,8 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
          preg_match_all("/##printer\.(\w*)##/", $input, $tags);
 
          $input = str_replace("\n", " - ", Html::cleanPostForTextArea($input));
-
-         $item = getItemForItemtype($itemtype);
+         $dbu   = new DbUtils();
+         $item  = $dbu->getItemForItemtype($itemtype);
          $item->getFromDB($items_id);
 
          $replaceValue = [];
@@ -598,8 +605,10 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
    * @return boolean
    */
    function checkDuplicateFields($input) {
-
-      $data = $this->getItems(0, getEntitiesRestrictRequest("AND", $this->getTable(), "", $_SESSION['glpiactiveentities'], true));
+      $dbu = new DbUtils();
+      $data = $this->getItems(0,
+                              $dbu->getEntitiesRestrictRequest("AND", $this->getTable(), "",
+                                                               $_SESSION['glpiactiveentities'], true));
 
       $msg     = [];
       $checkKo = false;
