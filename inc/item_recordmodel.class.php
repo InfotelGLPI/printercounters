@@ -143,7 +143,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
                   $dbu = new DbUtils();
                   return self::createTabEntry(__('Linked items', 'printercounters'),
                                               $dbu->countElementsInTable($this->getTable(),
-                                                                         "`plugin_printercounters_recordmodels_id` = '".$item->getID()."'"));
+                                                                         ["plugin_printercounters_recordmodels_id" => $item->getID()]));
                }
                return __('Linked items', 'printercounters');
                break;
@@ -190,7 +190,9 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
    */
    function showForItem($item) {
       $dbu = new DbUtils();
-      if ($dbu->countElementsInTable($this->getTable(), "`items_id` = '".$item->getID()."' AND `itemtype` ='".$item->getType()."'")) {
+      if ($dbu->countElementsInTable($this->getTable(),
+                                     ["items_id" => $item->getID(),
+                                      "itemtype" => $item->getType()])) {
          // Record error
          echo "<div class='center' id='error_item'>";
          $errorItem = new PluginPrintercountersErrorItem($item->getType(), $item->getID());

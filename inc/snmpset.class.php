@@ -74,7 +74,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
                   $dbu = new DbUtils();
                   return self::createTabEntry(self::getTypeName(),
                                               $dbu->countElementsInTable($this->getTable(),
-                                                                         "`plugin_printercounters_configs_id` = '".$item->getID()."'"));
+                                                                         ["plugin_printercounters_configs_id" => $item->getID()]));
                }
                return self::getTypeName();
                break;

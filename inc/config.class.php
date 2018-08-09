@@ -181,7 +181,7 @@ class PluginPrintercountersConfig extends CommonDBTM {
    function getConfigFromDB($options = []) {
 
       $table = $this->getTable();
-      $where = '1';
+      $where = [];
       if (isset($options['where'])) {
          $where = $options['where'];
       }

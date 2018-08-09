@@ -246,7 +246,7 @@ function plugin_item_purge_printercounters($item) {
          // If no counter delete record associated
          $dbu = new DbUtils();
          if ($dbu->countElementsInTable($dbu->getTableForItemType("PluginPrintercountersCounter"),
-                                        "`plugin_printercounters_records_id` = ".$item->getField('plugin_printercounters_records_id')) == 0) {
+                                        ["plugin_printercounters_records_id" => $item->getField('plugin_printercounters_records_id')]) == 0) {
             $temp = new PluginPrintercountersRecord();
             $temp->deleteByCriteria(['id' => $item->getField('plugin_printercounters_records_id')], 1);
          }

@@ -138,7 +138,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
                   $dbu = new DbUtils();
                   return self::createTabEntry(__('Linked items', 'printercounters'),
                                               $dbu->countElementsInTable($this->getTable(),
-                                                                         "`plugin_printercounters_billingmodels_id` = '".$item->getID()."'"));
+                                                                         ["plugin_printercounters_billingmodels_id" => $item->getID()]));
                }
                return __('Linked items', 'printercounters');
                break;

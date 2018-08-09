@@ -80,7 +80,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
                $dbu = new DbUtils();
                return self::createTabEntry(self::getTypeName(),
                                            $dbu->countElementsInTable($this->getTable(),
-                                                                      "`plugin_printercounters_recordmodels_id` = '".$item->getID()."'"));
+                                                                      ["plugin_printercounters_recordmodels_id" => $item->getID()]));
             }
             return self::getTypeName();
          }

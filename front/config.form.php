@@ -45,7 +45,7 @@ if ($plugin->isActivated("printercounters")) {
 
    if (isset($_POST["update_config"])) {
       $dbu = new DbUtils();
-      if (!$dbu->countElementsInTable("glpi_plugin_printercounters_configs", "`id` = 1")) {
+      if (!$dbu->countElementsInTable("glpi_plugin_printercounters_configs", ["id" => 1])) {
          $config->add($_POST);
       } else {
          $_POST['id'] = 1;
