@@ -6,24 +6,32 @@
    <logo>https://raw.githubusercontent.com/InfotelGLPI/printercounters/master/printercounters.png</logo>
    <description>
       <short>
-         <fr><![CDATA[Plugin de gestion des compteurs des imprimantes basé sur le protocole SNMP]]></fr>
          <en><![CDATA[Plugin counters management of printers based on SNMP]]></en>
+         <cs><![CDATA[Zásuvný modul správy počitadel v tiskárnách založený na SNMP]]></cs>
+         <fr><![CDATA[Plugin de gestion des compteurs des imprimantes basé sur le protocole SNMP]]></fr>
       </short>
       <long>
-         <fr><![CDATA[Plugin de gestion des compteurs des imprimantes basé sur le protocole SNMP.
-Le plugin se base sur l'inventaire déja existant de GLPI, pour récupérer les adresses IP des imprimantes de chaque entité.
-Le plugin permet :
-        <br />- D'effectuer le relevé des compteurs des imprimantes sur le réseau
-        <br />- De configurer et de gérer l'interrogation des compteurs pour chaque imprimante
-        <br />- D'afficher et de gérer les coûts par imprimantes / entités
-   ]]></fr>
          <en><![CDATA[Plugin counters management of printers based on SNMP.
 The plugin is based on the existing inventory GLPI to retrieve the printer IP addresses of each entity.
 The plugin allows :
         <br />- To perform counters reading printers on the network
         <br />- To configure and manage the counter interrogation for each printer
         <br />- To view and manage costs by printers / entities
-   ]]></en>
+   ]]></en>         
+         <cs><![CDATA[Zásuvný modul správy počitadel v tiskárnách založený na SNMP.
+Zásuvný modul je založen na existujícím GLPI inventáři pro získávání IP adres tiskárny pro každou z entit.
+Zásuvný modul umožňuje:
+        <br />- Čtení počitadel v tiskárnách na síti
+        <br />- Nastavit a spravovat vyslýchání počitadla na každé tiskárně
+        <br />- Zobrazit a spravovat náklady podle tiskáren/entit
+   ]]></cs>
+        <fr><![CDATA[Plugin de gestion des compteurs des imprimantes basé sur le protocole SNMP.
+Le plugin se base sur l'inventaire déja existant de GLPI, pour récupérer les adresses IP des imprimantes de chaque entité.
+Le plugin permet :
+        <br />- D'effectuer le relevé des compteurs des imprimantes sur le réseau
+        <br />- De configurer et de gérer l'interrogation des compteurs pour chaque imprimante
+        <br />- D'afficher et de gérer les coûts par imprimantes / entités
+   ]]></fr>
        </long>
    </description>
    <homepage>https://github.com/InfotelGLPI/printercounters</homepage>
@@ -85,14 +93,18 @@ The plugin allows :
     </langs>
    <license><![CDATA[GPLv2+]]></license>
       <tags>
-         <fr>
-            <tag>gestion</tag>
-            <tag>inventaire</tag>
-         </fr>
          <en>
             <tag>management</tag>
             <tag>inventory</tag>
          </en>
+         <cs>
+            <tag>správa</tag>
+            <tag>inventář</tag>
+         </cs>
+         <fr>
+            <tag>gestion</tag>
+            <tag>inventaire</tag>
+         </fr>
    </tags>
    <screenshots>
       <screenshot>https://raw.githubusercontent.com/wiki/InfotelGLPI/printercounters/notice/image003.jpg</screenshot>
