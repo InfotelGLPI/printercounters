@@ -1458,8 +1458,9 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       // Update TCO
       $item_recordmodel = new PluginPrintercountersItem_Recordmodel($this->itemtype, $this->items_id);
-      $item_recordmodel->getFromDBByCrit(['LOWER(`itemtype`)' => "LOWER('".$this->itemtype."')",
+      $item_recordmodel->getFromDBByCrit(['itemtype' => ['LIKE' => $this->itemtype],
                                           'items_id' => $this->items_id]);
+
       if ($item_recordmodel->update(['id' => $item_recordmodel->getField('id'),
                                      'global_tco' => ($records['total_record_cost'] + $tco)])) {
          $result = Html::formatNumber($records['total_record_cost'] + $tco);
