@@ -58,6 +58,7 @@ if (isset($_POST["add"])) {
 
 } else {
    Html::header(__('Record planning', 'printercounters'), '', "tools", "pluginprintercountersmenu", "record");
+   echo '<script type="text/javascript" src="../printercounters.js"></script>';
    $item_recordmodel->showRecordPlanning();
    Html::footer();
 }

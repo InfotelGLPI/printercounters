@@ -1558,7 +1558,8 @@ class PluginPrintercountersRecord extends CommonDBTM {
                      foreach ($record['counters'] as $last_counter) {
                         foreach ($input['counters'] as $countertypes_recordmodels_id => $counters) {
                            foreach ($counters as $value) {
-                              if (($last_counter['countertypes_recordmodels_id'] == $countertypes_recordmodels_id) && $value < $last_counter['counters_value']) {
+                              if (($last_counter['countertypes_recordmodels_id'] == $countertypes_recordmodels_id)
+                                  && $value < $last_counter['counters_value']) {
                                  $msg[]   = __('Error : Counters cannot be lower than the previous', 'printercounters');
                                  $checkKo = true;
                                  break 3;

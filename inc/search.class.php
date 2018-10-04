@@ -1505,7 +1505,8 @@ class PluginPrintercountersSearch extends CommonDBTM {
    *
    */
    static function initPrintercounterJS($params) {
-      echo '<script type="text/javascript" src="../printercounters.js"></script>';
+
+      Html::requireJs('printercounters');
 
       echo '<script type="text/javascript">';
       echo 'var printercountersSearch = $(document).printercountersSearch('.json_encode($params).');';
