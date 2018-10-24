@@ -1005,7 +1005,9 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
       // Launch ajax massive action
       echo "<script type='text/javascript'>";
+      echo "$(document).ready(function() {";
       echo "printecounters_ajaxMassiveAction('".$CFG_GLPI['root_doc']."', 'ajaxMassiveAction', ".ini_get('max_execution_time').");";
+      echo "});";
       echo "</script>";
    }
 
