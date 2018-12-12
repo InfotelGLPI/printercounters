@@ -27,16 +27,18 @@
  --------------------------------------------------------------------------
  */
 
+define('PLUGIN_PRINTERCOUNTERS_VERSION', '1.6.0');
+
 // Init the hooks of the plugins -Needed
 function plugin_init_printercounters() {
    global $PLUGIN_HOOKS, $CFG_GLPI;
 
    $PLUGIN_HOOKS['csrf_compliant']['printercounters'] = true;
-   $PLUGIN_HOOKS['change_profile']['printercounters'] = ['PluginPrintercountersProfile','changeProfile'];
+   $PLUGIN_HOOKS['change_profile']['printercounters'] = ['PluginPrintercountersProfile', 'changeProfile'];
 
-   $PLUGIN_HOOKS['add_css']['printercounters'] = ['printercounters.css'];
+   $PLUGIN_HOOKS['add_css']['printercounters']          = ['printercounters.css'];
    $PLUGIN_HOOKS['add_javascript']['printercounters'][] = 'printercounters.js';
-   $PLUGIN_HOOKS['javascript']['printercounters'][] = '/plugins/printercounters/printercounters.js';
+   $PLUGIN_HOOKS['javascript']['printercounters'][]     = '/plugins/printercounters/printercounters.js';
 
    if (Session::getLoginUserID()) {
       if (class_exists('PluginPrintercountersItem_Recordmodel')) {
@@ -67,7 +69,7 @@ function plugin_init_printercounters() {
          // Injection
          $PLUGIN_HOOKS['plugin_datainjection_populate']['printercounters'] = 'plugin_datainjection_populate_printercounters';
 
-         $PLUGIN_HOOKS['menu_toadd']['printercounters'] = ['tools' => 'PluginPrintercountersMenu'];
+         $PLUGIN_HOOKS['menu_toadd']['printercounters']          = ['tools' => 'PluginPrintercountersMenu'];
          $PLUGIN_HOOKS['helpdesk_menu_entry']['printercounters'] = true;
          if (Session::haveRight("plugin_printercounters", UPDATE)) {
             $PLUGIN_HOOKS['config_page']['printercounters'] = 'front/config.form.php';
@@ -77,7 +79,7 @@ function plugin_init_printercounters() {
       $PLUGIN_HOOKS['post_init']['printercounters'] = 'plugin_printercounters_postinit';
 
       // Pre item purge
-      $PLUGIN_HOOKS['pre_item_purge']['printercounters']  = [
+      $PLUGIN_HOOKS['pre_item_purge']['printercounters'] = [
          'PluginPrintercountersRecordmodel'             => 'plugin_pre_item_purge_printercounters',
          'PluginPrintercountersBillingmodel'            => 'plugin_pre_item_purge_printercounters',
          'PluginPrintercountersCountertype'             => 'plugin_pre_item_purge_printercounters',
@@ -89,42 +91,48 @@ function plugin_init_printercounters() {
          'Entity'                                       => 'plugin_pre_item_purge_printercounters'];
 
       // Post item purge
-      $PLUGIN_HOOKS['item_purge']['printercounters']  = [
+      $PLUGIN_HOOKS['item_purge']['printercounters'] = [
          'PluginPrintercountersCounter' => 'plugin_item_purge_printercounters'];
 
       // Pre item delete
-      $PLUGIN_HOOKS['pre_item_delete']['printercounters']  = [
+      $PLUGIN_HOOKS['pre_item_delete']['printercounters'] = [
          'Printer' => 'plugin_item_delete_printercounters'];
 
       // Item transfer
-      $PLUGIN_HOOKS['item_transfer']['printercounters']  = 'plugin_item_transfer_printercounters';
+      $PLUGIN_HOOKS['item_transfer']['printercounters'] = 'plugin_item_transfer_printercounters';
    }
 }
 
 // Get the name and the version of the plugin - Needed
 function plugin_version_printercounters() {
-   return  [
-      'name'           => __('Printer counters', 'printercounters'),
-      'version'        => '1.5.1',
-      'author'         => "<a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>",
-      'license'        => 'GPLv2+',
-      'homepage'       => 'https://github.com/InfotelGLPI/printercounters',
-      'minGlpiVersion' => '9.3'];// For compatibility / no install in version < 9.2
+   return [
+      'name'         => __('Printer counters', 'printercounters'),
+      'version'      => PLUGIN_PRINTERCOUNTERS_VERSION,
+      'author'       => "<a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>",
+      'license'      => 'GPLv2+',
+      'homepage'     => 'https://github.com/InfotelGLPI/printercounters',
+      'requirements' => [
+         'glpi' => [
+            'min' => '9.4',
+            'dev' => false
+         ]
+      ]
+   ];
 }
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_printercounters_check_prerequisites() {
-
-   if (version_compare(GLPI_VERSION, '9.3', 'lt') || version_compare(GLPI_VERSION, '9.4', 'ge')) {
-      echo __('This plugin requires GLPI >= 9.3');
+   if (version_compare(GLPI_VERSION, '9.4', 'lt')
+       || version_compare(GLPI_VERSION, '9.5', 'ge')) {
+      if (method_exists('Plugin', 'messageIncompatible')) {
+         echo Plugin::messageIncompatible('core', '9.4');
+      }
       return false;
    }
-
    if (!extension_loaded('snmp')) {
       echo __('This plugin requires SNMP php extension', 'printercounters');
       return false;
    }
-
    return true;
 }
 

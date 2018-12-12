@@ -248,7 +248,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       $_POST['field']      = $default_search['field'];
       $_POST['value']      = $default_search['value'];
       $_POST['searchtype'] = $default_search['searchtype'];
-      include (GLPI_ROOT."/ajax/searchoption.php");
+      include (GLPI_ROOT."/plugins/printercounters/ajax/searchoption.php");
       $_POST['itemtype'] = !empty($itemtype) ? $itemtype : '';
       echo "</div>\n";
 
@@ -259,7 +259,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
                       'searchtype'  => ''];
 
       Ajax::updateItemOnSelectEvent("dropdown_criteria_".$i."__field_".$rand, "SearchSpan".$item->getType()."$i",
-                                    $CFG_GLPI["root_doc"]."/ajax/searchoption.php", $params);
+                                    $CFG_GLPI["root_doc"]."/plugins/printercounters/ajax/searchoption.php", $params);
       echo "</td></tr>";
       echo "</table></div>";
    }

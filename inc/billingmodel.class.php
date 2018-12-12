@@ -322,7 +322,7 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
     * @return boolean
     */
    function getBillingModelsForRecordmodel($recordmodels_id) {
-      $data = $this->find("`plugin_printercounters_recordmodels_id`=".$recordmodels_id);
+      $data = $this->find(['plugin_printercounters_recordmodels_id' => $recordmodels_id]);
 
       if (!empty($data)) {
          return $data;

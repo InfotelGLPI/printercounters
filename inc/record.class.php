@@ -967,7 +967,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
     */
    function setFirstRecord($item_recordmodel, $recordmodel) {
 
-      $records = $this->find("`plugin_printercounters_items_recordmodels_id` = " . $item_recordmodel);
+      $records = $this->find(['plugin_printercounters_items_recordmodels_id' => $item_recordmodel]);
       $dbu     = new DbUtils();
 
       if (empty($records)) {

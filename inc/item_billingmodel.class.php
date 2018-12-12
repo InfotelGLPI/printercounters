@@ -187,7 +187,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
       $used = [];
 
-      $data = $this->find("`items_id` = '".$item->getID()."' AND `itemtype` = '".$item->getType()."'");
+      $data = $this->find(['items_id' => $item->getID(), 'itemtype' => $item->getType()]);
       if (!empty($data)) {
          foreach ($data as $values) {
             $used[] = $values['plugin_printercounters_billingmodels_id'];

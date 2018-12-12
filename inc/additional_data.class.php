@@ -179,7 +179,7 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
 
       if (!empty($input['additional_datas'])) {
          // Find previous data of printer
-         $found_datas = $this->find("`plugin_printercounters_items_recordmodels_id`=".$input['items_recordmodels_id']);
+         $found_datas = $this->find(['plugin_printercounters_items_recordmodels_id' => $input['items_recordmodels_id']]);
 
          foreach ($input['additional_datas'] as $key => &$val) {
             $found = 0;

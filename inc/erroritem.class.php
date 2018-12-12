@@ -206,6 +206,7 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
       $config_data = $config->getInstance();
 
       if ($config_data['enable_error_handler']) {
+         //TODO find
          $data = $this->find("`items_id`= '".$this->items_id."' AND LOWER(`itemtype`) = '".strtolower($this->itemtype)."'");
          $data = reset($data);
 
@@ -277,7 +278,7 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
    }
 
    private function listItems() {
-
+//TODO find
       $fields = $this->find("`error_counter` > 0");
 
       if (!empty($fields)) {
@@ -332,7 +333,7 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
       if ($config_data['enable_error_handler']) {
          // Get list of items in error
          $errorItem   = new self();
-         $errorList   = $errorItem->find("`status` IN ('".self::$HARD_STATE."', '".self::$SOFT_STATE."')");
+         $errorList   = $errorItem->find(['status' => [self::$HARD_STATE, self::$SOFT_STATE]]);
 
          if (!empty($errorList)) {
             foreach ($errorList as $error) {
