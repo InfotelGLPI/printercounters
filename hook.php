@@ -117,7 +117,8 @@ function plugin_printercounters_uninstall() {
                    "glpi_plugin_printercounters_budgets",
                    "glpi_plugin_printercounters_items_billingmodels",
                    "glpi_plugin_printercounters_sysdescrs",
-                   "glpi_plugin_printercounters_additionals_datas"];
+                   "glpi_plugin_printercounters_additionals_datas",
+                   "glpi_plugin_printercounters_snmpsets"];
 
    foreach ($tables as $table) {
       $DB->query("DROP TABLE IF EXISTS `$table`;");

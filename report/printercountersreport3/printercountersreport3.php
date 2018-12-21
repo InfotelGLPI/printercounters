@@ -213,7 +213,7 @@ if (empty($datas)) {
       Html::header($title, $_SERVER['PHP_SELF'], "utils", "report");
       Report::title();
    }
-   echo "<div class='center'><font class='red b'>".__('No item found')."</font></div>";
+   echo "<div class='center'><span style=\"font-weight:bold; color:red\">".__('No item found')."</span></div>";
    Html::footer();
 
 } else if ($output_type == Search::HTML_OUTPUT) {
