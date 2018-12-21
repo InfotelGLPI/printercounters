@@ -207,7 +207,8 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
 
       if ($config_data['enable_error_handler']) {
          //TODO find
-         $data = $this->find("`items_id`= '".$this->items_id."' AND LOWER(`itemtype`) = '".strtolower($this->itemtype)."'");
+         $data = $this->find(["items_id" =>  $this->items_id,
+                             "LOWER(itemtype)" => strtolower($this->itemtype)]);
          $data = reset($data);
 
          if ($data['error_counter'] > 0) {
@@ -279,7 +280,7 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
 
    private function listItems() {
 //TODO find
-      $fields = $this->find("`error_counter` > 0");
+      $fields = $this->find(["error_counter" => ['>', 0]]);
 
       if (!empty($fields)) {
          echo "<div class='center'>";
