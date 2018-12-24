@@ -247,6 +247,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
    * @return boolean
    */
    function showForRecordmodel($item) {
+      global $DB;
 
       $recordmodel = new PluginPrintercountersRecordmodel();
       $canedit = ($recordmodel->can($item->fields['id'], UPDATE) && $this->canCreate());
@@ -272,10 +273,22 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          // Dropdown item
          echo "<td class='center'>";
          echo $itemtype::getTypeName(2).'&nbsp;';
+
+         $iterator = $DB->request(['SELECT' => 'items_id',
+                                     'FROM'  => $this->getTable(),
+                                     'WHERE' => [
+                                        'itemtype' => $itemtype,
+                                     ],
+                                  ]);
+         $used = [];
+         while ($row = $iterator->next()) {
+            $used[] = $row['items_id'];
+         }
+
          Dropdown::show($itemtype, ['name'        => 'items_id',
-                                         'entity'      => $item->fields['entities_id'],
-                                         'entity_sons' => true,
-                                         'condition'   => " `".$dbu->getTableForItemType($itemtype)."`.`id` NOT IN (SELECT `items_id` FROM ".$this->getTable()." WHERE itemtype = '".$itemtype."')"]);
+                                    'entity'      => $item->fields['entities_id'],
+                                    'entity_sons' => true,
+                                    'used'        => $used]);
          echo "</td>";
          echo "</tr>";
 

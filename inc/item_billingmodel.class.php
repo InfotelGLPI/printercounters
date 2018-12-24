@@ -232,6 +232,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
     * @return boolean
     */
    function showForBillingmodel($item) {
+      global $DB;
 
       $billingmodel = new PluginPrintercountersBillingmodel();
       $canedit = ($billingmodel->can($item->fields['id'], UPDATE) && $this->canCreate());
@@ -257,10 +258,22 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
          echo "<td class='center'>";
          echo $itemtype::getTypeName(2).'&nbsp;';
          $dbu = new DbUtils();
-         Dropdown::show($itemtype, ['name' => 'items_id',
-             'entity' => $item->fields['entities_id'],
-             'entity_sons' => true,
-             'condition' => " `".$dbu->getTableForItemType($itemtype)."`.`id` NOT IN (SELECT `items_id` FROM ".$this->getTable()." WHERE itemtype = '".$itemtype."')"]);
+
+         $iterator = $DB->request(['SELECT' => 'items_id',
+                                   'FROM'  => $this->getTable(),
+                                   'WHERE' => [
+                                      'itemtype' => $itemtype,
+                                   ],
+                                  ]);
+         $used = [];
+         while ($row = $iterator->next()) {
+            $used[] = $row['items_id'];
+         }
+
+         Dropdown::show($itemtype, ['name'        => 'items_id',
+                                    'entity'      => $item->fields['entities_id'],
+                                    'entity_sons' => true,
+                                    'used'        => $used]);
          echo "</td>";
          echo "</tr>";
 
