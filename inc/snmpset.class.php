@@ -401,7 +401,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
                                        case 'set_contact':
                                           if (!$val) {
                                              unset($SNMPsetValues[$key]);
-                                             continue;
+                                             continue 2;
                                           }
                                           $SNMPsetValues['contact'] = $this->getTagTraduction($SNMPsetValues['contact'], $itemtype, $printers_id);
                                           break;
@@ -409,7 +409,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
                                        case 'set_name':
                                           if (!$val) {
                                              unset($SNMPsetValues[$key]);
-                                             continue;
+                                             continue 2;
                                           }
                                           $val = $record_config[$printers_id]['name'];
                                           break;
@@ -417,7 +417,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
                                        case 'set_location':
                                           if (!$val) {
                                              unset($SNMPsetValues[$key]);
-                                             continue;
+                                             continue 2;
                                           }
                                           $val = Dropdown::getDropdownName('glpi_locations', $record_config[$printers_id]['locations_id']);
                                           $val = str_replace(' > ', ', ', $val);

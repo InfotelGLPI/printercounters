@@ -1488,7 +1488,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
             $count = 0;
             foreach ($searchopt as $num => $val) {
                if (!isset($val['nodisplay']) || !$val['nodisplay']) {
-                  $give_item[$i]['ITEM_'.$count] = Search::giveItem($this->getType(), $num, $line, $count);
+                  $give_item[$i]['ITEM_'.$count] = Search::giveItem($this->getType(), $num, $line, $count,[],$count);
                }
                $count++;
             }

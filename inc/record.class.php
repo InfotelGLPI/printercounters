@@ -457,7 +457,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
             PluginPrintercountersSearch::parseData($line);
             foreach ($searchopt as $num => $val) {
                if (is_array($val) && (!isset($val['nosql']) || $val['nosql'] == false)) {
-                  $give_item[$i][$num] = Search::giveItem($this->getType(), $num, $line, $count);
+                  $give_item[$i][$num] = Search::giveItem($this->getType(), $num, $line, $count,[],$count);
                   $count++;
                }
             }
