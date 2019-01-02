@@ -993,9 +993,8 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
       $ma->POST["process_count"] = 0;
 
-      //TODO find
       $data = $this->find(["items_id"        => $ids,
-                           "LOWER(itemtype)" => strtolower($itemtype)]);
+                           "itemtype" => ucfirst(strtolower($itemtype))]);
       $item_data = [];
       foreach ($data as $key => $val) {
          $item_data[$val['items_id']] = $val;
