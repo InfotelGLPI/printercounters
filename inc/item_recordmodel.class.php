@@ -1344,31 +1344,31 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
       foreach ($searchopt as $num => $val) {
          if ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'date') {
-            $types['date']      = 'ITEM_'.$count;
+            $types['date']      = 'ITEM_'.$num;
             $search_num['date'] = $num;
 
          } else if ($val['table'] == $dbu->getTableForItemType($this->itemtype) && $val['field'] == 'id') {
-            $types['id']      = 'ITEM_'.$count;
+            $types['id']      = 'ITEM_'.$num;
             $search_num['id'] = $num;
 
          } else if ($val['table'] == $dbu->getTableForItemType($this->itemtype) && $val['field'] == 'name') {
-            $types['name']      = 'ITEM_'.$count;
+            $types['name']      = 'ITEM_'.$num;
             $search_num['name'] = $num;
 
          } else if ($val['table'] == 'glpi_entities' && $val['field'] == 'name') {
-            $types['entity']      = 'ITEM_'.$count;
+            $types['entity']      = 'ITEM_'.$num;
             $search_num['entity'] = $num;
 
          } else if ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'state') {
-            $types['state']      = 'ITEM_'.$count;
+            $types['state']      = 'ITEM_'.$num;
             $search_num['state'] = $num;
 
          } else if ($val['table'] == 'glpi_plugin_printercounters_records' && $val['field'] == 'result') {
-            $types['result']      = 'ITEM_'.$count;
+            $types['result']      = 'ITEM_'.$num;
             $search_num['result'] = $num;
 
          } else if ($val['table'] == $this->getTable() && $val['field'] == 'periodicity') {
-            $types['periodicity']      = 'ITEM_'.$count;
+            $types['periodicity']      = 'ITEM_'.$num;
             $search_num['periodicity'] = $num;
          }
 
@@ -1483,11 +1483,11 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          foreach ($search->dataSearch as $i => $row) {
             $row['id']   = $row[$types['name'].'_id'];
             $line['raw'] = $row;
-            PluginPrintercountersSearch::parseData($line);
+            PluginPrintercountersSearch::parseData($line,$this->getType());
             $count = 0;
             foreach ($searchopt as $num => $val) {
                if (!isset($val['nodisplay']) || !$val['nodisplay']) {
-                  $give_item[$i]['ITEM_'.$count] = Search::giveItem($this->getType(), $num, $line, $count,[],$count);
+                  $give_item[$i]['ITEM_'.$num] = Search::giveItem($this->getType(), $num, $line, $count);
                }
                $count++;
             }

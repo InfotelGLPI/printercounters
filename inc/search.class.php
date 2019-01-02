@@ -461,7 +461,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
                $col_num = 1;
 
                $line['raw'] = $history;
-               PluginPrintercountersSearch::parseData($line);
+               PluginPrintercountersSearch::parseData($line,$item->getType());
 
                // Show massive action checkbox
                $count   = 0;
@@ -559,7 +559,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       $query = "SELECT ";
       // Add select for all toview item
       foreach ($toview as $key => $val) {
-         $query .= self::addSelect($itemtype, $val, $key, 0);
+         $query .= self::addSelect($itemtype, $val, $val, 0);
       }
 
       if (!empty($itemtable)) {
@@ -657,7 +657,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       if (isset($p['sort']) && isset($p['order'])) {
          foreach ($toview as $key => $val) {
             if ($p['sort'] == $val) {
-               $query .= self::addOrderBy($itemtype, $p['sort'], $p['order'], $key);
+               $query .= self::addOrderBy($itemtype, $p['sort'], $p['order'], $val);
             }
          }
       }
@@ -1282,7 +1282,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       //      }
 
       if (isset($CFG_GLPI["union_search_type"][$itemtype])) {
-         return " ORDER BY ITEM_$key $order ";
+         return " ORDER BY ITEM_$ID $order ";
       }
 
       // Plugin can override core definition for its type
@@ -1357,7 +1357,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       }
 
       //return " ORDER BY $table.$field $order ";
-      return " ORDER BY ITEM_$key $order ";
+      return " ORDER BY ITEM_$ID $order ";
 
    }
 
@@ -2147,7 +2147,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       return $OK;
    }
 
-   static function parseData(&$newrow) {
+   static function parseData(&$newrow, $itemtype) {
       // Parse datas
       if (!empty($newrow['raw'])) {
          foreach ($newrow['raw'] as $key => $val) {
@@ -2157,7 +2157,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
             $keysplit = explode('_', $key);
 
             if (isset($keysplit[1]) && $keysplit[0] == 'ITEM') {
-               $j         = $keysplit[1];
+               $j         = $itemtype."_".$keysplit[1];
                $fieldname = 'name';
                if (isset($keysplit[2])) {
                   $fieldname = $keysplit[2];
