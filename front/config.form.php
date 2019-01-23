@@ -88,7 +88,7 @@ if ($plugin->isActivated("printercounters")) {
 
 } else {
    Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
-   echo "<div align='center'><br><br><img src=\"".$CFG_GLPI["root_doc"]."/pics/warning.png\" alt=\"warning\"><br><br>";
+   echo "<div align='center'><br><br><i class='fas fa-exclamation-triangle fa-4x' style='color:orange'></i><br><br>";
    echo "<b>Please activate the plugin</b></div>";
    Html::footer();
 }
