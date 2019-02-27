@@ -1,9 +1,9 @@
 # printercounters
 Plugin Printercounters pour GLPI
 
-Ce plugin est sur Transifex - Aidez-nous à le traduire : https://www.transifex.com/tsmr/GLPI_printercounters/
+Ce plugin est sur Transifex - Aidez-nous à le traduire : https://www.transifex.com/infotelGLPI/GLPI_printercounters/
 
-This plugin is on Transifex - Help us to translate : https://www.transifex.com/tsmr/GLPI_printercounters/
+This plugin is on Transifex - Help us to translate : https://www.transifex.com/infotelGLPI/GLPI_printercounters/
 
 Mise en place d'un plugin de gestion des compteurs des imprimantes basé sur le protocole SNMP.
 Le plugin se base sur l'inventaire déja existant de GLPI, pour récupérer les adresses IP des imprimantes de chaque entité.
