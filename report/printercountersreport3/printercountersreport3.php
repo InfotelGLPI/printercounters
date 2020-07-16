@@ -115,7 +115,7 @@ if ($endDate != 'NULL' && $startDate != 'NULL') {
    $result = $DB->query($query);
    $output = [];
    if ($DB->numrows($result)) {
-      while ($data = $DB->fetch_assoc($result)) {
+      while ($data = $DB->fetchAssoc($result)) {
          $data['total_page_number'] = 0;
          $data['record_amount'] = 0;
          $data['record_detail'] = [];

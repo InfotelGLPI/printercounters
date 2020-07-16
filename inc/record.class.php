@@ -824,7 +824,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                            GROUP BY  `glpi_plugin_printercounters_records`.`plugin_printercounters_items_recordmodels_id`";
             $resultFirst = $DB->query($queryFirst);
             if ($DB->numrows($resultFirst)) {
-               while ($data = $DB->fetch_assoc($resultFirst)) {
+               while ($data = $DB->fetchAssoc($resultFirst)) {
                   $firstRecords[] = $data['min_date'];
                }
                $query .= " AND `glpi_plugin_printercounters_records`.`date` NOT IN('".implode("','", $firstRecords)."') ";
@@ -846,7 +846,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         while ($data = $DB->fetch_assoc($result)) {
+         while ($data = $DB->fetchAssoc($result)) {
             $output[$data['records_id']] = $data['records_id'];
          }
 
@@ -1154,7 +1154,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
          if ($items_id > 0) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                $output[$data['records_id']]['recordmodels_id']                    = $data['recordmodels_id'];
                $output[$data['records_id']]['items_id']                           = $data['items_id'];
                $output[$data['records_id']]['itemtype']                           = $itemtype;
@@ -1169,7 +1169,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                                                                           'countertypes_recordmodels_id' => $data['countertypes_recordmodels_id']];
             }
          } else {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                $output[$itemtype][$data['items_id']][$data['records_id']]['recordmodels_id']                    = $data['recordmodels_id'];
                $output[$itemtype][$data['items_id']][$data['records_id']]['items_id']                           = $data['items_id'];
                $output[$itemtype][$data['items_id']][$data['records_id']]['itemtype']                           = $itemtype;
@@ -1493,7 +1493,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         while ($data = $DB->fetch_assoc($result)) {
+         while ($data = $DB->fetchAssoc($result)) {
             return $data['tco'];
          }
       }

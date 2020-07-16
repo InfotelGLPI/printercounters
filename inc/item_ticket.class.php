@@ -371,7 +371,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         while ($data = $DB->fetch_assoc($result)) {
+         while ($data = $DB->fetchAssoc($result)) {
             $output[$data['id']] = $data;
          }
       }
@@ -489,7 +489,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
 
          $result = $DB->query($query);
          if ($DB->numrows($result)) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                if (!isset($item_ticket_data[PluginPrintercountersItem_Ticket::$NB_RECORD_ERROR]) || !in_array($data['items_id'], $item_ticket_data[PluginPrintercountersItem_Ticket::$NB_RECORD_ERROR])) {
                   $items[$data['itemtype']][] = $data['items_id'];
                   $items_data[$data['itemtype']][$data['items_id']] = $data;
@@ -511,7 +511,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
 
          $result = $DB->query($query);
          if ($DB->numrows($result)) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                if ($data['bad_record_count'] >= $config_data['nb_errors_ticket']) {
                   $items_ko[$data['itemtype']][] = $data['items_id'];
                }
@@ -584,7 +584,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
 
          $result = $DB->query($query);
          if ($DB->numrows($result)) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                if (!isset($item_ticket_data[self::$NO_RECORD_DELAY]) || !in_array($data['items_id'], $item_ticket_data[self::$NO_RECORD_DELAY])) {
                   $items[$data['itemtype']][] = $data['items_id'];
                   $items_data[$data['itemtype']][$data['items_id']] = $data;
@@ -605,7 +605,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
 
          $result = $DB->query($query);
          if ($DB->numrows($result)) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                $items_ok[$data['itemtype']][] = $data['items_id'];
             }
          }

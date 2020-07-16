@@ -91,7 +91,7 @@ $query = " SELECT `glpi_plugin_printercounters_items_recordmodels`.`id` as id,
 
 $result = $DB->query($query);
 if ($DB->numrows($result)) {
-   while ($data = $DB->fetch_assoc($result)) {
+   while ($data = $DB->fetchAssoc($result)) {
       $items_ok[$data['id']] = $data['id'];
    }
 }
@@ -227,7 +227,7 @@ if ($res && $nbtot > 0) {
    $record = new PluginPrintercountersRecord();
    $itemjoin2 = $dbu->getTableForItemType("PluginPrintercountersItem_Recordmodel");
 
-   while ($data = $DB->fetch_assoc($res)) {
+   while ($data = $DB->fetchAssoc($res)) {
       // Get last record
       $condition = " AND `".$record->getTable()."`.`date` IN (SELECT max(`".$record->getTable()."`.`date`) FROM ".$record->getTable();
       $condition .= " LEFT JOIN `".$itemjoin2."` 

@@ -348,7 +348,7 @@ class PluginPrintercountersRecordmodel extends CommonDropdown {
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         while ($data = $DB->fetch_assoc($result)) {
+         while ($data = $DB->fetchAssoc($result)) {
             $output[$data['items_id']]['sysdescr'][]               = $data['sysdescr'];
             $output[$data['items_id']]['oid'][$data['oid_type']][] = $data['oid'];
 

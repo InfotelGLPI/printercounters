@@ -260,7 +260,7 @@ class PluginPrintercountersAdditional_data extends CommonDBTM {
          $toner  = [];
          $other  = [];
          $enbale = [];
-         while ($data = $DB->fetch_assoc($result)) {
+         while ($data = $DB->fetchAssoc($result)) {
             switch ($data['type']) {
                case PluginPrintercountersPrinter::TONER_TYPE;
                   $toner[] = $data;

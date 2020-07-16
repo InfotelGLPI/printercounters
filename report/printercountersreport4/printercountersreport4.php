@@ -187,7 +187,7 @@ if ($res && $nbtot > 0) {
 
    $items = [];
    $datas = [];
-   while ($data = $DB->fetch_assoc($res)) {
+   while ($data = $DB->fetchAssoc($res)) {
       $items[] = $data['id'];
       $datas[] = $data;
    }
@@ -251,7 +251,7 @@ function getItemDomain($items) {
 
    $result_ocs = $DB->query($query);
    if ($DB->numrows($result_ocs) > 0) {
-      while ($data = $DB->fetch_array($result_ocs)) {
+      while ($data = $DB->fetchArray($result_ocs)) {
          $fqdns[$data['items_id']] = $data['fqdn'];
       }
    }

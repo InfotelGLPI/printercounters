@@ -189,7 +189,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
 
       $result_ocs = $DB->query($query);
       if ($DB->numrows($result_ocs) > 0) {
-         while ($data = $DB->fetch_array($result_ocs)) {
+         while ($data = $DB->fetchArray($result_ocs)) {
             $ip[$data['items_id']][$data['cards_id']]['ip'][] = $data['ip'];
             $ip[$data['items_id']][$data['cards_id']]['mac']  = $data['mac'];
          }
@@ -272,12 +272,12 @@ class PluginPrintercountersProcess extends CommonDBTM {
       if ($DB->numrows($result)) {
          // Items in error
          if ($config_data['enable_error_handler'] && $errorHandler) {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                $output[] = $data['items_id'];
             }
             // Normal
          } else {
-            while ($data = $DB->fetch_assoc($result)) {
+            while ($data = $DB->fetchAssoc($result)) {
                // Is item can be fetch ?
                if (($data['delay'] >= $data['periodicity_seconds'] || $data['delay'] == null) && $data['enable_automatic_record']) {
                   // Get next record
@@ -521,7 +521,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         while ($data = $DB->fetch_assoc($result)) {
+         while ($data = $DB->fetchAssoc($result)) {
             $link = Toolbox::getItemTypeFormURL($this->itemtype).'?id='.$data['items_id'];
             $output[$data['process_id']][] =  ['items_name' => $data['items_name'], 'items_id' => $data['items_id'], 'items_link' => "<a href='$link' target='_blank'>".$data['items_name']."</a>"];
          }

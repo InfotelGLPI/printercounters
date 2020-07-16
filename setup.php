@@ -27,7 +27,7 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_PRINTERCOUNTERS_VERSION', '1.6.0');
+define('PLUGIN_PRINTERCOUNTERS_VERSION', '1.7.0');
 
 // Init the hooks of the plugins -Needed
 function plugin_init_printercounters() {
@@ -113,7 +113,7 @@ function plugin_version_printercounters() {
       'homepage'     => 'https://github.com/InfotelGLPI/printercounters',
       'requirements' => [
          'glpi' => [
-            'min' => '9.4',
+            'min' => '9.5',
             'dev' => false
          ]
       ]
@@ -122,10 +122,10 @@ function plugin_version_printercounters() {
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_printercounters_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '9.4', 'lt')
-       || version_compare(GLPI_VERSION, '9.5', 'ge')) {
+   if (version_compare(GLPI_VERSION, '9.5', 'lt')
+       || version_compare(GLPI_VERSION, '9.6', 'ge')) {
       if (method_exists('Plugin', 'messageIncompatible')) {
-         echo Plugin::messageIncompatible('core', '9.4');
+         echo Plugin::messageIncompatible('core', '9.5');
       }
       return false;
    }

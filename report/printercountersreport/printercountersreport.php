@@ -213,7 +213,7 @@ if ($res && $nbtot > 0) {
    $jalon1Minor3Month = date('Y-m-d H:i:s', strtotime($datecriteria->getStartDate()." - 3 MONTH"));
    $jalon1Plus3Month  = date('Y-m-d H:i:s', strtotime($datecriteria->getStartDate()." + 3 MONTH"));
 
-   while ($data = $DB->fetch_assoc($res)) {
+   while ($data = $DB->fetchAssoc($res)) {
       $item_billingmodel = new PluginPrintercountersItem_Billingmodel($itemtype, $data['id']);
 
       // Get record start ~ 3 month

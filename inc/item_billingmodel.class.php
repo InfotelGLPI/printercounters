@@ -463,7 +463,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         while ($data = $DB->fetch_assoc($result)) {
+         while ($data = $DB->fetchAssoc($result)) {
             $output[$data['id']] = $data;
          }
       }
@@ -608,7 +608,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         while ($data = $DB->fetch_assoc($result)) {
+         while ($data = $DB->fetchAssoc($result)) {
             // Manage group by
             $explode1 = explode("$$$$", $data['counters_cost']);
             foreach ($explode1 as $explode) {
@@ -657,7 +657,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
 
       $result = $DB->query($query);
       if ($DB->numrows($result)) {
-         while ($data = $DB->fetch_assoc($result)) {
+         while ($data = $DB->fetchAssoc($result)) {
             $output[$data['items_id']] = $data;
          }
          return $output;

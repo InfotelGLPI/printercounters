@@ -243,7 +243,7 @@ $dbu = new DbUtils();
 
       $items = [];
       $datas = [];
-      while ($data = $DB->fetch_assoc($res)) {
+      while ($data = $DB->fetchAssoc($res)) {
          $items[] = $data['id'];
          $datas[] = $data;
       }

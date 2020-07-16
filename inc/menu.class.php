@@ -181,7 +181,13 @@ class PluginPrintercountersMenu extends CommonDBTM {
       $menu['options']['config']['title'] = __('Plugin management', 'printercounters');
       $menu['options']['config']['page']  = '/plugins/printercounters/front/config.form.php';
 
+      $menu['icon'] = self::getIcon();
+
       return $menu;
+   }
+
+   static function getIcon() {
+      return "fas fa-stopwatch-20";
    }
 
    /**
