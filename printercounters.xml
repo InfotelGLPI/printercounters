@@ -36,6 +36,10 @@ The plugin allows :
    </authors>
    <versions>
        <version>
+           <num>1.7.0</num>
+           <compatibility>9.5</compatibility>
+       </version>
+       <version>
            <num>1.6.0</num>
            <compatibility>9.4</compatibility>
        </version>
