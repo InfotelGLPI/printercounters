@@ -818,6 +818,9 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       $tab[6095]['datatype']       = 'timestamp';
       $tab[6095]['searchtype']     = 'equals';
       $tab[6095]['massiveaction']  = false;
+      $tab[6095]['joinparams']     = ['jointype'   => 'itemtype_item',
+         'beforejoin' => ['table' => $dbu->getTableForItemType($this->itemtype)]
+      ];
 
       $tab[6096]['table']          = 'glpi_plugin_printercounters_snmpauthentications';
       $tab[6096]['field']          = 'name';
