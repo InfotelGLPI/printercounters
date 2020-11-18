@@ -27,4 +27,6 @@
  --------------------------------------------------------------------------
  */
 $LANG['plugin_printercounters']['printercountersreport3'] = "Relatório complementar";
-
+$LANG['plugin_printercounters']['printercountersreport3_confidencerate'] = "Taxa de confiabilidade";
+$LANG['plugin_printercounters']['printercountersreport3_consumptionrate'] = "Taxa de consumo";
+$LANG['plugin_printercounters']['printercountersreport3_extrapolation'] = "Extrapolação (nos últimos meses 12 meses) com base no mês registrado";

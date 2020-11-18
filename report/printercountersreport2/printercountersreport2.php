@@ -220,7 +220,7 @@ if ($res && $nbtot > 0) {
    showTitle($output_type, $num, __('Location'), 'location', true);
    showTitle($output_type, $num, __('Manufacturer'), 'manufacturer', true);
    showTitle($output_type, $num, __('Model'), 'model', true);
-   showTitle($output_type, $num, __('Last successful record date', 'printercounters'), 'date', false);
+   showTitle($output_type, $num, __($LANG['plugin_printercounters']['printercountersreport2_date'], 'printercounters'), 'date', false);
    showTitle($output_type, $num, __('Record type', 'printercounters'), 'type', false);
    echo Search::showEndLine($output_type);
 

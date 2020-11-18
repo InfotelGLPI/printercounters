@@ -27,4 +27,6 @@
  --------------------------------------------------------------------------
  */
 $LANG['plugin_printercounters']['printercountersreport3'] = "Rapport complémentaire";
-
+$LANG['plugin_printercounters']['printercountersreport3_confidencerate'] = "Confidence rate";
+$LANG['plugin_printercounters']['printercountersreport3_consumptionrate'] = "Consumption rate";
+$LANG['plugin_printercounters']['printercountersreport3_extrapolation'] = "Extrapolation (over 12 months) based on the month recorded";

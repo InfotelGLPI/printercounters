@@ -170,9 +170,9 @@ if (!empty($datas)) {
       }
 
       if (!empty($total_items)) {
-         $datas['datas'][__('Confidence rate', 'printercounters')][$date] = Html::formatNumber(($success_items / $total_items) * 100)." %";
+         $datas['datas'][__($LANG['plugin_printercounters']['printercountersreport3_confidencerate'], 'printercounters')][$date] = Html::formatNumber(($success_items / $total_items) * 100)." %";
       } else {
-         $datas['datas'][__('Confidence rate', 'printercounters')][$date] = Html::formatNumber(0)." %";
+         $datas['datas'][__($LANG['plugin_printercounters']['printercountersreport3_confidencerate'], 'printercounters')][$date] = Html::formatNumber(0)." %";
       }
 
       // Total record amount
@@ -180,9 +180,9 @@ if (!empty($datas)) {
 
       // Consumption rate
       if (!empty($datas['datas'][__('Budget')][$date])) {
-         $datas['datas'][__('Consumption rate', 'printercounters')][$date] = Html::formatNumber((($datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')][$date] / $datas['datas'][__('Budget')][$date]) * 100)).' %';
+         $datas['datas'][__($LANG['plugin_printercounters']['printercountersreport3_consumptionrate'], 'printercounters')][$date] = Html::formatNumber((($datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')][$date] / $datas['datas'][__('Budget')][$date]) * 100)).' %';
       } else {
-         $datas['datas'][__('Consumption rate', 'printercounters')][$date] = Html::formatNumber((0)).' %';
+         $datas['datas'][__($LANG['plugin_printercounters']['printercountersreport3_consumptionrate'], 'printercounters')][$date] = Html::formatNumber((0)).' %';
       }
 
       // Budget
@@ -193,13 +193,13 @@ if (!empty($datas)) {
    }
 
    // Extrapolation
-   $extrapolation = [__('Extrapolation (over 12 months) based on the month recorded', 'printercounters') => Html::formatNumber(($total_record_amount / count($tmp_datas)) * 12)];
+   $extrapolation = [__($LANG['plugin_printercounters']['printercountersreport3_extrapolation'], 'printercounters') => Html::formatNumber(($total_record_amount / count($tmp_datas)) * 12)];
 
    // Sort values by dates
    ksort($datas['datas'][__('Budget')]);
    ksort($datas['datas'][_n('Record amount', 'Records amount', 2, 'printercounters')]);
-   ksort($datas['datas'][__('Consumption rate', 'printercounters')]);
-   ksort($datas['datas'][__('Confidence rate', 'printercounters')]);
+   ksort($datas['datas'][__($LANG['plugin_printercounters']['printercountersreport3_consumptionrate'], 'printercounters')]);
+   ksort($datas['datas'][__($LANG['plugin_printercounters']['printercountersreport3_confidencerate'], 'printercounters')]);
 
    unset($datas['datas']['successRecord']);
 

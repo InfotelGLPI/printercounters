@@ -27,4 +27,4 @@
  --------------------------------------------------------------------------
  */
 $LANG['plugin_printercounters']['printercountersreport2'] = "Lista de impressoras sem registro há mais de 3 meses";
-
+$LANG['plugin_printercounters']['printercountersreport2_date'] = "Data do último registro bem-sucedido";
