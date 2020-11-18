@@ -26,10 +26,10 @@
  along with printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
-$LANG['plugin_printercounters']['printercountersreport'] = "Contradiction with the holders of markets";
-$LANG['plugin_printercounters']['printercountersreport_budget'] = "Acquisition budget";
-$LANG['plugin_printercounters']['printercountersreport_monochrome1'] = "Monochrome start date ~ 3 month";
-$LANG['plugin_printercounters']['printercountersreport_color1'] = "Color start date ~ 3 month";
-$LANG['plugin_printercounters']['printercountersreport_monochrome2'] = "Monochrome end date ~ start";
-$LANG['plugin_printercounters']['printercountersreport_color2'] = "Color end date ~ start";
+$LANG['plugin_printercounters']['printercountersreport'] = "Divergência entre monocromático e cor";
+$LANG['plugin_printercounters']['printercountersreport_budget'] = "Orçamento de aquisição";
+$LANG['plugin_printercounters']['printercountersreport_monochrome1'] = "Data de início monocromático ~ 3 meses";
+$LANG['plugin_printercounters']['printercountersreport_color1'] = "Data de início cor ~ 3 meses";
+$LANG['plugin_printercounters']['printercountersreport_monochrome2'] = "Data fim ~ início monocromático";
+$LANG['plugin_printercounters']['printercountersreport_color2'] = "Data fim ~ início cor";
 

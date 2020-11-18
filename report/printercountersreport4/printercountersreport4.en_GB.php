@@ -26,6 +26,6 @@
  along with printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
-$LANG['plugin_printercounters']['printercountersreport4']['title'] = "Counter records by printer";
-$LANG['plugin_printercounters']['printercountersreport4']['date']  = "Page number at %s";
-$LANG['plugin_printercounters']['printercountersreport4']['date2'] = "Page number from %s1 to %s2";
+$LANG['plugin_printercounters']['printercountersreport4'] = "Counter records by printer";
+$LANG['plugin_printercounters']['printercountersreport4_date']  = "Page number at %s";
+$LANG['plugin_printercounters']['printercountersreport4_date2'] = "Page number from %s to %s";

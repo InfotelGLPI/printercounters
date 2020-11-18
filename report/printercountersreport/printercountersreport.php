@@ -200,11 +200,11 @@ if ($res && $nbtot > 0) {
    showTitle($output_type, $num, __('Location'), 'location', true);
    showTitle($output_type, $num, __('Manufacturer'), 'manufacturer', true);
    showTitle($output_type, $num, __('Model'), 'model', true);
-   showTitle($output_type, $num, __('Acquisition budget', 'printercounters'), 'budget', true);
-   showTitle($output_type, $num, __('Monochrome start date ~ 3 month', 'printercounters'), 'monochrome1', false);
-   showTitle($output_type, $num, __('Color start date ~ 3 month', 'printercounters'), 'color1', false);
-   showTitle($output_type, $num, __('Monochrome end date ~ start', 'printercounters'), 'monochrome2', false);
-   showTitle($output_type, $num, __('Color end date ~ start', 'printercounters'), 'color2', false);
+   showTitle($output_type, $num, __($LANG['plugin_printercounters']['printercountersreport_budget'], 'printercounters'), 'budget', true);
+   showTitle($output_type, $num, __($LANG['plugin_printercounters']['printercountersreport_monochrome1'], 'printercounters'), 'monochrome1', false);
+   showTitle($output_type, $num, __($LANG['plugin_printercounters']['printercountersreport_color1'], 'printercounters'), 'color1', false);
+   showTitle($output_type, $num, __($LANG['plugin_printercounters']['printercountersreport_monochrome2'], 'printercounters'), 'monochrome2', false);
+   showTitle($output_type, $num, __($LANG['plugin_printercounters']['printercountersreport_color2'], 'printercounters'), 'color2', false);
    showTitle($output_type, $num, __('Cost'), 'costs', false);
    echo Search::showEndLine($output_type);
 
