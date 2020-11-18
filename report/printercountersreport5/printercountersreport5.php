@@ -84,21 +84,17 @@ if (isset($_POST["display_type"])) {
 
     $ip = "(SELECT name 
             FROM `glpi_ipaddresses` 
-            WHERE items_id = (SELECT id 
+            WHERE mainitemtype='Printer' and items_id = (SELECT id 
                               FROM `glpi_networknames` 
-                              WHERE items_id=(SELECT id 
-                                              FROM `glpi_networkports` 
-                                              WHERE  itemtype='Printer' and items_id=`glpi_printers`.`id`)))";
+                              WHERE items_id=`glpi_printers`.`id`))";
     $where = "";
     if(isset($_POST['glpi_printers_id']) && $_POST['glpi_printers_id'] > 0){
         $where .= " AND `glpi_printers`.`id` = ".$_POST['glpi_printers_id'];
         $ip = "(SELECT name 
             FROM `glpi_ipaddresses` 
-            WHERE items_id = (SELECT id 
+            WHERE mainitemtype='Printer' and items_id = (SELECT id 
                               FROM `glpi_networknames` 
-                              WHERE items_id=(SELECT id 
-                                              FROM `glpi_networkports` 
-                                              WHERE  itemtype='Printer' and items_id=" . $_POST['glpi_printers_id'] . ")))";
+                              WHERE items_id=" . $_POST['glpi_printers_id'] . "))";
     }
     if(isset($_POST['glpi_printermodels_id']) && $_POST['glpi_printermodels_id'] > 0){
         $where .= " AND `glpi_printermodels`.`id` = ".$_POST['glpi_printermodels_id'];
