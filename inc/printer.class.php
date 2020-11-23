@@ -440,10 +440,27 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
       $actualValues = $this->walk(self::SNMP_MARKER_SUPPLIES_ACTUAL_CAPACITY_SLOTS);
 
       foreach ($types as $key => $type) {
-         $resultData[] = ['type'      => self::TONER_TYPE,
-                               'sub_type'  => $type,
-                               'name'      => $names[$key],
-                               'value'     => ((int) $actualValues[$key] >= 0) ? ($actualValues[$key] / ($maxValues[$key] / 100)) : null];
+         if(ctype_xdigit(preg_replace('/\s+/', '', $type)) && ctype_xdigit(preg_replace('/\s+/', '', $names[$key]))) {
+            $resultData[] = ['type' => self::TONER_TYPE,
+                                  'sub_type' => trim(pack("H*", preg_replace('/\s+/', '', $type))),
+                                  'name'     => trim(pack("H*", preg_replace('/\s+/', '', $names[$key]))),
+                                  'value'    => ((int) $actualValues[$key] >= 0) ? ($actualValues[$key] / ($maxValues[$key] / 100)) : null];
+         } elseif(ctype_xdigit(preg_replace('/\s+/', '', $type))) {
+            $resultData[] = ['type' => self::TONER_TYPE,
+                                  'sub_type' => trim(pack("H*", preg_replace('/\s+/', '', $type))),
+                                  'name'     => $names[$key],
+                                  'value'    => ((int) $actualValues[$key] >= 0) ? ($actualValues[$key] / ($maxValues[$key] / 100)) : null];
+         } elseif(ctype_xdigit(preg_replace('/\s+/', '', $names[$key]))) {
+            $resultData[] = ['type' => self::TONER_TYPE,
+                                  'sub_type' => $type,
+                                  'name'     => trim(pack("H*", preg_replace('/\s+/', '', $names[$key]))),
+                                  'value'    => ((int) $actualValues[$key] >= 0) ? ($actualValues[$key] / ($maxValues[$key] / 100)) : null];
+         } else {
+            $resultData[] = ['type' => self::TONER_TYPE,
+                                  'sub_type' => $type,
+                                  'name'     => $names[$key],
+                                  'value'    => ((int) $actualValues[$key] >= 0) ? ($actualValues[$key] / ($maxValues[$key] / 100)) : null];
+         }
       }
 
       return $resultData;
