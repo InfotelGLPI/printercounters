@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-04 11:14+0000\n"
+"POT-Creation-Date: 2020-12-10 17:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Global TCO"
 msgstr ""
 
-#: setup.php:109 inc/additional_data.class.php:64
+#: setup.php:111 inc/additional_data.class.php:64
 #: inc/item_billingmodel.class.php:1035 inc/item_billingmodel.class.php:1061
 #: inc/item_recordmodel.class.php:885 inc/item_recordmodel.class.php:886
 #: inc/item_recordmodel.class.php:887 inc/item_recordmodel.class.php:888
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Printer counters"
 msgstr ""
 
-#: setup.php:133
+#: setup.php:135
 msgid "This plugin requires SNMP php extension"
 msgstr ""
 
