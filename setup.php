@@ -36,10 +36,12 @@ function plugin_init_printercounters() {
    $PLUGIN_HOOKS['csrf_compliant']['printercounters'] = true;
    $PLUGIN_HOOKS['change_profile']['printercounters'] = ['PluginPrintercountersProfile', 'changeProfile'];
 
-   $PLUGIN_HOOKS['add_css']['printercounters']          = ['printercounters.css'];
-   $PLUGIN_HOOKS['add_javascript']['printercounters'][] = 'printercounters.js';
-   $PLUGIN_HOOKS['javascript']['printercounters'][]     = '/plugins/printercounters/printercounters.js';
-
+   if (isset($_SESSION['glpiactiveprofile']['interface'])
+       && $_SESSION['glpiactiveprofile']['interface'] == 'central') {
+      $PLUGIN_HOOKS['add_css']['printercounters']          = ['printercounters.css'];
+      $PLUGIN_HOOKS['add_javascript']['printercounters'][] = 'printercounters.js';
+      $PLUGIN_HOOKS['javascript']['printercounters'][]     = '/plugins/printercounters/printercounters.js';
+   }
    if (Session::getLoginUserID()) {
       if (class_exists('PluginPrintercountersItem_Recordmodel')) {
          foreach (PluginPrintercountersItem_Recordmodel::$types as $item) {
