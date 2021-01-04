@@ -62,7 +62,7 @@ class PluginPrintercountersMenu extends CommonDBTM {
       echo "<tr>";
       echo "<th colspan='5'>".__('Counters followup', 'printercounters')."</th>";
       echo "</tr>";
-      echo "<tr class='tab_bg_1' style='background-color:white;'>";
+      echo "<tr class='tab_bg_1'>";
 
       // Record models
       echo "<td class='center printercounters_menu_item'>";
@@ -104,7 +104,7 @@ class PluginPrintercountersMenu extends CommonDBTM {
       echo "<th colspan='5'>".__('Budget followup', 'printercounters')."</th>";
       echo "</tr>";
 
-      echo "<tr class='tab_bg_1' style='background-color:white;'>";
+      echo "<tr class='tab_bg_1'>";
       // Billing
       echo "<td class='center printercounters_menu_item'>";
       echo "<a  class='printercounters_menu_a' href=\"./billingmodel.php\">";
