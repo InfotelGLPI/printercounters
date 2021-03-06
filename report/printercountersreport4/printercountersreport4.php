@@ -39,7 +39,7 @@ $report = new PluginReportsAutoReport($title);
 
 //Report's search criterias
 $datecriteria = New PluginReportsDateIntervalCriteria($report, 'date');
-$datecriteria->setStartDate(date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s').' - 1 YEAR')));
+$datecriteria->setStartDate(date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s').' - 1 MONTH')));
 $datecriteria->setEndDate(date('Y-m-d H:i:s'));
 
 //Display criterias form is needed
@@ -48,7 +48,10 @@ $report->displayCriteriasForm();
 //colname with sort allowed
 $columns = ['name'         => ['sorton' => 'name'],
                  'type'         => ['sorton' => 'type'],
-                 'model'        => ['sorton' => 'model']];
+                 'model'        => ['sorton' => 'model'],
+                 'serial'       => ['sorton' => 'serial'],
+                 'otherserial'  => ['sorton' => 'otherserial'],
+                 'location'       => ['sorton' => 'location']];
 
 $output_type = Search::HTML_OUTPUT;
 
@@ -76,8 +79,11 @@ $dbu = new DbUtils();
 $entity_restrict = $dbu->getEntitiesRestrictRequest("AND", "glpi_printers", "", $_SESSION['glpiactiveentities']);
 $query = "SELECT `glpi_printers`.`id`,
                  `glpi_printers`.`name` as name,
-                 `glpi_printermodels`.`name` as model,
                  `glpi_printertypes`.`name` as type,
+                 `glpi_printermodels`.`name` as model,
+                 `glpi_printers`.`serial` as serial,
+                 `glpi_printers`.`otherserial` as otherserial,
+                 `glpi_locations`.`completename` as location,
                  `glpi_plugin_printercounters_records`.`date`,
                  `glpi_printers`.`is_deleted`,
                  COUNT(`glpi_plugin_printercounters_records`.`id`) as countRecords
@@ -92,6 +98,8 @@ $query = "SELECT `glpi_printers`.`id`,
              ON (`glpi_printermodels`.`id` = `glpi_printers`.`printermodels_id`)
           LEFT JOIN `glpi_printertypes` 
              ON (`glpi_printertypes`.`id` = `glpi_printers`.`printertypes_id`)
+          LEFT JOIN `glpi_locations` 
+             ON (`glpi_locations`.`id` = `glpi_printers`.`locations_id`)
           WHERE 1 $entity_restrict
           AND `glpi_plugin_printercounters_records`.`result` = ".PluginPrintercountersRecord::$SUCCESS."
           GROUP BY `glpi_plugin_printercounters_items_recordmodels`.`items_id`".
@@ -166,7 +174,7 @@ if ($nbtot == 0) {
 
 // Show results
 if ($res && $nbtot > 0) {
-   $nbCols   = $DB->num_fields($res);
+   $nbCols   = $DB->numfields($res);
    $nbrows   = $DB->numrows($res);
    $num      = 1;
    $row_num  = 1;
@@ -177,6 +185,9 @@ if ($res && $nbtot > 0) {
    showTitle($output_type, $num, __('Printer'), 'name', true);
    showTitle($output_type, $num, __('Type'), 'type', true);
    showTitle($output_type, $num, __('Model'), 'model', true);
+   showTitle($output_type, $num, __('Serial'), 'serial', true);
+   showTitle($output_type, $num, __('Inventory number'), 'otherserial', true);
+   showTitle($output_type, $num, __('Location'), 'location', true);
    showTitle($output_type, $num, __('Domain'), 'domain', false);
    showTitle($output_type, $num, sprintf($LANG['plugin_printercounters']['printercountersreport4_date'], Html::convDate($datecriteria->getStartDate())), 'start', false);
    showTitle($output_type, $num, sprintf($LANG['plugin_printercounters']['printercountersreport4_date'], Html::convDate($datecriteria->getEndDate())), 'end', false);
@@ -221,6 +232,9 @@ if ($res && $nbtot > 0) {
       echo Search::showItem($output_type, "<a href='".$CFG_GLPI['root_doc']."/front/printer.form.php?id=".$data['id']."' target='_blank'>".$data['name']."</a>", $num, $row_num);
       echo Search::showItem($output_type, $data['type'], $num, $row_num);
       echo Search::showItem($output_type, $data['model'], $num, $row_num);
+      echo Search::showItem($output_type, $data['serial'], $num, $row_num);
+      echo Search::showItem($output_type, $data['otherserial'], $num, $row_num);
+      echo Search::showItem($output_type, $data['location'], $num, $row_num);
       echo Search::showItem($output_type, isset($fqdns[$data['id']]) ? $fqdns[$data['id']] : '', $num, $row_num);
       echo Search::showItem($output_type, $record1['total_page_number'], $num, $row_num);
       echo Search::showItem($output_type, $record2['total_page_number'], $num, $row_num);
@@ -311,7 +325,7 @@ function getOrderBy($default, $columns) {
    $order = $_REQUEST['order'];
 
    $tab = getOrderByFields($default, $columns);
-   if (count($tab) > 0) {
+   if ((is_array($tab) ? count($tab) : 0) > 0) {
       return " ORDER BY ".$tab." ".$order;
    }
    return '';

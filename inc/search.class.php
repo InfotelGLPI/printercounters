@@ -2173,7 +2173,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
                   $newrow[$j]['count'] = 1;
 
                   if (strpos($val, "$$") === false) {
-                     if ($val == Search::NULLVALUE) {
+                     if ($val !== 0 && $val == Search::NULLVALUE) {
                         $newrow[$j][0][$fieldname] = null;
                      } else {
                         $newrow[$j][0][$fieldname] = $val;

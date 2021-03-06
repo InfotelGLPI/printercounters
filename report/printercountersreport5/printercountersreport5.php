@@ -84,21 +84,13 @@ if (isset($_POST["display_type"])) {
 
     $ip = "(SELECT name 
             FROM `glpi_ipaddresses` 
-            WHERE items_id = (SELECT id 
-                              FROM `glpi_networknames` 
-                              WHERE items_id=(SELECT id 
-                                              FROM `glpi_networkports` 
-                                              WHERE  itemtype='Printer' and items_id=`glpi_printers`.`id`)))";
+            WHERE mainitemtype='Printer' and mainitems_id=`glpi_printers`.`id`)";
     $where = "";
     if(isset($_POST['glpi_printers_id']) && $_POST['glpi_printers_id'] > 0){
         $where .= " AND `glpi_printers`.`id` = ".$_POST['glpi_printers_id'];
         $ip = "(SELECT name 
             FROM `glpi_ipaddresses` 
-            WHERE items_id = (SELECT id 
-                              FROM `glpi_networknames` 
-                              WHERE items_id=(SELECT id 
-                                              FROM `glpi_networkports` 
-                                              WHERE  itemtype='Printer' and items_id=" . $_POST['glpi_printers_id'] . ")))";
+            WHERE mainitemtype='Printer' and mainitems_id=" . $_POST['glpi_printers_id'] .")";
     }
     if(isset($_POST['glpi_printermodels_id']) && $_POST['glpi_printermodels_id'] > 0){
         $where .= " AND `glpi_printermodels`.`id` = ".$_POST['glpi_printermodels_id'];
@@ -223,7 +215,7 @@ $dbu = new DbUtils();
 
    // Show results
    if ($res && $nbtot > 0) {
-      $nbCols   = $DB->num_fields($res);
+      $nbCols   = $DB->numfields($res);
       $nbrows   = $DB->numrows($res);
       $num      = 1;
       $row_num  = 1;
@@ -319,7 +311,7 @@ function getOrderBy($default, $columns) {
    $order = $_REQUEST['order'];
 
    $tab = getOrderByFields($default, $columns);
-   if (count($tab) > 0) {
+   if ((is_array($tab) ? count($tab) : 0) > 0) {
       return " ORDER BY ".$tab." ".$order;
    }
    return '';

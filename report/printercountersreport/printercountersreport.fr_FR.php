@@ -27,4 +27,9 @@
  --------------------------------------------------------------------------
  */
 $LANG['plugin_printercounters']['printercountersreport'] = "Contradiction avec les titulaires des marchés";
+$LANG['plugin_printercounters']['printercountersreport_budget'] = "Acquisition budget";
+$LANG['plugin_printercounters']['printercountersreport_monochrome1'] = "Monochrome start date ~ 3 month";
+$LANG['plugin_printercounters']['printercountersreport_color1'] = "Color start date ~ 3 month";
+$LANG['plugin_printercounters']['printercountersreport_monochrome2'] = "Monochrome end date ~ start";
+$LANG['plugin_printercounters']['printercountersreport_color2'] = "Color end date ~ start";
 

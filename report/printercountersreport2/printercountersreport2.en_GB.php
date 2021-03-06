@@ -27,4 +27,5 @@
  --------------------------------------------------------------------------
  */
 $LANG['plugin_printercounters']['printercountersreport2'] = "List of printers with no statement for more than 3 months";
+$LANG['plugin_printercounters']['printercountersreport2_date'] = "Last successful record date";
 

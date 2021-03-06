@@ -27,4 +27,4 @@
  --------------------------------------------------------------------------
  */
 $LANG['plugin_printercounters']['printercountersreport2'] = "Liste des imprimantes avec absence de relevé depuis plus de 3 mois";
-
+$LANG['plugin_printercounters']['printercountersreport2_date'] = "Last successful record date";
