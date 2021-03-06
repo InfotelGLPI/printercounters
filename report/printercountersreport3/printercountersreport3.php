@@ -352,7 +352,7 @@ function getOrderBy($default, $columns) {
 
    $tab = getOrderByFields($default, $columns);
 
-   if (count($tab) > 0) {
+   if ((is_array($tab) ? count($tab) : 0) > 0) {
       return " ORDER BY ".$tab." ".$order;
    }
    return '';

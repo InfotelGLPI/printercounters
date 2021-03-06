@@ -207,7 +207,7 @@ if ($nbtot == 0) {
 
 // Show results
 if ($res && $nbtot > 0) {
-   $nbCols   = $DB->num_fields($res);
+   $nbCols   = $DB->numfields($res);
    $nbrows   = $DB->numrows($res);
    $num      = 1;
    $row_num  = 1;
@@ -311,7 +311,7 @@ function getOrderBy($default, $columns) {
 
    $tab = getOrderByFields($default, $columns);
 
-   if (count($tab) > 0) {
+   if ((is_array($tab) ? count($tab) : 0) > 0) {
       return " ORDER BY ".$tab." ".$order;
    }
    return '';
