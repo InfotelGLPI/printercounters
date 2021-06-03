@@ -1807,7 +1807,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
                    || (isset($searchopt[$ID]["forcegroupby"]) && $searchopt[$ID]["forcegroupby"])) {
                   $ADDITONALFIELDS .= " GROUP_CONCAT(DISTINCT CONCAT(IFNULL(`$table$addtable`.`$key`,
                                                                          '" . Search::NULLVALUE . "'),
-                                                   '$$', $tocomputeid) SEPARATOR '$$$$')
+                                                   '$$', $tocomputeid) ORDER BY $tocomputeid SEPARATOR '$$$$')
                                     AS `" . $NAME . "_" . $num . "_$key`, ";
                } else {
                   $ADDITONALFIELDS .= "`$table$addtable`.`$key` AS `" . $NAME . "_" . $num . "_$key`, ";
@@ -2023,12 +2023,12 @@ class PluginPrintercountersSearch extends CommonDBTM {
             $TRANS = '';
             if (Session::haveTranslations($dbu->getItemTypeForTable($table), $field)) {
                $TRANS = "GROUP_CONCAT(DISTINCT CONCAT(IFNULL($tocomputetrans, '" . Search::NULLVALUE . "'),
-                                                   '$$',$tocomputeid) SEPARATOR '$$$$')
+                                                   '$$',$tocomputeid) ORDER BY $tocomputeid SEPARATOR '$$$$')
                                   AS `" . $NAME . "_" . $num . "_trans`, ";
 
             }
             return " GROUP_CONCAT(DISTINCT CONCAT(IFNULL($tocompute, '" . Search::NULLVALUE . "'),
-                                               '$$',$tocomputeid) SEPARATOR '$$$$')
+                                               '$$',$tocomputeid) ORDER BY $tocomputeid SEPARATOR '$$$$')
                               AS `" . $NAME . "_$num`,
                   $TRANS
                   $ADDITONALFIELDS";
