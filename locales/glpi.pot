@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-04 10:41+0000\n"
+"POT-Creation-Date: 2021-11-19 10:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "Printer counters"
 msgstr ""
 
-#: setup.php:135
+#: setup.php:129
 msgid "This plugin requires SNMP php extension"
 msgstr ""
 
@@ -241,7 +241,7 @@ msgstr[1] ""
 #: inc/countertype_recordmodel.class.php:151
 #: inc/countertype_recordmodel.class.php:230
 #: inc/countertype_recordmodel.class.php:533
-#: inc/countertype_recordmodel.class.php:698 inc/pagecost.class.php:491
+#: inc/countertype_recordmodel.class.php:698 inc/pagecost.class.php:489
 #: inc/recordmodel.class.php:199
 msgid "OID"
 msgstr ""
@@ -541,17 +541,17 @@ msgstr ""
 msgid "Description of the new ticket"
 msgstr ""
 
-#: inc/item_ticket.class.php:313
+#: inc/item_ticket.class.php:318
 msgid "Event type"
 msgstr ""
 
-#: inc/item_ticket.class.php:389
+#: inc/item_ticket.class.php:394
 msgid ""
 "Create a ticket if there are consecutive errors on records OR no records "
 "since a defined date"
 msgstr ""
 
-#: inc/item_ticket.class.php:659
+#: inc/item_ticket.class.php:664
 msgid "Tickets created for : "
 msgstr ""
 
@@ -961,38 +961,38 @@ msgstr ""
 msgid "AES256"
 msgstr ""
 
-#: inc/snmpset.class.php:148 inc/snmpset.class.php:274
-#: inc/snmpset.class.php:552
+#: inc/snmpset.class.php:148 inc/snmpset.class.php:279
+#: inc/snmpset.class.php:557
 msgid "Set printer name"
 msgstr ""
 
-#: inc/snmpset.class.php:160 inc/snmpset.class.php:275
-#: inc/snmpset.class.php:561
+#: inc/snmpset.class.php:160 inc/snmpset.class.php:280
+#: inc/snmpset.class.php:566
 msgid "Set printer location"
 msgstr ""
 
-#: inc/snmpset.class.php:172 inc/snmpset.class.php:276
-#: inc/snmpset.class.php:570
+#: inc/snmpset.class.php:172 inc/snmpset.class.php:281
+#: inc/snmpset.class.php:575
 msgid "Set printer contact informations"
 msgstr ""
 
-#: inc/snmpset.class.php:237
+#: inc/snmpset.class.php:242
 msgid "Add a new snmpset"
 msgstr ""
 
-#: inc/snmpset.class.php:438
+#: inc/snmpset.class.php:443
 msgid "SNMPset configuration is not found in the printer entity"
 msgstr ""
 
-#: inc/snmpset.class.php:457
+#: inc/snmpset.class.php:462
 msgid "IP not found"
 msgstr ""
 
-#: inc/snmpset.class.php:529
+#: inc/snmpset.class.php:534
 msgid "User phone"
 msgstr ""
 
-#: inc/snmpset.class.php:616
+#: inc/snmpset.class.php:621
 msgid "SNMPset is already configured for this entity"
 msgstr ""
 
