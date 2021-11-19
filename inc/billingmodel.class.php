@@ -271,7 +271,7 @@ class PluginPrintercountersBillingmodel extends CommonDropdown {
    * @param type $ID
    * @param type $field
    */
-   function displaySpecificTypeField($ID, $field = []) {
+   function displaySpecificTypeField($ID, $field = [], array $options = []) {
 
       $this->getFromDB($ID);
 

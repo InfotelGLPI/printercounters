@@ -123,10 +123,10 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
       // Sysdescr
       echo "<td class='center' colspan='4'>";
       echo self::getTypeName().'&nbsp;';
-      Html::autocompletionTextField($this, "sysdescr", ['value' => $this->fields['sysdescr']]);
+      echo Html::input('sysdescr', ['value' => $this->fields['sysdescr'], 'size' => 40]);
       $p = (isset($options['parent']) ? $options['parent']->getField('id') : "");
       $parent = ((isset($p))? $p : 0);
-      echo "<input type='hidden' name='plugin_printercounters_recordmodels_id' value='".$parent."' >";
+      echo Html::hidden('plugin_printercounters_recordmodels_id', ['value' => $parent]);
       echo "</td>";
       echo "</tr>";
 
@@ -164,7 +164,7 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
                                                  'PluginPrintercountersRecordmodel',
                                                  $item->fields['id']);
          echo "<div class='center firstbloc'>".
-               "<a class='vsubmit' id='printercounters_viewAddSysdescr' href='javascript:viewAddSysdescr".$item->fields['id']."_$rand();'>";
+               "<a class='btn btn-primary' id='printercounters_viewAddSysdescr' href='javascript:viewAddSysdescr".$item->fields['id']."_$rand();'>";
          echo __('Add a new sysdescr', 'printercounters')."</a></div>\n";
       }
 
@@ -185,7 +185,7 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
    private function listItems($ID, $data, $canedit, $rand) {
       global $CFG_GLPI;
 
-      echo "<div class='center'>";
+      echo "<div class='left'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
          $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];

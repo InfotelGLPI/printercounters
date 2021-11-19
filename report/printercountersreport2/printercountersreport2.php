@@ -148,7 +148,7 @@ if ($output_type == Search::HTML_OUTPUT) {
    echo "<form method='post' name='form' action='".$_SERVER['PHP_SELF']."'>";
    echo "<table class='tab_cadre_fixe'>";
    echo "<tr class='tab_bg_2'><td colspan='4' class='center'>";
-   echo "<input type='submit' name='find' value='"._sx('button', 'Search')."' class='submit'>";
+   echo Html::submit(_sx('button', 'Search'), ['name' => 'find', 'class' => 'btn btn-primary']);
    echo "</td></tr>";
    echo "</table>";
    Html::closeForm();
@@ -190,7 +190,7 @@ if ($nbtot == 0) {
             $param .= $key."[".$k."]=".urlencode($v);
          }
       } else {
-         echo "<input type='hidden' name='$key' value='$val' >";
+         echo Html::hidden($key, ['value' => $val]);
          if (!empty($param)) {
             $param .= "&";
          }

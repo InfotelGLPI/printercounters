@@ -177,16 +177,21 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
       echo "<input type='checkbox' $checked value='1' name='set_contact' value='1'/>";
       echo "</td>";
       echo "<td>";
-      echo "<textarea cols='35' rows='7' name='contact'>";
+
+      $content = "";
       $value = $this->getField('contact');
       if (empty($value) && $ID <= 0) {
          foreach ($this->getTags() as $title => $tag) {
-            echo $tag."\n";
+            $content .= $tag."\n";
          }
       } else {
-         echo $this->getField('contact');
+         $content = $value;
       }
-      echo "</textarea>";
+      Html::textarea(['name'            => 'contact',
+                      'value'       => $content,
+                      'cols'       => 35,
+                      'rows'       => 7,
+                      'enable_richtext' => false]);
       echo "</td>";
       echo "</tr>";
 
@@ -233,7 +238,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
                                                  'PluginPrintercountersConfig',
                                                  $config['configs_id']);
          echo "<div class='center firstbloc'>".
-               "<a class='vsubmit' id='printercounters_viewAddSnmpset' href='javascript:viewAddSnmpset".$config['configs_id']."_$rand();'>";
+               "<a class='btn btn-primary' id='printercounters_viewAddSnmpset' href='javascript:viewAddSnmpset".$config['configs_id']."_$rand();'>";
          echo __('Add a new snmpset', 'printercounters')."</a></div>\n";
          echo "<script type='text/javascript'>viewAddSnmpset".$config['configs_id']."_$rand();</script>";
       }
@@ -255,7 +260,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
    private function listItems($ID, $data, $canedit, $rand) {
       global $CFG_GLPI;
 
-      echo "<div class='center'>";
+      echo "<div class='left'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
          $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];
@@ -302,13 +307,13 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
          echo "<td $onclick>".nl2br($field['contact'])."</td>";
          echo "</tr>";
       }
-
+      echo "</table>";
       if ($canedit) {
          $massiveactionparams['ontop'] = false;
          Html::showMassiveActions($massiveactionparams);
          Html::closeForm();
       }
-      echo "</table>";
+
       echo "</div>";
    }
 

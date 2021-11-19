@@ -27,7 +27,7 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_PRINTERCOUNTERS_VERSION', '1.7.0');
+define('PLUGIN_PRINTERCOUNTERS_VERSION', '2.0.0');
 
 // Init the hooks of the plugins -Needed
 function plugin_init_printercounters() {
@@ -115,7 +115,8 @@ function plugin_version_printercounters() {
       'homepage'     => 'https://github.com/InfotelGLPI/printercounters',
       'requirements' => [
          'glpi' => [
-            'min' => '9.5',
+            'min' => '10.0',
+            'max' => '11.0',
             'dev' => false
          ]
       ]
@@ -124,22 +125,10 @@ function plugin_version_printercounters() {
 
 // Optional : check prerequisites before install : may print errors or add to message after redirect
 function plugin_printercounters_check_prerequisites() {
-   if (version_compare(GLPI_VERSION, '9.5', 'lt')
-       || version_compare(GLPI_VERSION, '9.6', 'ge')) {
-      if (method_exists('Plugin', 'messageIncompatible')) {
-         echo Plugin::messageIncompatible('core', '9.5');
-      }
-      return false;
-   }
    if (!extension_loaded('snmp')) {
       echo __('This plugin requires SNMP php extension', 'printercounters');
       return false;
    }
-   return true;
-}
-
-// Uninstall process for plugin : need to return true if succeeded : may display messages or add to message after redirect
-function plugin_printercounters_check_config() {
    return true;
 }
 

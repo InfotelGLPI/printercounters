@@ -265,12 +265,17 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       echo __('Description of the new ticket', 'printercounters');
       echo "</td>";
       echo "<td colspan='3'>";
-      echo "<textarea name='tickets_content' cols='80' rows='14'>".stripslashes($config['tickets_content'])."</textarea>";
+      Html::textarea(['name'            => 'tickets_content',
+                      'value'       => stripslashes($config['tickets_content']),
+                      'cols'       => 80,
+                      'rows'       => 14,
+                      'enable_richtext' => false]);
       echo "</td>";
       echo "</tr>";
 
-      echo "<tr><td class='tab_bg_2 center' colspan='6'><input type=\"submit\" name=\"update_config\" class=\"submit\"
-         value=\""._sx('button', 'Update')."\" ></td></tr>";
+      echo "<tr><td class='tab_bg_2 center' colspan='6'>";
+      echo Html::submit(_sx('button', 'Update'), ['name' => 'update_config', 'class' => 'btn btn-primary']);
+      echo "</td></tr>";
       echo "</table></div>";
       Html::closeForm();
 
@@ -292,7 +297,7 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
       $dbu  = new DbUtils();
       $item = $dbu->getItemForItemtype($this->itemtype);
 
-      echo "<div class='center'>";
+      echo "<div class='left'>";
 
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
@@ -325,14 +330,14 @@ class PluginPrintercountersItem_Ticket extends CommonDBTM {
          echo "<td>".self::getEvent($field['events_type'])."</td>";
          echo "</tr>";
       }
-
+      echo "</table>";
       if ($canedit) {
          $massiveactionparams['ontop'] = false;
          Html::showMassiveActions($massiveactionparams);
          Html::closeForm();
       }
 
-      echo "</table>";
+
       echo "</div>";
    }
 

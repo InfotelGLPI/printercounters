@@ -149,14 +149,14 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       // OID
       echo "<td class='center'>";
       echo __('OID', 'printercounters').'&nbsp;';
-      Html::autocompletionTextField($this, "oid", ['value' => $this->fields['oid']]);
+      echo Html::input('oid', ['value' => $this->fields['oid'], 'size' => 40]);
       echo "</td>";
       // OID type
       echo "<td class='center'>";
       echo __('OID type', 'printercounters').'&nbsp;';
       self::dropdownOidType(['value'                                  => $this->fields['oid_type'],
                                   'plugin_printercounters_recordmodels_id' => $options['parent']->getField('id')]);
-      echo "<input type='hidden' name='plugin_printercounters_recordmodels_id' value='".$options['parent']->getField('id')."' >";
+      echo Html::hidden('plugin_printercounters_recordmodels_id', ['value' => $options['parent']->getField('id')]);
       echo "</td>";
       echo "</tr>";
 
@@ -189,7 +189,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
                                                  'PluginPrintercountersRecordmodel',
                                                  $item->fields['id']);
          echo "<div class='center firstbloc'>".
-               "<a class='vsubmit' id='printercounters_viewAddCounters' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
+               "<a class='btn btn-primary' id='printercounters_viewAddCounters' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
          echo __('Add a new counter', 'printercounters')."</a></div>\n";
       }
 
@@ -209,7 +209,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
     */
    private function listItems($ID, $data, $canedit, $rand) {
 
-      echo "<div class='center'>";
+      echo "<div class='left'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
          $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];
@@ -259,14 +259,14 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
          echo "<td $onclick>".$alloidtypes[$field['oid_type']]."</td>";
          echo "</tr>";
       }
-
+      echo "</table>";
       if ($canedit) {
          $massiveactionparams['ontop'] = false;
          Html::showMassiveActions($massiveactionparams);
          Html::closeForm();
       }
 
-      echo "</table>";
+
       echo "</div>";
    }
 

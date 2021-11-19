@@ -166,10 +166,10 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
          // Submit
          echo "<td class='center'>";
-         echo "<input type='button' onClick = \"printercountersSearch.initSearch('".$CFG_GLPI["root_doc"]."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\" value='".__('Search')."' class='submit'>";
-         echo "<input type='hidden' name='itemtype' value='".$itemtype."'>";
-         echo "<input type='hidden' name='id' value='".$ID."'>";
-         echo "<input type='hidden' name='item' value='".base64_encode(serialize($item))."'>";
+         echo "<input type='button' onClick = \"printercountersSearch.initSearch('".$CFG_GLPI["root_doc"]."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\" value='".__('Search')."' class='btn btn-primary'>";
+         echo Html::hidden('itemtype', ['value' => $itemtype]);
+         echo Html::hidden('id', ['value' => $ID]);
+         echo Html::hidden('item', ['value' => base64_encode(serialize($item))]);
          echo "<a href='javascript:void(0)' onClick = \"printercountersSearch.resetSearchField('".$CFG_GLPI['root_doc']."', 'history_showSearch".$item->rand."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\">";
          echo "&nbsp;&nbsp;<img title=\"".__('Blank')."\" alt=\"".__('Blank')."\" src='".
          $CFG_GLPI["root_doc"]."/pics/reset.png' class='calendrier'></a>";
@@ -1376,8 +1376,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       if (isset($this->current_search['searchopt'])) {
          unset($this->current_search['searchopt']);
       }
-
-      echo "<input type='hidden' name='item' value='".base64_encode(serialize($item))."'>";
+      echo Html::hidden('item', ['value' => base64_encode(serialize($item))]);
 
       foreach ($this->current_search as $key => $val) {
          if ($key != "_glpi_csrf_token") {

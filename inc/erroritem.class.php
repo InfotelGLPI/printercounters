@@ -268,7 +268,7 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
 
       echo "<tr>";
       echo" <td class='tab_bg_2 center' colspan='6'>";
-      echo "<input type=\"submit\" name=\"update_config\" class=\"submit\" value=\""._sx('button', 'Update')."\" >";
+      echo Html::submit(_sx('button', 'Update'), ['name' => 'update_config', 'class' => 'btn btn-primary']);
       echo "</td>";
       echo "</tr>";
       echo "</table></div>";

@@ -135,7 +135,7 @@ class PluginPrintercountersPagecost extends CommonDBTM {
       echo "<td class='center' colspan='3'>";
       echo __('Cost').'&nbsp;';
       self::showCostInput($this, $this->fields['cost']);
-      echo "<input type='hidden' name='plugin_printercounters_billingmodels_id' value='".$options['parent']->getField('id')."' >";
+      echo Html::hidden('plugin_printercounters_billingmodels_id', ['value' => $options['parent']->getField('id')]);
       echo "</td>";
       echo "</tr>";
 
@@ -168,7 +168,7 @@ class PluginPrintercountersPagecost extends CommonDBTM {
                                                  'PluginPrintercountersBillingmodel',
                                                  $item->fields['id']);
          echo "<div class='center firstbloc'>".
-               "<a class='vsubmit' id='printercounters_viewAddPagecost' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
+               "<a class='btn btn-primary' id='printercounters_viewAddPagecost' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
          echo __('Add a new counter', 'printercounters')."</a></div>\n";
       }
 
@@ -188,7 +188,7 @@ class PluginPrintercountersPagecost extends CommonDBTM {
     */
    private function listItems($ID, $data, $canedit, $rand) {
 
-      echo "<div class='center'>";
+      echo "<div class='left'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
          $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];
@@ -238,13 +238,13 @@ class PluginPrintercountersPagecost extends CommonDBTM {
          echo "<td $onclick>".$alloidtypes[$field['oid_type']]."</td>";
          echo "</tr>";
       }
-
+      echo "</table>";
       if ($canedit) {
          $massiveactionparams['ontop'] = false;
          Html::showMassiveActions($massiveactionparams);
          Html::closeForm();
       }
-      echo "</table>";
+
       echo "</div>";
    }
 
@@ -429,9 +429,7 @@ class PluginPrintercountersPagecost extends CommonDBTM {
     * @return an array
     */
    static function showCostInput($item, $value, array $options = []) {
-
-      $options['value'] = self::getCost($value);
-      return Html::autocompletionTextField($item, "cost", $options);
+      return Html::input('cost', ['value' => self::getCost($value), 'size' => 40]);
    }
 
 

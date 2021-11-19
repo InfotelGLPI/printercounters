@@ -229,9 +229,9 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          echo __('Link the item to a record model', 'printercounters')."&nbsp;";
          Dropdown::show("PluginPrintercountersRecordmodel", ['name'   => 'plugin_printercounters_recordmodels_id',
                                                                   'entity' => $item->fields['entities_id']]);
-         echo "<input type='hidden' name='itemtype' value='".$this->itemtype."' >";
-         echo "<input type='hidden' name='items_id' value='".$this->items_id."' >";
-         echo "&nbsp;<input type='submit' name='add' class='submit' value='"._sx('button', 'Post')."'>";
+         echo Html::hidden('itemtype', ['value' => $this->itemtype]);
+         echo Html::hidden('items_id', ['value' => $this->items_id]);
+         echo Html::submit(_sx('button', 'Post'), ['name' => 'add', 'class' => 'btn btn-primary']);
          echo "</td>";
          echo "</tr>";
          echo "</table>";
@@ -281,7 +281,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
                                      ],
                                   ]);
          $used = [];
-         while ($row = $iterator->next()) {
+         foreach ($iterator as $row) {
             $used[] = $row['items_id'];
          }
 
@@ -294,9 +294,9 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
          echo "<tr>";
          echo "<td class='tab_bg_2 center' colspan='6'>";
-         echo "<input type='submit' name='add' class='submit' value='"._sx('button', 'Add')."' >";
-         echo "<input type='hidden' name='plugin_printercounters_recordmodels_id' value='".$item->fields['id']."' >";
-         echo "<input type='hidden' name='itemtype' value='".$this->itemtype."' >";
+         echo Html::hidden('plugin_printercounters_recordmodels_id', ['value' => $item->fields['id']]);
+         echo Html::hidden('itemtype', ['value' => $this->itemtype]);
+         echo Html::submit(_sx('button', 'Add'), ['name' => 'add', 'class' => 'btn btn-primary']);
          echo "</td>";
          echo "</tr>";
          echo "</table></div>";
@@ -321,7 +321,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
       $itemtype = $this->itemtype;
 
-      echo "<div class='center'>";
+      echo "<div class='left'>";
       if ($canedit) {
          Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
          $massiveactionparams = ['item' => __CLASS__, 'container' => 'mass'.__CLASS__.$rand];
@@ -372,13 +372,13 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          echo "<td>".PluginPrintercountersRecord::getRecordType($field['last_record_type'])."</td>";
          echo "</tr>";
       }
-
+      echo "</table>";
       if ($canedit) {
          $massiveactionparams['ontop'] = false;
          Html::showMassiveActions($massiveactionparams);
          Html::closeForm();
       }
-      echo "</table>";
+
       echo "</div>";
    }
 
@@ -606,11 +606,11 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
          echo "<tr>";
          echo "<td class='tab_bg_2 center' colspan='6'>";
-         echo "<input type='submit' name='update_config' class='submit' value='"._sx('button', 'Update')."'>";
-         echo "<input type='hidden' name='_clean_records' value='1'>";
-         echo "<input type='hidden' name='items_id' value='".$this->items_id."'>";
-         echo "<input type='hidden' name='itemtype' value='".$this->itemtype."'>";
-         echo "<input type='hidden' name='id' value='".$data['id']."'>";
+         echo Html::hidden('id', ['value' => $data['id']]);
+         echo Html::hidden('_clean_records', ['value' => 1]);
+         echo Html::hidden('items_id', ['value' => $this->items_id]);
+         echo Html::hidden('itemtype', ['value' => $this->itemtype]);
+         echo Html::submit(_sx('button', 'Update'), ['name' => 'update_config', 'class' => 'btn btn-primary']);
          echo "</td>";
          echo "</tr>";
          echo "</table></div>";
