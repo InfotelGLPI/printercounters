@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-19 10:43+0000\n"
+"POT-Creation-Date: 2021-12-09 15:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,10 +45,6 @@ msgstr ""
 msgid "Printer counters"
 msgstr ""
 
-#: setup.php:129
-msgid "This plugin requires SNMP php extension"
-msgstr ""
-
 #: front/config.form.php:60 inc/record.class.php:1718
 msgid "Clean records in error"
 msgstr ""
@@ -65,6 +61,10 @@ msgstr ""
 
 #: front/config.form.php:73 inc/record.class.php:1721
 msgid "Clean empty records"
+msgstr ""
+
+#: front/config.form.php:92 front/config.php:44
+msgid "Please activate the plugin"
 msgstr ""
 
 #: front/item_recordmodel.form.php:60 inc/item_recordmodel.class.php:1299
@@ -312,48 +312,48 @@ msgstr ""
 msgid "Number of errors"
 msgstr ""
 
-#: inc/erroritem.class.php:238
+#: inc/erroritem.class.php:239
 msgid "Enable record error handler"
 msgstr ""
 
-#: inc/erroritem.class.php:242
+#: inc/erroritem.class.php:243
 msgid "Maximum number of interrogation for records in error"
 msgstr ""
 
-#: inc/erroritem.class.php:287
+#: inc/erroritem.class.php:288
 msgid "Error item list"
 msgstr ""
 
-#: inc/erroritem.class.php:291
+#: inc/erroritem.class.php:292
 msgid "Number of host errors"
 msgstr ""
 
-#: inc/erroritem.class.php:314
+#: inc/erroritem.class.php:315
 msgid "Interrogation of printers in host error"
 msgstr ""
 
-#: inc/erroritem.class.php:450
+#: inc/erroritem.class.php:451
 msgid "Error on item, soft state"
 msgstr ""
 
-#: inc/erroritem.class.php:459
+#: inc/erroritem.class.php:460
 msgid "Error on item, hard state"
 msgstr ""
 
-#: inc/erroritem.class.php:466
+#: inc/erroritem.class.php:467
 msgid "Record success"
 msgstr ""
 
-#: inc/erroritem.class.php:470 inc/record.class.php:764
+#: inc/erroritem.class.php:471 inc/record.class.php:764
 #: inc/record.class.php:780
 msgid "No results, please check OIDs of your record model"
 msgstr ""
 
-#: inc/erroritem.class.php:477 inc/record.class.php:787
+#: inc/erroritem.class.php:478 inc/record.class.php:787
 msgid "This item type is not correct"
 msgstr ""
 
-#: inc/erroritem.class.php:482 inc/record.class.php:792
+#: inc/erroritem.class.php:483 inc/record.class.php:792
 msgid "No printers to search"
 msgstr ""
 
