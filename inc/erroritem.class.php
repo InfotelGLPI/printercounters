@@ -190,7 +190,8 @@ class PluginPrintercountersErrorItem extends CommonDBTM {
 
       if ($nbErrors = $this->isInError()) {
          $message = self::getTypeName().'. '.__('Number of errors', 'printercounters').' : '.$nbErrors;
-         Html::displayTitle($CFG_GLPI['root_doc']."/pics/warning.png", $message, $message);
+         echo "<div class='alert alert-important alert-warning d-flex'>";
+         echo $message."</div>";
       }
    }
 

@@ -95,7 +95,7 @@ if (isset($_POST["itemtype"])
    $_POST['value']      = stripslashes($_POST['value']);
    $_POST['searchopt']  = $searchopt;
 
-   include(GLPI_ROOT."/ajax/searchoptionvalue.php");
+   include(GLPI_ROOT."/plugins/printercounters/ajax/searchoptionvalue.php");
    echo "</span>\n";
    echo "</td></tr></table>";
 
@@ -109,6 +109,6 @@ if (isset($_POST["itemtype"])
 
    Ajax::updateItemOnSelectEvent($fieldsearch_id,
                                  "span$dropdownname",
-                                 $CFG_GLPI["root_doc"]."/ajax/searchoptionvalue.php",
+                                 $CFG_GLPI["root_doc"]."/plugins/printercounters/ajax/searchoptionvalue.php",
                                  $paramsaction);
 }

@@ -88,8 +88,8 @@ if ($plugin->isActivated("printercounters")) {
 
 } else {
    Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
-   echo "<div align='center'><br><br><i class='fas fa-exclamation-triangle fa-4x' style='color:orange'></i><br><br>";
-   echo "<b>Please activate the plugin</b></div>";
+   echo "<div class='alert alert-important alert-warning d-flex'>";
+   echo "<b>".__('Please activate the plugin', 'printercounters')."</b></div>";
    Html::footer();
 }
 

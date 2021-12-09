@@ -118,17 +118,11 @@ function plugin_version_printercounters() {
             'min' => '10.0',
             'max' => '11.0',
             'dev' => false
+         ],
+         'php' => [
+            'exts' => ['snmp'],
          ]
       ]
    ];
-}
-
-// Optional : check prerequisites before install : may print errors or add to message after redirect
-function plugin_printercounters_check_prerequisites() {
-   if (!extension_loaded('snmp')) {
-      echo __('This plugin requires SNMP php extension', 'printercounters');
-      return false;
-   }
-   return true;
 }
 

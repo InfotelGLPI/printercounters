@@ -1280,7 +1280,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
             foreach ($record['counters'] as $counter) {
                echo "<tr class='tab_bg_1'>";
                echo "<td>".$counter['counters_name'].'</td>';
-               echo '<td><input type="text" value="'.$counter['counters_value'].'" name="counters[counters]['.$counter['countertypes_recordmodels_id'].']['.$counter['counters_id'].']">
+               echo '<td><input class="form-control" type="text" value="'.$counter['counters_value'].'" name="counters[counters]['.$counter['countertypes_recordmodels_id'].']['.$counter['counters_id'].']">
                          <input type="hidden" value="'.$record['date'].'" name="counters[date]"></td>';
                echo "</tr>";
             }
@@ -1321,7 +1321,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
          foreach ($counters as $counter) {
             echo "<tr class='tab_bg_1'>";
             echo "<td>".$counter['counters_name'].'</td>';
-            echo '<td><input type="text" value="" name="counters[counters]['.$counter['countertypes_recordmodels_id'].'][0]"></td>';
+            echo '<td><input type="text"class="form-control" value="" name="counters[counters]['.$counter['countertypes_recordmodels_id'].'][0]"></td>';
             echo "</tr>";
          }
 

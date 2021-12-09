@@ -149,12 +149,12 @@ class PluginPrintercountersSearch extends CommonDBTM {
          // First line display add / delete images for normal and meta search items
          echo "<input type='hidden' disabled id='add_search_count".$item->rand."' name='add_search_count' value='".(count($this->default_search['criteria'])-1)."'>";
          echo "<a href=\"javascript:printercountersSearch.addSearchField('".$CFG_GLPI["root_doc"]."', 'search_line".$item->rand."', 'add_search_count".$item->rand."', 'search_form".$item->rand."');\">";
-         echo "<img src=\"".$CFG_GLPI["root_doc"]."/pics/plus.png\" title=\"".
-         __('Add a search criterion')."\"></a>&nbsp;&nbsp;&nbsp;&nbsp;";
+         echo "<i class='fa-1x fas fa-plus-square' title=\"".
+         __('Add a search criterion')."\"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;";
 
          echo "<a href=\"javascript:printercountersSearch.deleteSearchField('search_line".$item->rand."', 'add_search_count".$item->rand."');\" >";
-         echo "<img src=\"".$CFG_GLPI["root_doc"]."/pics/moins.png\" title=\"".
-         __('Delete a search criterion')."\"></a>&nbsp;&nbsp;&nbsp;&nbsp;";
+         echo "<i class='fa-1x fas fa-minus-square' title=\"".
+              __('Delete a search criterion')."\"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;";
          echo "</div>";
 
          // Display link item
@@ -171,8 +171,9 @@ class PluginPrintercountersSearch extends CommonDBTM {
          echo Html::hidden('id', ['value' => $ID]);
          echo Html::hidden('item', ['value' => base64_encode(serialize($item))]);
          echo "<a href='javascript:void(0)' onClick = \"printercountersSearch.resetSearchField('".$CFG_GLPI['root_doc']."', 'history_showSearch".$item->rand."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\">";
-         echo "&nbsp;&nbsp;<img title=\"".__('Blank')."\" alt=\"".__('Blank')."\" src='".
-         $CFG_GLPI["root_doc"]."/pics/reset.png' class='calendrier'></a>";
+         echo "&nbsp;&nbsp;";
+         echo "<i class='fa-1x fas fa-times-circle' title=\"".__s('Blank')."\"></i>";
+         echo "</a>";
          echo "</td>";
          echo "</tr></table>\n";
 
@@ -1447,11 +1448,11 @@ class PluginPrintercountersSearch extends CommonDBTM {
       // Back and fast backward button
       if (!$this->current_search['start'] == 0) {
          echo "<th class='left'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => 0]).");'>
-               <img src='".$CFG_GLPI["root_doc"]."/pics/first.png' alt=\"".__s('Start').
-         "\" title=\"".__s('Start')."\"></a></th>";
+               <i class='fa-2x fas fa-angle-double-left' title=\"".
+              __('Start')."\"></i></a></th>";
          echo "<th class='left'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => $back]).");'>
-               <img src='".$CFG_GLPI["root_doc"]."/pics/left.png' alt=\"".__s('Previous').
-         "\" title=\"".__s('Previous')."\"></th>";
+               <i class='fa-2x fas fa-angle-left' title=\"".
+              __s('Previous')."\"></i></th>";
       }
 
       echo "<td width='50%' class='tab_bg_2 center'>";
@@ -1471,11 +1472,11 @@ class PluginPrintercountersSearch extends CommonDBTM {
       // Forward and fast forward button
       if ($forward < $this->number) {
          echo "<th class='right'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => $forward]).");'>
-               <img src='".$CFG_GLPI["root_doc"]."/pics/right.png' alt=\"".__s('Next').
-         "\" title=\"".__s('Next')."\"></a></th>";
+               <i class='fa-2x fas fa-angle-right' title=\"".
+              __s('Next')."\"></i></a></th>";
          echo "<th class='right'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => $end]).");'>
-               <img src='".$CFG_GLPI["root_doc"]."/pics/last.png' alt=\"".__s('End').
-         "\" title=\"".__s('End')."\"></th>";
+               <i class='fa-2x fas fa-double-angle-right' title=\"".
+              __s('End')."\"></i></a></th>";
       }
 
       // End pager
