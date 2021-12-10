@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Xavier CAILLAUD <thetsmr@gmail.com>, 2020
+# Xavier CAILLAUD <thetsmr@gmail.com>, 2021
 # 
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: GLPI - Printercounters plugin 1.3.0\n"
+"Project-Id-Version: GLPI - Printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-24 15:41+0100\n"
+"POT-Creation-Date: 2021-12-09 15:02+0000\n"
 "PO-Revision-Date: 2020-11-02 16:15+0000\n"
-"Last-Translator: Xavier CAILLAUD <thetsmr@gmail.com>, 2020\n"
+"Last-Translator: Xavier CAILLAUD <thetsmr@gmail.com>, 2021\n"
 "Language-Team: French (France) (https://www.transifex.com/infotelGLPI/teams/63014/fr_FR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,26 +36,22 @@ msgstr ""
 "lié à un modèle de facturation"
 
 #: printercounters.js.php:46 ajax/loadscripts.php:47
-#: inc/item_recordmodel.class.php:845
+#: inc/item_recordmodel.class.php:848
 msgid "Global TCO"
 msgstr "TCO global"
 
-#: setup.php:109 inc/additional_data.class.php:64
+#: setup.php:111 inc/additional_data.class.php:64
 #: inc/item_billingmodel.class.php:1035 inc/item_billingmodel.class.php:1061
-#: inc/item_recordmodel.class.php:882 inc/item_recordmodel.class.php:883
-#: inc/item_recordmodel.class.php:884 inc/item_recordmodel.class.php:885
-#: inc/item_recordmodel.class.php:886 inc/item_recordmodel.class.php:887
-#: inc/item_recordmodel.class.php:888 inc/item_recordmodel.class.php:889
-#: inc/item_recordmodel.class.php:890 inc/item_recordmodel.class.php:891
-#: inc/item_recordmodel.class.php:896 inc/menu.class.php:47
+#: inc/item_recordmodel.class.php:885 inc/item_recordmodel.class.php:886
+#: inc/item_recordmodel.class.php:887 inc/item_recordmodel.class.php:888
+#: inc/item_recordmodel.class.php:889 inc/item_recordmodel.class.php:890
+#: inc/item_recordmodel.class.php:891 inc/item_recordmodel.class.php:892
+#: inc/item_recordmodel.class.php:893 inc/item_recordmodel.class.php:894
+#: inc/item_recordmodel.class.php:899 inc/menu.class.php:47
 #: inc/printer.class.php:123 inc/profile.class.php:164
 #: inc/record.class.php:1217
 msgid "Printer counters"
 msgstr "Compteurs Imprimantes"
-
-#: setup.php:133
-msgid "This plugin requires SNMP php extension"
-msgstr "Ce plugin requiert l'extension SNMP de php"
 
 #: front/config.form.php:60 inc/record.class.php:1718
 msgid "Clean records in error"
@@ -75,7 +71,11 @@ msgstr "Aucun relevé à nettoyer"
 msgid "Clean empty records"
 msgstr "Nettoyer les relevés vides"
 
-#: front/item_recordmodel.form.php:60 inc/item_recordmodel.class.php:1296
+#: front/config.form.php:92 front/config.php:44
+msgid "Please activate the plugin"
+msgstr "Merci d'activer le plugin"
+
+#: front/item_recordmodel.form.php:60 inc/item_recordmodel.class.php:1299
 #: inc/menu.class.php:84 inc/menu.class.php:85 inc/menu.class.php:171
 msgid "Record planning"
 msgstr "Planification des relevés"
@@ -250,7 +250,7 @@ msgstr[1] "Types de comtpeurs du modèle de relevé"
 #: inc/countertype_recordmodel.class.php:151
 #: inc/countertype_recordmodel.class.php:230
 #: inc/countertype_recordmodel.class.php:533
-#: inc/countertype_recordmodel.class.php:698 inc/pagecost.class.php:491
+#: inc/countertype_recordmodel.class.php:698 inc/pagecost.class.php:489
 #: inc/recordmodel.class.php:199
 msgid "OID"
 msgstr "OID"
@@ -321,50 +321,50 @@ msgstr "Hard state"
 msgid "Number of errors"
 msgstr "Nombre d'erreurs"
 
-#: inc/erroritem.class.php:238
+#: inc/erroritem.class.php:239
 msgid "Enable record error handler"
 msgstr "Activer le traitement des relevés en erreur hôte"
 
-#: inc/erroritem.class.php:242
+#: inc/erroritem.class.php:243
 msgid "Maximum number of interrogation for records in error"
 msgstr "Nombre maximum d'interrogation pour les relevés en erreur"
 
-#: inc/erroritem.class.php:287
+#: inc/erroritem.class.php:288
 msgid "Error item list"
 msgstr "Liste des éléments en erreur"
 
-#: inc/erroritem.class.php:291
+#: inc/erroritem.class.php:292
 msgid "Number of host errors"
 msgstr "Nombre d'éléments en erreur hôte"
 
-#: inc/erroritem.class.php:314
+#: inc/erroritem.class.php:315
 msgid "Interrogation of printers in host error"
 msgstr "Interrogation des imprimantes en erreur hôte"
 
-#: inc/erroritem.class.php:450
+#: inc/erroritem.class.php:451
 msgid "Error on item, soft state"
 msgstr "Erreur sur l'élément, soft state"
 
-#: inc/erroritem.class.php:459
+#: inc/erroritem.class.php:460
 msgid "Error on item, hard state"
 msgstr "Erreur sur l'élément, hard state"
 
-#: inc/erroritem.class.php:466
+#: inc/erroritem.class.php:467
 msgid "Record success"
 msgstr "Relevé réussi"
 
-#: inc/erroritem.class.php:470 inc/record.class.php:764
+#: inc/erroritem.class.php:471 inc/record.class.php:764
 #: inc/record.class.php:780
 msgid "No results, please check OIDs of your record model"
 msgstr ""
 "Pas de résultats, veuillez vérifier les OID de votre modèle de relevé de "
 "compteur"
 
-#: inc/erroritem.class.php:477 inc/record.class.php:787
+#: inc/erroritem.class.php:478 inc/record.class.php:787
 msgid "This item type is not correct"
 msgstr "Ce type d'objet n'est pas correct"
 
-#: inc/erroritem.class.php:482 inc/record.class.php:792
+#: inc/erroritem.class.php:483 inc/record.class.php:792
 msgid "No printers to search"
 msgstr "Aucune imprimante à interroger"
 
@@ -422,7 +422,7 @@ msgid_plural "Linked record models"
 msgstr[0] "Modèle de relevé lié"
 msgstr[1] "Modèles de relevé lié"
 
-#: inc/item_recordmodel.class.php:122 inc/item_recordmodel.class.php:1770
+#: inc/item_recordmodel.class.php:122 inc/item_recordmodel.class.php:1773
 msgid "Periodicity"
 msgstr "Périodicité"
 
@@ -443,7 +443,7 @@ msgid "Record configuration"
 msgstr "Configuration du relevé"
 
 #: inc/item_recordmodel.class.php:567 inc/item_recordmodel.class.php:798
-#: inc/item_recordmodel.class.php:882
+#: inc/item_recordmodel.class.php:885
 msgid "Enable automatic record"
 msgstr "Activer les relevés automatiques"
 
@@ -451,56 +451,56 @@ msgstr "Activer les relevés automatiques"
 msgid "Periodicity of automatic record"
 msgstr "Périodicité des relevés automatiques"
 
-#: inc/item_recordmodel.class.php:587 inc/item_recordmodel.class.php:835
+#: inc/item_recordmodel.class.php:587 inc/item_recordmodel.class.php:838
 msgid "Number of retries"
 msgstr "Nombre de réessaies"
 
-#: inc/item_recordmodel.class.php:597 inc/item_recordmodel.class.php:855
+#: inc/item_recordmodel.class.php:597 inc/item_recordmodel.class.php:858
 msgid "Timeout"
 msgstr "Délai maximum"
 
 #: inc/item_recordmodel.class.php:766 inc/item_recordmodel.class.php:781
 #: inc/item_recordmodel.class.php:798 inc/item_recordmodel.class.php:807
-#: inc/item_recordmodel.class.php:817 inc/item_recordmodel.class.php:824
-#: inc/item_recordmodel.class.php:835 inc/item_recordmodel.class.php:845
-#: inc/item_recordmodel.class.php:855
+#: inc/item_recordmodel.class.php:817 inc/item_recordmodel.class.php:827
+#: inc/item_recordmodel.class.php:838 inc/item_recordmodel.class.php:848
+#: inc/item_recordmodel.class.php:858
 msgid "Printercounters"
 msgstr "Compteurs Imprimantes"
 
-#: inc/item_recordmodel.class.php:883
+#: inc/item_recordmodel.class.php:886
 msgid "Set periodicity"
 msgstr "Définir la périodicité"
 
-#: inc/item_recordmodel.class.php:884
+#: inc/item_recordmodel.class.php:887
 msgid "Set record model"
 msgstr "Définir le modèle de relevé"
 
-#: inc/item_recordmodel.class.php:885
+#: inc/item_recordmodel.class.php:888
 msgid "Set SNMP authentication"
 msgstr "Définir l'authentification SNMP"
 
-#: inc/item_recordmodel.class.php:886
+#: inc/item_recordmodel.class.php:889
 msgid "Set retries"
 msgstr "Définir les réessaies"
 
-#: inc/item_recordmodel.class.php:887
+#: inc/item_recordmodel.class.php:890
 msgid "Set max timeout"
 msgstr "Définir le délai maximum"
 
-#: inc/item_recordmodel.class.php:888 inc/item_recordmodel.class.php:896
+#: inc/item_recordmodel.class.php:891 inc/item_recordmodel.class.php:899
 #: inc/record.class.php:161
 msgid "Immediate record"
 msgstr "Relevé immédiat"
 
-#: inc/item_recordmodel.class.php:889
+#: inc/item_recordmodel.class.php:892
 msgid "Update counter position"
 msgstr "Mettre à jour la position de compteur"
 
-#: inc/item_recordmodel.class.php:890
+#: inc/item_recordmodel.class.php:893
 msgid "Init counters to zero"
 msgstr "Initialiser le premier relevé à zéro"
 
-#: inc/item_recordmodel.class.php:891
+#: inc/item_recordmodel.class.php:894
 msgid "Set printer values"
 msgstr "Mettre à jour les valeurs de l'imprimante"
 
@@ -554,11 +554,11 @@ msgstr "Ajouter les utilisateurs de l'objet"
 msgid "Description of the new ticket"
 msgstr "Description du nouveau ticket"
 
-#: inc/item_ticket.class.php:313
+#: inc/item_ticket.class.php:318
 msgid "Event type"
 msgstr "Type d'événement"
 
-#: inc/item_ticket.class.php:389
+#: inc/item_ticket.class.php:394
 msgid ""
 "Create a ticket if there are consecutive errors on records OR no records "
 "since a defined date"
@@ -566,7 +566,7 @@ msgstr ""
 "Créer un ticket s'il existe des erreurs consécutives OU aucun relevés à "
 "succès depuis une date définie"
 
-#: inc/item_ticket.class.php:659
+#: inc/item_ticket.class.php:664
 msgid "Tickets created for : "
 msgstr "Ticket créés pour"
 
@@ -980,39 +980,39 @@ msgstr "AES192"
 msgid "AES256"
 msgstr "AES256"
 
-#: inc/snmpset.class.php:148 inc/snmpset.class.php:274
-#: inc/snmpset.class.php:552
+#: inc/snmpset.class.php:148 inc/snmpset.class.php:279
+#: inc/snmpset.class.php:557
 msgid "Set printer name"
 msgstr "Mettre à jour le nom de l'imprimante"
 
-#: inc/snmpset.class.php:160 inc/snmpset.class.php:275
-#: inc/snmpset.class.php:561
+#: inc/snmpset.class.php:160 inc/snmpset.class.php:280
+#: inc/snmpset.class.php:566
 msgid "Set printer location"
 msgstr "Mettre à jour le lieu de l'imprimante"
 
-#: inc/snmpset.class.php:172 inc/snmpset.class.php:276
-#: inc/snmpset.class.php:570
+#: inc/snmpset.class.php:172 inc/snmpset.class.php:281
+#: inc/snmpset.class.php:575
 msgid "Set printer contact informations"
 msgstr "Mettre à jour le contact de l'imprimante"
 
-#: inc/snmpset.class.php:237
+#: inc/snmpset.class.php:242
 msgid "Add a new snmpset"
 msgstr "Ajouter une nouvelle configuration snmpset"
 
-#: inc/snmpset.class.php:438
+#: inc/snmpset.class.php:443
 msgid "SNMPset configuration is not found in the printer entity"
 msgstr ""
 "La configuration SNMPset n'a pas été trouvée sur l'entité de l'imprimante"
 
-#: inc/snmpset.class.php:457
+#: inc/snmpset.class.php:462
 msgid "IP not found"
 msgstr "Aucune adresse ip trouvée"
 
-#: inc/snmpset.class.php:529
+#: inc/snmpset.class.php:534
 msgid "User phone"
 msgstr "Téléphone de l'utilisateur"
 
-#: inc/snmpset.class.php:616
+#: inc/snmpset.class.php:621
 msgid "SNMPset is already configured for this entity"
 msgstr "SNMPset est déja configuré pour cette entité"
 
