@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-09 15:02+0000\n"
+"POT-Creation-Date: 2021-12-13 07:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "Global TCO"
 msgstr ""
 
-#: setup.php:111 inc/additional_data.class.php:64
+#: setup.php:118 inc/additional_data.class.php:64
 #: inc/item_billingmodel.class.php:1035 inc/item_billingmodel.class.php:1061
 #: inc/item_recordmodel.class.php:885 inc/item_recordmodel.class.php:886
 #: inc/item_recordmodel.class.php:887 inc/item_recordmodel.class.php:888
@@ -240,16 +240,16 @@ msgstr[1] ""
 
 #: inc/countertype_recordmodel.class.php:151
 #: inc/countertype_recordmodel.class.php:230
-#: inc/countertype_recordmodel.class.php:533
-#: inc/countertype_recordmodel.class.php:698 inc/pagecost.class.php:489
+#: inc/countertype_recordmodel.class.php:539
+#: inc/countertype_recordmodel.class.php:704 inc/pagecost.class.php:489
 #: inc/recordmodel.class.php:199
 msgid "OID"
 msgstr ""
 
 #: inc/countertype_recordmodel.class.php:156
 #: inc/countertype_recordmodel.class.php:231
-#: inc/countertype_recordmodel.class.php:541
-#: inc/countertype_recordmodel.class.php:697 inc/pagecost.class.php:210
+#: inc/countertype_recordmodel.class.php:547
+#: inc/countertype_recordmodel.class.php:703 inc/pagecost.class.php:210
 #: inc/recordmodel.class.php:209
 msgid "OID type"
 msgstr ""
@@ -258,35 +258,35 @@ msgstr ""
 msgid "Add a new counter"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:490
+#: inc/countertype_recordmodel.class.php:496
 msgid "Color"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:491
+#: inc/countertype_recordmodel.class.php:497
 msgid "Monochrome"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:492
+#: inc/countertype_recordmodel.class.php:498
 msgid "Black and white"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:493
+#: inc/countertype_recordmodel.class.php:499
 msgid "Bichromie"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:494
+#: inc/countertype_recordmodel.class.php:500
 msgid "Serial number"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:495 inc/sysdescr.class.php:331
+#: inc/countertype_recordmodel.class.php:501 inc/sysdescr.class.php:331
 msgid "Sysdescr"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:497
+#: inc/countertype_recordmodel.class.php:503
 msgid "Number of printed papers"
 msgstr ""
 
-#: inc/countertype_recordmodel.class.php:499
+#: inc/countertype_recordmodel.class.php:505
 msgid "Other"
 msgstr ""
 
