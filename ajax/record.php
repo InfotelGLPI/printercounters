@@ -36,75 +36,76 @@ $_POST['itemtype'] = isset($_POST['itemtype']) ? $_POST['itemtype'] : 'printer';
 $_POST['items_id'] = isset($_POST['items_id']) ? $_POST['items_id'] : 0;
 $record = new PluginPrintercountersRecord($_POST['itemtype'], $_POST['items_id']);
 
-if (!isset($_POST['action'])) {
+if (!isset($_POST['action']) && isset($_GET['action'])) {
    $_POST['action'] = $_GET['action'];
 }
 
-switch ($_POST['action']) {
-   case 'immediateRecord':
-      header('Content-Type: application/json; charset=UTF-8"');
-      list($messages, $error) = $record->immediateRecord($_POST['items_id'], $_POST['itemtype']);
-      echo json_encode(['message'    => implode('</br>', $messages),
-                             'error'      => $error]);
-      break;
+if (isset($_POST['action'])) {
+   switch ($_POST['action']) {
+      case 'immediateRecord':
+         header('Content-Type: application/json; charset=UTF-8"');
+         list($messages, $error) = $record->immediateRecord($_POST['items_id'], $_POST['itemtype']);
+         echo json_encode(['message' => implode('</br>', $messages),
+                           'error'   => $error]);
+         break;
 
-   case 'showManualRecord':
-      header("Content-Type: text/html; charset=UTF-8");
-      $record->showManualRecord($_POST['items_id'], $_POST['itemtype'], $_POST['records_id'], $_POST['rand'], $_POST['addLowerRecord']);
-      break;
+      case 'showManualRecord':
+         header("Content-Type: text/html; charset=UTF-8");
+         $record->showManualRecord($_POST['items_id'], $_POST['itemtype'], $_POST['records_id'], $_POST['rand'], $_POST['addLowerRecord']);
+         break;
 
-   case 'setManualRecord':
-      header('Content-Type: application/json; charset=UTF-8"');
-      list($messages, $error) = $record->setManualRecord($_POST['items_id'], $_POST['itemtype'], $_POST['counters'], $_POST['records_id'], $_POST['addLowerRecord']);
-      echo json_encode(['message'    => implode('</br>', $messages),
-                             'error'      => $error]);
-      break;
+      case 'setManualRecord':
+         header('Content-Type: application/json; charset=UTF-8"');
+         list($messages, $error) = $record->setManualRecord($_POST['items_id'], $_POST['itemtype'], $_POST['counters'], $_POST['records_id'], $_POST['addLowerRecord']);
+         echo json_encode(['message' => implode('</br>', $messages),
+                           'error'   => $error]);
+         break;
 
-   case 'SNMPSet':
-      header('Content-Type: application/json; charset=UTF-8"');
-      $snmpset = new PluginPrintercountersSnmpset();
-      list($messages, $error) = $snmpset->snmpSet($_POST['items_id'], $_POST['itemtype']);
-      echo json_encode(['message'    => implode('</br>', $messages),
-                             'error'      => $error]);
-      break;
+      case 'SNMPSet':
+         header('Content-Type: application/json; charset=UTF-8"');
+         $snmpset = new PluginPrintercountersSnmpset();
+         list($messages, $error) = $snmpset->snmpSet($_POST['items_id'], $_POST['itemtype']);
+         echo json_encode(['message' => implode('</br>', $messages),
+                           'error'   => $error]);
+         break;
 
-   case 'updateGlobalTco':
-      header('Content-Type: application/json; charset=UTF-8"');
-      list($messages, $result, $error) = $record->updateGlobalTco($_POST['items_id'], $_POST['itemtype']);
-      echo json_encode(['result'    => $result,
-                             'message'   => $messages,
-                             'error'     => $error]);
-      break;
+      case 'updateGlobalTco':
+         header('Content-Type: application/json; charset=UTF-8"');
+         list($messages, $result, $error) = $record->updateGlobalTco($_POST['items_id'], $_POST['itemtype']);
+         echo json_encode(['result'  => $result,
+                           'message' => $messages,
+                           'error'   => $error]);
+         break;
 
-   case 'updatePrinterData':
-      header('Content-Type: application/json; charset=UTF-8"');
-      list($messages, $error) = $record->updatePrinterData($_POST['items_id'], $_POST['itemtype']);
-      echo json_encode(['message'    => implode('</br>', $messages),
-                             'error'      => $error]);
-      break;
+      case 'updatePrinterData':
+         header('Content-Type: application/json; charset=UTF-8"');
+         list($messages, $error) = $record->updatePrinterData($_POST['items_id'], $_POST['itemtype']);
+         echo json_encode(['message' => implode('</br>', $messages),
+                           'error'   => $error]);
+         break;
 
-   case 'ajaxMassiveAction':
-      header("Content-Type: text/html; charset=UTF-8");
-      $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
-      $item_recordmodel->doMassiveActionProcess();
-      break;
+      case 'ajaxMassiveAction':
+         header("Content-Type: text/html; charset=UTF-8");
+         $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
+         $item_recordmodel->doMassiveActionProcess();
+         break;
 
-   case 'ajaxMassiveActionTimeOut':
-      header("Content-Type: text/html; charset=UTF-8");
-      $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
-      $item_recordmodel->massiveActionTimeOut();
-      break;
+      case 'ajaxMassiveActionTimeOut':
+         header("Content-Type: text/html; charset=UTF-8");
+         $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
+         $item_recordmodel->massiveActionTimeOut();
+         break;
 
-   case 'loadCleanErrorRecords':
-      header("Content-Type: text/html; charset=UTF-8");
-      $record->cleanRecords();
-      break;
+      case 'loadCleanErrorRecords':
+         header("Content-Type: text/html; charset=UTF-8");
+         $record->cleanRecords();
+         break;
 
-   case 'showErrorItem':
-      header("Content-Type: text/html; charset=UTF-8");
-      // Record error
-      $errorItem = new PluginPrintercountersErrorItem($_POST['itemtype'], $_POST['items_id']);
-      $errorItem->showErrorItem();
-      break;
+      case 'showErrorItem':
+         header("Content-Type: text/html; charset=UTF-8");
+         // Record error
+         $errorItem = new PluginPrintercountersErrorItem($_POST['itemtype'], $_POST['items_id']);
+         $errorItem->showErrorItem();
+         break;
+   }
 }
-

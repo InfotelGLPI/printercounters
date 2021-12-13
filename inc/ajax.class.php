@@ -106,20 +106,32 @@ class PluginPrintercountersAjax extends CommonDBTM {
       }
 
       $out  =  "<script type='text/javascript'>\n";
-      $out .= "var $name=";
-      if (!empty($param['container'])) {
-         $out .= Html::jsGetElementbyID(Html::cleanId($param['container']));
-      } else {
-         $out .= "$('<div></div>')";
-      }
-      $out .= ".dialog({\n
-         width:".$param['width'].",\n
-         autoOpen: false,\n
-         height:".$param['height'].",\n
-         modal: ".($param['modal']?'true':'false').",\n
-         title: \"".addslashes($param['title'])."\"\n
-         });\n";
-      $out .= "</script>";
+//      $out .= "var $name=";
+//      if (!empty($param['container'])) {
+//         $out .= Html::jsGetElementbyID(Html::cleanId($param['container']));
+//      } else {
+//         $out .= "$('<div></div>')";
+//      }
+//      $out .= ".dialog({\n
+//         width:".$param['width'].",\n
+//         autoOpen: false,\n
+//         height:".$param['height'].",\n
+//         modal: ".($param['modal']?'true':'false').",\n
+//         title: \"".addslashes($param['title'])."\"\n
+//         });\n";
+      $out .= "$('#$name').html(data.message);
+$('#dialog-confirm').dialog({
+   resizable: false,
+   height: 180,
+   width: 350,
+   modal: true,
+   buttons: {
+         OK: function () {
+            $(this).dialog('close');
+         }
+   }
+  });";
+  $out .= "</script>";
 
       if ($param['display']) {
          echo $out;

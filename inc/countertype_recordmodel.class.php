@@ -422,7 +422,7 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
           LEFT JOIN `".$itemjoin2."` 
              ON (`".$itemjoin2."`.`id` = `".$this->getTable()."`.`plugin_printercounters_recordmodels_id`)         
           WHERE ";
-//      Toolbox::logInfo($recordmodels_id);
+
       if (is_array($recordmodels_id)) {
          $query .= "`".$this->getTable()."`.`plugin_printercounters_recordmodels_id` IN ('".implode("','", $recordmodels_id)."')";
          $query .= "AND ";
@@ -619,6 +619,13 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
       foreach ($recordmodels_id as $val) {
          $recordmodels_data[$val] = [];
       }
+      $array = [];
+      foreach ($recordmodels_id as $k => $v) {
+         $k = strip_tags($k);
+         $v = strip_tags($v);
+         $array[$k] = $v;
+      }
+      $recordmodels_id = $array;
 
       $data = $this->getRecordmodelCounters($recordmodels_id);
       if (!empty($data)) {

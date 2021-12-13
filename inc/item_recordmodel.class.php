@@ -1023,7 +1023,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
       // Launch ajax massive action
       echo "<script type='text/javascript'>";
       echo "$(document).ready(function() {";
-      echo "printecounters_ajaxMassiveAction('".$CFG_GLPI['root_doc']."', 'ajaxMassiveAction', ".ini_get('max_execution_time').");";
+      echo "printecounters_ajaxMassiveAction('".PLUGIN_PRINTERCOUNTERS_WEBDIR."', 'ajaxMassiveAction', ".ini_get('max_execution_time').");";
       echo "});";
       echo "</script>";
    }
@@ -1148,7 +1148,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
          $_SESSION["plugin_printercounters"]["ids"]           = $ids;
          Html::changeProgressBarPosition($i, $ma->POST["process_count"], sprintf(__('%1$s/%2$s'), $i, $ma->POST["process_count"]));
          echo "<script type='text/javascript'>";
-         echo "printecounters_ajaxMassiveAction('".$CFG_GLPI['root_doc']."', 'ajaxMassiveAction', ".ini_get('max_execution_time').");";
+         echo "printecounters_ajaxMassiveAction('".PLUGIN_PRINTERCOUNTERS_WEBDIR."', 'ajaxMassiveAction', ".ini_get('max_execution_time').");";
          echo "</script>";
 
       } else { // Nothing to do redirect

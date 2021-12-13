@@ -319,15 +319,26 @@
                          break;
 
                      case 'showManualRecord':
-                         var xy = printecountersGetScrollXY();
-                         manual_record_window.y = xy[1] + 50;
-                         manual_record_window.html(response).dialog("open");
+                         // var xy = printecountersGetScrollXY();
+                         // manual_record_window.y = xy[1] + 50;
+                         // manual_record_window.html(response).dialog("open");
+                        glpi_html_dialog({
+                           title: __('Add a manual record', 'printercounters'),
+                           body: response,
+                           id: 'showManualRecord',
+                           buttons: [{
+                              label: 'OK',
+                              click: function(event) {
+                                 window.location.reload();
+                              }
+                           }],
+                        })
                          break;
 
                      case 'setManualRecord':
                         if (!result.error) {
                             printercountersSearch.initSearch(root_doc, params.formName, params.updates.record);
-                            manual_record_window.dialog("close");
+                            // manual_record_window.dialog("close");
                         }
                          break;
 

@@ -148,7 +148,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
          echo "<div style='float:left;padding-top:8px;padding-bottom:8px;'>";
          // First line display add / delete images for normal and meta search items
          echo "<input type='hidden' disabled id='add_search_count".$item->rand."' name='add_search_count' value='".(count($this->default_search['criteria'])-1)."'>";
-         echo "<a href=\"javascript:printercountersSearch.addSearchField('".$CFG_GLPI["root_doc"]."', 'search_line".$item->rand."', 'add_search_count".$item->rand."', 'search_form".$item->rand."');\">";
+         echo "<a href=\"javascript:printercountersSearch.addSearchField('".PLUGIN_PRINTERCOUNTERS_WEBDIR."', 'search_line".$item->rand."', 'add_search_count".$item->rand."', 'search_form".$item->rand."');\">";
          echo "<i class='fa-1x fas fa-plus-square' title=\"".
          __('Add a search criterion')."\"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;";
 
@@ -166,11 +166,11 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
          // Submit
          echo "<td class='center'>";
-         echo "<input type='button' onClick = \"printercountersSearch.initSearch('".$CFG_GLPI["root_doc"]."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\" value='".__('Search')."' class='btn btn-primary'>";
+         echo "<input type='button' onClick = \"printercountersSearch.initSearch('".PLUGIN_PRINTERCOUNTERS_WEBDIR."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\" value='".__('Search')."' class='btn btn-primary'>";
          echo Html::hidden('itemtype', ['value' => $itemtype]);
          echo Html::hidden('id', ['value' => $ID]);
          echo Html::hidden('item', ['value' => base64_encode(serialize($item))]);
-         echo "<a href='javascript:void(0)' onClick = \"printercountersSearch.resetSearchField('".$CFG_GLPI['root_doc']."', 'history_showSearch".$item->rand."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\">";
+         echo "<a href='javascript:void(0)' onClick = \"printercountersSearch.resetSearchField('".PLUGIN_PRINTERCOUNTERS_WEBDIR."', 'history_showSearch".$item->rand."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\">";
          echo "&nbsp;&nbsp;";
          echo "<i class='fa-1x fas fa-times-circle' title=\"".__s('Blank')."\"></i>";
          echo "</a>";
@@ -437,7 +437,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
             }
             $linkto = '';
             if (!isset($val['nosort']) || !$val['nosort']) {
-               $linkto = "javascript:printercountersSearch.initSearch('".$CFG_GLPI["root_doc"]."', "
+               $linkto = "javascript:printercountersSearch.initSearch('".PLUGIN_PRINTERCOUNTERS_WEBDIR."', "
                                               . "'search_form".$item->rand."', "
                                               . "'history_showForm".$item->rand."', "
                                               .str_replace('"', "'",
@@ -1372,7 +1372,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       global $CFG_GLPI;
 
       echo "<form method='POST' name='search_export$item->rand' target='_blank' action='".$this->getFormURL()."' 
-               onsubmit=\"printecounters_reloadCsrf('".$CFG_GLPI['root_doc']."','search_export$item->rand');\">\n";
+               onsubmit=\"printecounters_reloadCsrf('".PLUGIN_PRINTERCOUNTERS_WEBDIR."','search_export$item->rand');\">\n";
 
       if (isset($this->current_search['searchopt'])) {
          unset($this->current_search['searchopt']);
@@ -1447,10 +1447,10 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
       // Back and fast backward button
       if (!$this->current_search['start'] == 0) {
-         echo "<th class='left'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => 0]).");'>
+         echo "<th class='left'><a href='javascript:printercountersSearch.initSearch(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => 0]).");'>
                <i class='fa-2x fas fa-angle-double-left' title=\"".
               __('Start')."\"></i></a></th>";
-         echo "<th class='left'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => $back]).");'>
+         echo "<th class='left'><a href='javascript:printercountersSearch.initSearch(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => $back]).");'>
                <i class='fa-2x fas fa-angle-left' title=\"".
               __s('Previous')."\"></i></th>";
       }
@@ -1471,10 +1471,10 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
       // Forward and fast forward button
       if ($forward < $this->number) {
-         echo "<th class='right'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => $forward]).");'>
+         echo "<th class='right'><a href='javascript:printercountersSearch.initSearch(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => $forward]).");'>
                <i class='fa-2x fas fa-angle-right' title=\"".
               __s('Next')."\"></i></a></th>";
-         echo "<th class='right'><a href='javascript:printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => $end]).");'>
+         echo "<th class='right'><a href='javascript:printercountersSearch.initSearch(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['start' => $end]).");'>
                <i class='fa-2x fas fa-double-angle-right' title=\"".
               __s('End')."\"></i></a></th>";
       }
@@ -1496,7 +1496,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
       echo "<form method='POST' action =''>\n";
       echo "<span>".__('Display (number of items)')."&nbsp;</span>";
-      Dropdown::showListLimit("printercountersSearch.initSearch(\"".$CFG_GLPI["root_doc"]."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['limit' => '__VALUE__']).")");
+      Dropdown::showListLimit("printercountersSearch.initSearch(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"search_form".$item->rand."\", \"history_showForm".$item->rand."\", ".json_encode(['limit' => '__VALUE__']).")");
       Html::closeForm();
    }
 

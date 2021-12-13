@@ -153,7 +153,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       if ($this->canView()) {
          echo "<div class='printercounters_action_group'>";
          // Immediate record
-         $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"immediateRecord\", \"\", \"record_action_result\", 
+         $onclick = "onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"immediateRecord\", \"\", \"record_action_result\", 
                   ".json_encode(['items_id'        => $this->items_id,
                                       'itemtype'        => $this->itemtype,
                                       'formName'        => 'search_form'.$this->rand,
@@ -161,7 +161,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
          echo "<a $onclick class='btn btn-primary printercounters_action_button'>".__('Immediate record', 'printercounters')."</a>";
 
          // Manual record
-         $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"showManualRecord\", \"\", \"\", 
+         $onclick = "onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"showManualRecord\", \"\", \"\", 
                   ".json_encode(['items_id'        => $this->items_id,
                                       'itemtype'        => $this->itemtype,
                                       'addLowerRecord'  => 0,
@@ -172,7 +172,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
          // Manual record : add less record
          if (self::canAddLessRecords()) {
-            $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"showManualRecord\", \"\", \"\", 
+            $onclick = "onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"showManualRecord\", \"\", \"\", 
                      ".json_encode(['items_id'        => $this->items_id,
                                          'itemtype'        => $this->itemtype,
                                          'addLowerRecord'  => 1,
@@ -187,7 +187,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       if ($this->canCreate()) {
          echo "<div class='printercounters_action_group'>";
          // Update global TCO
-         $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"updateGlobalTco\", \"\", \"record_action_result\", 
+         $onclick = "onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"updateGlobalTco\", \"\", \"record_action_result\", 
                   ".json_encode(['items_id'        => $this->items_id,
                                       'itemtype'        => $this->itemtype,
                                       'formName'        => 'search_form'.$this->rand,
@@ -195,7 +195,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
          echo "<a $onclick class='btn btn-primary printercounters_action_button'>".__('Update global TCO', 'printercounters')."</a>";
 
          // Update printer data
-         $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"updatePrinterData\", \"\", \"record_action_result\", 
+         $onclick = "onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"updatePrinterData\", \"\", \"record_action_result\", 
                   ".json_encode(['items_id'        => $this->items_id,
                                       'itemtype'        => $this->itemtype,
                                       'formName'        => 'search_form'.$this->rand,
@@ -204,7 +204,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
          // SNMP set
          if (PluginPrintercountersSnmpset::canSnmpSet()) {
-            $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"SNMPSet\", \"\", \"record_action_result\", 
+            $onclick = "onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"SNMPSet\", \"\", \"record_action_result\", 
                      ".json_encode(['items_id'        => $this->items_id,
                                          'itemtype'        => $this->itemtype,
                                          'formName'        => 'search_form'.$this->rand,
@@ -322,10 +322,12 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       // Fill counters if recordmodel has changed
       $recordmodels_id = [];
+
       foreach ($input['records'] as $records_id => $history) {
          $recordmodels_id[$history['recordmodels_id']] = $history['recordmodels_id'];
       }
       $countertype_recordmodels = new PluginPrintercountersCountertype_Recordmodel();
+
       $input['records'] = $countertype_recordmodels->fillCountersGap($input['records'], $recordmodels_id);
 
       // Display data
@@ -337,7 +339,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
          $onclick = '';
          $style = " style='cursor:pointer;'";
          if ($this->canUpdateRecords()) {
-            $onclick = " onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"showManualRecord\", \"\", \"\", 
+            $onclick = " onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"showManualRecord\", \"\", \"\", 
                ".json_encode(['items_id'        => $this->items_id,
                                    'itemtype'        => $this->itemtype,
                                    'addLowerRecord'  => $this->canAddLessRecords() ? 1 : 0,
@@ -869,7 +871,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
       // Launch ajax massive action
       echo "<script type='text/javascript'>";
-      echo "printecounters_ajaxMassiveAction('".$CFG_GLPI['root_doc']."', 'loadCleanErrorRecords', ".ini_get('max_execution_time').");";
+      echo "printecounters_ajaxMassiveAction('".PLUGIN_PRINTERCOUNTERS_WEBDIR."', 'loadCleanErrorRecords', ".ini_get('max_execution_time').");";
       echo "</script>";
 
       echo "<table class='tab_cadrehov'>";
@@ -914,7 +916,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
          );
 
          echo "<script type='text/javascript'>";
-         echo "printecounters_ajaxMassiveAction('".$CFG_GLPI['root_doc']."', 'loadCleanErrorRecords', ".ini_get('max_execution_time').");";
+         echo "printecounters_ajaxMassiveAction('".PLUGIN_PRINTERCOUNTERS_WEBDIR."', 'loadCleanErrorRecords', ".ini_get('max_execution_time').");";
          echo "</script>";
 
       } else {
@@ -1223,11 +1225,16 @@ class PluginPrintercountersRecord extends CommonDBTM {
          }
       }
 
-      PluginPrintercountersAjax::createFixedModalWindow('manual_record_window', ['title'       => $p['title'],
+      echo Ajax::createIframeModalWindow('manual_record_window',
+                                         $p['url'],
+                                         ['title'   => $p['title'],
+                                          'display' => false]);
 
-                                                                 'extraparams' => $p['extraparams'],
-                                                                 'width'       => $p['width'],
-                                                                 'height'      => $p['height']]);
+//      PluginPrintercountersAjax::createFixedModalWindow('manual_record_window', ['title'       => $p['title'],
+//
+//                                                                 'extraparams' => $p['extraparams'],
+//                                                                 'width'       => $p['width'],
+//                                                                 'height'      => $p['height']]);
    }
 
    /**
@@ -1304,7 +1311,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
          echo "<tr class='tab_bg_2'>";
          echo "<td colspan='2' class='center'>";
-         $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"setManualRecord\", \"manual_record_form\", \"manual_record_error\", 
+         $onclick = "onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"setManualRecord\", \"manual_record_form\", \"manual_record_error\", 
                ".json_encode(['items_id'        => $items_id,
                                    'itemtype'        => $itemtype,
                                    'addLowerRecord'  => $addLowerRecord,
@@ -1327,7 +1334,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
 
          echo "<tr class='tab_bg_2'>";
          echo "<td colspan='2' class='center'>";
-         $onclick = "onclick='printercountersAction.printercountersActions(\"".$CFG_GLPI['root_doc']."\", \"setManualRecord\", \"manual_record_form\", \"manual_record_error\", 
+         $onclick = "onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"setManualRecord\", \"manual_record_form\", \"manual_record_error\", 
                ".json_encode(['items_id'        => $items_id,
                                    'itemtype'        => $itemtype,
                                    'addLowerRecord'  => $addLowerRecord,
