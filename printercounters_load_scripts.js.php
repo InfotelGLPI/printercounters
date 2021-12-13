@@ -5,7 +5,7 @@ header('Content-Type: text/javascript');
 
 ?>
 
-var rootDoc = "<?php echo PLUGIN_PRINTERCOUNTERS_WEBDIR; ?>";
+var root_printercounters_doc = "<?php echo PLUGIN_PRINTERCOUNTERS_WEBDIR; ?>";
 (function ($) {
    $.fn.printercounters_load_scripts = function () {
 
@@ -16,7 +16,7 @@ var rootDoc = "<?php echo PLUGIN_PRINTERCOUNTERS_WEBDIR; ?>";
          //            $(document).ready(function () {
          // Send data
          $.ajax({
-            url: rootDoc + '/ajax/loadscripts.php',
+            url: root_printercounters_doc + '/ajax/loadscripts.php',
             type: "POST",
             dataType: "html",
             data: 'action=load',
