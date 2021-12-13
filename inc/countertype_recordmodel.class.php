@@ -421,8 +421,14 @@ class PluginPrintercountersCountertype_Recordmodel extends CommonDBTM {
              ON (`".$itemjoin."`.`id` = `".$this->getTable()."`.`plugin_printercounters_countertypes_id`)
           LEFT JOIN `".$itemjoin2."` 
              ON (`".$itemjoin2."`.`id` = `".$this->getTable()."`.`plugin_printercounters_recordmodels_id`)         
-          WHERE `".$this->getTable()."`.`plugin_printercounters_recordmodels_id` IN ('".implode("','", $recordmodels_id)."')
-          AND `".$this->getTable()."`.`oid_type` != '".self::SERIAL."' 
+          WHERE ";
+//      Toolbox::logInfo($recordmodels_id);
+      if (is_array($recordmodels_id)) {
+         $query .= "`".$this->getTable()."`.`plugin_printercounters_recordmodels_id` IN ('".implode("','", $recordmodels_id)."')";
+         $query .= "AND ";
+      }
+
+          $query .= " `".$this->getTable()."`.`oid_type` != '".self::SERIAL."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::MODEL."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::NUMBER_OF_PRINTED_PAPERS."' 
           AND `".$this->getTable()."`.`oid_type` != '".self::NAME."' 

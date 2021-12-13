@@ -30,28 +30,28 @@
 function plugin_printercounters_install() {
    global $DB;
 
-   include_once (GLPI_ROOT . "/plugins/printercounters/inc/profile.class.php");
+   include_once (PLUGIN_PRINTERCOUNTERS_DIR. "/inc/profile.class.php");
 
    // SQL creation
    if (!$DB->tableExists("glpi_plugin_printercounters_records")) {
-      $DB->runFile(GLPI_ROOT . "/plugins/printercounters/install/sql/empty-1.7.0.sql");
+      $DB->runFile(PLUGIN_PRINTERCOUNTERS_DIR. "/install/sql/empty-1.7.0.sql");
 
       // Add record notification
-      include_once(GLPI_ROOT ."/plugins/printercounters/inc/notificationtargetadditional_data.class.php");
+      include_once(PLUGIN_PRINTERCOUNTERS_DIR. "/inc/notificationtargetadditional_data.class.php");
       call_user_func(["PluginPrintercountersNotificationTargetAdditional_Data",'install']);
    }
 
    // Update 100 to 101
    if ($DB->tableExists("glpi_plugin_printercounters_billingmodels")
          && !$DB->fieldExists('glpi_plugin_printercounters_billingmodels', 'budgets_id')) {
-      include(GLPI_ROOT ."/plugins/printercounters/install/update_100_101.php");
+      include(PLUGIN_PRINTERCOUNTERS_DIR. "/install/update_100_101.php");
       update100to101();
    }
 
    // Update 101 to 102
    if ($DB->tableExists("glpi_plugin_printercounters_configs")
          && !$DB->fieldExists('glpi_plugin_printercounters_configs', 'set_first_record')) {
-      include(GLPI_ROOT ."/plugins/printercounters/install/update_101_102.php");
+      include(PLUGIN_PRINTERCOUNTERS_DIR. "/install/update_101_102.php");
       update101to102();
    }
 
@@ -59,32 +59,32 @@ function plugin_printercounters_install() {
    $dbu = new DbUtils();
    if ($DB->tableExists("glpi_plugin_printercounters_records")
          && !$dbu->isIndex('glpi_plugin_printercounters_records', 'date')) {
-      include(GLPI_ROOT."/plugins/printercounters/install/update_102_103.php");
+      include(PLUGIN_PRINTERCOUNTERS_DIR."/install/update_102_103.php");
       update102to103();
    }
 
    // Update 103 to 104
    if ($DB->tableExists("glpi_plugin_printercounters_snmpauthentications")
          && !$DB->fieldExists('glpi_plugin_printercounters_snmpauthentications', 'community_write')) {
-      include(GLPI_ROOT ."/plugins/printercounters/install/update_103_104.php");
+      include(PLUGIN_PRINTERCOUNTERS_DIR. "/install/update_103_104.php");
       update103to104();
    }
 
    // Update 104 to 105
    if (!$DB->tableExists('glpi_plugin_printercounters_additionals_datas')) {
-      include(GLPI_ROOT ."/plugins/printercounters/install/update_104_105.php");
+      include(PLUGIN_PRINTERCOUNTERS_DIR. "/install/update_104_105.php");
       update104to105();
    }
 
    // Update 105 to 106
    if (!$DB->fieldExists('glpi_plugin_printercounters_snmpauthentications', 'is_default')) {
-      include(GLPI_ROOT ."/plugins/printercounters/install/update_105_106.php");
+      include(PLUGIN_PRINTERCOUNTERS_DIR. "/install/update_105_106.php");
       update105to106();
    }
 
    // Update 106 to 107
    if (!$DB->tableExists("glpi_plugin_printercounters_errorrecords")) {
-      include(GLPI_ROOT ."/plugins/printercounters/install/update_106_107.php");
+      include(PLUGIN_PRINTERCOUNTERS_DIR. "/install/update_106_107.php");
       update106to107();
    }
 
@@ -127,7 +127,7 @@ function plugin_printercounters_uninstall() {
    CronTask::Unregister('printercounters');
 
    // Add record notification
-   include_once(GLPI_ROOT ."/plugins/printercounters/inc/notificationtargetadditional_data.class.php");
+   include_once(PLUGIN_PRINTERCOUNTERS_DIR. "/inc/notificationtargetadditional_data.class.php");
    call_user_func(["PluginPrintercountersNotificationTargetAdditional_Data",'uninstall']);
 
    return true;

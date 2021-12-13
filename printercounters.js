@@ -77,11 +77,11 @@
          }
 
             // Loading
-            item_bloc.html('<div style="width:100%;text-align:center"><img src="' + root_doc + '/plugins/printercounters/pics/large-loading.gif"></div>');
+            item_bloc.html('<div style="width:100%;text-align:center"><img src="' + root_doc + '/pics/large-loading.gif"></div>');
 
             // Send data
             $.ajax({
-               url: root_doc + '/plugins/printercounters/ajax/search.php',
+               url: root_doc + '/ajax/search.php',
                type: "POST",
                dataType: "html",
                data: 'action=initSearch&' + formInput +
@@ -116,7 +116,7 @@
             var formInput = getFormData(formName);
 
             $.ajax({
-               url: root_doc + '/plugins/printercounters/ajax/search.php',
+               url: root_doc + '/ajax/search.php',
                type: "POST",
                dataType: "html",
                data: 'action=addSearchField&' + formInput + '&search_count=' + $('#' + fieldcounter).val(),
@@ -156,7 +156,7 @@
             var formInput = getFormData(formName);
 
             $.ajax({
-               url: root_doc + '/plugins/printercounters/ajax/search.php',
+               url: root_doc + '/ajax/search.php',
                type: "POST",
                dataType: "html",
                data: 'action=resetSearchField&' + formInput,
@@ -204,10 +204,10 @@
             var item_bloc = $('#' + toupdate);
 
             // Loading
-            item_bloc.html('<div style="width:100%;text-align:center"><img src="' + root_doc + '/plugins/printercounters/pics/large-loading.gif"></div>');
+            item_bloc.html('<div style="width:100%;text-align:center"><img src="' + root_doc + '/pics/large-loading.gif"></div>');
 
             $.ajax({
-               url: root_doc + '/plugins/printercounters/ajax/additional_data.php',
+               url: root_doc + '/ajax/additional_data.php',
                type: "POST",
                dataType: "html",
                data: 'action=showAdditionalData&itemtype=' + itemtype + '&items_id=' + items_id,
@@ -235,10 +235,10 @@
             var item_bloc = $('#' + toupdate);
 
             // Loading
-            item_bloc.html('<div style="width:100%;text-align:center"><img src="' + root_doc + '/plugins/printercounters/pics/large-loading.gif"></div>');
+            item_bloc.html('<div style="width:100%;text-align:center"><img src="' + root_doc + '/pics/large-loading.gif"></div>');
 
             $.ajax({
-               url: root_doc + '/plugins/printercounters/ajax/record.php',
+               url: root_doc + '/ajax/record.php',
                type: "POST",
                dataType: "html",
                data: 'action=showErrorItem&itemtype=' + itemtype + '&items_id=' + items_id,
@@ -276,7 +276,7 @@
             if (toupdate != '') {
                 var item_bloc = $('#' + toupdate);
                 // Loading
-                item_bloc.html('<div style="width:100%;text-align:center"><img src="' + root_doc + '/plugins/printercounters/pics/large-loading.gif"></div>');
+                item_bloc.html('<div style="width:100%;text-align:center"><img src="' + root_doc + '/pics/large-loading.gif"></div>');
             }
 
             // If manual record is set : get form input
@@ -286,7 +286,7 @@
             }
 
             $.ajax({
-               url: root_doc + '/plugins/printercounters/ajax/record.php',
+               url: root_doc + '/ajax/record.php',
                type: "POST",
                dataType: "html",
                data: 'action=' + action +
@@ -339,7 +339,7 @@
                          break;
 
                      case 'killProcess':
-                         object.printercountersActions(root_doc + '/plugins/printercounters/ajax/process.php', root_doc, 'getProcesses', '', 'process_display', '', '');
+                         object.printercountersActions(root_doc + '/ajax/process.php', root_doc, 'getProcesses', '', 'process_display', '', '');
                          break;
 
                      case 'updateGlobalTco':
@@ -474,7 +474,7 @@ function printercounters_addelements(params) {
                            && (ajaxTab_param[1] == glpi_tab)) {
 
                       $.ajax({
-                           url: root_doc + '/plugins/printercounters/ajax/infocom.php',
+                           url: root_doc + '/ajax/infocom.php',
                            type: "POST",
                            dataType: "json",
                            data: {
@@ -519,7 +519,7 @@ function printercounters_setConfirmation(message, oldValue, newValue, formID, bu
 function printecounters_reloadCsrf(root_doc, formName) {
 
     $.ajax({
-         url: root_doc + '/plugins/printercounters/ajax/search.php',
+         url: root_doc + '/ajax/search.php',
          type: "POST",
          dataType: "html",
          data: {
@@ -537,7 +537,7 @@ function printecounters_reloadCsrf(root_doc, formName) {
 function printecounters_ajaxMassiveAction(root_doc, action, phpTimeout) {
 
     $.ajax({
-         url: root_doc + '/plugins/printercounters/ajax/record.php',
+         url: root_doc + '/ajax/record.php',
          type: "POST",
          dataType: "html",
          data: {

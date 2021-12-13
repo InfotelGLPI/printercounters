@@ -65,7 +65,7 @@ class PluginPrintercountersAjax extends CommonDBTM {
                             $parent->getForeignKeyField() => $parents_id,
                             'id'                          => $items_id];
             Ajax::updateItemJsCode($toupdate,
-                                   $CFG_GLPI["root_doc"]."/plugins/printercounters/ajax/viewsubitem.php", $params);
+                                   PLUGIN_PRINTERCOUNTERS_WEBDIR."/ajax/viewsubitem.php", $params);
             echo "};";
             echo "</script>\n";
    }

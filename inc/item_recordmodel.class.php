@@ -978,7 +978,7 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
 
       $ma->results['ok'] = 1;
 
-      $ma->setRedirect($CFG_GLPI['root_doc'].'/plugins/printercounters/front/record.form.php?initAjaxMassiveAction=1');
+      $ma->setRedirect(PLUGIN_PRINTERCOUNTERS_WEBDIR.'//front/record.form.php?initAjaxMassiveAction=1');
    }
 
 

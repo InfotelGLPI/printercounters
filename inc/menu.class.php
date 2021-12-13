@@ -67,35 +67,35 @@ class PluginPrintercountersMenu extends CommonDBTM {
       // Record models
       echo "<td class='center printercounters_menu_item'>";
       echo "<a  class='printercounters_menu_a' href=\"./recordmodel.php\">";
-      echo "<img class='printercounters_menu_img' src='".$CFG_GLPI["root_doc"]."/plugins/printercounters/pics/recordmodel.png' alt=\"".PluginPrintercountersRecordmodel::getTypeName(2)."\">";
+      echo "<img class='printercounters_menu_img' src='".PLUGIN_PRINTERCOUNTERS_WEBDIR."/pics/recordmodel.png' alt=\"".PluginPrintercountersRecordmodel::getTypeName(2)."\">";
       echo "<br>".PluginPrintercountersRecordmodel::getTypeName(2)."</a>";
       echo "</td>";
 
       // Counter types
       echo "<td class='center printercounters_menu_item'>";
       echo "<a  class='printercounters_menu_a' href=\"./countertype.php\">";
-      echo "<img class='printercounters_menu_img' src='".$CFG_GLPI["root_doc"]."/plugins/printercounters/pics/countertype.png' alt=\"".PluginPrintercountersCountertype::getTypeName(2)."\">";
+      echo "<img class='printercounters_menu_img' src='".PLUGIN_PRINTERCOUNTERS_WEBDIR."/pics/countertype.png' alt=\"".PluginPrintercountersCountertype::getTypeName(2)."\">";
       echo "<br>".PluginPrintercountersCountertype::getTypeName(2)."</a>";
       echo "</td>";
 
       // Record planification
       echo "<td class='center printercounters_menu_item'>";
       echo "<a  class='printercounters_menu_a' href=\"./item_recordmodel.form.php\">";
-      echo "<img class='printercounters_menu_img' src='".$CFG_GLPI["root_doc"]."/plugins/printercounters/pics/planification.png' alt=\"".__('Record planning', 'printercounters')."\">";
+      echo "<img class='printercounters_menu_img' src='".PLUGIN_PRINTERCOUNTERS_WEBDIR."/pics/planification.png' alt=\"".__('Record planning', 'printercounters')."\">";
       echo "<br>".__('Record planning', 'printercounters')."</a>";
       echo "</td>";
 
       // Configure SNMP authentication
       echo "<td class='center printercounters_menu_item'>";
       echo "<a  class='printercounters_menu_a' href=\"./snmpauthentication.php\">";
-      echo "<img class='printercounters_menu_img' src='".$CFG_GLPI["root_doc"]."/plugins/printercounters/pics/snmpauthentication.png' alt=\"".PluginPrintercountersSnmpauthentication::getTypeName(2)."\">";
+      echo "<img class='printercounters_menu_img' src='".PLUGIN_PRINTERCOUNTERS_WEBDIR."/pics/snmpauthentication.png' alt=\"".PluginPrintercountersSnmpauthentication::getTypeName(2)."\">";
       echo "<br>".PluginPrintercountersSnmpauthentication::getTypeName(2)."</a>";
       echo "</td>";
 
        // Plugin management
       echo "<td class='center printercounters_menu_item'>";
       echo "<a  class='printercounters_menu_a' href=\"./config.form.php\">";
-      echo "<img class='printercounters_menu_img' src='".$CFG_GLPI["root_doc"]."/plugins/printercounters/pics/process.png' alt=\"".PluginPrintercountersConfig::getTypeName()."\">";
+      echo "<img class='printercounters_menu_img' src='".PLUGIN_PRINTERCOUNTERS_WEBDIR."/pics/process.png' alt=\"".PluginPrintercountersConfig::getTypeName()."\">";
       echo "<br>".PluginPrintercountersConfig::getTypeName()."</a>";
       echo "</td>";
       echo "</tr>";
@@ -108,14 +108,14 @@ class PluginPrintercountersMenu extends CommonDBTM {
       // Billing
       echo "<td class='center printercounters_menu_item'>";
       echo "<a  class='printercounters_menu_a' href=\"./billingmodel.php\">";
-      echo "<img class='printercounters_menu_img' src='".$CFG_GLPI["root_doc"]."/plugins/printercounters/pics/billingmodel.png' alt=\"".PluginPrintercountersBillingmodel::getTypeName(2)."\">";
+      echo "<img class='printercounters_menu_img' src='".PLUGIN_PRINTERCOUNTERS_WEBDIR."/pics/billingmodel.png' alt=\"".PluginPrintercountersBillingmodel::getTypeName(2)."\">";
       echo "<br>".PluginPrintercountersBillingmodel::getTypeName(2)."</a>";
       echo "</td>";
 
       // Budget
       echo "<td class='center printercounters_menu_item'>";
       echo "<a  class='printercounters_menu_a' href=\"./budget.php\">";
-      echo "<img class='printercounters_menu_img' src='".$CFG_GLPI["root_doc"]."/plugins/printercounters/pics/budget.png' alt=\"".PluginPrintercountersBudget::getTypeName(2)."\">";
+      echo "<img class='printercounters_menu_img' src='".PLUGIN_PRINTERCOUNTERS_WEBDIR."/pics/budget.png' alt=\"".PluginPrintercountersBudget::getTypeName(2)."\">";
       echo "<br>".PluginPrintercountersBudget::getTypeName(2)."</a>";
       echo "</td>";
       echo "</tr>";
@@ -127,7 +127,7 @@ class PluginPrintercountersMenu extends CommonDBTM {
     * Menu content for headers
     */
    static function getMenuContent() {
-      $plugin_page = "/plugins/printercounters/front/menu.php";
+      $plugin_page = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR."/front/menu.php";
       $menu = [];
       //Menu entry in helpdesk
       $menu['title']                          = self::getTypeName();
@@ -144,42 +144,42 @@ class PluginPrintercountersMenu extends CommonDBTM {
 
       // Recordmodel
       $menu['options']['recordmodel']['title']            = _n("Record model", "Record models", 2, 'printercounters');
-      $menu['options']['recordmodel']['page']             = '/plugins/printercounters/front/recordmodel.php';
-      $menu['options']['recordmodel']['links']['add']     = '/front/setup.templates.php?itemtype=PluginPrintercountersRecordmodel&add=1';
-      $menu['options']['recordmodel']['links']['template']= '/front/setup.templates.php?itemtype=PluginPrintercountersRecordmodel&add=0';
-      $menu['options']['recordmodel']['links']['search']  = '/plugins/printercounters/front/recordmodel.php';
+      $menu['options']['recordmodel']['page']             = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/recordmodel.php';
+      $menu['options']['recordmodel']['links']['add']     = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/setup.templates.php?itemtype=PluginPrintercountersRecordmodel&add=1';
+      $menu['options']['recordmodel']['links']['template']= PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/setup.templates.php?itemtype=PluginPrintercountersRecordmodel&add=0';
+      $menu['options']['recordmodel']['links']['search']  = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/recordmodel.php';
 
       // Countertype
       $menu['options']['countertype']['title']            = _n("Counter type", "Counter types", 2, 'printercounters');
-      $menu['options']['countertype']['page']             = '/plugins/printercounters/front/countertype.php';
-      $menu['options']['countertype']['links']['add']     = '/plugins/printercounters/front/countertype.form.php';
-      $menu['options']['countertype']['links']['search']  = '/plugins/printercounters/front/countertype.php';
+      $menu['options']['countertype']['page']             = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/countertype.php';
+      $menu['options']['countertype']['links']['add']     = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/countertype.form.php';
+      $menu['options']['countertype']['links']['search']  = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/countertype.php';
 
       // Billingmodel
       $menu['options']['billingmodel']['title']           = _n("Billing model", "Billing models", 2, 'printercounters');
-      $menu['options']['billingmodel']['page']            = '/plugins/printercounters/front/billingmodel.php';
-      $menu['options']['billingmodel']['links']['add']    = '/plugins/printercounters/front/billingmodel.form.php';
-      $menu['options']['billingmodel']['links']['search'] = '/plugins/printercounters/front/billingmodel.php';
+      $menu['options']['billingmodel']['page']            = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/billingmodel.php';
+      $menu['options']['billingmodel']['links']['add']    = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/billingmodel.form.php';
+      $menu['options']['billingmodel']['links']['search'] = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/billingmodel.php';
 
       // Budget
       $menu['options']['budget']['title']                 = __("Budget");
-      $menu['options']['budget']['page']                  = '/plugins/printercounters/front/budget.php';
-      $menu['options']['budget']['links']['add']          = '/plugins/printercounters/front/budget.form.php';
-      $menu['options']['budget']['links']['search']       = '/plugins/printercounters/front/budget.php';
+      $menu['options']['budget']['page']                  = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/budget.php';
+      $menu['options']['budget']['links']['add']          = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/budget.form.php';
+      $menu['options']['budget']['links']['search']       = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/budget.php';
 
       // Record planning
       $menu['options']['record']['title']                 = __("Record planning", 'printercounters');
-      $menu['options']['record']['page']                  = '/plugins/printercounters/front/item_recordmodel.form.php';
+      $menu['options']['record']['page']                  = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/item_recordmodel.form.php';
 
       // Snmpauthentication
       $menu['options']['snmpauthentication']['title']           = _n("SNMP authentication", "SNMP authentications", 2, 'printercounters');
-      $menu['options']['snmpauthentication']['page']            = '/plugins/printercounters/front/snmpauthentication.php';
-      $menu['options']['snmpauthentication']['links']['add']    = '/plugins/printercounters/front/snmpauthentication.form.php';
-      $menu['options']['snmpauthentication']['links']['search'] = '/plugins/printercounters/front/snmpauthentication.php';
+      $menu['options']['snmpauthentication']['page']            = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/snmpauthentication.php';
+      $menu['options']['snmpauthentication']['links']['add']    = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/snmpauthentication.form.php';
+      $menu['options']['snmpauthentication']['links']['search'] = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/snmpauthentication.php';
 
       // Config
       $menu['options']['config']['title'] = __('Plugin management', 'printercounters');
-      $menu['options']['config']['page']  = '/plugins/printercounters/front/config.form.php';
+      $menu['options']['config']['page']  = PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR.'/front/config.form.php';
 
       $menu['icon'] = self::getIcon();
 

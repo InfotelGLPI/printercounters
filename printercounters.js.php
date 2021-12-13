@@ -39,7 +39,7 @@ if (Session::getCurrentInterface() == "central") {
    $itemtype = PluginPrintercountersItem_Recordmodel::$types;
 
    if (!empty($itemtype)) {
-      $params = ['root_doc'   => $CFG_GLPI['root_doc'],
+      $params = ['root_doc'   => PLUGIN_PRINTERCOUNTERS_WEBDIR,
                  'itemtype'   => $itemtype[0],
                  'itemToShow' => 'Infocom',
                  'glpi_tab'   => 'Infocom$1',

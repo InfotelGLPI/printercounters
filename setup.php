@@ -29,6 +29,13 @@
 
 define('PLUGIN_PRINTERCOUNTERS_VERSION', '2.0.0');
 
+if (!defined("PLUGIN_PRINTERCOUNTERS_DIR")) {
+   define("PLUGIN_PRINTERCOUNTERS_DIR", Plugin::getPhpDir("printercounters"));
+   define("PLUGIN_PRINTERCOUNTERS_NOTFULL_DIR", Plugin::getPhpDir("printercounters",false));
+   define("PLUGIN_PRINTERCOUNTERS_WEBDIR", Plugin::getWebDir("printercounters"));
+   define("PLUGIN_PRINTERCOUNTERS_NOTFULL_WEBDIR", Plugin::getWebDir("printercounters",false));
+}
+
 // Init the hooks of the plugins -Needed
 function plugin_init_printercounters() {
    global $PLUGIN_HOOKS, $CFG_GLPI;
@@ -40,13 +47,13 @@ function plugin_init_printercounters() {
        && $_SESSION['glpiactiveprofile']['interface'] == 'central') {
       $PLUGIN_HOOKS['add_css']['printercounters']          = ['printercounters.css'];
       $PLUGIN_HOOKS['add_javascript']['printercounters'][] = 'printercounters.js';
-      $PLUGIN_HOOKS['javascript']['printercounters'][]     = '/plugins/printercounters/printercounters.js';
+      $PLUGIN_HOOKS['javascript']['printercounters'][]     = PLUGIN_PRINTERCOUNTERS_NOTFULL_DIR.'/printercounters.js';
    }
    if (Session::getLoginUserID()) {
       if (class_exists('PluginPrintercountersItem_Recordmodel')) {
          foreach (PluginPrintercountersItem_Recordmodel::$types as $item) {
             if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], strtolower($item)) !== false) {
-               $PLUGIN_HOOKS['add_javascript']['printercounters'][] = 'printercounters_load_scripts.js';
+               $PLUGIN_HOOKS['add_javascript']['printercounters'][] = 'printercounters_load_scripts.js.php';
             }
          }
       }

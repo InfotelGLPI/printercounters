@@ -1215,7 +1215,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $p['height']        = 400;
       $p['rand']          = mt_rand();
       $p['title']         = __('Printer counters', 'printercounters');
-      $p['url']           = $CFG_GLPI['root_doc']."/plugins/printercounters/ajax/record.php";
+      $p['url']           = PLUGIN_PRINTERCOUNTERS_WEBDIR."/ajax/record.php";
 
       foreach ($options as $key => $val) {
          if (isset($p[$key])) {
@@ -1724,7 +1724,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       echo "</table></div>";
       echo "<script type='text/javascript'>
                function printercounters_clean_records(){
-                  if (window.confirm('".__('Do you want to clean all records ?', 'printercounters') . "';)){
+                  if (window.confirm('".__('Do you want to clean all records ?', 'printercounters') . "')){
                      return true;
                   } else {
                      return false;

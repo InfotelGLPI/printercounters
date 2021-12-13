@@ -26,24 +26,3 @@
  along with printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
-
-include ("../../../inc/includes.php");
-
-Session::checkLoginUser();
-//Html::header_nocache();
-
-switch ($_POST['action']) {
-   case 'getTco':
-      header('Content-Type: application/json; charset=UTF-8"');
-      $result = 0;
-      if (isset($_POST['items_id']) && isset($_POST['itemtype'])) {
-         $item_recordmodel = new PluginPrintercountersItem_Recordmodel();
-         if ($item_recordmodel->getFromDBByCrit(['itemtype' => "LOWER(" . $_POST['itemtype'] . ")",
-                                                 'items_id'        => $_POST['items_id']])) {
-            $result = $item_recordmodel->fields['global_tco'];
-         }
-      }
-      echo json_encode(['global_tco' => Html::formatNumber($result)]);
-      break;
-}
-
