@@ -79,7 +79,7 @@ function plugin_init_printercounters() {
          $PLUGIN_HOOKS['plugin_datainjection_populate']['printercounters'] = 'plugin_datainjection_populate_printercounters';
 
          $PLUGIN_HOOKS['menu_toadd']['printercounters']          = ['tools' => 'PluginPrintercountersMenu'];
-         $PLUGIN_HOOKS['helpdesk_menu_entry']['printercounters'] = true;
+//         $PLUGIN_HOOKS['helpdesk_menu_entry']['printercounters'] = true;
          if (Session::haveRight("plugin_printercounters", UPDATE)) {
             $PLUGIN_HOOKS['config_page']['printercounters'] = 'front/config.form.php';
          }
