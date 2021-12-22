@@ -34,7 +34,7 @@ function plugin_printercounters_install() {
 
    // SQL creation
    if (!$DB->tableExists("glpi_plugin_printercounters_records")) {
-      $DB->runFile(PLUGIN_PRINTERCOUNTERS_DIR. "/install/sql/empty-1.7.0.sql");
+      $DB->runFile(PLUGIN_PRINTERCOUNTERS_DIR. "/install/sql/empty-2.0.0.sql");
 
       // Add record notification
       include_once(PLUGIN_PRINTERCOUNTERS_DIR. "/inc/notificationtargetadditional_data.class.php");
