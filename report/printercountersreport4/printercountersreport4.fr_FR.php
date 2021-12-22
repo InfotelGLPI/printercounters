@@ -28,4 +28,4 @@
  */
 $LANG['plugin_printercounters']['printercountersreport4'] = "Relevé de compteurs par imprimante";
 $LANG['plugin_printercounters']['printercountersreport4_date']  = "Nombre de pages au %s";
-$LANG['plugin_printercounters']['printercountersreport4_date2'] = "Nombre de pages du %s1 au %s2";
+$LANG['plugin_printercounters']['printercountersreport4_date2'] = "Nombre de pages du %s au %s";

@@ -26,7 +26,6 @@
  along with printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
-$LANG['plugin_printercounters']['printercountersreport3'] = "Rapport complémentaire";
-$LANG['plugin_printercounters']['printercountersreport3_confidencerate'] = "Confidence rate";
-$LANG['plugin_printercounters']['printercountersreport3_consumptionrate'] = "Consumption rate";
-$LANG['plugin_printercounters']['printercountersreport3_extrapolation'] = "Extrapolation (over 12 months) based on the month recorded";
+$LANG['plugin_printercounters']['printercountersreport4'] = "Registros de contador por impressora";
+$LANG['plugin_printercounters']['printercountersreport4_date']  = "Número de página(s) em %s";
+$LANG['plugin_printercounters']['printercountersreport4_date2'] = "Número de página(s) de %s a %s";

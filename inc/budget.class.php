@@ -553,7 +553,7 @@ class PluginPrintercountersBudget extends CommonDropdown {
          // Get records
          $record = new PluginPrintercountersRecord();
          $records = [];
-         if (!empty($budget['end_date']) && !empty($budget['begin_date']) && $budget['entities_id'] != null) {
+         if (!empty($budget['end_date']) && !empty($budget['begin_date']) && !is_null($budget['entities_id'])) {
             $records = $record->getRecords(0, 'Printer',
                     ['order' => "`date` DESC",
                           'condition' => " AND `glpi_printers`.`entities_id` = ".$budget['entities_id']." 

@@ -26,7 +26,10 @@
  along with printercounters. If not, see <http://www.gnu.org/licenses/>.
  --------------------------------------------------------------------------
  */
-$LANG['plugin_printercounters']['printercountersreport3'] = "Rapport complémentaire";
-$LANG['plugin_printercounters']['printercountersreport3_confidencerate'] = "Confidence rate";
-$LANG['plugin_printercounters']['printercountersreport3_consumptionrate'] = "Consumption rate";
-$LANG['plugin_printercounters']['printercountersreport3_extrapolation'] = "Extrapolation (over 12 months) based on the month recorded";
+$LANG['plugin_printercounters']['printercountersreport'] = "Divergência entre monocromático e cor";
+$LANG['plugin_printercounters']['printercountersreport_budget'] = "Orçamento de aquisição";
+$LANG['plugin_printercounters']['printercountersreport_monochrome1'] = "Data de início monocromático ~ 3 meses";
+$LANG['plugin_printercounters']['printercountersreport_color1'] = "Data de início cor ~ 3 meses";
+$LANG['plugin_printercounters']['printercountersreport_monochrome2'] = "Data fim ~ início monocromático";
+$LANG['plugin_printercounters']['printercountersreport_color2'] = "Data fim ~ início cor";
+

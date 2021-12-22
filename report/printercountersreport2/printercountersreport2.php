@@ -207,7 +207,7 @@ if ($nbtot == 0) {
 
 // Show results
 if ($res && $nbtot > 0) {
-   $nbCols   = $DB->num_fields($res);
+   $nbCols   = $DB->numfields($res);
    $nbrows   = $DB->numrows($res);
    $num      = 1;
    $row_num  = 1;
@@ -220,7 +220,7 @@ if ($res && $nbtot > 0) {
    showTitle($output_type, $num, __('Location'), 'location', true);
    showTitle($output_type, $num, __('Manufacturer'), 'manufacturer', true);
    showTitle($output_type, $num, __('Model'), 'model', true);
-   showTitle($output_type, $num, __('Last successful record date', 'printercounters'), 'date', false);
+   showTitle($output_type, $num, __($LANG['plugin_printercounters']['printercountersreport2_date'], 'printercounters'), 'date', false);
    showTitle($output_type, $num, __('Record type', 'printercounters'), 'type', false);
    echo Search::showEndLine($output_type);
 
@@ -311,7 +311,7 @@ function getOrderBy($default, $columns) {
 
    $tab = getOrderByFields($default, $columns);
 
-   if (count($tab) > 0) {
+   if ((is_array($tab) ? count($tab) : 0) > 0) {
       return " ORDER BY ".$tab." ".$order;
    }
    return '';
