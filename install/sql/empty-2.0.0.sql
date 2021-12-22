@@ -2,6 +2,7 @@
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_configs'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_configs`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_configs` (
    `id` int(11) NOT NULL auto_increment,
    `nb_errors_ticket` int(11) NOT NULL default '10',
@@ -27,6 +28,7 @@ INSERT INTO `glpi_plugin_printercounters_configs` VALUES ('1', '10', '864000', '
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_countertypes'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_countertypes`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_countertypes` (
    `id` int(11) NOT NULL auto_increment,
    `name` varchar(255) default NULL,
@@ -40,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_countertypes` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_countertypes_recordmodels'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_countertypes_recordmodels`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_countertypes_recordmodels` (
    `id` int(11) NOT NULL auto_increment,
    `oid` varchar(255) default NULL,
@@ -56,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_countertypes_recordmodel
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_recordmodels'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_recordmodels`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_recordmodels` (
    `id` int(11) NOT NULL auto_increment,
    `name` varchar(255) default NULL,
@@ -76,6 +80,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_recordmodels` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_sysdescrs'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_sysdescrs`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_sysdescrs` (
    `id` int(11) NOT NULL auto_increment,
    `sysdescr` varchar(255) default NULL,
@@ -87,6 +92,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_sysdescrs` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_items_recordmodels'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_items_recordmodels`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_items_recordmodels` (
    `id` int(11) NOT NULL auto_increment,
    `nb_retries` int(11) NOT NULL default '0',
@@ -113,6 +119,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_items_recordmodels` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_counters'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_counters`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_counters` (
    `id` int(11) NOT NULL auto_increment,
    `value` int(11) NOT NULL default '0',
@@ -126,6 +133,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_counters` (
 -- -------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_records'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_records`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_records` (
    `id` int(11) NOT NULL auto_increment,
    `date` timestamp NULL DEFAULT NULL,
@@ -150,6 +158,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_records` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_snmpauthentications'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_snmpauthentications`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_snmpauthentications` (
    `id` int(11) NOT NULL auto_increment,
    `name` varchar(255) default NULL,
@@ -167,11 +176,12 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_snmpauthentications` (
    `comment` text COLLATE utf8mb4_unicode_ci,
    PRIMARY KEY (`id`),
    KEY `entities_id` (`entities_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_pagecosts'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_pagecosts`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_pagecosts` (
    `id` int(11) NOT NULL auto_increment,
    `cost` decimal(6,5) NOT NULL default '0',
@@ -185,6 +195,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_pagecosts` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_billingmodels'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_billingmodels`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_billingmodels` (
    `id` int(11) NOT NULL auto_increment,
    `name` varchar(255) default NULL,
@@ -208,6 +219,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_billingmodels` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_items_billingmodels'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_items_billingmodels`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_items_billingmodels` (
    `id` int(11) NOT NULL auto_increment,
    `itemtype` varchar(255) default NULL,
@@ -222,6 +234,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_items_billingmodels` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_budgets'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_budgets`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_budgets` (
    `id` int(11) NOT NULL auto_increment,
    `name` varchar(255) default NULL,
@@ -240,6 +253,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_budgets` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_items_tickets'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_items_tickets`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_items_tickets` (
    `id` int(11) NOT NULL auto_increment,
    `itemtype` varchar(255) default NULL,
@@ -256,6 +270,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_items_tickets` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_snmpsets'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_snmpsets`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_snmpsets` (
    `id` int(11) NOT NULL auto_increment,
    `entities_id` int(11) NOT NULL default '0',
@@ -272,6 +287,7 @@ CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_snmpsets` (
 -- --------------------------------------------------------
 -- Structure de la table 'glpi_plugin_printercounters_additionals_datas'
 -- --------------------------------------------------------
+DROP TABLE IF EXISTS `glpi_plugin_printercounters_additionals_datas`;
 CREATE TABLE IF NOT EXISTS `glpi_plugin_printercounters_additionals_datas` (
    `id` int(11) NOT NULL auto_increment,
    `name` varchar(255) default NULL,
