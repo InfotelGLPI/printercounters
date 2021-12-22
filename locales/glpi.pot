@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-22 08:23+0000\n"
+"POT-Creation-Date: 2021-12-22 11:28+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -604,7 +604,7 @@ msgid_plural "Counter types of billing models"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/printer.class.php:490
+#: inc/printer.class.php:507
 msgid "Uptime"
 msgstr ""
 
