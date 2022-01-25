@@ -164,7 +164,7 @@ class PluginPrintercountersSysdescr extends CommonDBTM {
                                                  'PluginPrintercountersRecordmodel',
                                                  $item->fields['id']);
          echo "<div class='center firstbloc'>".
-               "<a class='btn btn-primary' id='printercounters_viewAddSysdescr' href='javascript:viewAddSysdescr".$item->fields['id']."_$rand();'>";
+               "<a class='submit btn btn-primary' id='printercounters_viewAddSysdescr' href='javascript:viewAddSysdescr".$item->fields['id']."_$rand();'>";
          echo __('Add a new sysdescr', 'printercounters')."</a></div>\n";
       }
 

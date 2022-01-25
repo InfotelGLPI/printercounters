@@ -88,24 +88,24 @@ class PluginPrintercountersAjax extends CommonDBTM {
     *
     * @return void|string (see $options['display'])
     */
-   static function createFixedModalWindow($name, $options = []) {
-
-      $param = ['width'     => 800,
-                'height'    => 400,
-                'modal'     => true,
-                'container' => '',
-                'title'     => '',
-                'display'   => true];
-
-      if (count($options)) {
-         foreach ($options as $key => $val) {
-            if (isset($param[$key])) {
-               $param[$key] = $val;
-            }
-         }
-      }
-
-      $out  =  "<script type='text/javascript'>\n";
+//   static function createFixedModalWindow($name, $options = []) {
+//
+//      $param = ['width'     => 800,
+//                'height'    => 400,
+//                'modal'     => true,
+//                'container' => '',
+//                'title'     => '',
+//                'display'   => true];
+//
+//      if (count($options)) {
+//         foreach ($options as $key => $val) {
+//            if (isset($param[$key])) {
+//               $param[$key] = $val;
+//            }
+//         }
+//      }
+//
+//      $out  =  "<script type='text/javascript'>\n";
 //      $out .= "var $name=";
 //      if (!empty($param['container'])) {
 //         $out .= Html::jsGetElementbyID(Html::cleanId($param['container']));
@@ -119,25 +119,25 @@ class PluginPrintercountersAjax extends CommonDBTM {
 //         modal: ".($param['modal']?'true':'false').",\n
 //         title: \"".addslashes($param['title'])."\"\n
 //         });\n";
-      $out .= "$('#$name').html(data.message);
-$('#dialog-confirm').dialog({
-   resizable: false,
-   height: 180,
-   width: 350,
-   modal: true,
-   buttons: {
-         OK: function () {
-            $(this).dialog('close');
-         }
-   }
-  });";
-  $out .= "</script>";
-
-      if ($param['display']) {
-         echo $out;
-      } else {
-         return $out;
-      }
-
-   }
+//      $out .= "$('#$name').html(data.message);
+//$('#dialog-confirm').dialog({
+//   resizable: false,
+//   height: 180,
+//   width: 350,
+//   modal: true,
+//   buttons: {
+//         OK: function () {
+//            $(this).dialog('close');
+//         }
+//   }
+//  });";
+//  $out .= "</script>";
+//
+//      if ($param['display']) {
+//         echo $out;
+//      } else {
+//         return $out;
+//      }
+//
+//   }
 }

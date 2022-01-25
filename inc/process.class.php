@@ -401,13 +401,13 @@ class PluginPrintercountersProcess extends CommonDBTM {
                   }
                }
                echo "</td>";
-               echo "<td><a onclick='printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."/ajax/process.php\", \"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"killProcess\", \"\", \"process_action_result\", $pid, \"".$this->getType()."\");' class='btn btn-primary printercounters_action_button'>".__('Kill process', 'printercounters')."</a></td>";
+               echo "<td><a onclick='printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."/ajax/process.php\", \"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"killProcess\", \"\", \"process_action_result\", $pid, \"".$this->getType()."\");' class='submit btn btn-primary printercounters_action_button'>".__('Kill process', 'printercounters')."</a></td>";
                echo "</tr>";
             }
 
             echo "<tr>";
             echo "<td class='tab_bg_2 center' colspan='".($nb_col+2)."'>";
-            echo "<a onclick='printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."/ajax/process.php\", \"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"killProcess\", \"\", \"process_action_result\", $pids[0], \"".$this->getType()."\");' class='btn btn-primary printercounters_action_button'>".__('Kill all processes', 'printercounters')."</a>";
+            echo "<a onclick='printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."/ajax/process.php\", \"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"killProcess\", \"\", \"process_action_result\", $pids[0], \"".$this->getType()."\");' class='submit btn btn-primary printercounters_action_button'>".__('Kill all processes', 'printercounters')."</a>";
             echo "</td>";
             echo "</tr>";
             echo "</table>";

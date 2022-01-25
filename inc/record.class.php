@@ -158,7 +158,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                       'itemtype'        => $this->itemtype,
                                       'formName'        => 'search_form'.$this->rand,
                                       'updates'         => ['record' => 'history_showForm'.$this->rand, 'additionalData' => 'additional_datas', 'errorItem' => 'error_item']]).");'";
-         echo "<a $onclick class='btn btn-primary printercounters_action_button'>".__('Immediate record', 'printercounters')."</a>";
+         echo "<a $onclick class='submit btn btn-primary printercounters_action_button'>".__('Immediate record', 'printercounters')."</a>";
 
          // Manual record
          $onclick = "onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"showManualRecord\", \"\", \"\", 
@@ -168,7 +168,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                       'formName'        => 'search_form'.$this->rand,
                                       'updates'         => ['record' => 'history_showForm'.$this->rand],
                                       'rand'            => $this->rand]).");'";
-         echo "<a $onclick class='btn btn-primary printercounters_action_button'>".__('Add a manual record', 'printercounters')."</a>";
+         echo "<a $onclick class='submit btn btn-primary printercounters_action_button'>".__('Add a manual record', 'printercounters')."</a>";
 
          // Manual record : add less record
          if (self::canAddLessRecords()) {
@@ -179,7 +179,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                          'formName'        => 'search_form'.$this->rand,
                                          'updates'         => ['record' => 'history_showForm'.$this->rand],
                                          'rand'            => $this->rand]).");'";
-            echo "<a $onclick class='btn btn-primary printercounters_action_button'>".__('Add a lower record', 'printercounters')."</a>";
+            echo "<a $onclick class='submit btn btn-primary printercounters_action_button'>".__('Add a lower record', 'printercounters')."</a>";
          }
          echo "</div>";
       }
@@ -192,7 +192,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                       'itemtype'        => $this->itemtype,
                                       'formName'        => 'search_form'.$this->rand,
                                       'updates'         => ['globalTco' => 'update_global_tco']]).");'";
-         echo "<a $onclick class='btn btn-primary printercounters_action_button'>".__('Update global TCO', 'printercounters')."</a>";
+         echo "<a $onclick class='submit btn btn-primary printercounters_action_button'>".__('Update global TCO', 'printercounters')."</a>";
 
          // Update printer data
          $onclick = "onclick='printercountersAction.printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"updatePrinterData\", \"\", \"record_action_result\", 
@@ -200,7 +200,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                       'itemtype'        => $this->itemtype,
                                       'formName'        => 'search_form'.$this->rand,
                                       'updates'         => ['record' => 'history_showForm'.$this->rand]]).");'";
-         echo "<a $onclick class='btn btn-primary printercounters_action_button'>".__('Update printer data', 'printercounters')."</a>";
+         echo "<a $onclick class='submit btn btn-primary printercounters_action_button'>".__('Update printer data', 'printercounters')."</a>";
 
          // SNMP set
          if (PluginPrintercountersSnmpset::canSnmpSet()) {
@@ -210,7 +210,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                          'formName'        => 'search_form'.$this->rand,
                                          'updates'         => ['additionalData' => 'additional_datas'],
                                          'rand'            => $this->rand]).");'";
-            echo "<a $onclick class='btn btn-primary printercounters_action_button'>".__('Update the values of the physical printer', 'printercounters')."</a>";
+            echo "<a $onclick class='submit btn btn-primary printercounters_action_button'>".__('Update the values of the physical printer', 'printercounters')."</a>";
          }
          echo "</div>";
       }
@@ -1318,7 +1318,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                    'records_id'      => $records_id,
                                    'formName'        => 'search_form'.$rand,
                                    'updates'         => ['record' => 'history_showForm'.$rand]]).");'";
-         echo "<input type='button' $onclick class='btn btn-primary' value='"._sx('button', 'Update')."'>";
+         echo "<input type='button' $onclick class='submit btn btn-primary' value='"._sx('button', 'Update')."'>";
          echo "</td></tr>";
 
          //ADD
@@ -1341,7 +1341,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
                                    'records_id'      => $records_id,
                                    'formName'        => 'search_form'.$rand,
                                    'updates'         => ['record' => 'history_showForm'.$rand]]).");'";
-         echo "<input type='button' $onclick class='btn btn-primary' value='"._sx('button', 'Add')."'>";
+         echo "<input type='button' $onclick class='submit btn btn-primary' value='"._sx('button', 'Add')."'>";
          echo "<input type='hidden' value='".$item_recordmodels_data['entities_id']."' name='counters[entities_id]'>";
          echo "</td></tr>";
       }

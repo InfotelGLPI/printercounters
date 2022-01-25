@@ -238,7 +238,7 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
                                                  'PluginPrintercountersConfig',
                                                  $config['configs_id']);
          echo "<div class='center firstbloc'>".
-               "<a class='btn btn-primary' id='printercounters_viewAddSnmpset' href='javascript:viewAddSnmpset".$config['configs_id']."_$rand();'>";
+               "<a class='submit btn btn-primary' id='printercounters_viewAddSnmpset' href='javascript:viewAddSnmpset".$config['configs_id']."_$rand();'>";
          echo __('Add a new snmpset', 'printercounters')."</a></div>\n";
          echo "<script type='text/javascript'>viewAddSnmpset".$config['configs_id']."_$rand();</script>";
       }

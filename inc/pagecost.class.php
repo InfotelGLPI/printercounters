@@ -168,7 +168,7 @@ class PluginPrintercountersPagecost extends CommonDBTM {
                                                  'PluginPrintercountersBillingmodel',
                                                  $item->fields['id']);
          echo "<div class='center firstbloc'>".
-               "<a class='btn btn-primary' id='printercounters_viewAddPagecost' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
+               "<a class='submit btn btn-primary' id='printercounters_viewAddPagecost' href='javascript:viewAddCounterType".$item->fields['id']."_$rand();'>";
          echo __('Add a new counter', 'printercounters')."</a></div>\n";
       }
 

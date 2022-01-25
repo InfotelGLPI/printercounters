@@ -166,7 +166,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
 
          // Submit
          echo "<td class='center'>";
-         echo "<input type='button' onClick = \"printercountersSearch.initSearch('".PLUGIN_PRINTERCOUNTERS_WEBDIR."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\" value='".__('Search')."' class='btn btn-primary'>";
+         echo "<input type='button' onClick = \"printercountersSearch.initSearch('".PLUGIN_PRINTERCOUNTERS_WEBDIR."', 'search_form".$item->rand."', 'history_showForm".$item->rand."');\" value='".__('Search')."' class='submit btn btn-primary'>";
          echo Html::hidden('itemtype', ['value' => $itemtype]);
          echo Html::hidden('id', ['value' => $ID]);
          echo Html::hidden('item', ['value' => base64_encode(serialize($item))]);
