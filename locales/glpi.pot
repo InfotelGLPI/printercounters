@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-25 09:07+0000\n"
+"POT-Creation-Date: 2022-07-26 14:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,25 +45,25 @@ msgstr ""
 msgid "Printer counters"
 msgstr ""
 
-#: front/config.form.php:60 inc/record.class.php:1725
+#: front/config.form.php:58 inc/record.class.php:1725
 msgid "Clean records in error"
 msgstr ""
 
-#: front/config.form.php:62 front/config.form.php:75
-#: scripts/clean_records.php:58
+#: front/config.form.php:60 front/config.form.php:73
+#: scripts/clean_records.php:55
 msgid "Records cleaned"
 msgstr ""
 
-#: front/config.form.php:65 front/config.form.php:78
-#: scripts/clean_records.php:60
+#: front/config.form.php:63 front/config.form.php:76
+#: scripts/clean_records.php:57
 msgid "No records to clean"
 msgstr ""
 
-#: front/config.form.php:73 inc/record.class.php:1728
+#: front/config.form.php:71 inc/record.class.php:1728
 msgid "Clean empty records"
 msgstr ""
 
-#: front/config.form.php:92 front/config.php:44
+#: front/config.form.php:90 front/config.php:43
 msgid "Please activate the plugin"
 msgstr ""
 
@@ -1000,6 +1000,6 @@ msgstr ""
 msgid "Add a new sysdescr"
 msgstr ""
 
-#: scripts/clean_records.php:64 scripts/printercounters_fullsync.php:89
+#: scripts/clean_records.php:61 scripts/printercounters_fullsync.php:87
 msgid "Plugin disabled or automatic record disabled"
 msgstr ""
