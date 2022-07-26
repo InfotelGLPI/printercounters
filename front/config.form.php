@@ -29,9 +29,7 @@
 
 include ('../../../inc/includes.php');
 
-$plugin = new Plugin();
-
-if ($plugin->isActivated("printercounters")) {
+if (Plugin::isPluginActive("printercounters")) {
    $config = new PluginPrintercountersConfig();
    if (!$config->canCreate()) {
       Html::displayRightError();

@@ -31,8 +31,7 @@ include ('../../../inc/includes.php');
 
 Session::checkRight("config", UPDATE);
 
-$plugin = new Plugin();
-if ($plugin->isActivated("printercounters")) {
+if (Plugin::isPluginActive("printercounters")) {
    $config = new PluginPrintercountersConfig();
    Html::header(PluginPrintercountersConfig::getTypeName(), '', "tools", "pluginprintercountersmenu", "config");
    $data = $config->getInstance();

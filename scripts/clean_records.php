@@ -47,10 +47,7 @@ if (($mem > 0) && ($mem < (64 * 1024 * 1024))) {
    die("PHP memory_limit = ".$mem." - "."A minimum of 64Mio is commonly required for GLPI.'\n\n");
 }
 
-//Check if plugin is installed
-$plugin = new Plugin();
-
-if ($plugin->isActivated("printercounters")) {
+if (Plugin::isPluginActive("printercounters")) {
 
    // Clean record
    $record = new PluginPrintercountersRecord();

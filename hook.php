@@ -285,8 +285,7 @@ function plugin_item_transfer_printercounters($input) {
 // Define dropdown relations
 function plugin_printercounters_getDatabaseRelations() {
 
-   $plugin = new Plugin();
-   if ($plugin->isActivated("printercounters")) {
+   if (Plugin::isPluginActive("printercounters")) {
       return ["glpi_entities"                                         => ["glpi_plugin_printercounters_countertypes"              => "entities_id",
                                                                                     "glpi_plugin_printercounters_recordmodels"              => "entities_id",
                                                                                     "glpi_plugin_printercounters_records"                   => "entities_id",
@@ -325,9 +324,7 @@ function plugin_printercounters_getDatabaseRelations() {
 // Define Dropdown tables to be manage in GLPI
 function plugin_printercounters_getDropdown() {
 
-   $plugin = new Plugin();
-
-   if ($plugin->isActivated("printercounters")) {
+   if (Plugin::isPluginActive("printercounters")) {
       return ['PluginPrintercountersRecordmodel'         => PluginPrintercountersRecordmodel::getTypeName(2),
                    'PluginPrintercountersBillingmodel'        => PluginPrintercountersBillingmodel::getTypeName(2),
                    'PluginPrintercountersCountertype'         => PluginPrintercountersCountertype::getTypeName(2),
