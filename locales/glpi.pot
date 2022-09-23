@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-03 06:58+0000\n"
+"POT-Creation-Date: 2022-09-23 07:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -134,43 +134,43 @@ msgstr ""
 msgid "Application date is already used. Please select another"
 msgstr ""
 
-#: inc/budget.class.php:1081 inc/budget.class.php:1222
-#: inc/budget.class.php:1544
+#: inc/budget.class.php:1103 inc/budget.class.php:1244
+#: inc/budget.class.php:1566
 msgid "Amount"
 msgstr ""
 
-#: inc/budget.class.php:1090
+#: inc/budget.class.php:1112
 msgid "Record amount"
 msgid_plural "Records amount"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/budget.class.php:1101
+#: inc/budget.class.php:1123
 msgid "Usage rate"
 msgstr ""
 
-#: inc/budget.class.php:1113
+#: inc/budget.class.php:1135
 msgid "Color rate"
 msgstr ""
 
-#: inc/budget.class.php:1125
+#: inc/budget.class.php:1147
 msgid "Total page number"
 msgstr ""
 
-#: inc/budget.class.php:1137
+#: inc/budget.class.php:1159
 msgid "Color page rate"
 msgstr ""
 
-#: inc/budget.class.php:1324
+#: inc/budget.class.php:1346
 #, php-format
 msgid "The budget period %s already exists"
 msgstr ""
 
-#: inc/budget.class.php:1361
+#: inc/budget.class.php:1383
 msgid "The sub-entities budget amount exceed the parent budget"
 msgstr ""
 
-#: inc/budget.class.php:1555
+#: inc/budget.class.php:1577
 msgid "Begin date cannot be higher than end date"
 msgstr ""
 
