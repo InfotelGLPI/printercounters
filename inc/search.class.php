@@ -462,7 +462,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
                $col_num = 1;
 
                $line['raw'] = $history;
-               PluginPrintercountersSearch::parseData($line,$item->getType());
+               self::parseData($line,$item->getType());
 
                // Show massive action checkbox
                $count   = 0;
@@ -727,7 +727,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
       }
 
       // Hack to allow search by ID on every sub-table
-      if (preg_match('/^\$\$\$\$([0-9]+)$/', $val, $regs)) {
+      if ($val && preg_match('/^\$\$\$\$([0-9]+)$/', $val, $regs)) {
          return $link." (`$table`.`id` ".($nott?"<>":"=").$regs[1]." ".
                          (($regs[1] == 0)?" OR `$table`.`id` IS NULL":'').") ";
       }
@@ -2169,7 +2169,7 @@ class PluginPrintercountersSearch extends CommonDBTM {
                }
 
                // No Group_concat case
-               if (strpos($val, "$$$$") === false) {
+               if ($val && strpos($val, "$$$$") === false) {
                   $newrow[$j]['count'] = 1;
 
                   if (strpos($val, "$$") === false) {
@@ -2184,24 +2184,26 @@ class PluginPrintercountersSearch extends CommonDBTM {
                      $newrow[$j][0]['id']       = $split2[1];
                   }
                } else {
-                  if (!isset($newrow[$j])) {
-                     $newrow[$j] = [];
-                  }
-                  $split               = explode("$$$$", $val);
-                  $newrow[$j]['count'] = count($split);
-                  foreach ($split as $key2 => $val2) {
-                     if (strpos($val2, "$$") === false) {
-                        $newrow[$j][$key2][$fieldname] = $val2;
-                     } else {
-                        $split2                  = Search::explodeWithID("$$", $val2);
-                        $newrow[$j][$key2]['id'] = $split2[1];
-                        if ($split2[0] == Search::NULLVALUE) {
-                           $newrow[$j][$key2][$fieldname] = null;
-                        } else {
-                           $newrow[$j][$key2][$fieldname] = $split2[0];
-                        }
-                     }
-                  }
+                   if (!isset($newrow[$j])) {
+                       $newrow[$j] = [];
+                   }
+                   if ($val) {
+                       $split = explode("$$$$", $val);
+                       $newrow[$j]['count'] = count($split);
+                       foreach ($split as $key2 => $val2) {
+                           if (strpos($val2, "$$") === false) {
+                               $newrow[$j][$key2][$fieldname] = $val2;
+                           } else {
+                               $split2                  = Search::explodeWithID("$$", $val2);
+                               $newrow[$j][$key2]['id'] = $split2[1];
+                               if ($split2[0] == Search::NULLVALUE) {
+                                   $newrow[$j][$key2][$fieldname] = null;
+                               } else {
+                                   $newrow[$j][$key2][$fieldname] = $split2[0];
+                               }
+                           }
+                       }
+                   }
                }
             }
          }

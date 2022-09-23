@@ -147,15 +147,31 @@ class PluginPrintercountersBudget extends CommonDropdown {
       echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_record_amount'],
                                                                            false, 2)."</b>",
                             $col_num, $row_num, "class='tab_bg_1'");
-      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_usage_rate'])."%</b>",
+       if (isset($total['total_usage_rate'])) {
+           echo Search::showItem($search->output_type, "<b>" . Html::formatNumber($total['total_usage_rate']) . "%</b>",
+                                 $col_num, $row_num, "class='tab_bg_1'");
+       } else {
+           echo Search::showItem($search->output_type, "",
+                                 $col_num, $row_num, "class='tab_bg_1'");
+       }
+       if (isset($total['total_color_rate'])) {
+           echo Search::showItem($search->output_type, "<b>" . Html::formatNumber($total['total_color_rate']) . "%</b>",
+                                 $col_num, $row_num, "class='tab_bg_1'");
+       } else {
+           echo Search::showItem($search->output_type, "",
+                                 $col_num, $row_num, "class='tab_bg_1'");
+       }
+       echo Search::showItem($search->output_type, "<b>" . Html::formatNumber($total['total_page_number'],
+                                                                                  false, 0) . "</b>",
+                                 $col_num, $row_num, "class='tab_bg_1'");
+
+       if (isset($total['total_color_page_rate'])) {
+           echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_color_page_rate'])."%</b>",
                             $col_num, $row_num, "class='tab_bg_1'");
-      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_color_rate'])."%</b>",
-                            $col_num, $row_num, "class='tab_bg_1'");
-      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_page_number'],
-                                                                           false, 0)."</b>",
-                            $col_num, $row_num, "class='tab_bg_1'");
-      echo Search::showItem($search->output_type, "<b>".Html::formatNumber($total['total_color_page_rate'])."%</b>",
-                            $col_num, $row_num, "class='tab_bg_1'");
+       } else {
+           echo Search::showItem($search->output_type, "",
+                                 $col_num, $row_num, "class='tab_bg_1'");
+       }
       echo Search::showItem($search->output_type, '', $col_num, $row_num, "class='tab_bg_1'");
       echo Search::showItem($search->output_type, '', $col_num, $row_num, "class='tab_bg_1'");
       echo Search::showEndLine($search->output_type);
@@ -329,9 +345,15 @@ class PluginPrintercountersBudget extends CommonDropdown {
          list($output, $total) = $this->computeColorRate($output, $total);
 
          // Set total
-         $total['total_usage_rate']      = $total['total_usage_rate'] / count($input);
-         $total['total_color_rate']      = $total['total_color_rate'] / count($input);
-         $total['total_color_page_rate'] = $total['total_color_page_rate'] / count($input);
+          if (isset($total['total_usage_rate'])) {
+              $total['total_usage_rate']      = $total['total_usage_rate'] / count($input);
+          }
+          if (isset($total['total_color_rate'])) {
+              $total['total_color_rate'] = $total['total_color_rate'] / count($input);
+          }
+          if (isset($total['total_color_page_rate'])) {
+              $total['total_color_page_rate'] = $total['total_color_page_rate'] / count($input);
+          }
       }
 
       return [$output, $total];
