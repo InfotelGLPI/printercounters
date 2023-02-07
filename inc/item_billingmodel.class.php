@@ -774,7 +774,7 @@ class PluginPrintercountersItem_Billingmodel extends CommonDBTM {
                                 && isset($records[$records_id[$key - 1]]['counters'][$countertypes_id])) {
 
                            // Volume = diff between 2 records
-                           $volume = ($counter['counters_value'] - $records[$records_id[$key - 1]]['counters'][$countertypes_id]['counters_value']);
+                           $volume = ((int)$counter['counters_value'] - (int)$records[$records_id[$key - 1]]['counters'][$countertypes_id]['counters_value']);
                            if ($volume < 0) {
                               $volume = 0;
                            }

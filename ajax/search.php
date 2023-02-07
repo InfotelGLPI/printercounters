@@ -27,7 +27,7 @@
  --------------------------------------------------------------------------
  */
 
-include ("../../../inc/includes.php");
+include("../../../inc/includes.php");
 
 Session::checkLoginUser();
 header("Content-Type: text/html; charset=UTF-8");
@@ -36,33 +36,46 @@ header("Content-Type: text/html; charset=UTF-8");
 $search = new PluginPrintercountersSearch();
 
 switch ($_POST['action']) {
-   case 'addSearchField':
-      if (!isset($_POST['item'])) {
-         exit;
-      }
-      $search->addSearchField($_POST['search_count'], unserialize(base64_decode($_POST['item'])));
-      break;
+    case 'addSearchField':
+        if (!isset($_POST['item'])) {
+            exit;
+        }
+        if (!isset($_SESSION['plugin_printercounters_item_' . $_POST['item']])) {
+            exit;
+        }
+        $search->addSearchField($_POST['search_count'], unserialize($_SESSION['plugin_printercounters_item_' . $_POST['item']]));
 
-   case 'resetSearchField':
-      if (!isset($_POST['item'])) {
-         exit;
-      }
-      $item = unserialize(base64_decode($_POST['item']));
-      $search->showHistoryGenericSearch($item);
-      break;
+        break;
 
-   case 'initSearch':
-      if (!isset($_POST['item'])) {
-         exit;
-      }
-      $item = unserialize(base64_decode($_POST['item']));
-      $search->manageHistoryGetValues($item, $_POST);
-      $search->showHistory($item);
-      break;
+    case 'resetSearchField':
+        if (!isset($_POST['item'])) {
+            exit;
+        }
+        if (!isset($_SESSION['plugin_printercounters_item_' . $_POST['item']])) {
+            exit;
+        }
+        $item = unserialize($_SESSION['plugin_printercounters_item_' . $_POST['item']]);
+        if (!get_class($item) == PluginPrintercountersRecord::class) {
+            return;
+        }
+        $search->showHistoryGenericSearch($item);
+        break;
 
-   case 'reloadCsrf':
-      Session::cleanCSRFTokens();
-      echo Session::getNewCSRFToken();
-      break;
+    case 'initSearch':
+        if (!isset($_POST['item'])) {
+            exit;
+        }
+        $item = unserialize($_SESSION['plugin_printercounters_item_' . $_POST['item']]);
+        if (!get_class($item) == PluginPrintercountersRecord::class) {
+            return;
+        }
+        $search->manageHistoryGetValues($item, $_POST);
+        $search->showHistory($item);
+        break;
+
+    case 'reloadCsrf':
+        Session::cleanCSRFTokens();
+        echo Session::getNewCSRFToken();
+        break;
 }
 
