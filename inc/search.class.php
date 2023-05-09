@@ -919,7 +919,7 @@ class PluginPrintercountersSearch extends CommonDBTM
                 $search = ["/\&lt;/", "/\&gt;/"];
                 $replace = ["<", ">"];
                 $val = preg_replace($search, $replace, $val);
-                if (preg_match("/^\s*([<>])([=]*)[[:space:]]*([0-9\.]+)/", $val, $regs)) {
+                if ($avl && preg_match("/^\s*([<>])([=]*)[[:space:]]*([0-9\.]+)/", $val, $regs)) {
                     if ($nott) {
                         if ($regs[1] == '<') {
                             $regs[1] = '>';
