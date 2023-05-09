@@ -117,6 +117,8 @@ class PluginPrintercountersPrinter extends PluginPrintercountersCommonSNMPObject
    const SNMP_CARTRIDGE_COLOR_SLOT_3 = '.1.3.6.1.2.1.43.12.1.1.4.1.3';
    const SNMP_CARTRIDGE_COLOR_SLOT_4 = '.1.3.6.1.2.1.43.12.1.1.4.1.4';
 
+   var $oid;
+
    static $rightname = 'plugin_printercounters';
 
    static function getTypeName($nb = 0) {
