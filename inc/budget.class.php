@@ -47,6 +47,8 @@ class PluginPrintercountersBudget extends CommonDropdown {
    const ADD_AMOUNT        = 3;
 
    var $rand = 0;
+   var $massiveaction;
+   var $fixedDisplay;
 
    static $rightname = 'plugin_printercounters';
 
