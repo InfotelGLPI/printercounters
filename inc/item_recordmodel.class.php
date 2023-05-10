@@ -47,6 +47,8 @@ class PluginPrintercountersItem_Recordmodel extends CommonDBTM {
    public $dohistory = true;
 
    var $rand = 0;
+   var $massiveaction;
+   var $fixedDisplay;
 
    protected $itemtype;
    protected $items_id;
