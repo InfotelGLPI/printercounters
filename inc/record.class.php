@@ -69,6 +69,9 @@ class PluginPrintercountersRecord extends CommonDBTM {
    var $itemtype;
    var $tags;
    var $rand = 0;
+   var $massiveaction;
+   var $fixedDisplay;
+
 
    static $rightname = 'plugin_printercounters';
 
@@ -260,7 +263,7 @@ class PluginPrintercountersRecord extends CommonDBTM {
       $dbu         = new DbUtils();
       foreach ($options as $num => $val) {
          if ($val['table'] == $dbu->getTableForItemType('PluginPrintercountersRecord') && $val['field'] == 'id') {
-            $restriction .= PluginPrintercountersSearch::addWhere('', 1, $this->getType(), $num, 'equals', null);
+            $restriction .= PluginPrintercountersSearch::addWhere('', 1, $this->getType(), $num, 'equals', 0);
          }
          if ($val['table'] == $dbu->getTableForItemType($this->itemtype) && $val['field'] == 'id') {
             $restriction .= PluginPrintercountersSearch::addWhere('AND', 0, $this->getType(), $num, 'equals', $this->items_id);
