@@ -43,7 +43,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
    const TONER_ALERT      = 'toner_alert';
    const TONER_ALERT_NAME = 'Toner level alert';
 
-   static $itemtype = 'PluginPrintercountersAdditional_Data';
+//   static $itemtype = 'PluginPrintercountersAdditional_Data';
 
    /**
     * Get events
@@ -63,7 +63,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
    function addDataForTemplate($event, $options = []) {
 
       $events                                    = $this->getAllEvents();
-      $this->data['##printercounters.action##'] = $events[$event];
+      $this->data['##printercounters.action##'] =  __("Toner level alert", "printercounters");
 
       foreach ($options['items'] as $id => $item) {
          $tmp                                                 = [];
@@ -153,7 +153,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
 
       $query_id = "SELECT `id`
                    FROM `glpi_notificationtemplates`
-                   WHERE `itemtype`='".self::$itemtype."'
+                   WHERE `itemtype`='PluginPrintercountersAdditional_Data'
                    AND `name` = '".self::TONER_ALERT_NAME."'";
 
       $result = $DB->query($query_id) or die($DB->error());
@@ -161,7 +161,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
          $templates_id = $DB->result($result, 0, 'id');
       } else {
          $templates_id = $template->add(['name'     => self::TONER_ALERT_NAME,
-                                              'itemtype' => self::$itemtype,
+                                              'itemtype' => 'PluginPrintercountersAdditional_Data',
                                               'date_mod' => $_SESSION['glpi_currenttime'],
                                               'comment'  => '',
                                               'css'      => '']);
@@ -203,11 +203,11 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
          $notificationtemplate = new Notification_NotificationTemplate();
          foreach ($notifs as $label => $name) {
             if (!$dbu->countElementsInTable("glpi_notifications",
-                                            ["itemtype" => self::$itemtype,
+                                            ["itemtype" => 'PluginPrintercountersAdditional_Data',
                                              "event"    => $name])) {
                $tmp = ['name'                     => $label,
                             'entities_id'              => 0,
-                            'itemtype'                 => self::$itemtype,
+                            'itemtype'                 => 'PluginPrintercountersAdditional_Data',
                             'event'                    => $name,
                             'comment'                  => '',
                             'is_recursive'             => 1,
@@ -233,7 +233,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
       $notif = new Notification();
 
       foreach ([self::TONER_ALERT] as $event) {
-         $options = ['itemtype' => self::$itemtype,
+         $options = ['itemtype' => 'PluginPrintercountersAdditional_Data',
                           'event'    => $event,
                           'FIELDS'   => 'id'];
          foreach ($DB->request('glpi_notifications', $options) as $data) {
@@ -245,7 +245,7 @@ class PluginPrintercountersNotificationTargetAdditional_Data extends Notificatio
       $template       = new NotificationTemplate();
       $translation    = new NotificationTemplateTranslation();
       $notif_template = new Notification_NotificationTemplate();
-      $options     = ['itemtype' => self::$itemtype,
+      $options     = ['itemtype' => 'PluginPrintercountersAdditional_Data',
                            'FIELDS'   => 'id'];
       foreach ($DB->request('glpi_notificationtemplates', $options) as $data) {
          $options_template = ['notificationtemplates_id' => $data['id'],

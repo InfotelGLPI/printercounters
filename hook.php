@@ -296,8 +296,8 @@ function plugin_printercounters_getDatabaseRelations() {
 
                    "glpi_tickets"                                          => ["glpi_plugin_printercounters_items_tickets"             => "tickets_id"],
 
-                   "glpi_printers"                                         => ["glpi_plugin_printercounters_items_billingmodels"       => "items_id",
-                                                                                    "glpi_plugin_printercounters_items_recordmodels"        => "items_id"],
+//                   "glpi_printers"                                         => ["glpi_plugin_printercounters_items_billingmodels"       => "items_id",
+//                                                                                    "glpi_plugin_printercounters_items_recordmodels"        => "items_id"],
 
                    "glpi_plugin_printercounters_billingmodels"             => ["glpi_plugin_printercounters_items_billingmodels"       => "plugin_printercounters_billingmodels_id",
                                                                                     "glpi_plugin_printercounters_pagecosts"                 => "plugin_printercounters_billingmodels_id"],
