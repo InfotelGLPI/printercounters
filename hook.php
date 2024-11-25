@@ -121,7 +121,7 @@ function plugin_printercounters_uninstall() {
                    "glpi_plugin_printercounters_snmpsets"];
 
    foreach ($tables as $table) {
-      $DB->query("DROP TABLE IF EXISTS `$table`;");
+      $DB->dropTable($table);
    }
 
    CronTask::Unregister('printercounters');

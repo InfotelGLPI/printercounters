@@ -528,9 +528,9 @@ class PluginPrintercountersSnmpset extends CommonDBTM {
 
       return [__('User')                                  => '##printer.users_id##',
                    __('Alternate username')                    => '##printer.contact##',
-                   __('Technician in charge of the hardware')  => '##printer.users_id_tech##',
+                   __('Technician in charge')  => '##printer.users_id_tech##',
                    __('Group')                                 => '##printer.groups_id##',
-                   __('Group in charge of the hardware')       => '##printer.groups_id_tech##',
+                   __('Group in charge')       => '##printer.groups_id_tech##',
                    __('User phone', 'printercounters')         => '##printer.user_num##',
                    __('Alternate username number')             => '##printer.contact_num##'];
    }

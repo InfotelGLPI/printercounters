@@ -236,13 +236,15 @@ class PluginPrintercountersProfile extends Profile {
          // Add or update rights
          foreach ($matching as $old => $new) {
             if (isset($used[$profile_data['profiles_id']][$new])) {
-               $query = "UPDATE `glpi_profilerights` 
-                         SET `rights`='".self::translateARight($profile_data[$old])."' 
-                         WHERE `name`='$new' AND `profiles_id`='".$profile_data['profiles_id']."'";
-               $DB->query($query);
+                $DB->update('glpi_profilerights', ['rights' => self::translateARight($profile_data[$old])], [
+                    'name'        => $new,
+                    'profiles_id' => $profile_data['profiles_id']
+                ]);
             } else {
-               $query = "INSERT INTO `glpi_profilerights` (`profiles_id`, `name`, `rights`) VALUES ('".$profile_data['profiles_id']."', '$new', '".self::translateARight($profile_data[$old])."');";
-               $DB->query($query);
+                $DB->add('glpi_profilerights', ['rights' => self::translateARight($profile_data[$old])], [
+                    'name'        => $new,
+                    'profiles_id' => $profile_data['profiles_id']
+                ]);
             }
          }
       }
@@ -268,10 +270,14 @@ class PluginPrintercountersProfile extends Profile {
       // Migration old rights in new ones
       self::migrateOneProfile();
 
-      foreach ($DB->request("SELECT *
-                           FROM `glpi_profilerights` 
-                           WHERE `profiles_id`='".$_SESSION['glpiactiveprofile']['id']."' 
-                              AND `name` LIKE '%plugin_printercounters%'") as $prof) {
+       $it = $DB->request([
+           'FROM' => 'glpi_profilerights',
+           'WHERE' => [
+               'profiles_id' => $_SESSION['glpiactiveprofile']['id'],
+               'name' => ['LIKE', '%plugin_printercounters%']
+           ]
+       ]);
+       foreach ($it as $prof) {
          $_SESSION['glpiactiveprofile'][$prof['name']] = $prof['rights'];
       }
    }

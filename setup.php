@@ -117,7 +117,7 @@ function plugin_version_printercounters() {
    return [
       'name'         => __('Printer counters', 'printercounters'),
       'version'      => PLUGIN_PRINTERCOUNTERS_VERSION,
-      'author'       => "<a href='http://infotel.com/services/expertise-technique/glpi/'>Infotel</a>",
+      'author'       => "<a href='https://blogglpi.infotel.com'>Infotel</a>",
       'license'      => 'GPLv2+',
       'homepage'     => 'https://github.com/InfotelGLPI/printercounters',
       'requirements' => [
