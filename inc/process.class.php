@@ -456,7 +456,7 @@ class PluginPrintercountersProcess extends CommonDBTM {
       $error   = false;
       $message = '';
 
-      if (DIRECTORY_SEPARATOR=='/') {
+      if (DIRECTORY_SEPARATOR=='/' && is_numeric($pid)) {
          // Unix/Linux
          exec("ps -ef| awk '\$3 == '$pid' { print  \$2 }'", $output, $ret);
          if ($ret) {
