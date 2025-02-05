@@ -412,7 +412,13 @@ class PluginPrintercountersProcess extends CommonDBTM {
 
             echo "<tr>";
             echo "<td class='tab_bg_2 center' colspan='".($nb_col+2)."'>";
-            echo "<a onclick='printercountersActions(\"".PLUGIN_PRINTERCOUNTERS_WEBDIR."/ajax/process.php\", \"".PLUGIN_PRINTERCOUNTERS_WEBDIR."\", \"killProcess\", \"\", \"process_action_result\", $pids[0], \"".$this->getType()."\");' class='submit btn btn-primary printercounters_action_button'>".__('Kill all processes', 'printercounters')."</a>";
+             if ($config['can_kill_processes']) {
+                 echo "<a onclick='printercountersActions(\"" . PLUGIN_PRINTERCOUNTERS_WEBDIR . "/ajax/process.php\", \"" . PLUGIN_PRINTERCOUNTERS_WEBDIR . "\", \"killProcess\", \"\", \"process_action_result\", $pids[0], \"" . $this->getType(
+                     ) . "\");' class='submit btn btn-primary printercounters_action_button'>" . __(
+                         'Kill all processes',
+                         'printercounters'
+                     ) . "</a>";
+             }
             echo "</td>";
             echo "</tr>";
             echo "</table>";
