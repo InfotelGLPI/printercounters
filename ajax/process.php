@@ -37,12 +37,14 @@ if (Session::haveRight(PluginPrintercountersProcess::$rightname, UPDATE)) {
 
     switch ($_POST['action']) {
         case 'killProcess':
-            header('Content-Type: application/json; charset=UTF-8"');
-            list($messages, $error) = $process->killProcesses($_POST['items_id'], PluginPrintercountersProcess::SIGKILL);
-            echo json_encode(['message'    => $messages,
-                'error'      => $error]);
-            break;
-
+            $config = PluginPrintercountersConfig::getInstance();
+            if ($config['can_kill_processes']) {
+                header('Content-Type: application/json; charset=UTF-8"');
+                list($messages, $error) = $process->killProcesses($_POST['items_id'], PluginPrintercountersProcess::SIGKILL);
+                echo json_encode(['message'    => $messages,
+                    'error'      => $error]);
+                break;
+            }
         case 'getProcesses':
             header("Content-Type: text/html; charset=UTF-8");
             $process->getProcesses();

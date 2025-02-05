@@ -47,6 +47,7 @@ class PluginPrintercountersConfig extends CommonDBTM {
    const TICKETS    = 2;
    const RECORDS    = 3;
    const ERRORITEMS = 4;
+   const PROCESS    = 5;
 
    static $rightname = 'plugin_printercounters';
 
@@ -83,6 +84,7 @@ class PluginPrintercountersConfig extends CommonDBTM {
          $tabs[self::TICKETS]    = PluginPrintercountersItem_Ticket::getTypeName();
          $tabs[self::RECORDS]    = PluginPrintercountersRecord::getTypeName(2);
          $tabs[self::ERRORITEMS] = PluginPrintercountersErrorItem::getTypeName(2);
+          $tabs[self::PROCESS] = PluginPrintercountersProcess::getTypeName();
 
          return $tabs;
       }
@@ -127,18 +129,19 @@ class PluginPrintercountersConfig extends CommonDBTM {
                $erroritem = new PluginPrintercountersErrorItem();
                $erroritem->showErrorItemConfig($config);
                break;
+
+             case self::PROCESS :
+                 PluginPrintercountersProcess::showConfigForm($config);
+                 break;
          }
       }
       return true;
    }
 
-
-
    /**
     * Get config instance in database
     *
-    * @param type $options
-    * @return type
+    * @return array
     */
    public static function getInstance() {
       if (!isset(self::$instance)) {
@@ -147,23 +150,25 @@ class PluginPrintercountersConfig extends CommonDBTM {
          $data = $temp->getConfigFromDB();
          $input = [];
          if ($data) {
-            $input = ['configs_id'               => $data['id'],
-                           'nb_errors_ticket'         => $data['nb_errors_ticket'],
-                           'nb_errors_delay_ticket'   => $data['nb_errors_delay_ticket'],
-                           'no_record_delay_ticket'   => $data['no_record_delay_ticket'],
-                           'items_status'             => json_decode($data['items_status'], true),
-                           'tickets_category'         => $data["tickets_category"],
-                           'tickets_content'          => $data["tickets_content"],
-                           'add_item_user'            => $data["add_item_user"],
-                           'add_item_group'           => $data["add_item_group"],
-                           'disable_autosearch'       => $data['disable_autosearch'],
-                           'set_first_record'         => $data['set_first_record'],
-                           'enable_toner_alert'       => $data['enable_toner_alert'],
-                           'toner_alert_repeat'       => $data['toner_alert_repeat'],
-                           'toner_treshold'           => $data['toner_treshold'],
-                           'max_error_counter'        => $data['max_error_counter'],
-                           'enable_error_handler'     => $data['enable_error_handler']
-                         ];
+             $input = [
+                 'configs_id' => $data['id'],
+                 'nb_errors_ticket' => $data['nb_errors_ticket'],
+                 'nb_errors_delay_ticket' => $data['nb_errors_delay_ticket'],
+                 'no_record_delay_ticket' => $data['no_record_delay_ticket'],
+                 'items_status' => json_decode($data['items_status'], true),
+                 'tickets_category' => $data["tickets_category"],
+                 'tickets_content' => $data["tickets_content"],
+                 'add_item_user' => $data["add_item_user"],
+                 'add_item_group' => $data["add_item_group"],
+                 'disable_autosearch' => $data['disable_autosearch'],
+                 'set_first_record' => $data['set_first_record'],
+                 'enable_toner_alert' => $data['enable_toner_alert'],
+                 'toner_alert_repeat' => $data['toner_alert_repeat'],
+                 'toner_treshold' => $data['toner_treshold'],
+                 'max_error_counter' => $data['max_error_counter'],
+                 'enable_error_handler' => $data['enable_error_handler'],
+                 'can_kill_processes' => $data['can_kill_processes']
+             ];
          }
 
          self::$instance = $input;
