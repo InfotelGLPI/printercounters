@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-25 17:04+0000\n"
+"POT-Creation-Date: 2025-02-19 09:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: hook.php:152
+#: hook.php:156
 msgid "Record model cannot be deleted, it is linked to a billing model"
 msgstr ""
 
-#: hook.php:203
+#: hook.php:207
 msgid ""
 "Counter type cannot be deleted, the record model is linked to a billing model"
 msgstr ""
@@ -228,7 +228,7 @@ msgstr ""
 msgid "SNMP Object ID is not string"
 msgstr ""
 
-#: inc/config.class.php:54 inc/menu.class.php:181
+#: inc/config.class.php:55 inc/menu.class.php:181
 msgid "Plugin management"
 msgstr ""
 
@@ -627,52 +627,62 @@ msgstr ""
 msgid "Invalid process itemtype"
 msgstr ""
 
-#: inc/process.class.php:404
+#: inc/process.class.php:407
 msgid "Kill process"
 msgstr ""
 
-#: inc/process.class.php:410
+#: inc/process.class.php:418
 msgid "Kill all processes"
 msgstr ""
 
-#: inc/process.class.php:417 inc/process.class.php:421
+#: inc/process.class.php:428 inc/process.class.php:432
 msgid "No processes"
 msgstr ""
 
-#: inc/process.class.php:434
+#: inc/process.class.php:445
 msgid "UID"
 msgstr ""
 
-#: inc/process.class.php:435
+#: inc/process.class.php:446
 msgid "PID"
 msgstr ""
 
-#: inc/process.class.php:436
+#: inc/process.class.php:447
 msgid "PPID"
 msgstr ""
 
-#: inc/process.class.php:437
+#: inc/process.class.php:448
 msgid "C"
 msgstr ""
 
-#: inc/process.class.php:438
+#: inc/process.class.php:449
 msgid "STIME"
 msgstr ""
 
-#: inc/process.class.php:439
+#: inc/process.class.php:450
 msgid "TTY"
 msgstr ""
 
-#: inc/process.class.php:440
+#: inc/process.class.php:451
 msgid "TIME"
 msgstr ""
 
-#: inc/process.class.php:441
+#: inc/process.class.php:452
 msgid "CMD"
 msgstr ""
 
-#: inc/process.class.php:442
+#: inc/process.class.php:453
 msgid "Items in progress"
+msgstr ""
+
+#: inc/process.class.php:551
+msgid "Allow killing processes"
+msgstr ""
+
+#: inc/process.class.php:560
+msgid ""
+"Allowing killing processes will allow the plugin to execute scripts on the "
+"server"
 msgstr ""
 
 #: inc/profile.class.php:45
