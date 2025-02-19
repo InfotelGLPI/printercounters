@@ -321,7 +321,7 @@ class PluginPrintercountersPagecost extends CommonDBTM {
    function addCounterTypeForBillings($recordmodels_id, $countertypes_id) {
 
       $billingmodel = new PluginPrintercountersBillingmodel();
-      $data = $billingmodel->find(['plugin_printercounters_items_recordmodels_id' => $recordmodels_id]);
+      $data = $billingmodel->find(['plugin_printercounters_recordmodels_id' => $recordmodels_id]);
       if (!empty($data)) {
          foreach ($data as $values) {
             $this->add(['plugin_printercounters_countertypes_id'  => $countertypes_id,
