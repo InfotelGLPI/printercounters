@@ -18,4 +18,4 @@ Contraintes :
 * Utilisable à partir de la version 5.4 de PHP.
 * Le plugin doit pouvoir interroger 3000 à 4500 imprimantes potentielles.
 
-Spécifications : https://forge.glpi-project.org/projects/glpi/wiki/SNMP_printer_counters
+https://github.com/InfotelGLPI/printercounters/wiki/Notice-d%E2%80%99utilisation
