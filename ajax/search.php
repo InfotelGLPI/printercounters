@@ -34,38 +34,47 @@ header("Content-Type: text/html; charset=UTF-8");
 //Html::header_nocache();
 
 $search = new PluginPrintercountersSearch();
-
+$allowed_classes = [PluginPrintercountersRecord::class];
 switch ($_POST['action']) {
     case 'addSearchField':
-        if (!isset($_POST['item'])) {
+        if (!isset($_POST['item']) || !is_numeric($_POST['item'])) {
             exit;
         }
-        if (!isset($_SESSION['plugin_printercounters_item_' . $_POST['item']])) {
+        $session_key = 'plugin_printercounters_item_' . $_POST['item'];
+        if (!isset($_SESSION[$session_key])) {
             exit;
         }
-        $search->addSearchField($_POST['search_count'], unserialize($_SESSION['plugin_printercounters_item_' . $_POST['item']]));
-
+        $item = unserialize($_SESSION[$session_key], ["allowed_classes" => $allowed_classes]);
+        if ($item === false) {
+            exit;
+        }
+        $search->addSearchField($_POST['search_count'], $item);
         break;
 
     case 'resetSearchField':
-        if (!isset($_POST['item'])) {
+        if (!isset($_POST['item']) || !is_numeric($_POST['item'])) {
             exit;
         }
-        if (!isset($_SESSION['plugin_printercounters_item_' . $_POST['item']])) {
+        $session_key = 'plugin_printercounters_item_' . $_POST['item'];
+        if (!isset($_SESSION[$session_key])) {
             exit;
         }
-        $item = unserialize($_SESSION['plugin_printercounters_item_' . $_POST['item']]);
-        if (!get_class($item) == PluginPrintercountersRecord::class) {
+        $item = unserialize($_SESSION[$session_key], ["allowed_classes" => $allowed_classes]);
+        if (get_class($item) !== PluginPrintercountersRecord::class) {
             return;
         }
         $search->showHistoryGenericSearch($item);
         break;
 
     case 'initSearch':
-        if (!isset($_POST['item'])) {
+        if (!isset($_POST['item']) || !is_numeric($_POST['item'])) {
             exit;
         }
-        $item = unserialize($_SESSION['plugin_printercounters_item_' . $_POST['item']]);
+        $session_key = 'plugin_printercounters_item_' . $_POST['item'];
+        if (!isset($_SESSION[$session_key])) {
+            exit;
+        }
+        $item = unserialize($_SESSION[$session_key], ["allowed_classes" => $allowed_classes]);
         if (!get_class($item) == PluginPrintercountersRecord::class) {
             return;
         }
