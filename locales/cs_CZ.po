@@ -5,28 +5,28 @@
 # 
 # Translators:
 # Xavier CAILLAUD <thetsmr@gmail.com>, 2020
-# David Stepan <stepand@tiscali.cz>, 2022
+# David Stepan <stepand@tiscali.cz>, 2025
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: GLPI - Printercounters plugin\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-25 08:08+0000\n"
+"POT-Creation-Date: 2025-02-21 13:15+0000\n"
 "PO-Revision-Date: 2020-11-02 16:15+0000\n"
-"Last-Translator: David Stepan <stepand@tiscali.cz>, 2022\n"
-"Language-Team: Czech (Czech Republic) (https://www.transifex.com/infotelGLPI/teams/63014/cs_CZ/)\n"
+"Last-Translator: David Stepan <stepand@tiscali.cz>, 2025\n"
+"Language-Team: Czech (Czech Republic) (https://app.transifex.com/infotelGLPI/teams/63014/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs_CZ\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
 
-#: hook.php:152
+#: hook.php:156
 msgid "Record model cannot be deleted, it is linked to a billing model"
 msgstr "Šablonu záznamu nelze vymazat, je propojen se šablonou fakturace"
 
-#: hook.php:203
+#: hook.php:207
 msgid ""
 "Counter type cannot be deleted, the record model is linked to a billing "
 "model"
@@ -35,46 +35,46 @@ msgstr ""
 "účtování"
 
 #: printercounters.js.php:46 ajax/loadscripts.php:47
-#: inc/item_recordmodel.class.php:848
+#: inc/item_recordmodel.class.php:850
 msgid "Global TCO"
 msgstr "Celkové náklady na pořízení a vlastnění"
 
 #: setup.php:118 inc/additional_data.class.php:64
 #: inc/item_billingmodel.class.php:1035 inc/item_billingmodel.class.php:1061
-#: inc/item_recordmodel.class.php:885 inc/item_recordmodel.class.php:886
 #: inc/item_recordmodel.class.php:887 inc/item_recordmodel.class.php:888
 #: inc/item_recordmodel.class.php:889 inc/item_recordmodel.class.php:890
 #: inc/item_recordmodel.class.php:891 inc/item_recordmodel.class.php:892
 #: inc/item_recordmodel.class.php:893 inc/item_recordmodel.class.php:894
-#: inc/item_recordmodel.class.php:899 inc/menu.class.php:47
-#: inc/printer.class.php:123 inc/profile.class.php:164
-#: inc/record.class.php:1219
+#: inc/item_recordmodel.class.php:895 inc/item_recordmodel.class.php:896
+#: inc/item_recordmodel.class.php:901 inc/menu.class.php:47
+#: inc/printer.class.php:125 inc/profile.class.php:164
+#: inc/record.class.php:1222
 msgid "Printer counters"
 msgstr "Počítadla z tiskáren"
 
-#: front/config.form.php:60 inc/record.class.php:1725
+#: front/config.form.php:58 inc/record.class.php:1728
 msgid "Clean records in error"
 msgstr "Vyčistit záznamy obsahující chyby"
 
-#: front/config.form.php:62 front/config.form.php:75
-#: scripts/clean_records.php:58
+#: front/config.form.php:60 front/config.form.php:73
+#: scripts/clean_records.php:55
 msgid "Records cleaned"
 msgstr "Záznamy vyčištěny"
 
-#: front/config.form.php:65 front/config.form.php:78
-#: scripts/clean_records.php:60
+#: front/config.form.php:63 front/config.form.php:76
+#: scripts/clean_records.php:57
 msgid "No records to clean"
 msgstr "Žádný záznam k vyčištění"
 
-#: front/config.form.php:73 inc/record.class.php:1728
+#: front/config.form.php:71 inc/record.class.php:1731
 msgid "Clean empty records"
 msgstr "Vyčistit prázdné záznamy"
 
-#: front/config.form.php:92 front/config.php:44
+#: front/config.form.php:90 front/config.php:43
 msgid "Please activate the plugin"
 msgstr "Prosím aktivujte zásuvný modul"
 
-#: front/item_recordmodel.form.php:60 inc/item_recordmodel.class.php:1299
+#: front/item_recordmodel.form.php:60 inc/item_recordmodel.class.php:1301
 #: inc/menu.class.php:84 inc/menu.class.php:85 inc/menu.class.php:171
 msgid "Record planning"
 msgstr "Plánování záznamu"
@@ -89,8 +89,8 @@ msgstr[3] "Doplňující údaje"
 
 #: inc/additional_data.class.php:76 inc/billingmodel.class.php:71
 #: inc/erroritem.class.php:87 inc/item_billingmodel.class.php:87
-#: inc/item_recordmodel.class.php:86 inc/item_ticket.class.php:85
-#: inc/record.class.php:112 inc/recordmodel.class.php:72
+#: inc/item_recordmodel.class.php:88 inc/item_ticket.class.php:85
+#: inc/record.class.php:115 inc/recordmodel.class.php:72
 msgid "Invalid itemtype"
 msgstr "Neplatný typ položky"
 
@@ -116,13 +116,13 @@ msgstr[3] "Modely účtování"
 
 #: inc/billingmodel.class.php:120 inc/billingmodel.class.php:216
 #: inc/billingmodel.class.php:502 inc/item_billingmodel.class.php:112
-#: inc/record.class.php:2100
+#: inc/record.class.php:2103
 msgid "Application date"
 msgstr "Datum použití"
 
 #: inc/billingmodel.class.php:156 inc/countertype.class.php:47
 #: inc/item_billingmodel.class.php:117 inc/menu.class.php:153
-#: inc/record.class.php:2096 inc/recordmodel.class.php:184
+#: inc/record.class.php:2099 inc/recordmodel.class.php:184
 msgid "Counter type"
 msgid_plural "Counter types"
 msgstr[0] "Typ počítadla"
@@ -131,12 +131,12 @@ msgstr[2] "Typů počítadel"
 msgstr[3] "Typy počítadel"
 
 #: inc/billingmodel.class.php:185 inc/item_billingmodel.class.php:139
-#: inc/item_billingmodel.class.php:143 inc/item_recordmodel.class.php:144
-#: inc/item_recordmodel.class.php:148 inc/recordmodel.class.php:168
+#: inc/item_billingmodel.class.php:143 inc/item_recordmodel.class.php:146
+#: inc/item_recordmodel.class.php:150 inc/recordmodel.class.php:168
 msgid "Linked items"
 msgstr "Připojené položky"
 
-#: inc/billingmodel.class.php:287 inc/item_recordmodel.class.php:555
+#: inc/billingmodel.class.php:287 inc/item_recordmodel.class.php:557
 msgid "Are you sure to change the recordmodel ?"
 msgstr "Opravdu chcete změnit šablonu záznamu?"
 
@@ -149,12 +149,12 @@ msgstr "Kopírovat"
 msgid "Application date is already used. Please select another"
 msgstr "Datum aplikace je už používáno. Vyberte jiné"
 
-#: inc/budget.class.php:1081 inc/budget.class.php:1222
-#: inc/budget.class.php:1544
+#: inc/budget.class.php:1105 inc/budget.class.php:1246
+#: inc/budget.class.php:1568
 msgid "Amount"
 msgstr "Množství"
 
-#: inc/budget.class.php:1090
+#: inc/budget.class.php:1114
 msgid "Record amount"
 msgid_plural "Records amount"
 msgstr[0] "Množství záznamu"
@@ -162,32 +162,32 @@ msgstr[1] "Množství záznamů"
 msgstr[2] "Množství záznamů"
 msgstr[3] "Množství záznamů"
 
-#: inc/budget.class.php:1101
+#: inc/budget.class.php:1125
 msgid "Usage rate"
 msgstr "Míra využití"
 
-#: inc/budget.class.php:1113
+#: inc/budget.class.php:1137
 msgid "Color rate"
 msgstr "Míra barev"
 
-#: inc/budget.class.php:1125
+#: inc/budget.class.php:1149
 msgid "Total page number"
 msgstr "Celkový počet stránek"
 
-#: inc/budget.class.php:1137
+#: inc/budget.class.php:1161
 msgid "Color page rate"
 msgstr "Barevná stránka"
 
-#: inc/budget.class.php:1324
+#: inc/budget.class.php:1348
 #, php-format
 msgid "The budget period %s already exists"
 msgstr "Rozpočtové období %s už existuje"
 
-#: inc/budget.class.php:1361
+#: inc/budget.class.php:1385
 msgid "The sub-entities budget amount exceed the parent budget"
 msgstr "Částka rozpočtu dílčích kapitol přesahuje celkový rozpočet"
 
-#: inc/budget.class.php:1555
+#: inc/budget.class.php:1579
 msgid "Begin date cannot be higher than end date"
 msgstr "Datum zahájení nemůže být později než datum ukončení"
 
@@ -245,7 +245,7 @@ msgstr "IP adresa nebyla nastavena"
 msgid "SNMP Object ID is not string"
 msgstr "Identifikátor SNMP objektu není řetězec"
 
-#: inc/config.class.php:54 inc/menu.class.php:181
+#: inc/config.class.php:55 inc/menu.class.php:181
 msgid "Plugin management"
 msgstr "Správa zásuvného modulu"
 
@@ -365,16 +365,16 @@ msgstr "Chyba na položce, tvrdý stav"
 msgid "Record success"
 msgstr "Záznam byl úspěšný"
 
-#: inc/erroritem.class.php:471 inc/record.class.php:766
-#: inc/record.class.php:782
+#: inc/erroritem.class.php:471 inc/record.class.php:769
+#: inc/record.class.php:785
 msgid "No results, please check OIDs of your record model"
 msgstr "Žádné výsledky – zkontrolujte OID svého modelu záznamu"
 
-#: inc/erroritem.class.php:478 inc/record.class.php:789
+#: inc/erroritem.class.php:478 inc/record.class.php:792
 msgid "This item type is not correct"
 msgstr "Tento typ položky není správný"
 
-#: inc/erroritem.class.php:483 inc/record.class.php:794
+#: inc/erroritem.class.php:483 inc/record.class.php:797
 msgid "No printers to search"
 msgstr "Žádné tiskárny k vyhledávání"
 
@@ -390,13 +390,13 @@ msgstr[1] "Propojené modely fakturace"
 msgstr[2] "Propojených modelů fakturace"
 msgstr[3] "Propojené modely fakturace"
 
-#: inc/item_billingmodel.class.php:114 inc/item_recordmodel.class.php:124
-#: inc/record.class.php:2093
+#: inc/item_billingmodel.class.php:114 inc/item_recordmodel.class.php:126
+#: inc/record.class.php:2096
 msgid "Result"
 msgstr "Výsledek"
 
-#: inc/item_billingmodel.class.php:118 inc/record.class.php:1269
-#: inc/record.class.php:2097
+#: inc/item_billingmodel.class.php:118 inc/record.class.php:1272
+#: inc/record.class.php:2100
 msgid "Counter value"
 msgstr "Hodnota z počítadla"
 
@@ -404,17 +404,17 @@ msgstr "Hodnota z počítadla"
 msgid "Link the item to a billing model"
 msgstr "Připojit položku k účtovacímu modelu"
 
-#: inc/item_billingmodel.class.php:254 inc/item_recordmodel.class.php:270
+#: inc/item_billingmodel.class.php:254 inc/item_recordmodel.class.php:272
 msgid "Add an item"
 msgstr "Přidat položku"
 
-#: inc/item_billingmodel.class.php:330 inc/item_recordmodel.class.php:345
-#: inc/item_recordmodel.class.php:766
+#: inc/item_billingmodel.class.php:330 inc/item_recordmodel.class.php:347
+#: inc/item_recordmodel.class.php:768
 msgid "Last record date"
 msgstr "Poslední datum záznamu"
 
-#: inc/item_billingmodel.class.php:331 inc/item_recordmodel.class.php:346
-#: inc/item_recordmodel.class.php:781
+#: inc/item_billingmodel.class.php:331 inc/item_recordmodel.class.php:348
+#: inc/item_recordmodel.class.php:783
 msgid "Last record type"
 msgstr "Poslední typ záznamu"
 
@@ -426,7 +426,7 @@ msgstr " Nastavit model účtování"
 msgid "Item cannot be added, check the record model"
 msgstr "Položka nemůže být přidána, zkontrolujte model záznamu"
 
-#: inc/item_recordmodel.class.php:74
+#: inc/item_recordmodel.class.php:76
 msgid "Linked record model"
 msgid_plural "Linked record models"
 msgstr[0] "Připojený model záznamu"
@@ -434,85 +434,85 @@ msgstr[1] "Připojené modely záznamu"
 msgstr[2] "Připojených modelů záznamu"
 msgstr[3] "Připojené modely záznamu"
 
-#: inc/item_recordmodel.class.php:122 inc/item_recordmodel.class.php:1773
+#: inc/item_recordmodel.class.php:124 inc/item_recordmodel.class.php:1775
 msgid "Periodicity"
 msgstr "Opakovanost"
 
-#: inc/item_recordmodel.class.php:123
+#: inc/item_recordmodel.class.php:125
 msgid "State"
 msgstr "Stav"
 
-#: inc/item_recordmodel.class.php:126 inc/record.class.php:2091
+#: inc/item_recordmodel.class.php:128 inc/record.class.php:2094
 msgid "Record type"
 msgstr "Typ záznamu"
 
-#: inc/item_recordmodel.class.php:229
+#: inc/item_recordmodel.class.php:231
 msgid "Link the item to a record model"
 msgstr "Připojit položku k modelu záznamu"
 
-#: inc/item_recordmodel.class.php:545
+#: inc/item_recordmodel.class.php:547
 msgid "Record configuration"
 msgstr "Nastavení záznamu"
 
-#: inc/item_recordmodel.class.php:567 inc/item_recordmodel.class.php:798
-#: inc/item_recordmodel.class.php:885
+#: inc/item_recordmodel.class.php:569 inc/item_recordmodel.class.php:800
+#: inc/item_recordmodel.class.php:887
 msgid "Enable automatic record"
 msgstr "Zapnout automatický záznam"
 
-#: inc/item_recordmodel.class.php:575 inc/item_recordmodel.class.php:817
+#: inc/item_recordmodel.class.php:577 inc/item_recordmodel.class.php:819
 msgid "Periodicity of automatic record"
 msgstr "Opakovanost automatického záznamu"
 
-#: inc/item_recordmodel.class.php:587 inc/item_recordmodel.class.php:838
+#: inc/item_recordmodel.class.php:589 inc/item_recordmodel.class.php:840
 msgid "Number of retries"
 msgstr "Počet opakování"
 
-#: inc/item_recordmodel.class.php:597 inc/item_recordmodel.class.php:858
+#: inc/item_recordmodel.class.php:599 inc/item_recordmodel.class.php:860
 msgid "Timeout"
 msgstr "Časový limit"
 
-#: inc/item_recordmodel.class.php:766 inc/item_recordmodel.class.php:781
-#: inc/item_recordmodel.class.php:798 inc/item_recordmodel.class.php:807
-#: inc/item_recordmodel.class.php:817 inc/item_recordmodel.class.php:827
-#: inc/item_recordmodel.class.php:838 inc/item_recordmodel.class.php:848
-#: inc/item_recordmodel.class.php:858
+#: inc/item_recordmodel.class.php:768 inc/item_recordmodel.class.php:783
+#: inc/item_recordmodel.class.php:800 inc/item_recordmodel.class.php:809
+#: inc/item_recordmodel.class.php:819 inc/item_recordmodel.class.php:829
+#: inc/item_recordmodel.class.php:840 inc/item_recordmodel.class.php:850
+#: inc/item_recordmodel.class.php:860
 msgid "Printercounters"
 msgstr "Počítadla tiskárny"
 
-#: inc/item_recordmodel.class.php:886
+#: inc/item_recordmodel.class.php:888
 msgid "Set periodicity"
 msgstr "Nastavit opakovanost"
 
-#: inc/item_recordmodel.class.php:887
+#: inc/item_recordmodel.class.php:889
 msgid "Set record model"
 msgstr "Nastavení modelu záznamu"
 
-#: inc/item_recordmodel.class.php:888
+#: inc/item_recordmodel.class.php:890
 msgid "Set SNMP authentication"
 msgstr "Nastavení SNMP ověření"
 
-#: inc/item_recordmodel.class.php:889
+#: inc/item_recordmodel.class.php:891
 msgid "Set retries"
 msgstr "Nastavit opakování"
 
-#: inc/item_recordmodel.class.php:890
+#: inc/item_recordmodel.class.php:892
 msgid "Set max timeout"
 msgstr "Nastavení maximálního časového limitu"
 
-#: inc/item_recordmodel.class.php:891 inc/item_recordmodel.class.php:899
-#: inc/record.class.php:161
+#: inc/item_recordmodel.class.php:893 inc/item_recordmodel.class.php:901
+#: inc/record.class.php:164
 msgid "Immediate record"
 msgstr "Okamžitý záznam"
 
-#: inc/item_recordmodel.class.php:892
+#: inc/item_recordmodel.class.php:894
 msgid "Update counter position"
 msgstr "Aktualizovat pozici počítadla"
 
-#: inc/item_recordmodel.class.php:893
+#: inc/item_recordmodel.class.php:895
 msgid "Init counters to zero"
 msgstr "Vynulovat počítadlo"
 
-#: inc/item_recordmodel.class.php:894
+#: inc/item_recordmodel.class.php:896
 msgid "Set printer values"
 msgstr "Nastavit hodnoty tiskárny"
 
@@ -609,8 +609,9 @@ msgstr[2] "SNMP ověření"
 msgstr[3] "SNMP ověření"
 
 #: inc/notificationtargetadditional_data.class.php:53
+#: inc/notificationtargetadditional_data.class.php:66
 #: inc/notificationtargetadditional_data.class.php:93
-#: inc/record.class.php:1677
+#: inc/record.class.php:1680
 msgid "Toner level alert"
 msgstr "Upozornění na úroveň toneru"
 
@@ -640,7 +641,7 @@ msgstr[1] "Typy fakturačních modelů"
 msgstr[2] "Typy fakturačních modelů"
 msgstr[3] "Typy fakturačních modelů"
 
-#: inc/printer.class.php:507
+#: inc/printer.class.php:509
 msgid "Uptime"
 msgstr "Doba provozu"
 
@@ -664,53 +665,64 @@ msgstr "Neplatné číslo procesu"
 msgid "Invalid process itemtype"
 msgstr "Neplatný typ položky procesu"
 
-#: inc/process.class.php:404
+#: inc/process.class.php:407
 msgid "Kill process"
 msgstr "Ukončit proces"
 
-#: inc/process.class.php:410
+#: inc/process.class.php:418
 msgid "Kill all processes"
 msgstr "Ukončit všechny procesy"
 
-#: inc/process.class.php:417 inc/process.class.php:421
+#: inc/process.class.php:428 inc/process.class.php:432
 msgid "No processes"
 msgstr "Žádné procesy"
 
-#: inc/process.class.php:434
+#: inc/process.class.php:445
 msgid "UID"
 msgstr "UID"
 
-#: inc/process.class.php:435
+#: inc/process.class.php:446
 msgid "PID"
 msgstr "PID"
 
-#: inc/process.class.php:436
+#: inc/process.class.php:447
 msgid "PPID"
 msgstr "PPID"
 
-#: inc/process.class.php:437
+#: inc/process.class.php:448
 msgid "C"
 msgstr "C"
 
-#: inc/process.class.php:438
+#: inc/process.class.php:449
 msgid "STIME"
 msgstr "STIME"
 
-#: inc/process.class.php:439
+#: inc/process.class.php:450
 msgid "TTY"
 msgstr "TTY"
 
-#: inc/process.class.php:440
+#: inc/process.class.php:451
 msgid "TIME"
 msgstr "TIME"
 
-#: inc/process.class.php:441
+#: inc/process.class.php:452
 msgid "CMD"
 msgstr "CMD"
 
-#: inc/process.class.php:442
+#: inc/process.class.php:453
 msgid "Items in progress"
 msgstr "Probíhající položky"
+
+#: inc/process.class.php:551
+msgid "Allow killing processes"
+msgstr "Povolit procesy ukončení"
+
+#: inc/process.class.php:560
+msgid ""
+"Allowing killing processes will allow the plugin to execute scripts on the "
+"server"
+msgstr ""
+"Povolení ukončování procesů umožní pluginu spouštět skripty na serveru."
 
 #: inc/profile.class.php:45
 msgid "Rights management"
@@ -728,7 +740,7 @@ msgstr "Oprávnění přidávat nižší záznamy"
 msgid "Right to update printers values"
 msgstr "Oprávnění aktualizovat hodnoty tiskáren"
 
-#: inc/record.class.php:91
+#: inc/record.class.php:94
 msgid "Record"
 msgid_plural "Records"
 msgstr[0] "Záznam"
@@ -736,160 +748,160 @@ msgstr[1] "Záznamy"
 msgstr[2] "Záznamů"
 msgstr[3] "Záznamy"
 
-#: inc/record.class.php:150
+#: inc/record.class.php:153
 msgid "Actions"
 msgstr "Akce"
 
-#: inc/record.class.php:171 inc/record.class.php:1258
+#: inc/record.class.php:174 inc/record.class.php:1261
 msgid "Add a manual record"
 msgstr "Přidat ruční záznam"
 
-#: inc/record.class.php:182 inc/record.class.php:1263
+#: inc/record.class.php:185 inc/record.class.php:1266
 msgid "Add a lower record"
 msgstr "Přidat nižší záznam"
 
-#: inc/record.class.php:195
+#: inc/record.class.php:198
 msgid "Update global TCO"
 msgstr "Aktualizovat globální TCO"
 
-#: inc/record.class.php:203
+#: inc/record.class.php:206
 msgid "Update printer data"
 msgstr "Aktualizovat tisková data"
 
-#: inc/record.class.php:213
+#: inc/record.class.php:216
 msgid "Update the values of the physical printer"
 msgstr "Aktualizovat hodnoty fyzické tiskárny"
 
-#: inc/record.class.php:516
+#: inc/record.class.php:519
 msgid "Record history"
 msgstr "Historie záznamu"
 
-#: inc/record.class.php:553
+#: inc/record.class.php:556
 msgid "Host error"
 msgstr "Chyba hostitele"
 
-#: inc/record.class.php:554
+#: inc/record.class.php:557
 msgid "Record error"
 msgstr "Chyba záznamu"
 
-#: inc/record.class.php:555
+#: inc/record.class.php:558
 msgid "Automatic"
 msgstr "Automatický"
 
-#: inc/record.class.php:556
+#: inc/record.class.php:559
 msgid "Manual"
 msgstr "Ruční"
 
-#: inc/record.class.php:592
+#: inc/record.class.php:595
 msgid "Planned"
 msgstr "Plánováno"
 
-#: inc/record.class.php:593
+#: inc/record.class.php:596
 msgid "Finished"
 msgstr "Dokončeno"
 
-#: inc/record.class.php:594
+#: inc/record.class.php:597
 msgid "In progress"
 msgstr "Probíhá"
 
-#: inc/record.class.php:632
+#: inc/record.class.php:635
 msgid "Success"
 msgstr "Úspěch"
 
-#: inc/record.class.php:633
+#: inc/record.class.php:636
 msgid "IP fail"
 msgstr "Nezdar IP"
 
-#: inc/record.class.php:634
+#: inc/record.class.php:637
 msgid "OID fail"
 msgstr "Nezdar OID"
 
-#: inc/record.class.php:635
+#: inc/record.class.php:638
 msgid "Unknown error"
 msgstr "Neznámá chyba"
 
-#: inc/record.class.php:636
+#: inc/record.class.php:639
 msgid "MAC fail"
 msgstr "Nezdar MAC adresy"
 
-#: inc/record.class.php:637
+#: inc/record.class.php:640
 msgid "Sysdescr fail"
 msgstr "Nezdar systémového popisu"
 
-#: inc/record.class.php:638
+#: inc/record.class.php:641
 msgid "Serial fail"
 msgstr "Nezdar sériového čísla"
 
-#: inc/record.class.php:915
+#: inc/record.class.php:918
 #, php-format
 msgid "%s records remaining"
 msgstr "%szbývajících záznamů"
 
-#: inc/record.class.php:1261
+#: inc/record.class.php:1264
 msgid "Update record"
 msgstr "Aktualizovat záznam"
 
-#: inc/record.class.php:1302
+#: inc/record.class.php:1305
 msgid "Record entity"
 msgstr "Entita záznamu"
 
-#: inc/record.class.php:1476
+#: inc/record.class.php:1479
 msgid "TCO update error"
 msgstr "Chyba aktualizace TCO"
 
-#: inc/record.class.php:1532 inc/record.class.php:1546
+#: inc/record.class.php:1535 inc/record.class.php:1549
 msgid "Error : Counters are not valid"
 msgstr "Chyba: Počítadla nejsou platná"
 
-#: inc/record.class.php:1570
+#: inc/record.class.php:1573
 msgid "Error : Counters cannot be lower than the previous"
 msgstr "Chyba: Počítadla nemohou být nižší než jsou předchozí"
 
-#: inc/record.class.php:1594
+#: inc/record.class.php:1597
 msgid "Error : Counters cannot be higher than the next"
 msgstr "Chyba: Počítadla nemohou být vyšší než jsou jim následující"
 
-#: inc/record.class.php:1607
+#: inc/record.class.php:1610
 msgid "Error : Counter position is not valid"
 msgstr "Chyba: Pozice počítadla není platná"
 
-#: inc/record.class.php:1635
+#: inc/record.class.php:1638
 msgid "Item records"
 msgstr "Položka záznamů"
 
-#: inc/record.class.php:1638
+#: inc/record.class.php:1641
 msgid "Disable automatic records"
 msgstr "Vypnout automatické záznamy"
 
-#: inc/record.class.php:1645
+#: inc/record.class.php:1648
 msgid "Set first record when record model change"
 msgstr "Nastavte první záznam při změně modelu záznamu"
 
-#: inc/record.class.php:1653
+#: inc/record.class.php:1656
 msgid "Enable toner level alert"
 msgstr "Upozorňovat na stav toneru"
 
-#: inc/record.class.php:1679
+#: inc/record.class.php:1682
 msgid "Reminders frequency for printer toner level"
 msgstr "Četnost připomínání stavu toneru v tiskárně"
 
-#: inc/record.class.php:1687
+#: inc/record.class.php:1690
 msgid "Toner alert treshold"
 msgstr "Mezní hodnota výstrahy ohledně stavu toneru"
 
-#: inc/record.class.php:1713
+#: inc/record.class.php:1716
 msgid "Cleaning"
 msgstr "Čištění"
 
-#: inc/record.class.php:1716
+#: inc/record.class.php:1719
 msgid "Delete records before"
 msgstr "Smazat záznamy starší než"
 
-#: inc/record.class.php:1734
+#: inc/record.class.php:1737
 msgid "Do you want to clean all records ?"
 msgstr "Opravdu chcete smazat všechny záznamy?"
 
-#: inc/record.class.php:2094
+#: inc/record.class.php:2097
 msgid "Record ID"
 msgstr "Identifikátor záznamu"
 
@@ -1042,6 +1054,6 @@ msgstr "SNMP sada je pro tuto entitu už nastavená"
 msgid "Add a new sysdescr"
 msgstr "Přidat novou systémovou poznámku"
 
-#: scripts/clean_records.php:64 scripts/printercounters_fullsync.php:89
+#: scripts/clean_records.php:61 scripts/printercounters_fullsync.php:87
 msgid "Plugin disabled or automatic record disabled"
 msgstr "Zásuvný modul je vypnutý nebo je vypnutý automatický záznam"
