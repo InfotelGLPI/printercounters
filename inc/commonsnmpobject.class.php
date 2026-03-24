@@ -171,19 +171,26 @@ abstract class PluginPrintercountersCommonSNMPObject {
                                          $snmp_auth['community'],
                                          $this->maxTimeout,
                                          $this->maxRetries);
-
-               if (!empty($snmp_auth['authentication_encrypt'])
-                       && !empty($snmp_auth['authentication_password'])
-                       && !empty($snmp_auth['data_encrypt'])
-                       && !empty($snmp_auth['data_password'])) {
-                  $this->session->setSecurity('authPriv',
-                                              $snmp_auth['authentication_encrypt'],
-                                              $snmp_auth['authentication_password'],
-                                              $snmp_auth['data_encrypt'],
-                                              $snmp_auth['data_password'], '', '');
-               } else {
-                  throw new PluginPrintercountersException(__('Bad SNMP V3 parameters', 'printercounters'), 0, null, $this->items_id, $this->itemtype);
-               }
+				$is_security_OK = 
+					$snmp_auth['security_level'] == 'noAuthNoPriv'
+				||
+					! ( empty($snmp_auth['authentication_encrypt']) ||
+					    empty($snmp_auth['authentication_password']) )
+				||
+					( $snpm_auth['security_level'] == 'authPriv' &&
+					  ! ( empty($snmp_auth['data_encrypt']) ||
+						  empty($snmp_auth['data_password']) ) )
+				;
+					
+				if ( $is_security_OK ) {
+					$this->session->setSecurity($snmp_auth['security_level'],
+												$snmp_auth['authentication_encrypt'],
+												$snmp_auth['authentication_password'],
+												$snmp_auth['data_encrypt'],
+												$snmp_auth['data_password'], $snmp_auth['context'], '');
+				} else {
+					throw new PluginPrintercountersException(__('Bad SNMP V3 parameters', 'printercounters'), 0, null, $this->items_id, $this->itemtype);
+				}
                break;
 
             default :

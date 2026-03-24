@@ -92,6 +92,14 @@ function plugin_printercounters_install() {
         $DB->runFile(PLUGIN_PRINTERCOUNTERS_DIR. "/install/sql/update-2.0.2.sql");
     }
 
+    if (!$DB->fieldExists("glpi_plugin_printercounters_snmpauthentications", 'security_level')) {
+        $DB->runFile(PLUGIN_PRINTERCOUNTERS_DIR. "/install/sql/update-2.0.2-snmp-sec-level.sql");
+    }
+
+    if (!$DB->fieldExists("glpi_plugin_printercounters_snmpauthentications", 'context')) {
+        $DB->runFile(PLUGIN_PRINTERCOUNTERS_DIR. "/install/sql/update-2.0.2-snmp-context.sql");
+    }
+
    CronTask::Register('PluginPrintercountersItem_Ticket', 'PrintercountersCreateTicket', DAY_TIMESTAMP);
    CronTask::Register('PluginPrintercountersErrorItem', 'PluginPrintercountersErrorItem', DAY_TIMESTAMP);
 

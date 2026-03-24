@@ -46,6 +46,11 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
    const SNMPV2 = 1;
    const SNMPV3 = 3;
 
+   // Security levels
+   const noAuthNoPriv = 0;
+   const authNoPriv = 1;
+   const authPriv = 2;
+
    // Auth encryption
    const SHA = 1;
    const MD5 = 2;
@@ -159,6 +164,24 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
          'massiveaction'      => true
       ];
 
+      $tab[] = [
+         'id'                 => '51',
+         'table'              => $this->getTable(),
+         'field'              => 'context',
+         'name'               => __('Context', 'printercounters'),
+         'datatype'           => 'specific',
+         'massiveaction'      => true
+      ];
+
+      $tab[] = [
+         'id'                 => '52',
+         'table'              => $this->getTable(),
+         'field'              => 'security_level',
+         'name'               => __('Security level', 'printercounters'),
+         'datatype'           => 'specific',
+         'massiveaction'      => true
+      ];
+
       return $tab;
    }
 
@@ -170,43 +193,51 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
    function getAdditionalFields() {
 
       $tab = [
-                   ['name'  => 'version',
-                         'label' => __('Version'),
-                         'type'  => 'specific',
-                         'list'  => true],
-                   ['name'  => 'community',
-                         'label' => __('Community', 'printercounters'),
-                         'type'  => 'text',
-                         'list'  => true],
-                   ['name'  => 'community_write',
-                         'label' => __('Community write', 'printercounters'),
-                         'type'  => 'text',
-                         'list'  => true],
-                   ['name'  => 'authentication_encrypt',
-                         'label' => __('Authentication encryption', 'printercounters'),
-                         'type'  => 'specific',
-                         'list'  => true],
-                   ['name'  => 'data_encrypt',
-                         'label' => __('Data encryption', 'printercounters'),
-                         'type'  => 'specific',
-                         'list'  => true],
-                   ['name'  => 'user',
-                         'label' => __('User'),
-                         'type'  => 'text',
-                         'list'  => true],
-                   ['name'  => 'authentication_password',
-                         'label' => __('Authentication password', 'printercounters'),
-                         'type'  => 'specific',
-                         'list'  => true],
-                   ['name'  => 'data_password',
-                         'label' => __('Data password', 'printercounters'),
-                         'type'  => 'specific',
-                         'list'  => true],
-                   ['name'  => 'is_default',
-                         'label' => __('Is default', 'printercounters'),
-                         'type'  => 'bool',
-                         'list'  => true],
-                   ];
+         ['name'  => 'version',
+               'label' => __('Version'),
+               'type'  => 'specific',
+               'list'  => true],
+         ['name'  => 'community',
+               'label' => __('Community', 'printercounters'),
+               'type'  => 'text',
+               'list'  => true],
+         ['name'  => 'community_write',
+               'label' => __('Community write', 'printercounters'),
+               'type'  => 'text',
+               'list'  => true],
+         ['name'  => 'context',
+               'label' => __('Context', 'printercounters'),
+               'type'  => 'text',
+               'list'  => true],
+         ['name'  => 'security_level',
+               'label' => __('Security level', 'printercounters'),
+               'type'  => 'specific',
+               'list'  => true],
+         ['name'  => 'authentication_encrypt',
+               'label' => __('Authentication encryption', 'printercounters'),
+               'type'  => 'specific',
+               'list'  => true],
+         ['name'  => 'data_encrypt',
+               'label' => __('Data encryption', 'printercounters'),
+               'type'  => 'specific',
+               'list'  => true],
+         ['name'  => 'user',
+               'label' => __('User'),
+               'type'  => 'text',
+               'list'  => true],
+         ['name'  => 'authentication_password',
+               'label' => __('Authentication password', 'printercounters'),
+               'type'  => 'specific',
+               'list'  => true],
+         ['name'  => 'data_password',
+               'label' => __('Data password', 'printercounters'),
+               'type'  => 'specific',
+               'list'  => true],
+         ['name'  => 'is_default',
+               'label' => __('Is default', 'printercounters'),
+               'type'  => 'bool',
+               'list'  => true],
+      ];
 
       return $tab;
    }
@@ -232,6 +263,9 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
          case 'version':
             self::dropdownVersion(['value' => $value]);
             break;
+         case 'security_level':
+            self::dropdownSecurityLevel(['value' => $value]);
+            break;
          case 'authentication_encrypt':
             self::dropdownAuthenticationEncryption(['value' => $value]);
             break;
@@ -239,7 +273,7 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
             self::dropdownDataEncryption(['value' => $value]);
             break;
          case 'authentication_password':case 'data_password':
-               echo "<input type='password' name='".$field['name']."' value='$value'>";
+            echo "<input type='password' name='".$field['name']."' value='$value'>";
             break;
       }
    }
@@ -259,6 +293,8 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
       switch ($field) {
          case 'version' :
             return self::getVersion($values[$field]);
+         case 'security_level' :
+            return self::getSecurityLevel($values[$field]);
          case 'authentication_encrypt' :
             return self::getAuthenticationEncryption($values[$field]);
          case 'data_encrypt' :
@@ -287,6 +323,8 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
       switch ($field) {
          case 'version':
             return self::dropdownVersion($options);
+         case 'security_level':
+            return self::dropdownSecurityLevel($options);
          case 'authentication_encrypt':
             return self::dropdownAuthenticationEncryption($options);
          case 'data_encrypt':
@@ -356,9 +394,8 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
 
       // To be overridden by class
       $tab = [self::SNMPV1  => __('SNMP v1', 'printercounters'),
-                   self::SNMPV2  => __('SNMP v2c', 'printercounters'),
-                   self::SNMPV3  => __('SNMP v3', 'printercounters')];
-
+              self::SNMPV2  => __('SNMP v2c', 'printercounters'),
+              self::SNMPV3  => __('SNMP v3', 'printercounters')];
       return $tab;
    }
 
@@ -393,9 +430,45 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
 
       // To be overridden by class
       $tab = [0          => Dropdown::EMPTY_VALUE,
-                   self::SHA  => __('SHA', 'printercounters'),
-                   self::MD5  => __('MD5', 'printercounters')];
+              self::SHA  => __('SHA', 'printercounters'),
+              self::MD5  => __('MD5', 'printercounters')];
+      return $tab;
+   }
 
+   /**
+    * Show the SNMP security level dropdown
+    *
+    * @return an array
+    */
+   static function dropdownSecurityLevel(array $options = []) {
+      return Dropdown::showFromArray('security_level', self::getAllSecurityLevelArray(), $options);
+   }
+
+   /**
+    * Function get the SNMP security level
+    *
+    * @param type $value
+    * @return type
+    */
+   static function getSecurityLevel($value) {
+      if (!empty($value)) {
+         $data = self::getAllSecurityLevelArray();
+         return $data[$value];
+      }
+   }
+
+   /**
+    * Get the SNMP security level list
+    *
+    * @return an array
+    */
+   static function getAllSecurityLevelArray() {
+
+      // To be overridden by class
+      $tab = [0                   => Dropdown::EMPTY_VALUE,
+              self::noAuthNoPriv  => __('noAuthNoPriv', 'printercounters'),
+              self::authNoPriv    => __('authNoPriv', 'printercounters'),
+              self::authPriv      => __('authPriv', 'printercounters')];
       return $tab;
    }
 
@@ -431,11 +504,10 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
 
       // To be overridden by class
       $tab = [0             => Dropdown::EMPTY_VALUE,
-                   self::DES     => __('DES', 'printercounters'),
-                   self::AES128  => __('AES128', 'printercounters'),
-                   self::AES192  => __('AES192', 'printercounters'),
-                   self::AES256  => __('AES256', 'printercounters')];
-
+              self::DES     => __('DES', 'printercounters'),
+              self::AES128  => __('AES128', 'printercounters'),
+              self::AES192  => __('AES192', 'printercounters'),
+              self::AES256  => __('AES256', 'printercounters')];
       return $tab;
    }
 
@@ -460,6 +532,8 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
                           `".$this->getTable()."`.`version`,
                           `".$this->getTable()."`.`community`,
                           `".$this->getTable()."`.`community_write`,
+                          `".$this->getTable()."`.`security_level`,
+                          `".$this->getTable()."`.`context`,
                           `".$this->getTable()."`.`authentication_encrypt`,
                           `".$this->getTable()."`.`data_encrypt`,
                           `".$this->getTable()."`.`user`,
@@ -475,13 +549,15 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
          if ($DB->numrows($result)) {
             while ($data = $DB->fetchAssoc($result)) {
                $output[$data['items_id']] = ['version'                 => $data['version'],
-                                                  'community'               => !empty($data['community']) ? $data['community'] : '',
-                                                  'community_write'         => !empty($data['community_write']) ? $data['community_write'] : '',
-                                                  'authentication_encrypt'  => !empty($data['authentication_encrypt']) ? self::getAuthenticationEncryption($data['authentication_encrypt']) : '',
-                                                  'data_encrypt'            => !empty($data['data_encrypt']) ? self::getDataEncryption($data['data_encrypt']) : '',
-                                                  'user'                    => $data['user'],
-                                                  'authentication_password' => $data['authentication_password'],
-                                                  'data_password'           => $data['data_password']];
+                                             'community'               => !empty($data['community']) ? $data['community'] : '',
+                                             'community_write'         => !empty($data['community_write']) ? $data['community_write'] : '',
+                                             'context'                 => !empty($data['context']) ? $data['context'] : '' ,
+                                             'security_level'          => !empty($data['security_level']) ? self::getSecurityLevel($data['security_level']) : '',
+                                             'authentication_encrypt'  => !empty($data['authentication_encrypt']) ? self::getAuthenticationEncryption($data['authentication_encrypt']) : '',
+                                             'data_encrypt'            => !empty($data['data_encrypt']) ? self::getDataEncryption($data['data_encrypt']) : '',
+                                             'user'                    => $data['user'],
+                                             'authentication_password' => $data['authentication_password'],
+                                             'data_password'           => $data['data_password']];
             }
          }
       }
@@ -575,8 +651,8 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
       $checkKo = false;
 
       $mandatory_fields = ['name'            => __('Name'),
-                                'community'       => __('Community', 'printercounters'),
-                                'community_write' => __('Community write', 'printercounters')];
+                           'community'       => __('Community', 'printercounters'),
+                           'community_write' => __('Community write', 'printercounters')];
 
       foreach ($input as $key => $value) {
          if (array_key_exists($key, $mandatory_fields)) {
@@ -588,18 +664,34 @@ class PluginPrintercountersSnmpauthentication extends CommonDropdown {
       }
 
       // SNMP V3
-      if ($input['version'] == self::SNMPV3  && empty($input['authentication_encrypt'])
-              && empty($input['authentication_password'])
-              && empty($input['data_encrypt'])
-              && empty($input['data_password'])) {
-
-              $msg[] = __('Authentication encryption', 'printercounters');
-              $msg[] = __('Data encryption', 'printercounters');
-              $msg[] = __('User');
-              $msg[] = __('Authentication password', 'printercounters');
-              $msg[] = __('Data password', 'printercounters');
-
-              $checkKo = true;
+      if ($input['version'] == self::SNMPV3 ) {
+         $checkKo = false;
+         if ( empty($input['user'] ) ) {
+            $msg[] = __('User', 'printercounters');
+            $checkKo = true;
+         }
+         if ( $input['security_level'] != self::noAuthNoPriv ) { // both authNoPriv and authPriv request authentication parameters
+            if ( empty($input['authentication_encrypt']) || empty($input['authentication_password']) ) {
+               if ( empty($input['authentication_encrypt']) ) {
+                  $msg[] = __('Authentication encryption', 'printercounters');
+               }
+               if( empty($input['authentication_password']) ) {
+                  $msg[] = __('Authentication password', 'printercounters');
+               }
+               $checkKo = true;
+			}
+         }
+         if ( $input['security_level'] == self::authPriv ) {
+            if ( empty($input['data_encrypt']) || empty($input['data_password']) ) {
+               if ( empty($input['data_encrypt']) ) {
+                 $msg[] = __('Data encryption', 'printercounters');
+               }
+               if ( empty($input['data_password']) ) {
+                  $msg[] = __('Data password', 'printercounters');
+               }
+               $checkKo = true;
+            }
+         }
       }
 
       if ($checkKo) {

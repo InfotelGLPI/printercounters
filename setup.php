@@ -27,7 +27,7 @@
  --------------------------------------------------------------------------
  */
 
-define('PLUGIN_PRINTERCOUNTERS_VERSION', '2.0.2');
+define('PLUGIN_PRINTERCOUNTERS_VERSION', '2.0.3');
 
 if (!defined("PLUGIN_PRINTERCOUNTERS_DIR")) {
    define("PLUGIN_PRINTERCOUNTERS_DIR", Plugin::getPhpDir("printercounters"));
