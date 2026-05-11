@@ -715,7 +715,7 @@ msgid ""
 "server"
 msgstr ""
 "Consentire la terminazione dei processi permetterà al plugin di eseguire "
-"script sul server."
+"scripts sul server."
 
 #: inc/profile.class.php:45
 msgid "Rights management"
